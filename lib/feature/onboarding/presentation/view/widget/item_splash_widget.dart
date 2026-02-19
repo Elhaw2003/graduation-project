@@ -45,7 +45,7 @@ class ItemOnboardingWidget extends StatelessWidget {
                   curve: Curves.easeIn,
                 );
               } else {
-                GoRouter.of(context).go(AppRoutes.loginScreen);
+                GoRouter.of(context).go(AppRoutes.choosingIdentityScreen);
               }
             },
             title: index < onboardings.length - 1

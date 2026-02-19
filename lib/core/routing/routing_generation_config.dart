@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
+import 'package:smart_guide/feature/auth/choosingIdentity/presentation/view/choosing_identity_screen.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/login_screen.dart';
 import 'package:smart_guide/feature/onboarding/presentation/view/onboarding_screen.dart';
 import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart';
@@ -24,6 +25,11 @@ class RoutingGenerationConfig {
         path: AppRoutes.spalshScreen,
         name: AppRoutes.spalshScreen,
         builder: (context, state) => SplashScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.choosingIdentityScreen,
+        name: AppRoutes.choosingIdentityScreen,
+        builder: (context, state) => const choosingIdentityScreen(),
       ),
 
       /// Login Screen
