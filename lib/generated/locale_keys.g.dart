@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const exploreEgyptHistory = 'exploreEgyptHistory';
   static const discoverAncientSecrets = 'discoverAncientSecrets';
   static const yourJourneyStartsHere = 'yourJourneyStartsHere';
@@ -11,5 +11,6 @@ abstract class  LocaleKeys {
   static const smartGuideEgypt = 'smartGuideEgypt';
   static const next = 'next';
   static const discoverEgypt = 'discoverEgypt';
-
+  static const appName = 'appName';
+  static const egypt = 'egypt';
 }

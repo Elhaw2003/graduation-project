@@ -41,6 +41,7 @@ dependencies:
   easy_localization: ^3.0.8
   equatable: ^2.0.8
   smooth_page_indicator: ^2.0.1
+  animate_do: ^4.2.0
 
 dev_dependencies:
   flutter_test:
@@ -51,7 +52,7 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/svg/logoSvg.svg"
+  image_path: "assets/images/png/logo_with_text.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

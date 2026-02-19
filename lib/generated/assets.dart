@@ -2,12 +2,17 @@
 class Assets {
   Assets._();
 
-  static const String pngFirstSplashScreen = 'assets/images/png/first_splash_screen.png';
+  static const String pngFirstSplashScreen =
+      'assets/images/png/first_splash_screen.png';
   static const String pngLogo = 'assets/images/png/logo.png';
-  static const String pngSecondSplashScreen = 'assets/images/png/second_splash_screen.png';
-  static const String pngThirdSplashScreen = 'assets/images/png/third_splash_screen.png';
+  static const String pngSecondSplashScreen =
+      'assets/images/png/second_splash_screen.png';
+  static const String pngThirdSplashScreen =
+      'assets/images/png/third_splash_screen.png';
   static const String svgLogoSvg = 'assets/images/svg/logoSvg.png';
   static const String translationsAr = 'assets/translations/ar.json';
   static const String translationsEn = 'assets/translations/en.json';
-
+  static const String pngLogoWithText = 'assets/images/png/logo_with_text.png';
+  static const String pngLogoWithoutText =
+      'assets/images/png/logo_without_text.png';
 }

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/login_screen.dart';
-import 'package:smart_guide/feature/splash/presentation/view/spalsh_screen.dart';
+import 'package:smart_guide/feature/onboarding/presentation/view/onboarding_screen.dart';
+import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart';
 
 class RoutingGenerationConfig {
   static GoRouter routerGeneratorConfig = GoRouter(
@@ -11,20 +12,28 @@ class RoutingGenerationConfig {
       return errorBuilder();
     },
     routes: [
+      /// Onboarding Screen
+      GoRoute(
+        path: AppRoutes.onboardingScreen,
+        name: AppRoutes.onboardingScreen,
+        builder: (context, state) => OnboardingScreen(),
+      ),
+
       /// Splash Screen
       GoRoute(
         path: AppRoutes.spalshScreen,
         name: AppRoutes.spalshScreen,
-        builder: (context, state) => SpalshScreen(),
+        builder: (context, state) => SplashScreen(),
       ),
+
       /// Login Screen
       GoRoute(
         path: AppRoutes.loginScreen,
         name: AppRoutes.loginScreen,
-        builder: (context, state) => LoginScreen()
-        )
-    ]
-    );
+        builder: (context, state) => LoginScreen(),
+      ),
+    ],
+  );
 }
 
 /// Error Screen

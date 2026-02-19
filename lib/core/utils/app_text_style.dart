@@ -4,16 +4,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 
 class AppTextStyle {
-
-/// White color
+  /// White color
 
   static TextStyle whiteW600S25 = GoogleFonts.readexPro(
-    color: AppColors.whiteEDF0FEColor,
+    color: AppColors.backgroundColor,
     fontSize: 25.sp,
     fontWeight: FontWeight.w600,
   );
   static TextStyle whiteW500S17 = GoogleFonts.readexPro(
-    color: AppColors.whiteEDF0FEColor,
+    color: AppColors.backgroundColor,
     fontSize: 17.sp,
     fontWeight: FontWeight.w500,
   );
@@ -22,5 +21,4 @@ class AppTextStyle {
     fontSize: 27.sp,
     fontWeight: FontWeight.w500,
   );
-
 }

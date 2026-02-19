@@ -6,12 +6,12 @@ import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
-import 'package:smart_guide/feature/splash/data/list/page_views_screens.dart';
-import 'package:smart_guide/feature/splash/presentation/view/widget/smooth_indicator_widget.dart';
+import 'package:smart_guide/feature/onboarding/data/list/page_views_screens.dart';
+import 'package:smart_guide/feature/onboarding/presentation/view/widget/smooth_indicator_widget.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
-class ItemSplashWidget extends StatelessWidget {
-  const ItemSplashWidget({
+class ItemOnboardingWidget extends StatelessWidget {
+  const ItemOnboardingWidget({
     super.key,
     required this.index,
     required this.controller,
@@ -26,10 +26,10 @@ class ItemSplashWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(pageViewsScreens[index].title, style: AppTextStyle.whiteW600S25),
+          Text(onboardings[index].title, style: AppTextStyle.whiteW600S25),
           CustomHeightSpacingWidget(height: 10),
           Text(
-            pageViewsScreens[index].description,
+            onboardings[index].description,
             style: AppTextStyle.whiteW500S17,
           ),
           const CustomHeightSpacingWidget(height: 25),
@@ -38,16 +38,19 @@ class ItemSplashWidget extends StatelessWidget {
           CustomButtonWidget(
             buttonWidth: double.infinity,
             onPressed: () {
-              if (index < pageViewsScreens.length - 1) {
+              if (index < onboardings.length - 1) {
                 controller.animateToPage(
-                  index+1,
-                  duration: Duration(milliseconds: 500),
-                  curve: Curves.easeIn);
+                  index + 1,
+                  duration: Duration(seconds: 1),
+                  curve: Curves.easeIn,
+                );
               } else {
                 GoRouter.of(context).go(AppRoutes.loginScreen);
               }
             },
-            title: index < pageViewsScreens.length-1 ? LocaleKeys.next.tr() : LocaleKeys.discoverEgypt.tr(),
+            title: index < onboardings.length - 1
+                ? LocaleKeys.next.tr()
+                : LocaleKeys.discoverEgypt.tr(),
           ),
         ],
       ),
