@@ -1,0 +1,1 @@
+enum UserTypeEnum { tourist, guide }
