@@ -13,4 +13,6 @@ abstract class LocaleKeys {
   static const discoverEgypt = 'discoverEgypt';
   static const appName = 'appName';
   static const egypt = 'egypt';
+  static const tourist = 'tourist';
+  static const guide = 'guide';
 }

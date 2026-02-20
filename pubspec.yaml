@@ -42,6 +42,7 @@ dependencies:
   equatable: ^2.0.8
   smooth_page_indicator: ^2.0.1
   animate_do: ^4.2.0
+  flutter_svg: ^2.2.3
 
 dev_dependencies:
   flutter_test:

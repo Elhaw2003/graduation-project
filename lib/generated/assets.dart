@@ -15,4 +15,6 @@ class Assets {
   static const String pngLogoWithText = 'assets/images/png/logo_with_text.png';
   static const String pngLogoWithoutText =
       'assets/images/png/logo_without_text.png';
+  static const String svgAirplane = 'assets/images/svg/airplane.svg';
+  static const String svgCompass = 'assets/images/svg/compass.svg';
 }

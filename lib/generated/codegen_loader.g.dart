@@ -27,6 +27,8 @@ class CodegenLoader extends AssetLoader {
     "next": "التالي",
     "discoverEgypt": "اكتشف مصر",
     "appName": "المرشد الزكي",
+    "tourist": "مرشد سياحي",
+    "guide": "دليل سياحي",
   };
   static const Map<String, dynamic> _en = {
     "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -42,6 +44,8 @@ class CodegenLoader extends AssetLoader {
     "discoverEgypt": "Discover Egypt",
     "appName": "Smart Guide",
     "egypt": "Egypt",
+    "tourist": "Tourist",
+    "guide": "Guide",
   };
   static const Map<String, Map<String, dynamic>> mapLocales = {
     "ar": _ar,
