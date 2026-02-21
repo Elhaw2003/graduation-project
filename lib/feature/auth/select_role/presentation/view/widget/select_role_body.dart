@@ -70,7 +70,9 @@ class _SelectRoleBodyState extends State<SelectRoleBody> {
             buttonWidth: double.infinity,
             onPressed: selectType != null
                 ? () {
-                    GoRouter.of(context).go(AppRoutes.loginScreen);
+                    GoRouter.of(
+                      context,
+                    ).go(AppRoutes.loginScreen, extra: selectType);
                   }
                 : null,
             title: LocaleKeys.next.tr(),

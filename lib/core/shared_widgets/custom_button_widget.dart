@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 
@@ -65,9 +66,7 @@ class CustomButtonWidget extends StatelessWidget {
           ),
           shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(
-                borderRadiusButton?.r ?? 8.r,
-              ),
+              borderRadius: BorderRadius.circular(borderRadiusButton?.r ?? 8.r),
               side: BorderSide(
                 color: borderSideColor ?? AppColors.primaryColor,
                 width: borderSideWidth ?? 1.w,
@@ -79,7 +78,7 @@ class CustomButtonWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // buildPrefixIcon(),
+            buildPrefixIcon(),
             if (prefixIcon != null || prefixSvgIcon != null)
               SizedBox(width: 8.w),
             Expanded(
@@ -96,50 +95,50 @@ class CustomButtonWidget extends StatelessWidget {
 
             if (suffixIcon != null || suffixSvgIcon != null)
               SizedBox(width: 8.w),
-            // buildSuffixIcon(),
+            buildSuffixIcon(),
           ],
         ),
       ),
     );
   }
 
-  // Widget buildPrefixIcon() {
-  //   if (prefixSvgIcon != null) {
-  //     return SvgPicture.asset(
-  //       prefixSvgIcon!,
-  //       width: prefixIconSize?.w ?? 24.w,
-  //       height: prefixIconSize?.h ?? 24.h,
-  //       colorFilter: prefixIconColor != null
-  //           ? ColorFilter.mode(prefixIconColor!, BlendMode.srcIn)
-  //           : null,
-  //     );
-  //   } else if (prefixIcon != null) {
-  //     return Icon(
-  //       prefixIcon,
-  //       color: prefixIconColor ?? AppColors.whiteColor,
-  //       size: prefixIconSize ?? 24.sp,
-  //     );
-  //   }
-  //   return const SizedBox.shrink();
-  // }
+  Widget buildPrefixIcon() {
+    if (prefixSvgIcon != null) {
+      return SvgPicture.asset(
+        prefixSvgIcon!,
+        width: prefixIconSize?.w ?? 24.w,
+        height: prefixIconSize?.h ?? 24.h,
+        colorFilter: prefixIconColor != null
+            ? ColorFilter.mode(prefixIconColor!, BlendMode.srcIn)
+            : null,
+      );
+    } else if (prefixIcon != null) {
+      return Icon(
+        prefixIcon,
+        color: prefixIconColor ?? AppColors.whiteColor,
+        size: prefixIconSize ?? 24.sp,
+      );
+    }
+    return const SizedBox.shrink();
+  }
 
-  // Widget buildSuffixIcon() {
-  //   if (suffixSvgIcon != null) {
-  //     return SvgPicture.asset(
-  //       suffixSvgIcon!,
-  //       width: suffixIconSize?.w ?? 24.w,
-  //       height: suffixIconSize?.h ?? 24.h,
-  //       colorFilter: suffixIconColor != null
-  //           ? ColorFilter.mode(suffixIconColor!, BlendMode.srcIn)
-  //           : null,
-  //     );
-  //   } else if (suffixIcon != null) {
-  //     return Icon(
-  //       suffixIcon,
-  //       color: suffixIconColor ?? AppColors.whiteColor,
-  //       size: suffixIconSize ?? 24.sp,
-  //     );
-  //   }
-  //   return const SizedBox.shrink();
-  // }
+  Widget buildSuffixIcon() {
+    if (suffixSvgIcon != null) {
+      return SvgPicture.asset(
+        suffixSvgIcon!,
+        width: suffixIconSize?.w ?? 24.w,
+        height: suffixIconSize?.h ?? 24.h,
+        colorFilter: suffixIconColor != null
+            ? ColorFilter.mode(suffixIconColor!, BlendMode.srcIn)
+            : null,
+      );
+    } else if (suffixIcon != null) {
+      return Icon(
+        suffixIcon,
+        color: suffixIconColor ?? AppColors.whiteColor,
+        size: suffixIconSize ?? 24.sp,
+      );
+    }
+    return const SizedBox.shrink();
+  }
 }

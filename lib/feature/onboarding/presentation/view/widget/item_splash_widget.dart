@@ -26,11 +26,11 @@ class ItemOnboardingWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(onboardings[index].title, style: AppTextStyle.whiteW600S25),
+          Text(onboardings[index].title, style: AppTextStyle.backgroundW600S25),
           CustomHeightSpacingWidget(height: 10),
           Text(
             onboardings[index].description,
-            style: AppTextStyle.whiteW500S17,
+            style: AppTextStyle.backgroundW500S17,
           ),
           const CustomHeightSpacingWidget(height: 25),
           SmoothIndicatorWidget(controller: controller),
