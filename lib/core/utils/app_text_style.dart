@@ -4,21 +4,78 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 
 class AppTextStyle {
-  /// White color
-
-  static TextStyle whiteW600S25 = GoogleFonts.readexPro(
+  /// Background color
+  static TextStyle backgroundW600S25 = GoogleFonts.readexPro(
     color: AppColors.backgroundColor,
     fontSize: 25.sp,
     fontWeight: FontWeight.w600,
   );
-  static TextStyle whiteW500S17 = GoogleFonts.readexPro(
+  static TextStyle backgroundW500S17 = GoogleFonts.readexPro(
     color: AppColors.backgroundColor,
     fontSize: 17.sp,
     fontWeight: FontWeight.w500,
   );
+
+  /// White color
   static TextStyle whiteW500S27 = GoogleFonts.readexPro(
     color: AppColors.whiteColor,
     fontSize: 27.sp,
     fontWeight: FontWeight.w500,
+  );
+  static TextStyle whiteW500S22 = GoogleFonts.readexPro(
+    color: AppColors.whiteColor,
+    fontSize: 22.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle whiteW500S25 = GoogleFonts.readexPro(
+    color: AppColors.whiteColor,
+    fontSize: 25.sp,
+    fontWeight: FontWeight.w500,
+  );
+
+  /// primary color
+  static TextStyle primaryW500S22 = GoogleFonts.readexPro(
+    color: AppColors.primaryColor,
+    fontSize: 22.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle primaryW400S13 = GoogleFonts.readexPro(
+    color: AppColors.primaryColor,
+    fontSize: 13.sp,
+    fontWeight: FontWeight.w400,
+  );
+  static TextStyle primaryW400S15 = GoogleFonts.readexPro(
+    color: AppColors.primaryColor,
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w400,
+  );
+
+  /// primary text color
+  static TextStyle primaryTextW400S15 = GoogleFonts.readexPro(
+    color: AppColors.primaryTextColor,
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w400,
+  );
+  static TextStyle primaryTextW400S16 = GoogleFonts.readexPro(
+    color: AppColors.primaryTextColor,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w400,
+  );
+  static TextStyle primaryTextW500S17 = GoogleFonts.readexPro(
+    color: AppColors.primaryTextColor,
+    fontSize: 17.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle primaryTextW400S14 = GoogleFonts.readexPro(
+    color: AppColors.primaryTextColor,
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+  );
+
+  /// grey color
+  static TextStyle grey300W400S16 = GoogleFonts.readexPro(
+    color: AppColors.grey300Color,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w400,
   );
 }

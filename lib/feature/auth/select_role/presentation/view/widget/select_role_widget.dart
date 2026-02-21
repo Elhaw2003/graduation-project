@@ -55,7 +55,7 @@ class SelectRoleWidget extends StatelessWidget {
               ),
             ),
             CustomHeightSpacingWidget(height: 5),
-            Text(title, style: AppTextStyle.whiteW600S25),
+            Text(title, style: AppTextStyle.backgroundW600S25),
           ],
         ),
       ),
