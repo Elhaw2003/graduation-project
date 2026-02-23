@@ -9,6 +9,7 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.controller,
     this.minLines,
     this.maxLines,
+    this.helperMaxLines,
     this.keyboardType,
     this.obscureText,
     this.validator,
@@ -46,6 +47,7 @@ class CustomTextFieldWidget extends StatelessWidget {
   final TextEditingController? controller;
   final int? minLines;
   final int? maxLines;
+  final int? helperMaxLines;
   final TextInputType? keyboardType;
   final bool? obscureText;
   final String? Function(String?)? validator;
@@ -107,7 +109,8 @@ class CustomTextFieldWidget extends StatelessWidget {
               hintTextDirection ??
               (isRTL ? TextDirection.rtl : TextDirection.ltr),
           helperText: helperText,
-          helperStyle: helperTextStyle ?? AppTextStyle.primaryTextW400S15,
+          helperStyle: helperTextStyle ?? AppTextStyle.grey300W400S16,
+          helperMaxLines: helperMaxLines ?? 1,
           hintText: hintText,
           hintStyle: hintTextStyle ?? AppTextStyle.grey300W400S16,
           suffixIcon: suffixIcon != null

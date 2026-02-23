@@ -45,5 +45,32 @@ abstract class  LocaleKeys {
   static const dontHaveAccount = 'dontHaveAccount';
   static const createAccount = 'createAccount';
   static const login = 'login';
+  static const registerTitleAsTourist = 'registerTitleAsTourist';
+  static const registerDescriptionAsTourist = 'registerDescriptionAsTourist';
+  static const registerTitleAsGuide = 'registerTitleAsGuide';
+  static const registerDescriptionAsGuide = 'registerDescriptionAsGuide';
+  static const name = 'name';
+  static const enterFullName = 'enterFullName';
+  static const email = 'email';
+  static const enterEmail = 'enterEmail';
+  static const phone = 'phone';
+  static const enterPhone = 'enterPhone';
+  static const choosePassword = 'choosePassword';
+  static const confirmPassword = 'confirmPassword';
+  static const camera = 'camera';
+  static const gallery = 'gallery';
+  static const yourCountry = 'yourCountry';
+  static const selectYourCountry = 'selectYourCountry';
+  static const languagesYouSpeak = 'languagesYouSpeak';
+  static const selectLanguagesYouSpeak = 'selectLanguagesYouSpeak';
+  static const briefOverview = 'briefOverview';
+  static const describeYourself = 'describeYourself';
+  static const yearsOfExperience = 'yearsOfExperience';
+  static const enterYearsOfExperience = 'enterYearsOfExperience';
+  static const numbersOnly = 'numbersOnly';
+  static const uploadIdOrLicense = 'uploadIdOrLicense';
+  static const clickToUpload = 'clickToUpload';
+  static const uploadLimit = 'uploadLimit';
+  static const imageSizeLimit = 'imageSizeLimit';
 
 }

@@ -5,6 +5,7 @@ import 'package:smart_guide/core/shared_widgets/custom_spring_animation.dart';
 import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:smart_guide/feature/auth/forgot_password/presentation/view/forgot_password_screen.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/login_screen.dart';
+import 'package:smart_guide/feature/auth/register/presentation/view/register_screen.dart';
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
 import 'package:smart_guide/feature/onboarding/presentation/view/onboarding_screen.dart';
 import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart';
@@ -45,6 +46,18 @@ class RoutingGenerationConfig {
           final UserTypeEnum userTypeEnum = state.extra as UserTypeEnum;
           return CustomSpringPage(
             child: LoginScreen(userTypeEnum: userTypeEnum),
+          );
+        },
+      ),
+
+      /// Register Screen
+      GoRoute(
+        path: AppRoutes.registerScreen,
+        name: AppRoutes.registerScreen,
+        pageBuilder: (context, state) {
+          final UserTypeEnum userTypeEnum = state.extra as UserTypeEnum;
+          return CustomSpringPage(
+            child: RegisterScreen(userTypeEnum: userTypeEnum),
           );
         },
       ),
