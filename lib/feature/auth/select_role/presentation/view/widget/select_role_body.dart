@@ -30,7 +30,7 @@ class _SelectRoleBodyState extends State<SelectRoleBody> {
           Align(
             alignment: Alignment.topRight,
             child: Image.asset(
-              Assets.pngLogoWithText,
+              Assets.imagesPngLogoWithText,
               fit: BoxFit.fill,
               height: 100.h,
               width: 100.w,
@@ -44,7 +44,7 @@ class _SelectRoleBodyState extends State<SelectRoleBody> {
                 ? AppColors.primaryColor
                 : AppColors.grey300Color,
             title: LocaleKeys.tourist.tr(),
-            icon: Assets.svgAirplane,
+            icon: Assets.imagesSvgAirplane,
             onTap: () {
               setState(() {
                 selectType = UserTypeEnum.tourist;
@@ -63,7 +63,7 @@ class _SelectRoleBodyState extends State<SelectRoleBody> {
                 selectType = UserTypeEnum.guide;
               });
             },
-            icon: Assets.svgCompass,
+            icon: Assets.imagesSvgCompass,
           ),
           Spacer(),
           CustomButtonWidget(
@@ -72,7 +72,7 @@ class _SelectRoleBodyState extends State<SelectRoleBody> {
                 ? () {
                     GoRouter.of(
                       context,
-                    ).go(AppRoutes.loginScreen, extra: selectType);
+                    ).pushNamed(AppRoutes.registerScreen, extra: selectType);
                   }
                 : null,
             title: LocaleKeys.next.tr(),

@@ -12,7 +12,7 @@ class LoginAppbar extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(right: 10.w, left: 10.w),
           child: Image.asset(
-            Assets.pngLogoWithText,
+            Assets.imagesPngLogoWithText,
             fit: BoxFit.fill,
             width: 50.w,
             height: 50.h,

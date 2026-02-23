@@ -5,19 +5,19 @@ import 'package:smart_guide/generated/locale_keys.g.dart';
 
 List<OnboardingModel> onboardings = [
   OnboardingModel(
-    image: Assets.pngFirstSplashScreen,
+    image: Assets.imagesPngFirstSplashScreen,
     title: LocaleKeys.exploreEgyptHistory.tr(),
     description: LocaleKeys.discoverAncientSecrets.tr(),
     buttonText: LocaleKeys.next.tr(),
   ),
   OnboardingModel(
-    image: Assets.pngSecondSplashScreen,
+    image: Assets.imagesPngSecondSplashScreen,
     title: LocaleKeys.yourJourneyStartsHere.tr(),
     description: LocaleKeys.planYourTrip.tr(),
     buttonText: LocaleKeys.next.tr(),
   ),
   OnboardingModel(
-    image: Assets.pngThirdSplashScreen,
+    image: Assets.imagesPngThirdSplashScreen,
     title: LocaleKeys.exploreEgyptSmartWay.tr(),
     description: LocaleKeys.smartGuideEgypt.tr(),
     buttonText: LocaleKeys.discoverEgypt.tr(),

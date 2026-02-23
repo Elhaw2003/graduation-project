@@ -39,7 +39,7 @@ class LoginBody extends StatelessWidget {
                   titleStyle: userTypeEnum == UserTypeEnum.tourist
                       ? AppTextStyle.whiteW500S22
                       : AppTextStyle.primaryW500S22,
-                  suffixSvgIcon: Assets.svgAirplane,
+                  suffixSvgIcon: Assets.imagesSvgAirplane,
                   suffixIconColor: userTypeEnum == UserTypeEnum.tourist
                       ? AppColors.whiteColor
                       : AppColors.primaryColor,
@@ -60,7 +60,7 @@ class LoginBody extends StatelessWidget {
                   titleStyle: userTypeEnum == UserTypeEnum.guide
                       ? AppTextStyle.whiteW500S22
                       : AppTextStyle.primaryW500S22,
-                  suffixSvgIcon: Assets.svgCompass,
+                  suffixSvgIcon: Assets.imagesSvgCompass,
                   suffixIconColor: userTypeEnum == UserTypeEnum.guide
                       ? AppColors.whiteColor
                       : AppColors.primaryColor,

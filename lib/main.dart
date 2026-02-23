@@ -1,7 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/routing/routing_generation_config.dart';
+import 'package:smart_guide/feature/auth/register/presentation/cubit/pick_image/pick_image_cubit.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 void main() async {
@@ -13,7 +15,10 @@ void main() async {
       path:
           'assets/translations', // <-- change the path of the translation files
       fallbackLocale: Locale('en'),
-      child: SmartGuide(),
+      child: BlocProvider(
+        create: (context) => PickImageCubit(),
+        child: SmartGuide(),
+      ),
     ),
   );
 }

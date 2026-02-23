@@ -78,4 +78,30 @@ class AppTextStyle {
     fontSize: 16.sp,
     fontWeight: FontWeight.w400,
   );
+
+  /// black color
+  static TextStyle black1F2937W500S20 = GoogleFonts.readexPro(
+    color: AppColors.black1F2937Color,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle black1F2937W400S15 = GoogleFonts.readexPro(
+    color: AppColors.black1F2937Color,
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w400,
+  );
+
+  /// gold color
+  static TextStyle goldColorW600S22 = TextStyle(
+    fontSize: 22.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.goldColor,
+  );
+
+  /// dark teal color
+  static TextStyle darkTealColorWBoldS26 = TextStyle(
+    fontSize: 26.sp,
+    fontWeight: FontWeight.bold,
+    color: AppColors.darkTealColor,
+  );
 }
