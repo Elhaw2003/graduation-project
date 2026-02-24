@@ -83,7 +83,15 @@ class CodegenLoader extends AssetLoader{
   "uploadIdOrLicense": "رفع بطاقة الهوية أو رخصة الإرشاد",
   "clickToUpload": "اضغط لرفع صورة",
   "uploadLimit": "يمكنك رفع حتى 4 صور.",
-  "imageSizeLimit": "يجب ألا يتجاوز حجم كل صورة 5 ميجابايت."
+  "imageSizeLimit": "يجب ألا يتجاوز حجم كل صورة 5 ميجابايت.",
+  "verifyPhone": "تحقق من رقم هاتفك",
+  "haveSentOtp": "لقد أرسلنا رمزًا مكونًا من 6 أرقام إلى (رقمك)",
+  "enterOtp": "ادخل الرمز الذي استلمته عبر الرسائل القصيرة",
+  "verify": "تحقق",
+  "didntReceiveCode": "لم تستلم الرمز؟ ",
+  "resendIn": "اعادة الارسال بعد",
+  "second": "ثانية",
+  "resend": "اعادة الارسال"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -154,7 +162,15 @@ static const Map<String,dynamic> _en = {
   "uploadIdOrLicense": "Upload ID or Guide License",
   "clickToUpload": "Click to upload image",
   "uploadLimit": "You can upload up to 4 images.",
-  "imageSizeLimit": "Each image must not exceed 5 MB."
+  "imageSizeLimit": "Each image must not exceed 5 MB.",
+  "verifyPhone": "Verify Your Phone Number",
+  "haveSentOtp": "We've sent a 6-digit code to (Your Number)",
+  "enterOtp": "Enter the code you received SMS",
+  "verify": "Verify",
+  "didntReceiveCode": "Didn't receive the code? ",
+  "resendIn": "Resend in",
+  "second": "s",
+  "resend": "Resend"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

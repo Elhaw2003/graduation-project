@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/shared_widgets/custom_arrow_back_button.dart';
-import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_text_field_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
@@ -10,6 +9,7 @@ import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:smart_guide/feature/auth/register/presentation/view/widget/custom_drop_down_field.dart';
 import 'package:smart_guide/feature/auth/register/presentation/view/widget/regisetr_image_picker_section.dart';
+import 'package:smart_guide/feature/auth/register/presentation/view/widget/register_button.dart';
 import 'package:smart_guide/feature/auth/register/presentation/view/widget/register_header_section.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
@@ -161,10 +161,7 @@ class _RegisterBodyState extends State<RegisterBody> {
               helperMaxLines: 2,
             ),
             CustomHeightSpacingWidget(height: 30),
-            CustomButtonWidget(
-              buttonWidth: double.infinity,
-              title: LocaleKeys.createAccount.tr(),
-            ),
+            RegisterButton(),
           ],
         ),
       ),

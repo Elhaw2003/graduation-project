@@ -32,6 +32,11 @@ class AppTextStyle {
     fontSize: 25.sp,
     fontWeight: FontWeight.w500,
   );
+  static TextStyle whiteW600S20 = GoogleFonts.readexPro(
+    color: AppColors.whiteColor,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w600,
+  );
 
   /// primary color
   static TextStyle primaryW500S22 = GoogleFonts.readexPro(

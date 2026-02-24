@@ -72,5 +72,13 @@ abstract class  LocaleKeys {
   static const clickToUpload = 'clickToUpload';
   static const uploadLimit = 'uploadLimit';
   static const imageSizeLimit = 'imageSizeLimit';
+  static const verifyPhone = 'verifyPhone';
+  static const haveSentOtp = 'haveSentOtp';
+  static const enterOtp = 'enterOtp';
+  static const verify = 'verify';
+  static const didntReceiveCode = 'didntReceiveCode';
+  static const resendIn = 'resendIn';
+  static const second = 'second';
+  static const resend = 'resend';
 
 }

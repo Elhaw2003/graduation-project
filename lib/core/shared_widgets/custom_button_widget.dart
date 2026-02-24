@@ -66,9 +66,11 @@ class CustomButtonWidget extends StatelessWidget {
           ),
           shape: WidgetStateProperty.all(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(borderRadiusButton?.r ?? 8.r),
+              borderRadius: BorderRadius.circular(
+                borderRadiusButton?.r ?? 12.r,
+              ),
               side: BorderSide(
-                color: borderSideColor ?? AppColors.primaryColor,
+                color: borderSideColor ?? Colors.transparent,
                 width: borderSideWidth ?? 1.w,
               ),
             ),
