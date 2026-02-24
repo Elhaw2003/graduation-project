@@ -8,6 +8,7 @@ import 'package:smart_guide/feature/auth/login/presentation/view/login_screen.da
 import 'package:smart_guide/feature/auth/register/presentation/view/register_screen.dart';
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
 import 'package:smart_guide/feature/auth/verify_phone_number/presentation/view/verify_phone_number_screen.dart';
+import 'package:smart_guide/feature/home/presentation/home_screen.dart';
 import 'package:smart_guide/feature/onboarding/presentation/view/onboarding_screen.dart';
 import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart';
 
@@ -78,6 +79,13 @@ class RoutingGenerationConfig {
         name: AppRoutes.verifyPhoneNumberScreen,
         pageBuilder: (context, state) {
           return CustomSpringPage(child: VerifyPhoneNumberScreen());
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.homeScreen,
+        name: AppRoutes.homeScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(child: HomeScreen());
         },
       ),
     ],

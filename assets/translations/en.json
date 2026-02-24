@@ -75,5 +75,9 @@
   "didntReceiveCode": "Didn't receive the code? ",
   "resendIn":"Resend in",
   "second":"s",
-  "resend":"Resend"
+  "resend":"Resend",
+  "hello": "Hello",
+  "cairo": "Cairo",
+  "cairoEgypt": "Cairo, Egypt"
+  
 }
