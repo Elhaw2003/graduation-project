@@ -67,5 +67,13 @@
   "uploadIdOrLicense": "Upload ID or Guide License",
   "clickToUpload": "Click to upload image",
   "uploadLimit": "You can upload up to 4 images.",
-  "imageSizeLimit": "Each image must not exceed 5 MB."
+  "imageSizeLimit": "Each image must not exceed 5 MB.",
+  "verifyPhone": "Verify Your Phone Number",
+  "haveSentOtp": "We've sent a 6-digit code to (Your Number)",
+  "enterOtp": "Enter the code you received SMS",
+  "verify": "Verify",
+  "didntReceiveCode": "Didn't receive the code? ",
+  "resendIn":"Resend in",
+  "second":"s",
+  "resend":"Resend"
 }
