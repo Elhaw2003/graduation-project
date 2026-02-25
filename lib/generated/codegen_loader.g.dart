@@ -91,7 +91,11 @@ class CodegenLoader extends AssetLoader{
   "didntReceiveCode": "لم تستلم الرمز؟ ",
   "resendIn": "اعادة الارسال بعد",
   "second": "ثانية",
-  "resend": "اعادة الارسال"
+  "resend": "اعادة الارسال",
+  "verificationSuccessful": "تم التحقق بنجاح!",
+  "welcomeMessage": "مرحبًا بك في سمارت جايد مصر!",
+  "accountReady": "حسابك أصبح جاهزًا — ابدأ استكشاف مصر بالطريقة الذكية!",
+  "loginPrompt": "سجّل الدخول لبدء الاستكشاف."
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -170,7 +174,11 @@ static const Map<String,dynamic> _en = {
   "didntReceiveCode": "Didn't receive the code? ",
   "resendIn": "Resend in",
   "second": "s",
-  "resend": "Resend"
+  "resend": "Resend",
+  "verificationSuccessful": "Verification Successful!",
+  "welcomeMessage": "Welcome to SmartGuide Egypt!",
+  "accountReady": "Your account is ready — start exploring Egypt the smart way!",
+  "loginPrompt": "Login to start exploring."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

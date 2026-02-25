@@ -80,5 +80,9 @@ abstract class  LocaleKeys {
   static const resendIn = 'resendIn';
   static const second = 'second';
   static const resend = 'resend';
+  static const verificationSuccessful = 'verificationSuccessful';
+  static const welcomeMessage = 'welcomeMessage';
+  static const accountReady = 'accountReady';
+  static const loginPrompt = 'loginPrompt';
 
 }
