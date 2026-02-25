@@ -95,7 +95,10 @@ class CodegenLoader extends AssetLoader{
   "verificationSuccessful": "تم التحقق بنجاح!",
   "welcomeMessage": "مرحبًا بك في سمارت جايد مصر!",
   "accountReady": "حسابك أصبح جاهزًا — ابدأ استكشاف مصر بالطريقة الذكية!",
-  "loginPrompt": "سجّل الدخول لبدء الاستكشاف."
+  "loginPrompt": "سجّل الدخول لبدء الاستكشاف.",
+  "enterEmailAndSendCode": "ادخل عنوان بريدك الالكتروني وسنرسل لك رمز لاستعادة كلمة المرور",
+  "emailHintText": "name@example.com",
+  "sendCode": "ارسال الرمز"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -146,7 +149,7 @@ static const Map<String,dynamic> _en = {
   "registerDescriptionAsGuide": "Share your expertise with travelers.",
   "name": "Name",
   "enterFullName": "Enter your full name",
-  "email": "Email",
+  "email": "E-mail",
   "enterEmail": "Enter your email address",
   "phone": "Phone",
   "enterPhone": "Enter your phone number",
@@ -178,7 +181,10 @@ static const Map<String,dynamic> _en = {
   "verificationSuccessful": "Verification Successful!",
   "welcomeMessage": "Welcome to SmartGuide Egypt!",
   "accountReady": "Your account is ready — start exploring Egypt the smart way!",
-  "loginPrompt": "Login to start exploring."
+  "loginPrompt": "Login to start exploring.",
+  "enterEmailAndSendCode": "Enter your email address and we'll send you a code to reset your password.",
+  "emailHintText": "name@example.com",
+  "sendCode": "Send Code"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

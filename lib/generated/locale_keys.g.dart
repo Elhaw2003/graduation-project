@@ -84,5 +84,8 @@ abstract class  LocaleKeys {
   static const welcomeMessage = 'welcomeMessage';
   static const accountReady = 'accountReady';
   static const loginPrompt = 'loginPrompt';
+  static const enterEmailAndSendCode = 'enterEmailAndSendCode';
+  static const emailHintText = 'emailHintText';
+  static const sendCode = 'sendCode';
 
 }
