@@ -3,9 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spring_animation.dart';
 import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
-import 'package:smart_guide/feature/auth/forgot_password/presentation/view/forgot_password_screen.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/login_screen.dart';
 import 'package:smart_guide/feature/auth/register/presentation/view/register_screen.dart';
+import 'package:smart_guide/feature/auth/reset_password/presentation/view/reset_password_screen.dart';
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
 import 'package:smart_guide/feature/auth/success_verification/presentation/view/success_verification_screen.dart';
 import 'package:smart_guide/feature/auth/verify_phone_number/presentation/view/verify_phone_number_screen.dart';
@@ -14,7 +14,7 @@ import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart'
 
 class RoutingGenerationConfig {
   static GoRouter routerGeneratorConfig = GoRouter(
-    initialLocation: AppRoutes.successVerificationScreen,
+    initialLocation: AppRoutes.resetPasswordScreen,
     errorBuilder: (context, state) {
       return errorBuilder();
     },
@@ -64,12 +64,12 @@ class RoutingGenerationConfig {
         },
       ),
 
-      /// Forgot Password Screen
+      /// Reset Password Screen
       GoRoute(
-        path: AppRoutes.forgotPasswordScreen,
-        name: AppRoutes.forgotPasswordScreen,
+        path: AppRoutes.resetPasswordScreen,
+        name: AppRoutes.resetPasswordScreen,
         pageBuilder: (context, state) {
-          return CustomSpringPage(child: ForgotPasswordScreen());
+          return CustomSpringPage(child: ResetPasswordScreen());
         },
       ),
 

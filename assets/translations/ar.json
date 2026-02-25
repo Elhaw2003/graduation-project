@@ -79,5 +79,8 @@
   "verificationSuccessful": "تم التحقق بنجاح!",
   "welcomeMessage": "مرحبًا بك في سمارت جايد مصر!",
   "accountReady": "حسابك أصبح جاهزًا — ابدأ استكشاف مصر بالطريقة الذكية!",
-  "loginPrompt": "سجّل الدخول لبدء الاستكشاف."
+  "loginPrompt": "سجّل الدخول لبدء الاستكشاف.",
+  "enterEmailAndSendCode":"ادخل عنوان بريدك الالكتروني وسنرسل لك رمز لاستعادة كلمة المرور",
+  "emailHintText":"name@example.com",
+  "sendCode":"ارسال الرمز"
 }
