@@ -7,13 +7,14 @@ import 'package:smart_guide/feature/auth/forgot_password/presentation/view/forgo
 import 'package:smart_guide/feature/auth/login/presentation/view/login_screen.dart';
 import 'package:smart_guide/feature/auth/register/presentation/view/register_screen.dart';
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
+import 'package:smart_guide/feature/auth/success_verification/presentation/view/success_verification_screen.dart';
 import 'package:smart_guide/feature/auth/verify_phone_number/presentation/view/verify_phone_number_screen.dart';
 import 'package:smart_guide/feature/onboarding/presentation/view/onboarding_screen.dart';
 import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart';
 
 class RoutingGenerationConfig {
   static GoRouter routerGeneratorConfig = GoRouter(
-    initialLocation: AppRoutes.selectRoleScreen,
+    initialLocation: AppRoutes.successVerificationScreen,
     errorBuilder: (context, state) {
       return errorBuilder();
     },
@@ -78,6 +79,15 @@ class RoutingGenerationConfig {
         name: AppRoutes.verifyPhoneNumberScreen,
         pageBuilder: (context, state) {
           return CustomSpringPage(child: VerifyPhoneNumberScreen());
+        },
+      ),
+
+      /// Success Verification Screen
+      GoRoute(
+        path: AppRoutes.successVerificationScreen,
+        name: AppRoutes.successVerificationScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(child: SuccessVerificationScreen());
         },
       ),
     ],

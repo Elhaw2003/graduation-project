@@ -75,5 +75,9 @@
   "didntReceiveCode": "Didn't receive the code? ",
   "resendIn":"Resend in",
   "second":"s",
-  "resend":"Resend"
+  "resend":"Resend",
+  "verificationSuccessful": "Verification Successful!",
+  "welcomeMessage": "Welcome to SmartGuide Egypt!",
+  "accountReady": "Your account is ready — start exploring Egypt the smart way!",
+  "loginPrompt": "Login to start exploring."
 }
