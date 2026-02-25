@@ -82,5 +82,7 @@
   "loginPrompt": "Login to start exploring.",
   "enterEmailAndSendCode":"Enter your email address and we'll send you a code to reset your password.",
   "emailHintText":"name@example.com",
-  "sendCode":"Send Code"
+  "sendCode":"Send Code",
+  "verifyEmail":"Verify Your Email",
+  "sentSixDigitCode":"We've sent a 6-digit code to"
 }

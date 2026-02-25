@@ -8,9 +8,15 @@ import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/auth/reset_password/presentation/view/widget/send_code_button.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
-class ResetPasswordBody extends StatelessWidget {
+class ResetPasswordBody extends StatefulWidget {
   const ResetPasswordBody({super.key});
 
+  @override
+  State<ResetPasswordBody> createState() => _ResetPasswordBodyState();
+}
+
+class _ResetPasswordBodyState extends State<ResetPasswordBody> {
+  TextEditingController emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -31,12 +37,13 @@ class ResetPasswordBody extends StatelessWidget {
           Text(LocaleKeys.email.tr(), style: AppTextStyle.primaryTextW500S17),
           CustomHeightSpacingWidget(height: 10),
           CustomTextFieldWidget(
+            controller: emailController,
             prefixIcon: Icons.email_outlined,
             prefixColor: AppColors.grey300Color,
             hintText: LocaleKeys.emailHintText.tr(),
           ),
           CustomHeightSpacingWidget(height: 30),
-          SendCodeButton(),
+          SendCodeButton(email: emailController.text.trim()),
         ],
       ),
     );

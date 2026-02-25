@@ -82,5 +82,7 @@
   "loginPrompt": "سجّل الدخول لبدء الاستكشاف.",
   "enterEmailAndSendCode":"ادخل عنوان بريدك الالكتروني وسنرسل لك رمز لاستعادة كلمة المرور",
   "emailHintText":"name@example.com",
-  "sendCode":"ارسال الرمز"
+  "sendCode":"ارسال الرمز",
+  "verifyEmail":"تحقق من بريدك الالكتروني",
+  "sentSixDigitCode":"لقد ارسلنا رمزًا مكونًا من 6 ارقام إلى"
 }
