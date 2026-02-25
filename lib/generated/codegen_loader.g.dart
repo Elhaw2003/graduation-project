@@ -98,7 +98,9 @@ class CodegenLoader extends AssetLoader{
   "loginPrompt": "سجّل الدخول لبدء الاستكشاف.",
   "enterEmailAndSendCode": "ادخل عنوان بريدك الالكتروني وسنرسل لك رمز لاستعادة كلمة المرور",
   "emailHintText": "name@example.com",
-  "sendCode": "ارسال الرمز"
+  "sendCode": "ارسال الرمز",
+  "verifyEmail": "تحقق من بريدك الالكتروني",
+  "sentSixDigitCode": "لقد ارسلنا رمزًا مكونًا من 6 ارقام إلى"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -184,7 +186,9 @@ static const Map<String,dynamic> _en = {
   "loginPrompt": "Login to start exploring.",
   "enterEmailAndSendCode": "Enter your email address and we'll send you a code to reset your password.",
   "emailHintText": "name@example.com",
-  "sendCode": "Send Code"
+  "sendCode": "Send Code",
+  "verifyEmail": "Verify Your Email",
+  "sentSixDigitCode": "We've sent a 6-digit code to"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

@@ -87,5 +87,7 @@ abstract class  LocaleKeys {
   static const enterEmailAndSendCode = 'enterEmailAndSendCode';
   static const emailHintText = 'emailHintText';
   static const sendCode = 'sendCode';
+  static const verifyEmail = 'verifyEmail';
+  static const sentSixDigitCode = 'sentSixDigitCode';
 
 }

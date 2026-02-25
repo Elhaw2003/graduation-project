@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
@@ -8,6 +10,7 @@ import 'package:smart_guide/feature/auth/register/presentation/view/register_scr
 import 'package:smart_guide/feature/auth/reset_password/presentation/view/reset_password_screen.dart';
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
 import 'package:smart_guide/feature/auth/success_verification/presentation/view/success_verification_screen.dart';
+import 'package:smart_guide/feature/auth/verify_email/presentation/view/verify_email_screen.dart';
 import 'package:smart_guide/feature/auth/verify_phone_number/presentation/view/verify_phone_number_screen.dart';
 import 'package:smart_guide/feature/onboarding/presentation/view/onboarding_screen.dart';
 import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart';
@@ -88,6 +91,16 @@ class RoutingGenerationConfig {
         name: AppRoutes.successVerificationScreen,
         pageBuilder: (context, state) {
           return CustomSpringPage(child: SuccessVerificationScreen());
+        },
+      ),
+
+      /// Verify Email Screen
+      GoRoute(
+        path: AppRoutes.verifyEmailScreen,
+        name: AppRoutes.verifyEmailScreen,
+        pageBuilder: (context, state) {
+          final String email = state.extra as String;
+          return CustomSpringPage(child: VerifyEmailScreen(email: email));
         },
       ),
     ],
