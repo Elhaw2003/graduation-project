@@ -47,7 +47,7 @@
   "registerDescriptionAsGuide":"Share your expertise with travelers.",
   "name": "Name",
   "enterFullName": "Enter your full name",
-  "email": "Email",
+  "email": "E-mail",
   "enterEmail": "Enter your email address",
   "phone": "Phone",
   "enterPhone": "Enter your phone number",
@@ -86,4 +86,14 @@
   "pick_a_local_expert_or_smart_ai": "Pick a local expert or smart AI to\n start your journey"
   
   
+
+  "verificationSuccessful": "Verification Successful!",
+  "welcomeMessage": "Welcome to SmartGuide Egypt!",
+  "accountReady": "Your account is ready — start exploring Egypt the smart way!",
+  "loginPrompt": "Login to start exploring.",
+  "enterEmailAndSendCode":"Enter your email address and we'll send you a code to reset your password.",
+  "emailHintText":"name@example.com",
+  "sendCode":"Send Code",
+  "verifyEmail":"Verify Your Email",
+  "sentSixDigitCode":"We've sent a 6-digit code to"
 }

@@ -89,4 +89,14 @@ abstract class LocaleKeys {
   static const chooseYourGuide = 'Choose Your Guide';
   static const pickALocalExpertOrSmartAi =
       'Pick a local expert or our smart AI to\n start your journey';
+  static const verificationSuccessful = 'verificationSuccessful';
+  static const welcomeMessage = 'welcomeMessage';
+  static const accountReady = 'accountReady';
+  static const loginPrompt = 'loginPrompt';
+  static const enterEmailAndSendCode = 'enterEmailAndSendCode';
+  static const emailHintText = 'emailHintText';
+  static const sendCode = 'sendCode';
+  static const verifyEmail = 'verifyEmail';
+  static const sentSixDigitCode = 'sentSixDigitCode';
+
 }

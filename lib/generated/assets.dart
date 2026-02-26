@@ -56,6 +56,9 @@ class Assets {
   static const String imagesSvgHome = "assets/images/svg/home_icon.svg";
   static const String imagesSvgperson = "assets/images/svg/person.svg";
   static const String imagesSvgrobot = "assets/images/svg/robot.svg";
+  /// Assets for lottieDone
+  /// assets/lottie/done.json
+  static const String lottieDone = "assets/lottie/done.json";
 
   /// Assets for translationsAr
   /// assets/translations/ar.json
