@@ -13,12 +13,16 @@ class SelectRoleWidget extends StatelessWidget {
     this.onTap,
     this.colorButton,
     this.isSelected,
+    this.iconColor,
+    this.textColor,
   });
   final String title;
   final String icon;
   final void Function()? onTap;
   final Color? colorButton;
   final bool? isSelected;
+  final Color? iconColor;
+  final Color? textColor;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -50,12 +54,15 @@ class SelectRoleWidget extends StatelessWidget {
               height: 80.h,
               width: 80.w,
               colorFilter: ColorFilter.mode(
-                AppColors.whiteColor,
+                iconColor ?? AppColors.whiteColor,
                 BlendMode.srcIn,
               ),
             ),
             CustomHeightSpacingWidget(height: 5),
-            Text(title, style: AppTextStyle.backgroundW600S25),
+            Text(
+              title,
+              style: AppTextStyle.backgroundW600S25.copyWith(color: textColor),
+            ),
           ],
         ),
       ),

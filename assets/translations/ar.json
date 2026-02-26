@@ -76,6 +76,19 @@
   "resendIn":"اعادة الارسال بعد",
   "second":"ثانية",
   "resend":"اعادة الارسال",
+  "hello": "مرحبا", 
+  "cairo": "القاهرة",
+  "cairoEgypt": "القاهرة، مصر",
+
+  "searchDestinationsAndGuides": "ابحث عن الأماكن والمرشدين",
+  
+  "show_all": "عرض الكل",
+  "popular_places": "أماكن مشهورة", 
+  "choose_your_guide": "اختر مرشدك",
+
+  "pick_a_local_expert_or_smart_ai": "اختر خبيرًا محليًا أو\n الذكاء الاصطناعي الذكي لبدء رحلتك"
+
+
   "verificationSuccessful": "تم التحقق بنجاح!",
   "welcomeMessage": "مرحبًا بك في سمارت جايد مصر!",
   "accountReady": "حسابك أصبح جاهزًا — ابدأ استكشاف مصر بالطريقة الذكية!",

@@ -76,6 +76,17 @@
   "resendIn":"Resend in",
   "second":"s",
   "resend":"Resend",
+  "hello": "Hello",
+  "cairo": "Cairo",
+  "cairoEgypt": "Cairo, Egypt",
+  "searchDestinationsAndGuides":"Search destinations & guides",
+    "show_all": "Show All",
+  "popular_places": "Popular Places",
+  "choose_your_guide": "Choose Your Guide",
+  "pick_a_local_expert_or_smart_ai": "Pick a local expert or smart AI to\n start your journey"
+  
+  
+
   "verificationSuccessful": "Verification Successful!",
   "welcomeMessage": "Welcome to SmartGuide Egypt!",
   "accountReady": "Your account is ready — start exploring Egypt the smart way!",

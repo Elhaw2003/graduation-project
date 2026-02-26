@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:smart_guide/app_main.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spring_animation.dart';
 import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
@@ -12,6 +13,8 @@ import 'package:smart_guide/feature/auth/select_role/presentation/view/select_ro
 import 'package:smart_guide/feature/auth/success_verification/presentation/view/success_verification_screen.dart';
 import 'package:smart_guide/feature/auth/verify_email/presentation/view/verify_email_screen.dart';
 import 'package:smart_guide/feature/auth/verify_phone_number/presentation/view/verify_phone_number_screen.dart';
+import 'package:smart_guide/feature/guides/presentation/view/choose_guides_screen.dart';
+import 'package:smart_guide/feature/home/presentation/home_screen.dart';
 import 'package:smart_guide/feature/onboarding/presentation/view/onboarding_screen.dart';
 import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart';
 
@@ -84,6 +87,25 @@ class RoutingGenerationConfig {
           return CustomSpringPage(child: VerifyPhoneNumberScreen());
         },
       ),
+      GoRoute(
+        path: AppRoutes.homeScreen,
+        name: AppRoutes.homeScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(child: HomeScreen());
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.appMain,
+        name: AppRoutes.appMain,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(child: AppMain());
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.chooseGuidesScreen,
+        name: AppRoutes.chooseGuidesScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(child: ChooseGuidesScreen());
 
       /// Success Verification Screen
       GoRoute(

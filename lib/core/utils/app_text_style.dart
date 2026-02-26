@@ -26,6 +26,18 @@ class AppTextStyle {
     fontWeight: FontWeight.w500,
   );
 
+  /// third text color
+  static TextStyle thirdTextW400S17 = GoogleFonts.readexPro(
+    color: AppColors.thirdTextColor,
+    fontSize: 17.sp,
+    fontWeight: FontWeight.w400,
+  );
+  static TextStyle thirdTextW900S20 = GoogleFonts.readexPro(
+    color: AppColors.thirdTextColor,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w900,
+  );
+
   /// White color
   static TextStyle whiteW500S27 = GoogleFonts.readexPro(
     color: AppColors.whiteColor,
@@ -35,6 +47,11 @@ class AppTextStyle {
   static TextStyle whiteW500S22 = GoogleFonts.readexPro(
     color: AppColors.whiteColor,
     fontSize: 22.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle whiteW500S17 = GoogleFonts.readexPro(
+    color: AppColors.whiteColor,
+    fontSize: 17.sp,
     fontWeight: FontWeight.w500,
   );
   static TextStyle whiteW500S25 = GoogleFonts.readexPro(
@@ -64,6 +81,11 @@ class AppTextStyle {
     fontSize: 15.sp,
     fontWeight: FontWeight.w400,
   );
+  static TextStyle primaryW500S16 = GoogleFonts.readexPro(
+    color: AppColors.primaryColor,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+  );
 
   /// primary text color
   static TextStyle primaryTextW400S15 = GoogleFonts.readexPro(
@@ -81,6 +103,16 @@ class AppTextStyle {
     fontSize: 17.sp,
     fontWeight: FontWeight.w500,
   );
+  static TextStyle primaryTextW500S21 = GoogleFonts.readexPro(
+    color: AppColors.primaryTextColor,
+    fontSize: 21.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle primaryTextW600S22 = GoogleFonts.readexPro(
+    color: AppColors.primaryTextColor,
+    fontSize: 22.sp,
+    fontWeight: FontWeight.w600,
+  );
   static TextStyle primaryTextW500S25 = GoogleFonts.readexPro(
     color: AppColors.primaryTextColor,
     fontSize: 25.sp,
@@ -89,6 +121,11 @@ class AppTextStyle {
   static TextStyle primaryTextW400S14 = GoogleFonts.readexPro(
     color: AppColors.primaryTextColor,
     fontSize: 14.sp,
+    fontWeight: FontWeight.w400,
+  );
+  static TextStyle secondaryTextW400S17 = GoogleFonts.readexPro(
+    color: AppColors.secondaryTextColor,
+    fontSize: 17.sp,
     fontWeight: FontWeight.w400,
   );
 
@@ -108,6 +145,11 @@ class AppTextStyle {
   static TextStyle black1F2937W400S15 = GoogleFonts.readexPro(
     color: AppColors.black1F2937Color,
     fontSize: 15.sp,
+    fontWeight: FontWeight.w400,
+  );
+  static TextStyle black1F2937W400S17 = GoogleFonts.readexPro(
+    color: AppColors.black1F2937Color,
+    fontSize: 17.sp,
     fontWeight: FontWeight.w400,
   );
 
