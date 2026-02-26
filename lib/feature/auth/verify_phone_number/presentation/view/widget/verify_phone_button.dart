@@ -16,7 +16,7 @@ class VerifyPhoneButton extends StatelessWidget {
       onPressed: otpController!.text.length != 6
           ? null
           : () {
-              GoRouter.of(context).pushNamed(AppRoutes.homeScreen);
+              GoRouter.of(context).pushNamed(AppRoutes.appMain);
             },
       buttonColor: otpController!.text.length != 6
           ? AppColors.primaryColor.withValues(alpha: 0.5)

@@ -78,6 +78,12 @@
   "resend":"Resend",
   "hello": "Hello",
   "cairo": "Cairo",
-  "cairoEgypt": "Cairo, Egypt"
+  "cairoEgypt": "Cairo, Egypt",
+  "searchDestinationsAndGuides":"Search destinations & guides",
+    "show_all": "Show All",
+  "popular_places": "Popular Places",
+  "choose_your_guide": "Choose Your Guide",
+  "pick_a_local_expert_or_smart_ai": "Pick a local expert or smart AI to\n start your journey"
+  
   
 }

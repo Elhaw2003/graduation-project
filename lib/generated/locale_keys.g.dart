@@ -82,5 +82,11 @@ abstract class LocaleKeys {
   static const resend = 'resend';
   static const hello = 'hello';
   static const cairo = 'cairo';
-  static const cairoEgypt = 'cairo, Egypt';
+  static const cairoEgypt = 'cairoEgypt';
+  static const searchDestinationsAndGuides = 'searchDestinationsAndGuides';
+  static const showAll = 'Show All';
+  static const popularPlaces = 'Popular Places';
+  static const chooseYourGuide = 'Choose Your Guide';
+  static const pickALocalExpertOrSmartAi =
+      'Pick a local expert or our smart AI to\n start your journey';
 }

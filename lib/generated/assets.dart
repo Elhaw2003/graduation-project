@@ -49,6 +49,13 @@ class Assets {
   /// Assets for imagesSvgsettings
   /// assets/images/svg/settings.svg
   static const String imagesSvgSettings = "assets/images/svg/settings.svg";
+  static const String imagesSvgChat = "assets/images/svg/ai_icon.svg";
+  static const String imagesSvgGuides = "assets/images/svg/guides_icon.svg";
+  static const String imagesSvgExplore = "assets/images/svg/explor_icon.svg";
+  static const String imagesSvgMenu = "assets/images/svg/more_icon.svg";
+  static const String imagesSvgHome = "assets/images/svg/home_icon.svg";
+  static const String imagesSvgperson = "assets/images/svg/person.svg";
+  static const String imagesSvgrobot = "assets/images/svg/robot.svg";
 
   /// Assets for translationsAr
   /// assets/translations/ar.json
