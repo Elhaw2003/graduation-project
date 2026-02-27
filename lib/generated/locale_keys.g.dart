@@ -82,8 +82,8 @@ abstract class LocaleKeys {
   static const resend = 'resend';
   static const hello = 'hello';
   static const cairo = 'cairo';
-  static const cairoEgypt = 'cairoEgypt';
-  static const searchDestinationsAndGuides = 'searchDestinationsAndGuides';
+  static const cairoEgypt = 'Cairo Egypt';
+  static const searchDestinationsAndGuides = 'Search Destinations And Guides';
   static const showAll = 'Show All';
   static const popularPlaces = 'Popular Places';
   static const chooseYourGuide = 'Choose Your Guide';
@@ -98,5 +98,4 @@ abstract class LocaleKeys {
   static const sendCode = 'sendCode';
   static const verifyEmail = 'verifyEmail';
   static const sentSixDigitCode = 'sentSixDigitCode';
-
 }

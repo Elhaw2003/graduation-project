@@ -106,6 +106,8 @@ class RoutingGenerationConfig {
         name: AppRoutes.chooseGuidesScreen,
         pageBuilder: (context, state) {
           return CustomSpringPage(child: ChooseGuidesScreen());
+        },
+      ),
 
       /// Success Verification Screen
       GoRoute(
