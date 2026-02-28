@@ -89,5 +89,9 @@
   "enterYourNewPasswordBelow":"Enter your new password below.",
   "enterYourPassword":"Enter your password",
   "resetPassword":"Reset Password",
-  "newPassword":"New Password"
+  "newPassword":"New Password",
+  "passwordResetSuccess":"Password successfully reset",
+  "passwordResetSuccessMessage":"You can now log in with your new password.",
+  "continu":"Continue"
+  
 }

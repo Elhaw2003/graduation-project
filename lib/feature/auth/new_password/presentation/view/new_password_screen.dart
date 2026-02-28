@@ -9,7 +9,6 @@ class NewPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         backgroundColor: AppColors.backgroundColor,

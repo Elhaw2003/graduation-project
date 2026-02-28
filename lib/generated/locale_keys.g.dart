@@ -102,5 +102,8 @@ abstract class  LocaleKeys {
   static const enterYourPassword = 'enterYourPassword';
   static const resetPassword = 'resetPassword';
   static const newPassword = 'newPassword';
+  static const passwordResetSuccess = 'passwordResetSuccess';
+  static const passwordResetSuccessMessage = 'passwordResetSuccessMessage';
+  static const continu = 'continu';
 
 }

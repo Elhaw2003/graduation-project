@@ -25,6 +25,11 @@ class AppTextStyle {
     fontSize: 15.sp,
     fontWeight: FontWeight.w500,
   );
+  static TextStyle backgroundW600S20 = GoogleFonts.readexPro(
+    color: AppColors.backgroundColor,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w600,
+  );
 
   /// third text color
   static TextStyle thirdTextW400S17 = GoogleFonts.readexPro(
@@ -129,6 +134,13 @@ class AppTextStyle {
     fontWeight: FontWeight.w400,
   );
 
+  /// primary text 400 color
+  static TextStyle primary400TextW500S16 = GoogleFonts.readexPro(
+    color: AppColors.primaryText400Color,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+  );
+
   /// grey color
   static TextStyle grey300W400S16 = GoogleFonts.readexPro(
     color: AppColors.grey300Color,
@@ -165,5 +177,12 @@ class AppTextStyle {
     fontSize: 26.sp,
     fontWeight: FontWeight.bold,
     color: AppColors.darkTealColor,
+  );
+
+  /// green color
+  static TextStyle greenColorW600S20 = TextStyle(
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.greenColor,
   );
 }

@@ -102,5 +102,8 @@
   "enterYourNewPasswordBelow":"ادخل كلمة المرور الجديدة",
   "enterYourPassword":"ادخل كلمة المرور",
   "resetPassword":"إنشاء كلمة المرور",
-  "newPassword":"كلمة المرور الجديدة"
+  "newPassword":"كلمة المرور الجديدة",
+  "passwordResetSuccess":"تم استعادة كلمة المرور بنجاح",
+  "passwordResetSuccessMessage":"يمكنك الان تسجيل الدخول مع كلمة المرور الجديدة.",
+  "continu":"استمر"
 }
