@@ -12,4 +12,6 @@ class AppRoutes {
   static const String resetPasswordScreen = '/resetPasswordScreen';
   static const String verifyEmailScreen = '/verifyEmailScreen';
   static const String newPasswordScreen = '/newPasswordScreen';
+  static const String passwordResetSuccessfullyScreen =
+      '/passwordResetSuccessfullyScreen';
 }

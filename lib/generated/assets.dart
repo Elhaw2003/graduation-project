@@ -18,6 +18,10 @@ class Assets {
   /// assets/images/png/logo_without_text.png
   static const String imagesPngLogoWithoutText = "assets/images/png/logo_without_text.png";
 
+  /// Assets for imagesPngPasswordResetSuccess
+  /// assets/images/png/password_reset_success.png
+  static const String imagesPngPasswordResetSuccess = "assets/images/png/password_reset_success.png";
+
   /// Assets for imagesPngSecondSplashScreen
   /// assets/images/png/second_splash_screen.png
   static const String imagesPngSecondSplashScreen = "assets/images/png/second_splash_screen.png";

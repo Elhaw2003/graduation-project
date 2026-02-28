@@ -113,7 +113,10 @@ class CodegenLoader extends AssetLoader{
   "enterYourNewPasswordBelow": "ادخل كلمة المرور الجديدة",
   "enterYourPassword": "ادخل كلمة المرور",
   "resetPassword": "إنشاء كلمة المرور",
-  "newPassword": "كلمة المرور الجديدة"
+  "newPassword": "كلمة المرور الجديدة",
+  "passwordResetSuccess": "تم استعادة كلمة المرور بنجاح",
+  "passwordResetSuccessMessage": "يمكنك الان تسجيل الدخول مع كلمة المرور الجديدة.",
+  "continu": "استمر"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -206,7 +209,10 @@ static const Map<String,dynamic> _en = {
   "enterYourNewPasswordBelow": "Enter your new password below.",
   "enterYourPassword": "Enter your password",
   "resetPassword": "Reset Password",
-  "newPassword": "New Password"
+  "newPassword": "New Password",
+  "passwordResetSuccess": "Password successfully reset",
+  "passwordResetSuccessMessage": "You can now log in with your new password.",
+  "continu": "Continue"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

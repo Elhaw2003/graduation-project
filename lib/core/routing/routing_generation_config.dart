@@ -8,6 +8,7 @@ import 'package:smart_guide/core/shared_widgets/custom_spring_animation.dart';
 import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/login_screen.dart';
 import 'package:smart_guide/feature/auth/new_password/presentation/view/new_password_screen.dart';
+import 'package:smart_guide/feature/auth/password_reset_successfully/presentation/view/password_reset_successfully_screen.dart';
 import 'package:smart_guide/feature/auth/register/presentation/view/register_screen.dart';
 import 'package:smart_guide/feature/auth/reset_password/presentation/view/reset_password_screen.dart';
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
@@ -21,7 +22,7 @@ import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart'
 
 class RoutingGenerationConfig {
   static GoRouter routerGeneratorConfig = GoRouter(
-    initialLocation: AppRoutes.newPasswordScreen,
+    initialLocation: AppRoutes.passwordResetSuccessfullyScreen,
     errorBuilder: (context, state) {
       return errorBuilder();
     },
@@ -135,6 +136,15 @@ class RoutingGenerationConfig {
         name: AppRoutes.newPasswordScreen,
         pageBuilder: (context, state) {
           return CustomSpringPage(child: NewPasswordScreen());
+        },
+      ),
+
+      /// Password Reset Success Screen
+      GoRoute(
+        path: AppRoutes.passwordResetSuccessfullyScreen,
+        name: AppRoutes.passwordResetSuccessfullyScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(child: PasswordResetSuccessfullyScreen());
         },
       ),
     ],
