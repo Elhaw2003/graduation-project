@@ -4,6 +4,7 @@ class AppColors {
   static const Color whiteColor = Color(0xffFFFFFF);
   static const Color backgroundColor = Color(0xffEDF0FE);
   static const Color primaryColor = Color(0xff3B82F6);
+  static const Color secondaryColor = Color(0xff113E80);
   static const Color darkTealColor = Color(0xFF0D5C63);
   static const Color goldColor = Color(0xFFC6A75E);
   static const Color grey100Color = Color(0xFFF0F1F1);
@@ -13,7 +14,10 @@ class AppColors {
   static const Color greyCFC9C9olor = Color(0xFFCFC9C9);
   static const Color primaryTextColor = Color(0xFF202123);
   static const Color secondaryTextColor = Color(0xFF606167);
+  static const Color thirdTextColor = Color(0xFF2F4F4F);
+
   static const Color black1F2937Color = Color(0xFF1F2937);
   static const Color blackColor = Color(0xFF000000);
   static const Color redColor = Colors.red;
+  static const Color contanerColore = Color(0xFFE0E7FF);
 }

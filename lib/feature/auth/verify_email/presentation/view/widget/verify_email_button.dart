@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
@@ -11,7 +13,11 @@ class VerifyEmailButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomButtonWidget(
-      onPressed: otpController!.text.length != 6 ? null : () {},
+      onPressed: otpController!.text.length != 6
+          ? null
+          : () {
+              GoRouter.of(context).pushNamed(AppRoutes.appMain);
+            },
       buttonColor: otpController!.text.length != 6
           ? AppColors.primaryColor.withValues(alpha: 0.5)
           : AppColors.primaryColor,

@@ -5,6 +5,9 @@ class AppRoutes {
   static const String registerScreen = '/registerScreen';
   static const String selectRoleScreen = '/selectRoleScreen';
   static const String verifyPhoneNumberScreen = '/verifyPhoneNumberScreen';
+  static const String homeScreen = '/homeScreen';
+  static const String appMain = '/appMain';
+  static const String chooseGuidesScreen = '/chooseGuidesScreen';
   static const String successVerificationScreen = '/successVerificationScreen';
   static const String resetPasswordScreen = '/resetPasswordScreen';
   static const String verifyEmailScreen = '/verifyEmailScreen';

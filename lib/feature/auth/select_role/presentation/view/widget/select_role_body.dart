@@ -38,6 +38,8 @@ class _SelectRoleBodyState extends State<SelectRoleBody> {
           ),
           CustomHeightSpacingWidget(height: 30),
           SelectRoleWidget(
+            textColor: AppColors.whiteColor,
+            iconColor: AppColors.whiteColor,
             isSelected:
                 selectType.toString() == UserTypeEnum.tourist.toString(),
             colorButton: selectType == UserTypeEnum.tourist
@@ -53,6 +55,8 @@ class _SelectRoleBodyState extends State<SelectRoleBody> {
           ),
           CustomHeightSpacingWidget(height: 50),
           SelectRoleWidget(
+            textColor: AppColors.whiteColor,
+            iconColor: AppColors.whiteColor,
             isSelected: selectType.toString() == UserTypeEnum.guide.toString(),
             colorButton: selectType == UserTypeEnum.guide
                 ? AppColors.primaryColor
