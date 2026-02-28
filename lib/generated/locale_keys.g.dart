@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class LocaleKeys {
+abstract class  LocaleKeys {
   static const exploreEgyptHistory = 'exploreEgyptHistory';
   static const discoverAncientSecrets = 'discoverAncientSecrets';
   static const yourJourneyStartsHere = 'yourJourneyStartsHere';
@@ -82,13 +82,12 @@ abstract class LocaleKeys {
   static const resend = 'resend';
   static const hello = 'hello';
   static const cairo = 'cairo';
-  static const cairoEgypt = 'Cairo Egypt';
-  static const searchDestinationsAndGuides = 'Search Destinations And Guides';
-  static const showAll = 'Show All';
-  static const popularPlaces = 'Popular Places';
-  static const chooseYourGuide = 'Choose Your Guide';
-  static const pickALocalExpertOrSmartAi =
-      'Pick a local expert or our smart AI to\n start your journey';
+  static const cairoEgypt = 'cairoEgypt';
+  static const searchDestinationsAndGuides = 'searchDestinationsAndGuides';
+  static const show_all = 'show_all';
+  static const popular_places = 'popular_places';
+  static const choose_your_guide = 'choose_your_guide';
+  static const pick_a_local_expert_or_smart_ai = 'pick_a_local_expert_or_smart_ai';
   static const verificationSuccessful = 'verificationSuccessful';
   static const welcomeMessage = 'welcomeMessage';
   static const accountReady = 'accountReady';

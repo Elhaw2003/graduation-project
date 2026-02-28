@@ -46,3 +46,11 @@ flutter:
     - assets/images/svg/
     - assets/translations/
     - assets/lottie/
+
+
+##### GENERATED ASSET FOLDER
+flutter_assets:
+  assets_path: assets/
+  output_path: lib/generated/
+  filename: assets.dart
+  field_prefix: null

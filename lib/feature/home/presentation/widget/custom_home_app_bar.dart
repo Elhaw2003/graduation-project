@@ -30,7 +30,7 @@ class CustomHomeAppBar extends StatelessWidget {
                 child: Image.asset(
                   height: 60,
                   width: 60,
-                  Assets.sphinx,
+                  Assets.imagesPngSphinx,
                   fit: BoxFit.cover,
                 ),
               ),

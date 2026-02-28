@@ -11,12 +11,12 @@ class TextSectionInChooseGuids extends StatelessWidget {
     return Column(
       children: [
         Text(
-          LocaleKeys.chooseYourGuide.tr(),
+          LocaleKeys.choose_your_guide.tr(),
           style: AppTextStyle.primaryTextW600S22,
         ),
         Text(
           textAlign: TextAlign.center,
-          LocaleKeys.pickALocalExpertOrSmartAi.tr(),
+          LocaleKeys.pick_a_local_expert_or_smart_ai.tr(),
           style: AppTextStyle.secondaryTextW400S17,
         ),
       ],
