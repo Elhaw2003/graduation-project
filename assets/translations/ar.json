@@ -97,5 +97,10 @@
   "emailHintText":"name@example.com",
   "sendCode":"ارسال الرمز",
   "verifyEmail":"تحقق من بريدك الالكتروني",
-  "sentSixDigitCode":"لقد ارسلنا رمزًا مكونًا من 6 ارقام إلى"
+  "sentSixDigitCode":"لقد ارسلنا رمزًا مكونًا من 6 ارقام إلى",
+  "createNewPassword":"انشاء كلمة مرور جديدة",
+  "enterYourNewPasswordBelow":"ادخل كلمة المرور الجديدة",
+  "enterYourPassword":"ادخل كلمة المرور",
+  "resetPassword":"إنشاء كلمة المرور",
+  "newPassword":"كلمة المرور الجديدة"
 }
