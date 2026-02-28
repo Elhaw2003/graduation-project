@@ -89,5 +89,10 @@ abstract class  LocaleKeys {
   static const sendCode = 'sendCode';
   static const verifyEmail = 'verifyEmail';
   static const sentSixDigitCode = 'sentSixDigitCode';
+  static const createNewPassword = 'createNewPassword';
+  static const enterYourNewPasswordBelow = 'enterYourNewPasswordBelow';
+  static const enterYourPassword = 'enterYourPassword';
+  static const resetPassword = 'resetPassword';
+  static const newPassword = 'newPassword';
 
 }

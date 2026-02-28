@@ -6,6 +6,7 @@ import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spring_animation.dart';
 import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/login_screen.dart';
+import 'package:smart_guide/feature/auth/new_password/presentation/view/new_password_screen.dart';
 import 'package:smart_guide/feature/auth/register/presentation/view/register_screen.dart';
 import 'package:smart_guide/feature/auth/reset_password/presentation/view/reset_password_screen.dart';
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
@@ -17,7 +18,7 @@ import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart'
 
 class RoutingGenerationConfig {
   static GoRouter routerGeneratorConfig = GoRouter(
-    initialLocation: AppRoutes.resetPasswordScreen,
+    initialLocation: AppRoutes.newPasswordScreen,
     errorBuilder: (context, state) {
       return errorBuilder();
     },
@@ -101,6 +102,15 @@ class RoutingGenerationConfig {
         pageBuilder: (context, state) {
           final String email = state.extra as String;
           return CustomSpringPage(child: VerifyEmailScreen(email: email));
+        },
+      ),
+
+      /// New Password Screen
+      GoRoute(
+        path: AppRoutes.newPasswordScreen,
+        name: AppRoutes.newPasswordScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(child: NewPasswordScreen());
         },
       ),
     ],

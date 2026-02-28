@@ -84,5 +84,10 @@
   "emailHintText":"name@example.com",
   "sendCode":"Send Code",
   "verifyEmail":"Verify Your Email",
-  "sentSixDigitCode":"We've sent a 6-digit code to"
+  "sentSixDigitCode":"We've sent a 6-digit code to",
+  "createNewPassword":"Create New Password",
+  "enterYourNewPasswordBelow":"Enter your new password below.",
+  "enterYourPassword":"Enter your password",
+  "resetPassword":"Reset Password",
+  "newPassword":"New Password"
 }

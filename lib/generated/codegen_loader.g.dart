@@ -100,7 +100,12 @@ class CodegenLoader extends AssetLoader{
   "emailHintText": "name@example.com",
   "sendCode": "ارسال الرمز",
   "verifyEmail": "تحقق من بريدك الالكتروني",
-  "sentSixDigitCode": "لقد ارسلنا رمزًا مكونًا من 6 ارقام إلى"
+  "sentSixDigitCode": "لقد ارسلنا رمزًا مكونًا من 6 ارقام إلى",
+  "createNewPassword": "انشاء كلمة مرور جديدة",
+  "enterYourNewPasswordBelow": "ادخل كلمة المرور الجديدة",
+  "enterYourPassword": "ادخل كلمة المرور",
+  "resetPassword": "إنشاء كلمة المرور",
+  "newPassword": "كلمة المرور الجديدة"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -188,7 +193,12 @@ static const Map<String,dynamic> _en = {
   "emailHintText": "name@example.com",
   "sendCode": "Send Code",
   "verifyEmail": "Verify Your Email",
-  "sentSixDigitCode": "We've sent a 6-digit code to"
+  "sentSixDigitCode": "We've sent a 6-digit code to",
+  "createNewPassword": "Create New Password",
+  "enterYourNewPasswordBelow": "Enter your new password below.",
+  "enterYourPassword": "Enter your password",
+  "resetPassword": "Reset Password",
+  "newPassword": "New Password"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

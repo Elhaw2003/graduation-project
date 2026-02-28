@@ -8,4 +8,5 @@ class AppRoutes {
   static const String successVerificationScreen = '/successVerificationScreen';
   static const String resetPasswordScreen = '/resetPasswordScreen';
   static const String verifyEmailScreen = '/verifyEmailScreen';
+  static const String newPasswordScreen = '/newPasswordScreen';
 }
