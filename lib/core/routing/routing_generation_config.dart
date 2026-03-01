@@ -22,7 +22,7 @@ import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart'
 
 class RoutingGenerationConfig {
   static GoRouter routerGeneratorConfig = GoRouter(
-    initialLocation: AppRoutes.passwordResetSuccessfullyScreen,
+    initialLocation: AppRoutes.selectRoleScreen,
     errorBuilder: (context, state) {
       return errorBuilder();
     },

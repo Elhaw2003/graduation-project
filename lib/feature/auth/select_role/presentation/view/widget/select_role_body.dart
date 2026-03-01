@@ -76,7 +76,7 @@ class _SelectRoleBodyState extends State<SelectRoleBody> {
                 ? () {
                     GoRouter.of(
                       context,
-                    ).pushNamed(AppRoutes.registerScreen, extra: selectType);
+                    ).pushNamed(AppRoutes.loginScreen, extra: selectType);
                   }
                 : null,
             title: LocaleKeys.next.tr(),

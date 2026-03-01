@@ -13,12 +13,28 @@ import 'package:smart_guide/feature/auth/login/presentation/view/widget/remember
 import 'package:smart_guide/generated/assets.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
-class LoginBody extends StatelessWidget {
+class LoginBody extends StatefulWidget {
   const LoginBody({super.key, required this.userTypeEnum});
+
   final UserTypeEnum userTypeEnum;
+
+  @override
+  State<LoginBody> createState() => _LoginBodyState();
+}
+
+class _LoginBodyState extends State<LoginBody> {
+  late UserTypeEnum userType;
+
+  @override
+  void initState() {
+    super.initState();
+    userType = widget.userTypeEnum;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Column(
@@ -28,19 +44,24 @@ class LoginBody extends StatelessWidget {
             Row(
               children: [
                 CustomButtonWidget(
+                  onPressed: () {
+                    setState(() {
+                      userType = UserTypeEnum.tourist;
+                    });
+                  },
                   buttonWidth: 191,
-                  buttonColor: userTypeEnum == UserTypeEnum.tourist
+                  buttonColor: userType == UserTypeEnum.tourist
                       ? AppColors.primaryColor
                       : AppColors.whiteColor,
-                  borderSideColor: userTypeEnum == UserTypeEnum.tourist
+                  borderSideColor: userType == UserTypeEnum.tourist
                       ? AppColors.primaryColor
                       : AppColors.whiteColor,
                   title: LocaleKeys.tourist.tr(),
-                  titleStyle: userTypeEnum == UserTypeEnum.tourist
+                  titleStyle: userType == UserTypeEnum.tourist
                       ? AppTextStyle.whiteW500S22
                       : AppTextStyle.primaryW500S22,
                   suffixSvgIcon: Assets.imagesSvgAirplane,
-                  suffixIconColor: userTypeEnum == UserTypeEnum.tourist
+                  suffixIconColor: userType == UserTypeEnum.tourist
                       ? AppColors.whiteColor
                       : AppColors.primaryColor,
                   suffixIconSize: 30,
@@ -48,20 +69,25 @@ class LoginBody extends StatelessWidget {
                 ),
                 CustomWidthSpacingWidget(width: 15),
                 CustomButtonWidget(
+                  onPressed: () {
+                    setState(() {
+                      userType = UserTypeEnum.guide;
+                    });
+                  },
                   buttonWidth: 191,
                   buttonHeight: 50,
-                  buttonColor: userTypeEnum == UserTypeEnum.guide
+                  buttonColor: userType == UserTypeEnum.guide
                       ? AppColors.primaryColor
                       : AppColors.whiteColor,
-                  borderSideColor: userTypeEnum == UserTypeEnum.guide
+                  borderSideColor: userType == UserTypeEnum.guide
                       ? AppColors.primaryColor
                       : AppColors.whiteColor,
                   title: LocaleKeys.guide.tr(),
-                  titleStyle: userTypeEnum == UserTypeEnum.guide
+                  titleStyle: userType == UserTypeEnum.guide
                       ? AppTextStyle.whiteW500S22
                       : AppTextStyle.primaryW500S22,
                   suffixSvgIcon: Assets.imagesSvgCompass,
-                  suffixIconColor: userTypeEnum == UserTypeEnum.guide
+                  suffixIconColor: userType == UserTypeEnum.guide
                       ? AppColors.whiteColor
                       : AppColors.primaryColor,
                   suffixIconSize: 30,
@@ -82,7 +108,7 @@ class LoginBody extends StatelessWidget {
             CustomTextFieldWidget(hintText: LocaleKeys.enterNationalId.tr()),
             CustomHeightSpacingWidget(height: 15),
             Text(
-              LocaleKeys.nationalId.tr(),
+              LocaleKeys.password.tr(),
               style: AppTextStyle.primaryTextW500S17,
             ),
             CustomHeightSpacingWidget(height: 5),
