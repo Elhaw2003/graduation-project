@@ -10,6 +10,10 @@ class Assets {
   /// assets/images/png/first_splash_screen.png
   static const String imagesPngFirstSplashScreen = "assets/images/png/first_splash_screen.png";
 
+  /// Assets for imagesPngGuide
+  /// assets/images/png/guide.png
+  static const String imagesPngGuide = "assets/images/png/guide.png";
+
   /// Assets for imagesPngLogoWithText
   /// assets/images/png/logo_with_text.png
   static const String imagesPngLogoWithText = "assets/images/png/logo_with_text.png";
@@ -37,6 +41,10 @@ class Assets {
   /// Assets for imagesPngThirdSplashScreen
   /// assets/images/png/third_splash_screen.png
   static const String imagesPngThirdSplashScreen = "assets/images/png/third_splash_screen.png";
+
+  /// Assets for imagesPngTourist
+  /// assets/images/png/tourist.png
+  static const String imagesPngTourist = "assets/images/png/tourist.png";
 
   /// Assets for imagesPngValleyOfTheKings
   /// assets/images/png/valley_of_the_kings.png

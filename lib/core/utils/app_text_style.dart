@@ -54,6 +54,16 @@ class AppTextStyle {
     fontSize: 22.sp,
     fontWeight: FontWeight.w500,
   );
+  static TextStyle whiteW500S20 = GoogleFonts.readexPro(
+    color: AppColors.whiteColor,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle whiteW500S18 = GoogleFonts.readexPro(
+    color: AppColors.whiteColor,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w500,
+  );
   static TextStyle whiteW500S17 = GoogleFonts.readexPro(
     color: AppColors.whiteColor,
     fontSize: 17.sp,
@@ -74,6 +84,11 @@ class AppTextStyle {
   static TextStyle primaryW500S22 = GoogleFonts.readexPro(
     color: AppColors.primaryColor,
     fontSize: 22.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle primaryW500S20 = GoogleFonts.readexPro(
+    color: AppColors.primaryColor,
+    fontSize: 20.sp,
     fontWeight: FontWeight.w500,
   );
   static TextStyle primaryW400S13 = GoogleFonts.readexPro(

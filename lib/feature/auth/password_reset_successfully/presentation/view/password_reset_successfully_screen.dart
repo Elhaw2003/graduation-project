@@ -4,7 +4,6 @@ import 'package:smart_guide/feature/auth/password_reset_successfully/presentatio
 
 class PasswordResetSuccessfullyScreen extends StatelessWidget {
   const PasswordResetSuccessfullyScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

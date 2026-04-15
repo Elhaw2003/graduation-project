@@ -15,10 +15,13 @@ abstract class  LocaleKeys {
   static const egypt = 'egypt';
   static const tourist = 'tourist';
   static const guide = 'guide';
+  static const tourGuide = 'tourGuide';
+  static const guideLogin = 'guideLogin';
   static const loginWelcome = 'loginWelcome';
   static const passwordDescription = 'passwordDescription';
   static const emailRequired = 'emailRequired';
   static const emailInvalid = 'emailInvalid';
+  static const userNameRequired = 'userNameRequired';
   static const passwordRequired = 'passwordRequired';
   static const passwordMinLength = 'passwordMinLength';
   static const passwordUppercase = 'passwordUppercase';
@@ -105,5 +108,32 @@ abstract class  LocaleKeys {
   static const passwordResetSuccess = 'passwordResetSuccess';
   static const passwordResetSuccessMessage = 'passwordResetSuccessMessage';
   static const continu = 'continu';
+  static const success = 'success';
+  static const error = 'error';
+  static const warning = 'warning';
+  static const info = 'info';
+  static const cancel = 'cancel';
+  static const ok = 'ok';
+  static const yes = 'yes';
+  static const no = 'no';
+  static const close = 'close';
+  static const loginSuccessfully = 'loginSuccessfully';
+  static const firstName = 'firstName';
+  static const lastName = 'lastName';
+  static const enterYourFirstName = 'enterYourFirstName';
+  static const enterYourLastName = 'enterYourLastName';
+  static const userName = 'userName';
+  static const enterUserName = 'enterUserName';
+  static const firstNameRequired = 'firstNameRequired';
+  static const lastNameRequired = 'lastNameRequired';
+  static const profileImage = 'profileImage';
+  static const selectNationalIdImage = 'selectNationalIdImage';
+  static const selectGuideLicenseImage = 'selectGuideLicenseImage';
+  static const imageSelected = 'imageSelected';
+  static const registerSuccessfully = 'registerSuccessfully';
+  static const profileImageRequired = 'profileImageRequired';
+  static const idAndLicenseRequired = 'idAndLicenseRequired';
+  static const selectYourProfile = 'selectYourProfile';
+  static const selectYourRoleDescription = 'selectYourRoleDescription';
 
 }

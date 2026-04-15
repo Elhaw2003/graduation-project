@@ -2,6 +2,8 @@ import 'package:animate_do/animate_do.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
@@ -9,8 +11,7 @@ import 'package:smart_guide/generated/assets.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class PasswordResetSuccessfullyBody extends StatelessWidget {
-  const PasswordResetSuccessfullyBody({super.key});
-
+  const PasswordResetSuccessfullyBody({super.key,});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -53,6 +54,12 @@ class PasswordResetSuccessfullyBody extends StatelessWidget {
             delay: const Duration(milliseconds: 700),
             duration: const Duration(milliseconds: 600),
             child: CustomButtonWidget(
+              onPressed: () {
+                // التعديل هنا: نستخدم goNamed ونبعت الـ userType اللي معانا
+                context.goNamed(
+                  AppRoutes.loginScreen,
+                );
+              },
               titleStyle: AppTextStyle.backgroundW600S20,
               buttonWidth: double.infinity,
               title: LocaleKeys.continu.tr(),

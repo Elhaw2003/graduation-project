@@ -9,7 +9,10 @@ import 'package:smart_guide/feature/auth/register/presentation/cubit/pick_image/
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class ImageSourceBottomSheet extends StatelessWidget {
-  const ImageSourceBottomSheet({super.key});
+  // أضفنا النوع هنا عشان الـ BottomSheet تعرف هي بتحدث أي صورة
+  final ImageType imageType;
+
+  const ImageSourceBottomSheet({super.key, required this.imageType});
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +35,7 @@ class ImageSourceBottomSheet extends StatelessWidget {
               context.read<PickImageCubit>().pickImage(
                 ImageSource.camera,
                 context,
+                imageType, // تمرير النوع للـ Cubit
               );
             },
           ),
@@ -49,6 +53,7 @@ class ImageSourceBottomSheet extends StatelessWidget {
               context.read<PickImageCubit>().pickImage(
                 ImageSource.gallery,
                 context,
+                imageType, // تمرير النوع للـ Cubit
               );
             },
           ),

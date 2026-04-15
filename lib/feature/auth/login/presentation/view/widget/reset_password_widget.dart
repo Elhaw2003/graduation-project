@@ -6,13 +6,17 @@ import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class ResetPasswordWidget extends StatelessWidget {
-  const ResetPasswordWidget({super.key});
-
+  const ResetPasswordWidget({super.key, required this.email});
+  final TextEditingController email;
   @override
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {
-        GoRouter.of(context).pushNamed(AppRoutes.resetPasswordScreen);
+        // التعديل الجوهري هنا: نبعت الـ Path Parameter والـ Extra مع بعض
+        context.pushNamed(
+          AppRoutes.resetPasswordScreen,
+          extra: email.text.trim(), // تمرير الإيميل كـ extra
+        );
       },
       child: Text(
         LocaleKeys.forgotPassword.tr(),

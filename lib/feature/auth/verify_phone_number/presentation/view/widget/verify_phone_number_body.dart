@@ -5,7 +5,6 @@ import 'package:smart_guide/core/shared_widgets/custom_arrow_back_button.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/auth/verify_phone_number/presentation/view/widget/pin_widget_code.dart';
-import 'package:smart_guide/feature/auth/verify_phone_number/presentation/view/widget/resend_code_widget.dart';
 import 'package:smart_guide/feature/auth/verify_phone_number/presentation/view/widget/verify_phone_button.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
@@ -49,7 +48,7 @@ class _VerifyPhoneNumberBodyState extends State<VerifyPhoneNumberBody> {
           CustomHeightSpacingWidget(height: 30),
           VerifyPhoneButton(otpController: otpController),
           CustomHeightSpacingWidget(height: 30),
-          ResendCodeWidget(),
+          // ResendCodeWidget(),
         ],
       ),
     );

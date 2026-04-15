@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
@@ -33,7 +35,7 @@ class SuccessVerificationBody extends StatelessWidget {
               DoneLottieWidget(),
               CustomHeightSpacingWidget(height: 20),
               Text(
-                LocaleKeys.verificationSuccessful.tr(),
+                LocaleKeys.registerSuccessfully.tr(),
                 style: AppTextStyle.backgroundW500S20,
               ),
               CustomHeightSpacingWidget(height: 5),
@@ -53,7 +55,9 @@ class SuccessVerificationBody extends StatelessWidget {
                 titleStyle: AppTextStyle.whiteW600S20.copyWith(
                   fontWeight: FontWeight.w500,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  context.go(AppRoutes.loginScreen);
+                },
               ),
             ],
           ),
