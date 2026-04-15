@@ -1,13 +1,15 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart'; // أضفنا هذا الـ import
 import 'package:smart_guide/core/utils/app_colors.dart';
-import 'package:smart_guide/feature/auth/register/presentation/cubit/pick_image/pick_image_cubit.dart';
 
 class SelectedImageWidget extends StatelessWidget {
-  const SelectedImageWidget({super.key});
+  // أضفنا ملف من نوع XFile عشان نقدر نعرض أي صورة نختارها
+  final XFile? file;
+
+  const SelectedImageWidget({super.key, this.file});
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +21,9 @@ class SelectedImageWidget extends StatelessWidget {
         border: Border.all(color: AppColors.primaryColor, width: 2.w),
       ),
       child: ClipOval(
-        child: Image.file(
-          File(BlocProvider.of<PickImageCubit>(context).image!.path),
-          fit: BoxFit.cover,
-        ),
+        child: file != null
+            ? Image.file(File(file!.path), fit: BoxFit.cover)
+            : const SizedBox(), // حالة احتياطية لو الملف فاضي
       ),
     );
   }

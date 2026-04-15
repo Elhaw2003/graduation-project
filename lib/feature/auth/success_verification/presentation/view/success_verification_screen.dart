@@ -3,7 +3,6 @@ import 'package:smart_guide/feature/auth/success_verification/presentation/view/
 
 class SuccessVerificationScreen extends StatelessWidget {
   const SuccessVerificationScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: SuccessVerificationBody());

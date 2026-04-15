@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
+import 'package:smart_guide/core/services/cache/cache_helper.dart';
 import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
@@ -37,15 +38,17 @@ class ItemOnboardingWidget extends StatelessWidget {
           CustomHeightSpacingWidget(height: 25),
           CustomButtonWidget(
             buttonWidth: double.infinity,
-            onPressed: () {
+            onPressed: () async{
               if (index < onboardings.length - 1) {
-                controller.animateToPage(
-                  index + 1,
-                  duration: Duration(seconds: 1),
-                  curve: Curves.easeIn,
+                controller.nextPage(
+                  duration: Duration(milliseconds: 600),
+                  curve: Curves.fastOutSlowIn,
                 );
               } else {
-                GoRouter.of(context).go(AppRoutes.loginScreen);
+                await CacheHelper.setBool(CacheHelper.kIsOnBoardingViewSeen, true);
+                if (context.mounted) {
+                  GoRouter.of(context).go(AppRoutes.loginScreen);
+                }
               }
             },
             title: index < onboardings.length - 1

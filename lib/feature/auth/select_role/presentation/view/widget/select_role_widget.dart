@@ -69,3 +69,99 @@ class SelectRoleWidget extends StatelessWidget {
     );
   }
 }
+
+//===================================================================
+
+class SelectRoleNewWidget extends StatelessWidget {
+  const SelectRoleNewWidget({
+    super.key,
+    required this.title,
+    required this.image, // المسار الخاص بالصورة (Asset Image)
+    this.onTap,
+    this.isSelected = false,
+  });
+
+  final String title;
+  final String image;
+  final void Function()? onTap;
+  final bool isSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        height: 200.h, // مقاس متناسق مع شاشات الموبايل
+        width: 200.w, // بياخد العرض المتاح عشان يبقى شبه الكروت اللي في الصورة
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.r),
+          // الـ Border الأزرق بيظهر بس لما نختار الكارت
+          border: Border.all(
+            color: isSelected ? AppColors.primaryColor : Colors.transparent,
+            width: 2.5.w,
+          ),
+          boxShadow: [
+            if (isSelected)
+              BoxShadow(
+                color: AppColors.primaryColor.withOpacity(0.2),
+                blurRadius: 15,
+                offset: const Offset(0, 8),
+              ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(
+            12.r,
+          ), // أصغر قليلاً من الـ Container الخارجي
+          child: Stack(
+            children: [
+              // 1. الصورة الخلفية
+              Image.asset(
+                image,
+                height: double.infinity,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+
+              // 2. طبقة الـ Overlay (التعتيم) عشان النص يظهر
+              Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Colors.black.withOpacity(0.1),
+                      Colors.black.withOpacity(0.5),
+                    ],
+                  ),
+                ),
+              ),
+
+              // 3. النص في المنتصف
+              Center(
+                child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
+                    shadows: [
+                      Shadow(
+                        color: Colors.black.withOpacity(0.5),
+                        offset: const Offset(0, 2),
+                        blurRadius: 4,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

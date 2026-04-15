@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_guide/app_main.dart';
@@ -13,152 +11,128 @@ import 'package:smart_guide/feature/auth/register/presentation/view/register_scr
 import 'package:smart_guide/feature/auth/reset_password/presentation/view/reset_password_screen.dart';
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
 import 'package:smart_guide/feature/auth/success_verification/presentation/view/success_verification_screen.dart';
-import 'package:smart_guide/feature/auth/verify_email/presentation/view/verify_email_screen.dart';
-import 'package:smart_guide/feature/auth/verify_phone_number/presentation/view/verify_phone_number_screen.dart';
-import 'package:smart_guide/feature/guides/presentation/view/choose_guides_screen.dart';
+import 'package:smart_guide/feature/auth/verify_otp/presentation/view/verify_otp_screen.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
 import 'package:smart_guide/feature/onboarding/presentation/view/onboarding_screen.dart';
 import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart';
 
 class RoutingGenerationConfig {
   static GoRouter routerGeneratorConfig = GoRouter(
-    initialLocation: AppRoutes.selectRoleScreen,
-    errorBuilder: (context, state) {
-      return errorBuilder();
-    },
+    initialLocation: AppRoutes.spalshScreen,
+    errorBuilder: (context, state) => errorBuilder(),
     routes: [
-      /// Onboarding Screen
-      GoRoute(
-        path: AppRoutes.onboardingScreen,
-        name: AppRoutes.onboardingScreen,
-        builder: (context, state) => OnboardingScreen(),
-      ),
-
-      /// Splash Screen
-      GoRoute(
-        path: AppRoutes.selectRoleScreen,
-        name: AppRoutes.selectRoleScreen,
-        builder: (context, state) => SelectRoleScreen(),
-      ),
-
-      /// Select Role Screen
+      /// Splash, Onboarding & Select Role
       GoRoute(
         path: AppRoutes.spalshScreen,
         name: AppRoutes.spalshScreen,
-        builder: (context, state) => SplashScreen(),
+        builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.onboardingScreen,
+        name: AppRoutes.onboardingScreen,
+        builder: (context, state) => const OnboardingScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.selectRoleScreen,
+        name: AppRoutes.selectRoleScreen,
+        builder: (context, state) => const SelectRoleScreen(),
       ),
 
-      /// Login Screen
+      /// Login Screen (General - No Params)
       GoRoute(
         path: AppRoutes.loginScreen,
         name: AppRoutes.loginScreen,
-        pageBuilder: (context, state) {
-          final UserTypeEnum userTypeEnum = state.extra as UserTypeEnum;
-          return CustomSpringPage(
-            child: LoginScreen(userTypeEnum: userTypeEnum),
-          );
-        },
+        builder: (context, state) => const LoginScreen(),
       ),
 
-      /// Register Screen
+      /// Register Screen (The only one with Path Parameter)
       GoRoute(
-        path: AppRoutes.registerScreen,
+        path: '${AppRoutes.registerScreen}/:userType',
         name: AppRoutes.registerScreen,
         pageBuilder: (context, state) {
-          final UserTypeEnum userTypeEnum = state.extra as UserTypeEnum;
+          final typeString = state.pathParameters['userType'];
+          final userType = UserTypeEnum.values.firstWhere(
+            (e) => e.name == typeString,
+            orElse: () => UserTypeEnum.Tourist,
+          );
           return CustomSpringPage(
-            child: RegisterScreen(userTypeEnum: userTypeEnum),
+            child: RegisterScreen(userTypeEnum: userType),
           );
         },
       ),
 
-      /// Reset Password Screen
+      /// Forgot Password Flow (General - Use 'extra' for data)
       GoRoute(
         path: AppRoutes.resetPasswordScreen,
         name: AppRoutes.resetPasswordScreen,
         pageBuilder: (context, state) {
-          return CustomSpringPage(child: ResetPasswordScreen());
+          final String email = state.extra as String? ?? "";
+          return CustomSpringPage(child: ResetPasswordScreen(email: email));
         },
       ),
 
-      /// Verify Phone Screen
       GoRoute(
-        path: AppRoutes.verifyPhoneNumberScreen,
-        name: AppRoutes.verifyPhoneNumberScreen,
+        path: AppRoutes.verifyOtpScreen,
+        name: AppRoutes.verifyOtpScreen,
         pageBuilder: (context, state) {
-          return CustomSpringPage(child: VerifyPhoneNumberScreen());
-        },
-      ),
-      GoRoute(
-        path: AppRoutes.homeScreen,
-        name: AppRoutes.homeScreen,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(child: HomeScreen());
-        },
-      ),
-      GoRoute(
-        path: AppRoutes.appMain,
-        name: AppRoutes.appMain,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(child: AppMain());
-        },
-      ),
-      GoRoute(
-        path: AppRoutes.chooseGuidesScreen,
-        name: AppRoutes.chooseGuidesScreen,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(child: ChooseGuidesScreen());
+          final String email = state.extra as String? ?? "";
+          return CustomSpringPage(child: VerifyOtpScreen(email: email));
         },
       ),
 
-      /// Success Verification Screen
-      GoRoute(
-        path: AppRoutes.successVerificationScreen,
-        name: AppRoutes.successVerificationScreen,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(child: SuccessVerificationScreen());
-        },
-      ),
-
-      /// Verify Email Screen
-      GoRoute(
-        path: AppRoutes.verifyEmailScreen,
-        name: AppRoutes.verifyEmailScreen,
-        pageBuilder: (context, state) {
-          final String email = state.extra as String;
-          return CustomSpringPage(child: VerifyEmailScreen(email: email));
-        },
-      ),
-
-      /// New Password Screen
       GoRoute(
         path: AppRoutes.newPasswordScreen,
         name: AppRoutes.newPasswordScreen,
         pageBuilder: (context, state) {
-          return CustomSpringPage(child: NewPasswordScreen());
+          final data = state.extra as Map<String, dynamic>? ?? {};
+          return CustomSpringPage(
+            child: NewPasswordScreen(
+              email: data['email'] ?? "",
+              otp: data['otp'] ?? "",
+            ),
+          );
         },
       ),
 
-      /// Password Reset Success Screen
+      /// Success Screens (General)
+      GoRoute(
+        path: AppRoutes.successVerificationScreen,
+        name: AppRoutes.successVerificationScreen,
+        pageBuilder: (context, state) =>
+            CustomSpringPage(child: SuccessVerificationScreen()),
+      ),
+
       GoRoute(
         path: AppRoutes.passwordResetSuccessfullyScreen,
         name: AppRoutes.passwordResetSuccessfullyScreen,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(child: PasswordResetSuccessfullyScreen());
-        },
+        pageBuilder: (context, state) =>
+            CustomSpringPage(child: PasswordResetSuccessfullyScreen()),
+      ),
+
+      /// Home & App Core
+      GoRoute(
+        path: AppRoutes.homeScreen,
+        name: AppRoutes.homeScreen,
+        pageBuilder: (context, state) =>
+            CustomSpringPage(child: const HomeScreen()),
+      ),
+      GoRoute(
+        path: AppRoutes.appMain,
+        name: AppRoutes.appMain,
+        pageBuilder: (context, state) =>
+            CustomSpringPage(child: const AppMain()),
       ),
     ],
   );
 }
 
-/// Error Screen
 Widget errorBuilder() {
   return Scaffold(
     appBar: AppBar(
       centerTitle: true,
       backgroundColor: Colors.red,
-      title: Text("Error Screen"),
+      title: const Text("Error Screen"),
     ),
-    body: Center(child: Text("No Page Found")),
+    body: const Center(child: Text("No Page Found")),
   );
 }
