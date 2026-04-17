@@ -146,7 +146,21 @@ class CodegenLoader extends AssetLoader{
   "profileImageRequired": "يرجى اختيار صورة الملف الشخصي",
   "idAndLicenseRequired": "يرجى رفع صورة البطاقة ورخصة الإرشاد",
   "selectYourProfile": "اختر صورة الملف الشخصي",
-  "selectYourRoleDescription": "هل أنت هنا للاستكشاف او للإرشاد"
+  "selectYourRoleDescription": "هل أنت هنا للاستكشاف او للإرشاد",
+  "settings": "الإعدادات",
+  "account_settings": "إعدادات الحساب",
+  "personal_info": "المعلومات الشخصية",
+  "password_security": "كلمة المرور والأمان",
+  "notifications": "الإشعارات",
+  "appearance": "المظهر والتفضيلات",
+  "dark_mode": "الوضع الداكن",
+  "language": "اللغة",
+  "privacy": "الخصوصية",
+  "support": "الدعم",
+  "help_center": "مركز المساعدة",
+  "contact_support": "تواصل مع الدعم",
+  "rate_app": "قيّم التطبيق",
+  "about_app": "عن التطبيق"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -271,7 +285,21 @@ static const Map<String,dynamic> _en = {
   "profileImageRequired": "Profile Image is required",
   "idAndLicenseRequired": "National ID and Guide License are require",
   "selectYourProfile": "Select your profile",
-  "selectYourRoleDescription": "Are you here to explore or to guide"
+  "selectYourRoleDescription": "Are you here to explore or to guide",
+  "settings": "Settings",
+  "account_settings": "Account Settings",
+  "personal_info": "Personal Information",
+  "password_security": "Password & Security",
+  "notifications": "Notifications",
+  "appearance": "Appearance & Preferences",
+  "dark_mode": "Dark Mode",
+  "language": "Language",
+  "privacy": "Privacy",
+  "support": "Support",
+  "help_center": "Help Center",
+  "contact_support": "Contact Support",
+  "rate_app": "Rate the App",
+  "about_app": "About the App"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

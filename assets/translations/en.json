@@ -121,5 +121,19 @@
   "profileImageRequired":"Profile Image is required",
   "idAndLicenseRequired":"National ID and Guide License are require",
   "selectYourProfile":"Select your profile",
-  "selectYourRoleDescription":"Are you here to explore or to guide"
+  "selectYourRoleDescription":"Are you here to explore or to guide",
+  "settings": "Settings",
+    "account_settings": "Account Settings",
+    "personal_info": "Personal Information",
+    "password_security": "Password & Security",
+    "notifications": "Notifications",
+    "appearance": "Appearance & Preferences",
+    "dark_mode": "Dark Mode",
+    "language": "Language",
+    "privacy": "Privacy",
+    "support": "Support",
+    "help_center": "Help Center",
+    "contact_support": "Contact Support",
+    "rate_app": "Rate the App",
+    "about_app": "About the App"
 }

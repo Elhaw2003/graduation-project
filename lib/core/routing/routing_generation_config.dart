@@ -14,11 +14,12 @@ import 'package:smart_guide/feature/auth/success_verification/presentation/view/
 import 'package:smart_guide/feature/auth/verify_otp/presentation/view/verify_otp_screen.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
 import 'package:smart_guide/feature/onboarding/presentation/view/onboarding_screen.dart';
+import 'package:smart_guide/feature/settings/presentation/view/settings_screen.dart';
 import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart';
 
 class RoutingGenerationConfig {
   static GoRouter routerGeneratorConfig = GoRouter(
-    initialLocation: AppRoutes.spalshScreen,
+    initialLocation: AppRoutes.settingsScreen,
     errorBuilder: (context, state) => errorBuilder(),
     routes: [
       /// Splash, Onboarding & Select Role
@@ -121,6 +122,14 @@ class RoutingGenerationConfig {
         name: AppRoutes.appMain,
         pageBuilder: (context, state) =>
             CustomSpringPage(child: const AppMain()),
+      ),
+
+      /// Settings
+      GoRoute(
+        path: AppRoutes.settingsScreen,
+        name: AppRoutes.settingsScreen,
+        pageBuilder: (context, state) =>
+            CustomSpringPage(child: const SettingsScreen()),
       ),
     ],
   );
