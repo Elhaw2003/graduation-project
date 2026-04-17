@@ -75,5 +75,14 @@
   "didntReceiveCode": "Didn't receive the code? ",
   "resendIn":"Resend in",
   "second":"s",
-  "resend":"Resend"
+  "resend":"Resend",
+  "verifiedLocalGuides": "Verified Local Guides",
+  "exploreEgyptThroughTheEyesOfExpertsWhoKnowEveryStory": "Explore Egypt through the eyes of\n experts who know every story.",
+  "showAll": "Show All",
+  "chooseYourGuide": "Choose Your Guide",
+  "pickALocalExpertOrSmartAI": "Pick a local expert or smart AI to accompany you on your journey.",
+  "popularPlaces": "Popular Places",
+  "serchDestinationsAndGuides": "Search Destinations and Guides",
+  "hello": "Hello",
+  "viewProfile": "View Profile"
 }

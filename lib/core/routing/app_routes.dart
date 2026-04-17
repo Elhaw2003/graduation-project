@@ -11,4 +11,7 @@ class AppRoutes {
   static const String successVerificationScreen = '/successVerificationScreen';
   static const String resetPasswordScreen = '/resetPasswordScreen';
   static const String verifyEmailScreen = '/verifyEmailScreen';
+  static const String tourGuideProfileScreen = '/tourGuideProfileScreen';
+  static const String exploreArSpotsScreen = '/exploreArSpotsScreen';
+  static const String aiGuideScreen = '/aiGuideScreen';
 }

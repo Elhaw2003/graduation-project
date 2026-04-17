@@ -1,101 +1,205 @@
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-// ignore_for_file: constant_identifier_names
+// ignore_for_file: prefer_single_quotes, avoid_renaming_method_parameters, constant_identifier_names
 
-abstract class  LocaleKeys {
-  static const exploreEgyptHistory = 'exploreEgyptHistory';
-  static const discoverAncientSecrets = 'discoverAncientSecrets';
-  static const yourJourneyStartsHere = 'yourJourneyStartsHere';
-  static const planYourTrip = 'planYourTrip';
-  static const exploreEgyptSmartWay = 'exploreEgyptSmartWay';
-  static const smartGuideEgypt = 'smartGuideEgypt';
-  static const next = 'next';
-  static const discoverEgypt = 'discoverEgypt';
-  static const appName = 'appName';
-  static const egypt = 'egypt';
-  static const tourist = 'tourist';
-  static const guide = 'guide';
-  static const loginWelcome = 'loginWelcome';
-  static const passwordDescription = 'passwordDescription';
-  static const emailRequired = 'emailRequired';
-  static const emailInvalid = 'emailInvalid';
-  static const passwordRequired = 'passwordRequired';
-  static const passwordMinLength = 'passwordMinLength';
-  static const passwordUppercase = 'passwordUppercase';
-  static const passwordLowercase = 'passwordLowercase';
-  static const passwordNumber = 'passwordNumber';
-  static const retypePasswordRequired = 'retypePasswordRequired';
-  static const passwordsNotMatch = 'passwordsNotMatch';
-  static const nameRequired = 'nameRequired';
-  static const nameMinLength = 'nameMinLength';
-  static const nameInvalid = 'nameInvalid';
-  static const phoneRequired = 'phoneRequired';
-  static const phoneInvalid = 'phoneInvalid';
-  static const otpRequired = 'otpRequired';
-  static const otpInvalid = 'otpInvalid';
-  static const otpLength = 'otpLength';
-  static const idRequired = 'idRequired';
-  static const idInvalid = 'idInvalid';
-  static const nationalId = 'nationalId';
-  static const password = 'password';
-  static const enterNationalId = 'enterNationalId';
-  static const enterPassword = 'enterPassword';
-  static const forgotPassword = 'forgotPassword';
-  static const rememberMe = 'rememberMe';
-  static const dontHaveAccount = 'dontHaveAccount';
-  static const createAccount = 'createAccount';
-  static const login = 'login';
-  static const registerTitleAsTourist = 'registerTitleAsTourist';
-  static const registerDescriptionAsTourist = 'registerDescriptionAsTourist';
-  static const registerTitleAsGuide = 'registerTitleAsGuide';
-  static const registerDescriptionAsGuide = 'registerDescriptionAsGuide';
-  static const name = 'name';
-  static const enterFullName = 'enterFullName';
-  static const email = 'email';
-  static const enterEmail = 'enterEmail';
-  static const phone = 'phone';
-  static const enterPhone = 'enterPhone';
-  static const choosePassword = 'choosePassword';
-  static const confirmPassword = 'confirmPassword';
-  static const camera = 'camera';
-  static const gallery = 'gallery';
-  static const yourCountry = 'yourCountry';
-  static const selectYourCountry = 'selectYourCountry';
-  static const languagesYouSpeak = 'languagesYouSpeak';
-  static const selectLanguagesYouSpeak = 'selectLanguagesYouSpeak';
-  static const briefOverview = 'briefOverview';
-  static const describeYourself = 'describeYourself';
-  static const yearsOfExperience = 'yearsOfExperience';
-  static const enterYearsOfExperience = 'enterYearsOfExperience';
-  static const numbersOnly = 'numbersOnly';
-  static const uploadIdOrLicense = 'uploadIdOrLicense';
-  static const clickToUpload = 'clickToUpload';
-  static const uploadLimit = 'uploadLimit';
-  static const imageSizeLimit = 'imageSizeLimit';
-  static const verifyPhone = 'verifyPhone';
-  static const haveSentOtp = 'haveSentOtp';
-  static const enterOtp = 'enterOtp';
-  static const verify = 'verify';
-  static const didntReceiveCode = 'didntReceiveCode';
-  static const resendIn = 'resendIn';
-  static const second = 'second';
-  static const resend = 'resend';
-  static const hello = 'hello';
-  static const cairo = 'cairo';
-  static const cairoEgypt = 'cairoEgypt';
-  static const searchDestinationsAndGuides = 'searchDestinationsAndGuides';
-  static const show_all = 'show_all';
-  static const popular_places = 'popular_places';
-  static const choose_your_guide = 'choose_your_guide';
-  static const pick_a_local_expert_or_smart_ai = 'pick_a_local_expert_or_smart_ai';
-  static const verificationSuccessful = 'verificationSuccessful';
-  static const welcomeMessage = 'welcomeMessage';
-  static const accountReady = 'accountReady';
-  static const loginPrompt = 'loginPrompt';
-  static const enterEmailAndSendCode = 'enterEmailAndSendCode';
-  static const emailHintText = 'emailHintText';
-  static const sendCode = 'sendCode';
-  static const verifyEmail = 'verifyEmail';
-  static const sentSixDigitCode = 'sentSixDigitCode';
+import 'dart:ui';
 
+import 'package:easy_localization/easy_localization.dart' show AssetLoader;
+
+class CodegenLoader extends AssetLoader{
+  const CodegenLoader();
+
+  @override
+  Future<Map<String, dynamic>?> load(String path, Locale locale) {
+    return Future.value(mapLocales[locale.toString()]);
+  }
+
+  static const Map<String,dynamic> _ar = {
+  "exploreEgyptHistory": "اكتشف التاريخ العظيم لمصر",
+  "discoverAncientSecrets": "من الأهرامات إلى المعابد... اكتشف أسرار الحضارة القديمة بطريقة ذكية.",
+  "yourJourneyStartsHere": "رحلتك تبدأ من هنا",
+  "planYourTrip": "خطط رحلتك بسهولة واكتشف أفضل المعالم السياحية والمطاعم والفنادق القريبة منك.",
+  "exploreEgyptSmartWay": "استكشف مصر بطريقة ذكية",
+  "smartGuideEgypt": "SmartGuide Egypt - رفيقك الذكي لاستكشاف مصر في كل مكان.",
+  "next": "التالي",
+  "discoverEgypt": "اكتشف مصر",
+  "appName": "المرشد الزكي",
+  "egypt": "مصر",
+  "tourist": "مرشد سياحي",
+  "guide": "مرشد سياحي",
+  "loginWelcome": "مرحبًا أيها المرشد! أدخل بياناتك لبدء مهامك",
+  "passwordDescription": "يجب أن تحتوي على 8 أحرف على الأقل، مع استخدام أرقام، وعدم استخدام رموز مثل (@ - # - % - * …).",
+  "emailRequired": "البريد الإلكتروني مطلوب",
+  "emailInvalid": "البريد الإلكتروني غير صحيح",
+  "passwordRequired": "كلمة المرور مطلوبة",
+  "passwordMinLength": "يجب أن تكون كلمة المرور 8 أحرف على الأقل",
+  "passwordUppercase": "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل",
+  "passwordLowercase": "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل",
+  "passwordNumber": "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل",
+  "retypePasswordRequired": "يرجى إعادة إدخال كلمة المرور",
+  "passwordsNotMatch": "كلمتا المرور غير متطابقتين",
+  "nameRequired": "الاسم مطلوب",
+  "nameMinLength": "يجب أن يكون الاسم 3 أحرف على الأقل",
+  "nameInvalid": "يجب أن يحتوي الاسم على حروف فقط",
+  "phoneRequired": "رقم الهاتف مطلوب",
+  "phoneInvalid": "رقم الهاتف غير صحيح",
+  "otpRequired": "رمز التحقق مطلوب",
+  "otpInvalid": "رمز التحقق غير صحيح",
+  "otpLength": "يجب أن يتكون رمز التحقق من 6 أرقام",
+  "idRequired": "رقم الهوية مطلوب",
+  "idInvalid": "رقم الهوية غير صحيح",
+  "nationalId": "الرقم القومي",
+  "password": "كلمة المرور",
+  "enterNationalId": "أدخل الرقم القومي",
+  "enterPassword": "أدخل كلمة المرور",
+  "forgotPassword": "هل نسيت كلمة المرور.؟",
+  "rememberMe": "تذكرني",
+  "dontHaveAccount": "...ليس لديك حساب؟",
+  "createAccount": "إنشاء حساب",
+  "login": "تسجيل الدخول",
+  "registerTitleAsTourist": "أنشئ حسابك كمسافر",
+  "registerDescriptionAsTourist": "استكشف مصر مع مرشدين محليين وذكيين",
+  "registerTitleAsGuide": "انشاء حسابك كمرشد سياحي",
+  "registerDescriptionAsGuide": "شارك خبرتك مع المسافرين",
+  "name": "الاسم",
+  "enterFullName": "أدخل اسمك الكامل",
+  "email": "البريد الإلكتروني",
+  "enterEmail": "أدخل بريدك الإلكتروني",
+  "phone": "رقم الهاتف",
+  "enterPhone": "أدخل رقم هاتفك",
+  "choosePassword": "اختر كلمة مرور قوية",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "camera": "الكاميرا",
+  "gallery": "المعرض",
+  "yourCountry": "بلدك",
+  "selectYourCountry": "اختر بلدك",
+  "languagesYouSpeak": "اللغات التي تتحدثها",
+  "selectLanguagesYouSpeak": "اختر اللغات التي تتحدثها",
+  "briefOverview": "نبذة مختصرة عنك",
+  "describeYourself": "عرّف بنفسك في بضع كلمات...",
+  "yearsOfExperience": "عدد سنوات الخبرة",
+  "enterYearsOfExperience": "أدخل عدد سنوات خبرتك",
+  "numbersOnly": "يرجى إدخال أرقام فقط.",
+  "uploadIdOrLicense": "رفع بطاقة الهوية أو رخصة الإرشاد",
+  "clickToUpload": "اضغط لرفع صورة",
+  "uploadLimit": "يمكنك رفع حتى 4 صور.",
+  "imageSizeLimit": "يجب ألا يتجاوز حجم كل صورة 5 ميجابايت.",
+  "verifyPhone": "تحقق من رقم هاتفك",
+  "haveSentOtp": "لقد أرسلنا رمزًا مكونًا من 6 أرقام إلى (رقمك)",
+  "enterOtp": "ادخل الرمز الذي استلمته عبر الرسائل القصيرة",
+  "verify": "تحقق",
+  "didntReceiveCode": "لم تستلم الرمز؟ ",
+  "resendIn": "اعادة الارسال بعد",
+  "second": "ثانية",
+  "resend": "اعادة الارسال",
+  "hello": "مرحبا",
+  "cairo": "القاهرة",
+  "cairoEgypt": "القاهرة، مصر",
+  "searchDestinationsAndGuides": "ابحث عن الأماكن والمرشدين",
+  "showAll": "عرض الكل",
+  "popularPlaces": "أماكن مشهورة",
+  "chooseYourGuide": "اختر مرشدك",
+  "pickALocalExpertOrSmartAI": "اختر خبيرًا محليًا أو\n الذكاء الاصطناعي الذكي لبدء رحلتك",
+  "verificationSuccessful": "تم التحقق بنجاح!",
+  "welcomeMessage": "مرحبًا بك في سمارت جايد مصر!",
+  "accountReady": "حسابك أصبح جاهزًا — ابدأ استكشاف مصر بالطريقة الذكية!",
+  "loginPrompt": "سجّل الدخول لبدء الاستكشاف.",
+  "enterEmailAndSendCode": "ادخل عنوان بريدك الالكتروني وسنرسل لك رمز لاستعادة كلمة المرور",
+  "emailHintText": "name@example.com",
+  "sendCode": "ارسال الرمز",
+  "verifyEmail": "تحقق من بريدك الالكتروني",
+  "sentSixDigitCode": "لقد ارسلنا رمزًا مكونًا من 6 ارقام إلى",
+  "verifiedLocalGuides": "المرشدين المحليين المعتمدين",
+  "exploreEgyptThroughTheEyesOfExpertsWhoKnowEveryStory": "استكشف مصر من خلال عيني الخبراء الذين يعرفون كل القصص.",
+  "viewProfile": "عرض الملف الشخصي"
+};
+static const Map<String,dynamic> _en = {
+  "exploreEgyptHistory": "Explore Egypt's Great History",
+  "discoverAncientSecrets": "From pyramids to temples... uncover the secrets of ancient civilization the smart way.",
+  "yourJourneyStartsHere": "Your Journey Starts Here",
+  "planYourTrip": "Plan your trip easily and discover top attractions, restaurants, and hotels near you.",
+  "exploreEgyptSmartWay": "Explore Egypt the Smart Way",
+  "smartGuideEgypt": "SmartGuide Egypt - your intelligent companion to explore Egypt everywhere.",
+  "next": "Next",
+  "discoverEgypt": "Discover Egypt",
+  "appName": "Smart Guide",
+  "egypt": "Egypt",
+  "tourist": "Tourist",
+  "guide": "Guide",
+  "loginWelcome": "Welcome, guide! Enter your details to start your tasks.",
+  "passwordDescription": "At least 8 characters, use numbers, and do not use symbols such as (@-#-%-*....)",
+  "emailRequired": "Email is required",
+  "emailInvalid": "Invalid email address",
+  "passwordRequired": "Password is required",
+  "passwordMinLength": "Password must be at least 8 characters",
+  "passwordUppercase": "Password must contain at least one uppercase letter",
+  "passwordLowercase": "Password must contain at least one lowercase letter",
+  "passwordNumber": "Password must contain at least one number",
+  "retypePasswordRequired": "Please retype your password",
+  "passwordsNotMatch": "Passwords do not match",
+  "nameRequired": "Name is required",
+  "nameMinLength": "Name must be at least 3 characters",
+  "nameInvalid": "Name must contain letters only",
+  "phoneRequired": "Phone number is required",
+  "phoneInvalid": "Invalid phone number",
+  "otpRequired": "OTP is required",
+  "otpInvalid": "Invalid OTP",
+  "otpLength": "OTP must be 6 digits",
+  "idRequired": "ID number is required",
+  "idInvalid": "Invalid national ID number",
+  "nationalId": "National ID Number",
+  "password": "Password",
+  "enterNationalId": "Enter your National ID number",
+  "enterPassword": "Enter your password",
+  "forgotPassword": "Forgot your password.?",
+  "rememberMe": "Remember me",
+  "dontHaveAccount": "Don't have an account?...",
+  "createAccount": "Create an account",
+  "login": "Log in",
+  "registerTitleAsTourist": "Create Your Traveler Account",
+  "registerDescriptionAsTourist": "Explore Egypt with smart and local guides.",
+  "registerTitleAsGuide": "Create Your Guide Account",
+  "registerDescriptionAsGuide": "Share your expertise with travelers.",
+  "name": "Name",
+  "enterFullName": "Enter your full name",
+  "email": "E-mail",
+  "enterEmail": "Enter your email address",
+  "phone": "Phone",
+  "enterPhone": "Enter your phone number",
+  "choosePassword": "Choose a strong password",
+  "confirmPassword": "Confirm your password",
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "yourCountry": "Your country",
+  "selectYourCountry": "Select your country",
+  "languagesYouSpeak": "The languages you speak",
+  "selectLanguagesYouSpeak": "Select the languages you speak",
+  "briefOverview": "A brief overview of you",
+  "describeYourself": "Describe yourself in a few words...",
+  "yearsOfExperience": "Number of years of experience",
+  "enterYearsOfExperience": "Enter your years of experience",
+  "numbersOnly": "Please enter numbers only.",
+  "uploadIdOrLicense": "Upload ID or Guide License",
+  "clickToUpload": "Click to upload image",
+  "uploadLimit": "You can upload up to 4 images.",
+  "imageSizeLimit": "Each image must not exceed 5 MB.",
+  "verifyPhone": "Verify Your Phone Number",
+  "haveSentOtp": "We've sent a 6-digit code to (Your Number)",
+  "enterOtp": "Enter the code you received SMS",
+  "verify": "Verify",
+  "didntReceiveCode": "Didn't receive the code? ",
+  "resendIn": "Resend in",
+  "second": "s",
+  "resend": "Resend",
+  "verifiedLocalGuides": "Verified Local Guides",
+  "exploreEgyptThroughTheEyesOfExpertsWhoKnowEveryStory": "Explore Egypt through the eyes of\n experts who know every story.",
+  "showAll": "Show All",
+  "chooseYourGuide": "Choose Your Guide",
+  "pickALocalExpertOrSmartAI": "Pick a local expert or smart AI to accompany you on your journey.",
+  "popularPlaces": "Popular Places",
+  "serchDestinationsAndGuides": "Search Destinations and Guides",
+  "hello": "Hello",
+  "viewProfile": "View Profile"
+};
+static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

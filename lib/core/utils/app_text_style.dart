@@ -86,6 +86,11 @@ class AppTextStyle {
     fontSize: 16.sp,
     fontWeight: FontWeight.w500,
   );
+  static TextStyle secondaryColorW400S13 = GoogleFonts.readexPro(
+    color: AppColors.secondaryColor,
+    fontSize: 13.sp,
+    fontWeight: FontWeight.w400,
+  );
 
   /// primary text color
   static TextStyle primaryTextW400S15 = GoogleFonts.readexPro(

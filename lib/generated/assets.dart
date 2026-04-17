@@ -3,6 +3,8 @@ class Assets {
   Assets._();
 
   static const String sphinx = "assets/images/png/sphinx.jpg";
+  static const String imagePerson = "assets/images/png/person.jpg";
+  static const String pyramids = "assets/images/png/pyramids.jpg";
 
   /// Assets for imagesPngDefaultUserAvatar
   /// assets/images/png/default_user_avatar.png
@@ -37,6 +39,8 @@ class Assets {
   /// assets/images/png/third_splash_screen.png
   static const String imagesPngThirdSplashScreen =
       "assets/images/png/third_splash_screen.png";
+  static const String imagesPngExploreAr = "assets/images/png/explore_ar.png";
+  static const String imagesPngArIcon = "assets/images/png/ar_icon.png";
 
   /// Assets for imagesSvgAirplane
   /// assets/images/svg/airplane.svg
@@ -56,6 +60,13 @@ class Assets {
   static const String imagesSvgHome = "assets/images/svg/home_icon.svg";
   static const String imagesSvgperson = "assets/images/svg/person.svg";
   static const String imagesSvgrobot = "assets/images/svg/robot.svg";
+  static const String imagesSvgverified = "assets/images/svg/verified.svg";
+  static const String imagesSvgInstagramLogo =
+      "assets/images/svg/instagram_logo.svg";
+  static const String imagesSvgLocationIcon =
+      "assets/images/svg/location_icon.svg";
+  static const String imagesSvgBank = "assets/images/svg/bank.svg";
+
   /// Assets for lottieDone
   /// assets/lottie/done.json
   static const String lottieDone = "assets/lottie/done.json";

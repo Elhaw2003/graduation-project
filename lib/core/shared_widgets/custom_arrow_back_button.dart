@@ -3,7 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 
 class CustomArrowBackButton extends StatelessWidget {
-  const CustomArrowBackButton({super.key});
+  const CustomArrowBackButton({super.key, this.iconColor});
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class CustomArrowBackButton extends StatelessWidget {
       onPressed: () {
         context.pop();
       },
-      icon: Icon(Icons.arrow_back, color: AppColors.primaryColor),
+      icon: Icon(Icons.arrow_back, color: iconColor ?? AppColors.primaryColor),
     );
   }
 }

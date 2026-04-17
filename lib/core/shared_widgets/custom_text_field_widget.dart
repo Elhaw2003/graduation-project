@@ -42,6 +42,7 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.prefixOnPressed,
     this.textDirection,
     this.hintTextDirection,
+    this.width,
   });
 
   final TextEditingController? controller;
@@ -80,84 +81,92 @@ class CustomTextFieldWidget extends StatelessWidget {
   final void Function()? prefixOnPressed;
   final TextDirection? textDirection;
   final TextDirection? hintTextDirection;
+  final double? width;
   @override
   Widget build(BuildContext context) {
     final isRTL = Directionality.of(context) == TextDirection.rtl;
 
-    return Theme(
-      data: ThemeData(
-        textSelectionTheme: TextSelectionThemeData(
-          selectionColor:
-              selectionColor ?? AppColors.primaryColor.withValues(alpha: 0.5),
-          selectionHandleColor: selectionHandleColor ?? AppColors.primaryColor,
+    return SizedBox(
+      width: width ?? double.infinity, // 👈 هنا السحر
+
+      child: Theme(
+        data: ThemeData(
+          textSelectionTheme: TextSelectionThemeData(
+            selectionColor:
+                selectionColor ?? AppColors.primaryColor.withValues(alpha: 0.5),
+            selectionHandleColor:
+                selectionHandleColor ?? AppColors.primaryColor,
+          ),
         ),
-      ),
-      child: TextFormField(
-        controller: controller,
-        minLines: minLines ?? 1,
-        maxLines: obscureText == true ? 1 : (maxLines ?? minLines ?? 1),
-        keyboardType: keyboardType ?? TextInputType.text,
-        obscureText: obscureText ?? false,
-        validator: validator,
-        keyboardAppearance: keyboardAppearance ?? Brightness.light,
-        cursorColor: cursorColor ?? AppColors.primaryColor,
-        obscuringCharacter: obscuringCharacter ?? "•",
-        textDirection: textDirection,
-        textAlign: isRTL ? TextAlign.right : TextAlign.left,
-        decoration: InputDecoration(
-          hintTextDirection:
-              hintTextDirection ??
-              (isRTL ? TextDirection.rtl : TextDirection.ltr),
-          helperText: helperText,
-          helperStyle: helperTextStyle ?? AppTextStyle.grey300W400S16,
-          helperMaxLines: helperMaxLines ?? 1,
-          hintText: hintText,
-          hintStyle: hintTextStyle ?? AppTextStyle.grey300W400S16,
-          suffixIcon: suffixIcon != null
-              ? IconButton(
-                  onPressed: suffixOnPressed,
-                  highlightColor: AppColors.primaryColor.withValues(alpha: 0.3),
-                  icon: Icon(
-                    suffixIcon,
-                    color: suffixColor ?? AppColors.secondaryTextColor,
-                    size: suffixSize?.sp ?? 25.sp,
-                  ),
-                )
-              : null,
-          prefixIcon: prefixIcon != null
-              ? IconButton(
-                  onPressed: prefixOnPressed,
-                  icon: Icon(
-                    prefixIcon,
-                    color: prefixColor ?? AppColors.primaryTextColor,
-                    size: prefixSize?.sp ?? 25.sp,
-                  ),
-                )
-              : null,
-          fillColor: fillColor ?? AppColors.whiteColor,
-          filled: true,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(enableBorderRadius?.r ?? 8.r),
-            borderSide: BorderSide(
-              color: enableBorderColor ?? AppColors.whiteColor,
+        child: TextFormField(
+          controller: controller,
+          minLines: minLines ?? 1,
+          maxLines: obscureText == true ? 1 : (maxLines ?? minLines ?? 1),
+          keyboardType: keyboardType ?? TextInputType.text,
+          obscureText: obscureText ?? false,
+          validator: validator,
+          keyboardAppearance: keyboardAppearance ?? Brightness.light,
+          cursorColor: cursorColor ?? AppColors.primaryColor,
+          obscuringCharacter: obscuringCharacter ?? "•",
+          textDirection: textDirection,
+          textAlign: isRTL ? TextAlign.right : TextAlign.left,
+          decoration: InputDecoration(
+            hintTextDirection:
+                hintTextDirection ??
+                (isRTL ? TextDirection.rtl : TextDirection.ltr),
+            helperText: helperText,
+            helperStyle: helperTextStyle ?? AppTextStyle.grey300W400S16,
+            helperMaxLines: helperMaxLines ?? 1,
+            hintText: hintText,
+            hintStyle: hintTextStyle ?? AppTextStyle.grey300W400S16,
+            suffixIcon: suffixIcon != null
+                ? IconButton(
+                    onPressed: suffixOnPressed,
+                    highlightColor: AppColors.primaryColor.withValues(
+                      alpha: 0.3,
+                    ),
+                    icon: Icon(
+                      suffixIcon,
+                      color: suffixColor ?? AppColors.secondaryTextColor,
+                      size: suffixSize?.sp ?? 25.sp,
+                    ),
+                  )
+                : null,
+            prefixIcon: prefixIcon != null
+                ? IconButton(
+                    onPressed: prefixOnPressed,
+                    icon: Icon(
+                      prefixIcon,
+                      color: prefixColor ?? AppColors.primaryTextColor,
+                      size: prefixSize?.sp ?? 25.sp,
+                    ),
+                  )
+                : null,
+            fillColor: fillColor ?? AppColors.whiteColor,
+            filled: true,
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(enableBorderRadius?.r ?? 8.r),
+              borderSide: BorderSide(
+                color: enableBorderColor ?? AppColors.whiteColor,
+              ),
             ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(focusBorderRadius?.r ?? 8.r),
-            borderSide: BorderSide(
-              color: focusBorderColor ?? AppColors.primaryColor,
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(focusBorderRadius?.r ?? 8.r),
+              borderSide: BorderSide(
+                color: focusBorderColor ?? AppColors.primaryColor,
+              ),
             ),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(errorBorderRadius?.r ?? 8.r),
-            borderSide: BorderSide(
-              color: errorBorderColor ?? AppColors.redColor,
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(errorBorderRadius?.r ?? 8.r),
+              borderSide: BorderSide(
+                color: errorBorderColor ?? AppColors.redColor,
+              ),
             ),
-          ),
-          focusedErrorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(errorBorderRadius?.r ?? 8.r),
-            borderSide: BorderSide(
-              color: errorBorderColor ?? AppColors.redColor,
+            focusedErrorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(errorBorderRadius?.r ?? 8.r),
+              borderSide: BorderSide(
+                color: errorBorderColor ?? AppColors.redColor,
+              ),
             ),
           ),
         ),
