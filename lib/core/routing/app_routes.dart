@@ -14,4 +14,5 @@ class AppRoutes {
   static const String newPasswordScreen = '/newPasswordScreen';
   static const String passwordResetSuccessfullyScreen =
       '/passwordResetSuccessfullyScreen';
+  static const String settingsScreen = '/settingsScreen';
 }

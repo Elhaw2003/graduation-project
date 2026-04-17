@@ -135,5 +135,19 @@ abstract class  LocaleKeys {
   static const idAndLicenseRequired = 'idAndLicenseRequired';
   static const selectYourProfile = 'selectYourProfile';
   static const selectYourRoleDescription = 'selectYourRoleDescription';
+  static const settings = 'settings';
+  static const account_settings = 'account_settings';
+  static const personal_info = 'personal_info';
+  static const password_security = 'password_security';
+  static const notifications = 'notifications';
+  static const appearance = 'appearance';
+  static const dark_mode = 'dark_mode';
+  static const language = 'language';
+  static const privacy = 'privacy';
+  static const support = 'support';
+  static const help_center = 'help_center';
+  static const contact_support = 'contact_support';
+  static const rate_app = 'rate_app';
+  static const about_app = 'about_app';
 
 }

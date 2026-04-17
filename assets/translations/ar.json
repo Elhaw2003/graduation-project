@@ -135,5 +135,19 @@
   "profileImageRequired":"يرجى اختيار صورة الملف الشخصي",
   "idAndLicenseRequired":"يرجى رفع صورة البطاقة ورخصة الإرشاد",
   "selectYourProfile":"اختر صورة الملف الشخصي",
-  "selectYourRoleDescription":"هل أنت هنا للاستكشاف او للإرشاد"
+  "selectYourRoleDescription":"هل أنت هنا للاستكشاف او للإرشاد",
+  "settings": "الإعدادات",
+    "account_settings": "إعدادات الحساب",
+    "personal_info": "المعلومات الشخصية",
+    "password_security": "كلمة المرور والأمان",
+    "notifications": "الإشعارات",
+    "appearance": "المظهر والتفضيلات",
+    "dark_mode": "الوضع الداكن",
+    "language": "اللغة",
+    "privacy": "الخصوصية",
+    "support": "الدعم",
+    "help_center": "مركز المساعدة",
+    "contact_support": "تواصل مع الدعم",
+    "rate_app": "قيّم التطبيق",
+    "about_app": "عن التطبيق"
 }
