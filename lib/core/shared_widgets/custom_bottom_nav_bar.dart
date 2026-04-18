@@ -17,11 +17,11 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final iconList = <String>[
-      Assets.imagesSvgHome, // 🔹 أيقونة الصفحة الرئيسية
-      Assets.imagesSvgGuides,
-      Assets.imagesSvgChat,
-      Assets.imagesSvgExplore,
-      Assets.imagesSvgMenu,
+      Assets.imagesSvgHomeIcon, // 🔹 أيقونة الصفحة الرئيسية
+      Assets.imagesSvgGuidesIcon,
+      Assets.imagesSvgRobot,
+      Assets.imagesSvgExplorIcon,
+      Assets.imagesSvgMoreIcon,
     ];
 
     final labelList = <String>["Home", "Guides", "Ai Chat", "Explore", "More"];

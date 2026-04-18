@@ -1,16 +1,42 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_guide/core/network/dio_consumer.dart';
+import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
+import 'package:smart_guide/feature/auth/login/data/repo/login_remote_imple_repo.dart';
+import 'package:smart_guide/feature/auth/login/presentation/cubit/login_with_google/login_with_google_cubit.dart';
+import 'package:smart_guide/feature/auth/login/presentation/cubit/login_email/login_with_email_cubit.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/widget/login_appbar.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/widget/login_body.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key, required this.userTypeEnum});
-  final UserTypeEnum userTypeEnum;
+  const LoginScreen({super.key});
+  // final UserTypeEnum userTypeEnum;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(flexibleSpace: LoginAppbar()),
-      body: LoginBody(userTypeEnum: userTypeEnum),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => LoginCubit(
+            loginRepo: LoginRemoteImpleRepo(
+              apiConsumer: DioConsumer(dio: Dio()),
+              storage: SecureStorageHelper(),
+            ),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => LoginWithGoogleCubit(
+            loginRepo: LoginRemoteImpleRepo(
+              apiConsumer: DioConsumer(dio: Dio()),
+              storage: SecureStorageHelper(),
+            ),
+          ),
+        ),
+      ],
+      child: Scaffold(
+        appBar: AppBar(flexibleSpace: LoginAppbar()),
+        body: LoginBody(),
+      ),
     );
   }
 }

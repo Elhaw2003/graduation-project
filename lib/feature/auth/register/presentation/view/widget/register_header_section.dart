@@ -14,7 +14,7 @@ class RegisterHeaderSection extends StatelessWidget {
       children: [
         Center(
           child: Text(
-            userTypeEnum == UserTypeEnum.tourist
+            userTypeEnum == UserTypeEnum.Tourist
                 ? LocaleKeys.registerTitleAsTourist.tr()
                 : LocaleKeys.registerTitleAsGuide.tr(),
             style: AppTextStyle.black1F2937W500S20,
@@ -24,7 +24,7 @@ class RegisterHeaderSection extends StatelessWidget {
         CustomHeightSpacingWidget(height: 5),
         Center(
           child: Text(
-            userTypeEnum == UserTypeEnum.tourist
+            userTypeEnum == UserTypeEnum.Tourist
                 ? LocaleKeys.registerDescriptionAsTourist.tr()
                 : LocaleKeys.registerDescriptionAsGuide.tr(),
             style: AppTextStyle.black1F2937W400S15,

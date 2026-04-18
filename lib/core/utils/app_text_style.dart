@@ -25,6 +25,11 @@ class AppTextStyle {
     fontSize: 15.sp,
     fontWeight: FontWeight.w500,
   );
+  static TextStyle backgroundW600S20 = GoogleFonts.readexPro(
+    color: AppColors.backgroundColor,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w600,
+  );
 
   /// third text color
   static TextStyle thirdTextW400S17 = GoogleFonts.readexPro(
@@ -49,6 +54,16 @@ class AppTextStyle {
     fontSize: 22.sp,
     fontWeight: FontWeight.w500,
   );
+  static TextStyle whiteW500S20 = GoogleFonts.readexPro(
+    color: AppColors.whiteColor,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle whiteW500S18 = GoogleFonts.readexPro(
+    color: AppColors.whiteColor,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w500,
+  );
   static TextStyle whiteW500S17 = GoogleFonts.readexPro(
     color: AppColors.whiteColor,
     fontSize: 17.sp,
@@ -69,6 +84,11 @@ class AppTextStyle {
   static TextStyle primaryW500S22 = GoogleFonts.readexPro(
     color: AppColors.primaryColor,
     fontSize: 22.sp,
+    fontWeight: FontWeight.w500,
+  );
+  static TextStyle primaryW500S20 = GoogleFonts.readexPro(
+    color: AppColors.primaryColor,
+    fontSize: 20.sp,
     fontWeight: FontWeight.w500,
   );
   static TextStyle primaryW400S13 = GoogleFonts.readexPro(
@@ -97,6 +117,11 @@ class AppTextStyle {
     color: AppColors.primaryTextColor,
     fontSize: 15.sp,
     fontWeight: FontWeight.w400,
+  );
+  static TextStyle primaryPoppinsTextW500S15 = GoogleFonts.poppins(
+    color: AppColors.primaryTextColor,
+    fontSize: 15.sp,
+    fontWeight: FontWeight.w500,
   );
   static TextStyle primaryTextW400S16 = GoogleFonts.readexPro(
     color: AppColors.primaryTextColor,
@@ -132,6 +157,13 @@ class AppTextStyle {
     color: AppColors.secondaryTextColor,
     fontSize: 17.sp,
     fontWeight: FontWeight.w400,
+  );
+
+  /// primary text 400 color
+  static TextStyle primary400TextW500S16 = GoogleFonts.readexPro(
+    color: AppColors.primaryText400Color,
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
   );
 
   /// grey color
@@ -170,5 +202,19 @@ class AppTextStyle {
     fontSize: 26.sp,
     fontWeight: FontWeight.bold,
     color: AppColors.darkTealColor,
+  );
+
+  /// green color
+  static TextStyle greenColorW600S20 = TextStyle(
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.greenColor,
+  );
+
+  /// SecondaryTextColor
+  static TextStyle secondaryTextPoppinsColorW500S16 = GoogleFonts.poppins(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.secondaryTextColor,
   );
 }

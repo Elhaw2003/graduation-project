@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/generated/assets.dart';
 
 class LoginAppbar extends StatelessWidget {
@@ -8,6 +9,8 @@ class LoginAppbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      backgroundColor: AppColors.backgroundColor,
+      surfaceTintColor: Colors.transparent,
       actions: [
         Padding(
           padding: EdgeInsets.only(right: 10.w, left: 10.w),

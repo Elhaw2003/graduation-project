@@ -2,6 +2,53 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class Validators {
+  // Validator للاسم الأول
+  static String? validateFirstName(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return LocaleKeys.firstNameRequired
+          .tr(); // أو مفتاح خاص بـ firstNameRequired لو موجود
+    }
+    if (value.trim().length < 2) {
+      return LocaleKeys.nameMinLength.tr();
+    }
+    return null;
+  }
+
+  // Validator للاسم الأخير
+  static String? validateLastName(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return LocaleKeys.lastNameRequired.tr();
+    }
+    if (value.trim().length < 2) {
+      return LocaleKeys.nameMinLength.tr();
+    }
+    return null;
+  }
+
+  // Validator لاسم المستخدم (UserName)
+  static String? validateUserName(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return LocaleKeys.userNameRequired
+          .tr(); // تأكد من وجود المفتاح في الـ Translation
+    }
+    if (value.trim().length < 3) {
+      return LocaleKeys.nameMinLength.tr();
+    }
+    // يمنع المسافات في الـ UserName
+    if (value.contains(' ')) {
+      return LocaleKeys.nameInvalid.tr();
+    }
+    return null;
+  }
+
+  // Validator للدولة (Country)
+  static String? validateCountry(String? value) {
+    if (value == null || value.isEmpty) {
+      return LocaleKeys.selectYourCountry.tr();
+    }
+    return null;
+  }
+
   static String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return LocaleKeys.emailRequired.tr();
@@ -43,10 +90,10 @@ class Validators {
     return null;
   }
 
-  static String? validateRetypePassword(
+  static String? validateRetypePassword({
     String? value,
     String? originalPassword,
-  ) {
+  }) {
     if (value == null || value.isEmpty) {
       return LocaleKeys.retypePasswordRequired.tr();
     }

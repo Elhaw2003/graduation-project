@@ -1,106 +1,215 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:smart_guide/core/methods/custom_animated_snack_bar.dart';
+import 'package:smart_guide/core/methods/input_validator.dart';
+import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
+import 'package:smart_guide/core/shared_widgets/custom_loading_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_rich_text_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_text_field_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
-import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
+import 'package:smart_guide/feature/auth/login/presentation/cubit/login_with_google/login_with_google_cubit.dart';
+import 'package:smart_guide/feature/auth/login/presentation/cubit/login_with_google/login_with_google_states.dart';
+import 'package:smart_guide/feature/auth/login/presentation/cubit/login_email/login_with_email_cubit.dart';
+import 'package:smart_guide/feature/auth/login/presentation/cubit/login_email/login_with_email_states.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/widget/login_button_widget.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/widget/remember_and_forgot_wiget.dart';
-import 'package:smart_guide/generated/assets.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
-class LoginBody extends StatelessWidget {
-  const LoginBody({super.key, required this.userTypeEnum});
-  final UserTypeEnum userTypeEnum;
+class LoginBody extends StatefulWidget {
+  const LoginBody({super.key});
+  @override
+  State<LoginBody> createState() => _LoginBodyState();
+}
+
+class _LoginBodyState extends State<LoginBody> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomHeightSpacingWidget(height: 40),
-            Row(
-              children: [
-                CustomButtonWidget(
-                  buttonWidth: 191,
-                  buttonColor: userTypeEnum == UserTypeEnum.tourist
-                      ? AppColors.primaryColor
-                      : AppColors.whiteColor,
-                  borderSideColor: userTypeEnum == UserTypeEnum.tourist
-                      ? AppColors.primaryColor
-                      : AppColors.whiteColor,
-                  title: LocaleKeys.tourist.tr(),
-                  titleStyle: userTypeEnum == UserTypeEnum.tourist
-                      ? AppTextStyle.whiteW500S22
-                      : AppTextStyle.primaryW500S22,
-                  suffixSvgIcon: Assets.imagesSvgAirplane,
-                  suffixIconColor: userTypeEnum == UserTypeEnum.tourist
-                      ? AppColors.whiteColor
-                      : AppColors.primaryColor,
-                  suffixIconSize: 30,
-                  buttonHeight: 50,
+    return BlocConsumer<LoginCubit, LoginStates>(
+      listener: (context, state) {
+        if (state is LoginSuccessStates) {
+          CustomAnimatedShowSnackBar.successSnackBar(
+            context: context,
+            message: LocaleKeys.loginSuccessfully.tr(),
+          );
+          Future.delayed(const Duration(seconds: 1), () {
+            if (context.mounted) {
+              context.goNamed(AppRoutes.homeScreen);
+            }
+          });
+        } else if (state is LoginFailureStates) {
+          CustomAnimatedShowSnackBar.failureSnackBar(
+            context: context,
+            message: state.message,
+          );
+        }
+      },
+      builder: (context, state) {
+        final isLoading = state is LoginLoadingStates;
+        return AbsorbPointer(
+          absorbing: isLoading,
+          child: SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Form(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomHeightSpacingWidget(height: 40),
+                    // Row(
+                    //   children: [
+                    //     CustomButtonWidget(
+                    //       buttonWidth: 191,
+                    //       buttonColor: userType == UserTypeEnum.Tourist
+                    //           ? AppColors.primaryColor
+                    //           : AppColors.whiteColor,
+                    //       borderSideColor: userType == UserTypeEnum.Tourist
+                    //           ? AppColors.primaryColor
+                    //           : AppColors.whiteColor,
+                    //       title: LocaleKeys.tourist.tr(),
+                    //       titleStyle: userType == UserTypeEnum.Tourist
+                    //           ? AppTextStyle.whiteW500S22
+                    //           : AppTextStyle.primaryW500S22,
+                    //       suffixSvgIcon: Assets.imagesSvgAirplane,
+                    //       suffixIconColor: userType == UserTypeEnum.Tourist
+                    //           ? AppColors.whiteColor
+                    //           : AppColors.primaryColor,
+                    //       suffixIconSize: 30,
+                    //       buttonHeight: 50,
+                    //     ),
+                    //     CustomWidthSpacingWidget(width: 15),
+                    //     CustomButtonWidget(
+                    //       buttonWidth: 191,
+                    //       buttonHeight: 50,
+                    //       buttonColor: userType == UserTypeEnum.TourGuide
+                    //           ? AppColors.primaryColor
+                    //           : AppColors.whiteColor,
+                    //       borderSideColor: userType == UserTypeEnum.TourGuide
+                    //           ? AppColors.primaryColor
+                    //           : AppColors.whiteColor,
+                    //       title: LocaleKeys.guideLogin.tr(),
+                    //       titleStyle: userType == UserTypeEnum.TourGuide
+                    //           ? AppTextStyle.whiteW500S22
+                    //           : AppTextStyle.primaryW500S22,
+                    //       suffixSvgIcon: Assets.imagesSvgCompass,
+                    //       suffixIconColor: userType == UserTypeEnum.TourGuide
+                    //           ? AppColors.whiteColor
+                    //           : AppColors.primaryColor,
+                    //       suffixIconSize: 30,
+                    //     ),
+                    //   ],
+                    // ),
+                    CustomHeightSpacingWidget(height: 10),
+                    Text(
+                      LocaleKeys.loginWelcome.tr(),
+                      style: AppTextStyle.primaryTextW500S17,
+                    ),
+                    CustomHeightSpacingWidget(height: 35),
+                    Text(
+                      LocaleKeys.email.tr(),
+                      style: AppTextStyle.primaryTextW500S17,
+                    ),
+                    CustomHeightSpacingWidget(height: 5),
+                    CustomTextFieldWidget(
+                      hintText: LocaleKeys.enterEmail.tr(),
+                      controller: emailController,
+                      validator: (value) {
+                        return Validators.validateEmail(value);
+                      },
+                    ),
+                    CustomHeightSpacingWidget(height: 15),
+                    Text(
+                      LocaleKeys.password.tr(),
+                      style: AppTextStyle.primaryTextW500S17,
+                    ),
+                    CustomHeightSpacingWidget(height: 5),
+                    CustomTextFieldWidget(
+                      hintText: LocaleKeys.enterPassword.tr(),
+                      controller: passwordController,
+                      validator: (value) {
+                        return Validators.validatePassword(value);
+                      },
+                    ),
+                    CustomHeightSpacingWidget(height: 10),
+                    RememberAndForgotWiget(email: emailController),
+                    CustomHeightSpacingWidget(height: 30),
+                    LoginButtonWidget(
+                      state: state,
+                      email: emailController,
+                      password: passwordController,
+                      formKey: formKey,
+                    ),
+                    CustomHeightSpacingWidget(height: 20),
+                    BlocConsumer<LoginWithGoogleCubit, LoginWithGoogleStates>(
+                      listener: (context, state) {
+                        if (state is LoginWithGoogleFailureStates) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            CustomAnimatedShowSnackBar.failureSnackBar(
+                              context: context,
+                              message: state.message,
+                            );
+                          });
+                        } else if (state is LoginWithGoogleSuccessStates) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            CustomAnimatedShowSnackBar.successSnackBar(
+                              context: context,
+                              message: LocaleKeys.loginSuccessfully.tr(),
+                            );
+                          });
+                        }
+                      },
+                      builder: (context, state) {
+                        return CustomButtonWidget(
+                          onPressed: () {
+                            context
+                                .read<LoginWithGoogleCubit>()
+                                .loginWithGoogle();
+                          },
+                          buttonWidth: double.infinity,
+                          title: "Login",
+                          titleStyle: TextStyle(
+                            color: AppColors.backgroundColor,
+                          ),
+                          child: state is LoginWithGoogleLoadingStates
+                              ? CustomLoadingWidget()
+                              : null,
+                        );
+                      },
+                    ),
+                    CustomHeightSpacingWidget(height: 10),
+                    Center(
+                      child: CustomRichTextWidget(
+                        onTap: () {
+                          context.pushNamed(AppRoutes.selectRoleScreen);
+                        },
+                        title: LocaleKeys.dontHaveAccount.tr(),
+                        secondTitle: LocaleKeys.createAccount.tr(),
+                      ),
+                    ),
+                  ],
                 ),
-                CustomWidthSpacingWidget(width: 15),
-                CustomButtonWidget(
-                  buttonWidth: 191,
-                  buttonHeight: 50,
-                  buttonColor: userTypeEnum == UserTypeEnum.guide
-                      ? AppColors.primaryColor
-                      : AppColors.whiteColor,
-                  borderSideColor: userTypeEnum == UserTypeEnum.guide
-                      ? AppColors.primaryColor
-                      : AppColors.whiteColor,
-                  title: LocaleKeys.guide.tr(),
-                  titleStyle: userTypeEnum == UserTypeEnum.guide
-                      ? AppTextStyle.whiteW500S22
-                      : AppTextStyle.primaryW500S22,
-                  suffixSvgIcon: Assets.imagesSvgCompass,
-                  suffixIconColor: userTypeEnum == UserTypeEnum.guide
-                      ? AppColors.whiteColor
-                      : AppColors.primaryColor,
-                  suffixIconSize: 30,
-                ),
-              ],
-            ),
-            CustomHeightSpacingWidget(height: 10),
-            Text(
-              LocaleKeys.loginWelcome.tr(),
-              style: AppTextStyle.primaryTextW400S15,
-            ),
-            CustomHeightSpacingWidget(height: 35),
-            Text(
-              LocaleKeys.nationalId.tr(),
-              style: AppTextStyle.primaryTextW500S17,
-            ),
-            CustomHeightSpacingWidget(height: 5),
-            CustomTextFieldWidget(hintText: LocaleKeys.enterNationalId.tr()),
-            CustomHeightSpacingWidget(height: 15),
-            Text(
-              LocaleKeys.nationalId.tr(),
-              style: AppTextStyle.primaryTextW500S17,
-            ),
-            CustomHeightSpacingWidget(height: 5),
-            CustomTextFieldWidget(hintText: LocaleKeys.enterPassword.tr()),
-            CustomHeightSpacingWidget(height: 10),
-            RememberAndForgotWiget(),
-            CustomHeightSpacingWidget(height: 30),
-            LoginButtonWidget(),
-            CustomHeightSpacingWidget(height: 10),
-            Center(
-              child: CustomRichTextWidget(
-                title: LocaleKeys.dontHaveAccount.tr(),
-                secondTitle: LocaleKeys.createAccount.tr(),
               ),
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

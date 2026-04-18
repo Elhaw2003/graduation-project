@@ -3,13 +3,19 @@ import 'package:smart_guide/feature/auth/login/presentation/view/widget/reset_pa
 import 'package:smart_guide/feature/auth/login/presentation/view/widget/remember_me_widget.dart';
 
 class RememberAndForgotWiget extends StatelessWidget {
-  const RememberAndForgotWiget({super.key});
-
+  const RememberAndForgotWiget({
+    super.key,
+    required this.email,
+  });
+  final TextEditingController email;
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [RememberMeWidget(), ResetPasswordWidget()],
+      children: [
+        RememberMeWidget(),
+        ResetPasswordWidget(email: email),
+      ],
     );
   }
 }

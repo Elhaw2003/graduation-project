@@ -42,6 +42,8 @@ class ChooseGuidesBody extends StatelessWidget {
                 ),
               );
             },
+            icon: Assets.imagesSvgPerson,
+            onTap: () {},
           ),
           CustomHeightSpacingWidget(height: 32),
           SelectRoleWidget(
@@ -54,6 +56,8 @@ class ChooseGuidesBody extends StatelessWidget {
             onTap: () {
               GoRouter.of(context).pushNamed(AppRoutes.aiGuideScreen);
             },
+            icon: Assets.imagesSvgRobot,
+            onTap: () {},
           ),
         ],
       ),

@@ -17,6 +17,12 @@ class TextSectionInChooseGuids extends StatelessWidget {
         Text(
           subTitle,
           textAlign: TextAlign.center,
+          LocaleKeys.choose_your_guide.tr(),
+          style: AppTextStyle.primaryTextW600S22,
+        ),
+        Text(
+          textAlign: TextAlign.center,
+          LocaleKeys.pick_a_local_expert_or_smart_ai.tr(),
           style: AppTextStyle.secondaryTextW400S17,
         ),
       ],

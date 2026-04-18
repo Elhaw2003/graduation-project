@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
@@ -43,6 +44,8 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.textDirection,
     this.hintTextDirection,
     this.width,
+    this.fieldEnabled,
+    this.inputFormatters,
   });
 
   final TextEditingController? controller;
@@ -82,6 +85,8 @@ class CustomTextFieldWidget extends StatelessWidget {
   final TextDirection? textDirection;
   final TextDirection? hintTextDirection;
   final double? width;
+  final bool? fieldEnabled;
+  final List<TextInputFormatter>? inputFormatters;
   @override
   Widget build(BuildContext context) {
     final isRTL = Directionality.of(context) == TextDirection.rtl;
@@ -149,6 +154,57 @@ class CustomTextFieldWidget extends StatelessWidget {
               borderSide: BorderSide(
                 color: enableBorderColor ?? AppColors.whiteColor,
               ),
+      ),
+      child: TextFormField(
+        enabled: fieldEnabled ?? true,
+        controller: controller,
+        minLines: minLines ?? 1,
+        maxLines: obscureText == true ? 1 : (maxLines ?? minLines ?? 1),
+        keyboardType: keyboardType ?? TextInputType.text,
+        obscureText: obscureText ?? false,
+        validator: validator,
+        keyboardAppearance: keyboardAppearance ?? Brightness.light,
+        cursorColor: cursorColor ?? AppColors.primaryColor,
+        obscuringCharacter: obscuringCharacter ?? "•",
+        textDirection: textDirection,
+        textAlign: isRTL ? TextAlign.right : TextAlign.left,
+        inputFormatters: inputFormatters,
+        decoration: InputDecoration(
+          hintTextDirection:
+              hintTextDirection ??
+              (isRTL ? TextDirection.rtl : TextDirection.ltr),
+          helperText: helperText,
+          helperStyle: helperTextStyle ?? AppTextStyle.grey300W400S16,
+          helperMaxLines: helperMaxLines ?? 1,
+          hintText: hintText,
+          hintStyle: hintTextStyle ?? AppTextStyle.grey300W400S16,
+          suffixIcon: suffixIcon != null
+              ? IconButton(
+                  onPressed: suffixOnPressed,
+                  highlightColor: AppColors.primaryColor.withValues(alpha: 0.3),
+                  icon: Icon(
+                    suffixIcon,
+                    color: suffixColor ?? AppColors.secondaryTextColor,
+                    size: suffixSize?.sp ?? 25.sp,
+                  ),
+                )
+              : null,
+          prefixIcon: prefixIcon != null
+              ? IconButton(
+                  onPressed: prefixOnPressed,
+                  icon: Icon(
+                    prefixIcon,
+                    color: prefixColor ?? AppColors.primaryTextColor,
+                    size: prefixSize?.sp ?? 25.sp,
+                  ),
+                )
+              : null,
+          fillColor: fillColor ?? AppColors.whiteColor,
+          filled: true,
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(enableBorderRadius?.r ?? 8.r),
+            borderSide: BorderSide(
+              color: enableBorderColor ?? AppColors.whiteColor,
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(focusBorderRadius?.r ?? 8.r),

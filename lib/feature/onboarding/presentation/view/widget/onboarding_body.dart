@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/feature/onboarding/data/list/page_views_screens.dart';
-import 'package:smart_guide/feature/onboarding/presentation/view/widget/item_splash_widget.dart';
+import 'package:smart_guide/feature/onboarding/presentation/view/widget/item_onboarding_widget.dart';
 
 class OnboardingBody extends StatefulWidget {
   const OnboardingBody({super.key});
@@ -27,6 +27,7 @@ class _OnboardingBodyState extends State<OnboardingBody> {
         /// الصور فقط
         PageView.builder(
           clipBehavior: Clip.none,
+          scrollBehavior: const ScrollBehavior(),
           physics: ClampingScrollPhysics(),
           allowImplicitScrolling: true,
           controller: controller,

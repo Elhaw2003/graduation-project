@@ -14,4 +14,9 @@ class AppRoutes {
   static const String tourGuideProfileScreen = '/tourGuideProfileScreen';
   static const String exploreArSpotsScreen = '/exploreArSpotsScreen';
   static const String aiGuideScreen = '/aiGuideScreen';
+  static const String verifyOtpScreen = '/verifyOtpScreen';
+  static const String newPasswordScreen = '/newPasswordScreen';
+  static const String passwordResetSuccessfullyScreen =
+      '/passwordResetSuccessfullyScreen';
+  static const String settingsScreen = '/settingsScreen';
 }

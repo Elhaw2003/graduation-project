@@ -1,1 +1,1 @@
-enum UserTypeEnum { tourist, guide }
+enum UserTypeEnum { Tourist, TourGuide }
