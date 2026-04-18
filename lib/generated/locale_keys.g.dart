@@ -87,6 +87,10 @@ abstract class  LocaleKeys {
   static const cairo = 'cairo';
   static const cairoEgypt = 'cairoEgypt';
   static const searchDestinationsAndGuides = 'searchDestinationsAndGuides';
+  static const showAll = 'showAll';
+  static const popularPlaces = 'popularPlaces';
+  static const chooseYourGuide = 'chooseYourGuide';
+  static const pickALocalExpertOrSmartAI = 'pickALocalExpertOrSmartAI';
   static const show_all = 'show_all';
   static const popular_places = 'popular_places';
   static const choose_your_guide = 'choose_your_guide';
@@ -100,6 +104,9 @@ abstract class  LocaleKeys {
   static const sendCode = 'sendCode';
   static const verifyEmail = 'verifyEmail';
   static const sentSixDigitCode = 'sentSixDigitCode';
+  static const verifiedLocalGuides = 'verifiedLocalGuides';
+  static const exploreEgyptThroughTheEyesOfExpertsWhoKnowEveryStory = 'exploreEgyptThroughTheEyesOfExpertsWhoKnowEveryStory';
+  static const viewProfile = 'viewProfile';
   static const createNewPassword = 'createNewPassword';
   static const enterYourNewPasswordBelow = 'enterYourNewPasswordBelow';
   static const enterYourPassword = 'enterYourPassword';

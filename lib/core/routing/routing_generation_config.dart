@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:smart_guide/app_main.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spring_animation.dart';
+import 'package:smart_guide/feature/aiGuide/presentation/view/ai_guide_screen.dart';
 import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/login_screen.dart';
 import 'package:smart_guide/feature/auth/new_password/presentation/view/new_password_screen.dart';
@@ -11,6 +12,11 @@ import 'package:smart_guide/feature/auth/register/presentation/view/register_scr
 import 'package:smart_guide/feature/auth/reset_password/presentation/view/reset_password_screen.dart';
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
 import 'package:smart_guide/feature/auth/success_verification/presentation/view/success_verification_screen.dart';
+import 'package:smart_guide/feature/auth/verify_email/presentation/view/verify_email_screen.dart';
+import 'package:smart_guide/feature/auth/verify_phone_number/presentation/view/verify_phone_number_screen.dart';
+import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_screen.dart';
+import 'package:smart_guide/feature/guides/presentation/view/choose_guides_screen.dart';
+import 'package:smart_guide/feature/guides/tour_guide_profile_screen.dart';
 import 'package:smart_guide/feature/auth/verify_otp/presentation/view/verify_otp_screen.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
 import 'package:smart_guide/feature/onboarding/presentation/view/onboarding_screen.dart';
@@ -130,6 +136,26 @@ class RoutingGenerationConfig {
         name: AppRoutes.settingsScreen,
         pageBuilder: (context, state) =>
             CustomSpringPage(child: const SettingsScreen()),
+      ),
+      GoRoute(
+        path: AppRoutes.tourGuideProfileScreen,
+        name: AppRoutes.tourGuideProfileScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(child: TourGuideProfileScreen());
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.exploreArSpotsScreen,
+        name: AppRoutes.exploreArSpotsScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(child: ExploreArSpotsScreen());
+        },
+      ), GoRoute(
+        path: AppRoutes.aiGuideScreen,
+        name: AppRoutes.aiGuideScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(child: AiGuideScreen());
+        },
       ),
     ],
   );

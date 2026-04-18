@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_guide/core/shared_widgets/custom_bottom_nav_bar.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
+import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_screen.dart';
 import 'package:smart_guide/feature/guides/presentation/view/choose_guides_screen.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
 
@@ -18,7 +19,7 @@ class _AppMainState extends State<AppMain> {
     HomeScreen(),
     ChooseGuidesScreen(),
     Center(child: Text("Chat")),
-    Center(child: Text("Explore")),
+    ExploreArSpotsScreen(),
     Center(child: Text("Menu")),
   ];
 

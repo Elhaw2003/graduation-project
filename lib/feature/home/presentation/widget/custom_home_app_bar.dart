@@ -7,8 +7,13 @@ import 'package:smart_guide/generated/assets.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class CustomHomeAppBar extends StatelessWidget {
-  const CustomHomeAppBar({super.key});
-
+  const CustomHomeAppBar({
+    super.key,
+    required this.title,
+    required this.subTitle,
+  });
+  final String title;
+  final String subTitle;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -17,14 +22,8 @@ class CustomHomeAppBar extends StatelessWidget {
         children: [
           Expanded(
             child: ListTile(
-              title: Text(
-                LocaleKeys.hello.tr(),
-                style: AppTextStyle.thirdTextW900S20,
-              ),
-              subtitle: Text(
-                LocaleKeys.cairoEgypt.tr(),
-                style: AppTextStyle.thirdTextW400S17,
-              ),
+              title: Text(title, style: AppTextStyle.thirdTextW900S20),
+              subtitle: Text(subTitle, style: AppTextStyle.thirdTextW400S17),
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(25.0),
                 child: Image.asset(
