@@ -2,7 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:smart_guide/core/methods/custom_animated_snack_bar.dart';
+import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_loading_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
@@ -22,6 +24,9 @@ class LogOutButtonWidget extends StatelessWidget {
             message: state.message,
           );
           Navigator.pop(context);
+          if (context.mounted) {
+            context.goNamed(AppRoutes.loginScreen);
+          }
         } else if (state is LogOutFailureState) {
           CustomAnimatedShowSnackBar.failureSnackBar(
             context: context,

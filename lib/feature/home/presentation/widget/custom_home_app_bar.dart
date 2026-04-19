@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/generated/assets.dart';
@@ -48,7 +50,9 @@ class CustomHomeAppBar extends StatelessWidget {
               ],
             ),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                context.pushNamed(AppRoutes.settingsScreen);
+              },
               icon: SvgPicture.asset(
                 height: 30,
                 width: 30,

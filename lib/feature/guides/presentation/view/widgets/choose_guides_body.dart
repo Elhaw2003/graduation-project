@@ -33,7 +33,7 @@ class ChooseGuidesBody extends StatelessWidget {
             isSelected: true,
             colorButton: AppColors.whiteColor,
             title: 'Human Guide',
-            icon: Assets.imagesSvgperson,
+            icon: Assets.imagesPngArIcon,
             onTap: () {
               Navigator.push(
                 context,
@@ -50,7 +50,7 @@ class ChooseGuidesBody extends StatelessWidget {
             isSelected: true,
             colorButton: AppColors.whiteColor,
             title: 'Ai Guide',
-            icon: Assets.imagesSvgrobot,
+            icon: Assets.imagesSvgRobot,
             onTap: () {
               GoRouter.of(context).pushNamed(AppRoutes.aiGuideScreen);
             },
