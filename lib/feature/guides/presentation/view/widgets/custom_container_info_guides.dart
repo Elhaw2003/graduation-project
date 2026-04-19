@@ -38,7 +38,7 @@ class CustomContainerInfoGuides extends StatelessWidget {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(50),
                   child: Image.asset(
-                    Assets.imagePerson,
+                    Assets.imagesPngPerson,
                     height: 100,
                     width: 100,
                     fit: BoxFit.fill,

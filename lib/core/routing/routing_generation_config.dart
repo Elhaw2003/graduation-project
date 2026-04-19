@@ -17,12 +17,13 @@ import 'package:smart_guide/feature/guides/tour_guide_profile_screen.dart';
 import 'package:smart_guide/feature/auth/verify_otp/presentation/view/verify_otp_screen.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
 import 'package:smart_guide/feature/onboarding/presentation/view/onboarding_screen.dart';
+import 'package:smart_guide/feature/popular_places/presentation/view/popular_places_screen.dart';
 import 'package:smart_guide/feature/settings/presentation/view/settings_screen.dart';
 import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart';
 
 class RoutingGenerationConfig {
   static GoRouter routerGeneratorConfig = GoRouter(
-    initialLocation: AppRoutes.selectRoleScreen,
+    initialLocation: AppRoutes.popularPlacesScreen,
     errorBuilder: (context, state) => errorBuilder(),
     routes: [
       /// Splash, Onboarding & Select Role
@@ -153,6 +154,13 @@ class RoutingGenerationConfig {
         name: AppRoutes.aiGuideScreen,
         pageBuilder: (context, state) {
           return CustomSpringPage(child: AiGuideScreen());
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.popularPlacesScreen,
+        name: AppRoutes.popularPlacesScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(child: PopularPlacesScreen());
         },
       ),
     ],

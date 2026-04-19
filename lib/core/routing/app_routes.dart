@@ -19,4 +19,5 @@ class AppRoutes {
   static const String passwordResetSuccessfullyScreen =
       '/passwordResetSuccessfullyScreen';
   static const String settingsScreen = '/settingsScreen';
+  static const String popularPlacesScreen = '/popularPlacesScreen';
 }

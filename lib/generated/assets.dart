@@ -1,20 +1,22 @@
 // ignore_for_file: prefer_single_quotes
 class Assets {
   Assets._();
-
-  static const String sphinx = "assets/images/png/sphinx.jpg";
-  static const String imagePerson = "assets/images/png/person.jpg";
-  static const String pyramids = "assets/images/png/pyramids.jpg";
+  
+  /// Assets for imagesPngArIcon
+  /// assets/images/png/ar_icon.png
+  static const String imagesPngArIcon = "assets/images/png/ar_icon.png";
 
   /// Assets for imagesPngDefaultUserAvatar
   /// assets/images/png/default_user_avatar.png
-  static const String imagesPngDefaultUserAvatar =
-      "assets/images/png/default_user_avatar.png";
+  static const String imagesPngDefaultUserAvatar = "assets/images/png/default_user_avatar.png";
+
+  /// Assets for imagesPngExploreAr
+  /// assets/images/png/explore_ar.png
+  static const String imagesPngExploreAr = "assets/images/png/explore_ar.png";
 
   /// Assets for imagesPngFirstSplashScreen
   /// assets/images/png/first_splash_screen.png
-  static const String imagesPngFirstSplashScreen =
-      "assets/images/png/first_splash_screen.png";
+  static const String imagesPngFirstSplashScreen = "assets/images/png/first_splash_screen.png";
 
   /// Assets for imagesPngGuide
   /// assets/images/png/guide.png
@@ -22,23 +24,27 @@ class Assets {
 
   /// Assets for imagesPngLogoWithText
   /// assets/images/png/logo_with_text.png
-  static const String imagesPngLogoWithText =
-      "assets/images/png/logo_with_text.png";
+  static const String imagesPngLogoWithText = "assets/images/png/logo_with_text.png";
 
   /// Assets for imagesPngLogoWithoutText
   /// assets/images/png/logo_without_text.png
-  static const String imagesPngLogoWithoutText =
-      "assets/images/png/logo_without_text.png";
+  static const String imagesPngLogoWithoutText = "assets/images/png/logo_without_text.png";
 
   /// Assets for imagesPngPasswordResetSuccess
   /// assets/images/png/password_reset_success.png
-  static const String imagesPngPasswordResetSuccess =
-      "assets/images/png/password_reset_success.png";
+  static const String imagesPngPasswordResetSuccess = "assets/images/png/password_reset_success.png";
+
+  /// Assets for imagesPngPerson
+  /// assets/images/png/person.jpg
+  static const String imagesPngPerson = "assets/images/png/person.jpg";
+
+  /// Assets for imagesPngPyramids
+  /// assets/images/png/pyramids.jpg
+  static const String imagesPngPyramids = "assets/images/png/pyramids.jpg";
 
   /// Assets for imagesPngSecondSplashScreen
   /// assets/images/png/second_splash_screen.png
-  static const String imagesPngSecondSplashScreen =
-      "assets/images/png/second_splash_screen.png";
+  static const String imagesPngSecondSplashScreen = "assets/images/png/second_splash_screen.png";
 
   /// Assets for imagesPngSphinx
   /// assets/images/png/sphinx.jpg
@@ -50,10 +56,7 @@ class Assets {
 
   /// Assets for imagesPngThirdSplashScreen
   /// assets/images/png/third_splash_screen.png
-  static const String imagesPngThirdSplashScreen =
-      "assets/images/png/third_splash_screen.png";
-  static const String imagesPngExploreAr = "assets/images/png/explore_ar.png";
-  static const String imagesPngArIcon = "assets/images/png/ar_icon.png";
+  static const String imagesPngThirdSplashScreen = "assets/images/png/third_splash_screen.png";
 
   /// Assets for imagesPngTourist
   /// assets/images/png/tourist.png
@@ -61,8 +64,7 @@ class Assets {
 
   /// Assets for imagesPngValleyOfTheKings
   /// assets/images/png/valley_of_the_kings.png
-  static const String imagesPngValleyOfTheKings =
-      "assets/images/png/valley_of_the_kings.png";
+  static const String imagesPngValleyOfTheKings = "assets/images/png/valley_of_the_kings.png";
 
   /// Assets for imagesSvgAbout
   /// assets/images/svg/about.svg
@@ -70,8 +72,7 @@ class Assets {
 
   /// Assets for imagesSvgAccountSettings
   /// assets/images/svg/account_settings.svg
-  static const String imagesSvgAccountSettings =
-      "assets/images/svg/account_settings.svg";
+  static const String imagesSvgAccountSettings = "assets/images/svg/account_settings.svg";
 
   /// Assets for imagesSvgAiIcon
   /// assets/images/svg/ai_icon.svg
@@ -87,8 +88,11 @@ class Assets {
 
   /// Assets for imagesSvgArrowForward
   /// assets/images/svg/arrow_forward.svg
-  static const String imagesSvgArrowForward =
-      "assets/images/svg/arrow_forward.svg";
+  static const String imagesSvgArrowForward = "assets/images/svg/arrow_forward.svg";
+
+  /// Assets for imagesSvgBank
+  /// assets/images/svg/bank.svg
+  static const String imagesSvgBank = "assets/images/svg/bank.svg";
 
   /// Assets for imagesSvgCompass
   /// assets/images/svg/compass.svg
@@ -96,8 +100,7 @@ class Assets {
 
   /// Assets for imagesSvgContactSupp
   /// assets/images/svg/contact_supp.svg
-  static const String imagesSvgContactSupp =
-      "assets/images/svg/contact_supp.svg";
+  static const String imagesSvgContactSupp = "assets/images/svg/contact_supp.svg";
 
   /// Assets for imagesSvgDarkMode
   /// assets/images/svg/dark_mode.svg
@@ -106,6 +109,10 @@ class Assets {
   /// Assets for imagesSvgExplorIcon
   /// assets/images/svg/explor_icon.svg
   static const String imagesSvgExplorIcon = "assets/images/svg/explor_icon.svg";
+
+  /// Assets for imagesSvgFilter
+  /// assets/images/svg/filter.svg
+  static const String imagesSvgFilter = "assets/images/svg/filter.svg";
 
   /// Assets for imagesSvgGuidesIcon
   /// assets/images/svg/guides_icon.svg
@@ -119,9 +126,17 @@ class Assets {
   /// assets/images/svg/home_icon.svg
   static const String imagesSvgHomeIcon = "assets/images/svg/home_icon.svg";
 
+  /// Assets for imagesSvgInstagramLogo
+  /// assets/images/svg/instagram_logo.svg
+  static const String imagesSvgInstagramLogo = "assets/images/svg/instagram_logo.svg";
+
   /// Assets for imagesSvgLangauge
   /// assets/images/svg/langauge.svg
   static const String imagesSvgLangauge = "assets/images/svg/langauge.svg";
+
+  /// Assets for imagesSvgLocationIcon
+  /// assets/images/svg/location_icon.svg
+  static const String imagesSvgLocationIcon = "assets/images/svg/location_icon.svg";
 
   /// Assets for imagesSvgLogOut
   /// assets/images/svg/log_out.svg
@@ -133,13 +148,11 @@ class Assets {
 
   /// Assets for imagesSvgNotification
   /// assets/images/svg/notification.svg
-  static const String imagesSvgNotification =
-      "assets/images/svg/notification.svg";
+  static const String imagesSvgNotification = "assets/images/svg/notification.svg";
 
   /// Assets for imagesSvgPassSecurity
   /// assets/images/svg/pass_security.svg
-  static const String imagesSvgPassSecurity =
-      "assets/images/svg/pass_security.svg";
+  static const String imagesSvgPassSecurity = "assets/images/svg/pass_security.svg";
 
   /// Assets for imagesSvgPerson
   /// assets/images/svg/person.svg
@@ -147,8 +160,11 @@ class Assets {
 
   /// Assets for imagesSvgPersonalInfo
   /// assets/images/svg/personal_info.svg
-  static const String imagesSvgPersonalInfo =
-      "assets/images/svg/personal_info.svg";
+  static const String imagesSvgPersonalInfo = "assets/images/svg/personal_info.svg";
+
+  /// Assets for imagesSvgPopularPlaces
+  /// assets/images/svg/popular_places.svg
+  static const String imagesSvgPopularPlaces = "assets/images/svg/popular_places.svg";
 
   /// Assets for imagesSvgPrivacy
   /// assets/images/svg/privacy.svg
@@ -165,19 +181,6 @@ class Assets {
   /// Assets for imagesSvgSettings
   /// assets/images/svg/settings.svg
   static const String imagesSvgSettings = "assets/images/svg/settings.svg";
-  static const String imagesSvgChat = "assets/images/svg/ai_icon.svg";
-  static const String imagesSvgGuides = "assets/images/svg/guides_icon.svg";
-  static const String imagesSvgExplore = "assets/images/svg/explor_icon.svg";
-  static const String imagesSvgMenu = "assets/images/svg/more_icon.svg";
-  static const String imagesSvgHome = "assets/images/svg/home_icon.svg";
-  static const String imagesSvgperson = "assets/images/svg/person.svg";
-  static const String imagesSvgrobot = "assets/images/svg/robot.svg";
-  static const String imagesSvgverified = "assets/images/svg/verified.svg";
-  static const String imagesSvgInstagramLogo =
-      "assets/images/svg/instagram_logo.svg";
-  static const String imagesSvgLocationIcon =
-      "assets/images/svg/location_icon.svg";
-  static const String imagesSvgBank = "assets/images/svg/bank.svg";
 
   /// Assets for imagesSvgSupport
   /// assets/images/svg/support.svg
@@ -185,8 +188,11 @@ class Assets {
 
   /// Assets for imagesSvgTermsOfService
   /// assets/images/svg/terms_of_service.svg
-  static const String imagesSvgTermsOfService =
-      "assets/images/svg/terms_of_service.svg";
+  static const String imagesSvgTermsOfService = "assets/images/svg/terms_of_service.svg";
+
+  /// Assets for imagesSvgVerified
+  /// assets/images/svg/verified.svg
+  static const String imagesSvgVerified = "assets/images/svg/verified.svg";
 
   /// Assets for lottieDone
   /// assets/lottie/done.json
@@ -200,3 +206,4 @@ class Assets {
   /// assets/translations/en.json
   static const String translationsEn = "assets/translations/en.json";
 }
+

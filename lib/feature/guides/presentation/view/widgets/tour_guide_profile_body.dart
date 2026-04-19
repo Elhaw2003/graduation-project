@@ -18,7 +18,7 @@ class TourGuideProfileBody extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(Assets.pyramids),
+              image: AssetImage(Assets.imagesPngPyramids),
               fit: BoxFit.cover,
             ),
           ),

@@ -85,6 +85,13 @@ class AppTextStyle {
     fontWeight: FontWeight.w500,
   );
 
+  /// black color
+  static TextStyle blackPoppinsW500S24 = GoogleFonts.poppins(
+    color: AppColors.blackColor,
+    fontSize: 24.sp,
+    fontWeight: FontWeight.w500,
+  );
+
   /// primary color
   static TextStyle primaryW500S22 = GoogleFonts.readexPro(
     color: AppColors.primaryColor,

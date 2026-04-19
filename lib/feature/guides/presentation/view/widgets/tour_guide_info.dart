@@ -27,7 +27,7 @@ class TourGuideInfoDetiles extends StatelessWidget {
                 style: AppTextStyle.primaryTextW500S17,
               ),
               SvgPicture.asset(
-                Assets.imagesSvgverified,
+                Assets.imagesSvgVerified,
                 width: 22,
                 height: 22,
               ),
