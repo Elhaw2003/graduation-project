@@ -15,8 +15,6 @@ abstract class  LocaleKeys {
   static const egypt = 'egypt';
   static const tourist = 'tourist';
   static const guide = 'guide';
-  static const tourGuide = 'tourGuide';
-  static const guideLogin = 'guideLogin';
   static const loginWelcome = 'loginWelcome';
   static const passwordDescription = 'passwordDescription';
   static const emailRequired = 'emailRequired';
@@ -91,10 +89,6 @@ abstract class  LocaleKeys {
   static const popularPlaces = 'popularPlaces';
   static const chooseYourGuide = 'chooseYourGuide';
   static const pickALocalExpertOrSmartAI = 'pickALocalExpertOrSmartAI';
-  static const show_all = 'show_all';
-  static const popular_places = 'popular_places';
-  static const choose_your_guide = 'choose_your_guide';
-  static const pick_a_local_expert_or_smart_ai = 'pick_a_local_expert_or_smart_ai';
   static const verificationSuccessful = 'verificationSuccessful';
   static const welcomeMessage = 'welcomeMessage';
   static const accountReady = 'accountReady';

@@ -11,8 +11,6 @@
   "egypt": "مصر",
   "tourist": "سائح",
   "guide": "مرشد سياحي",
-  "tourGuide": "مرشد سياحي",
-  "guideLogin": "مرشد سياحي",
   "loginWelcome": "مرحبًا! أدخل بياناتك لبدء مهامك",
   "passwordDescription": "يجب أن تحتوي على 8 أحرف على الأقل، مع استخدام أرقام، وعدم استخدام رموز مثل (@ - # - % - * …).",
   "emailRequired": "البريد الإلكتروني مطلوب",
@@ -98,7 +96,7 @@
   "sentSixDigitCode":"لقد ارسلنا رمزًا مكونًا من 6 ارقام إلى",
   "verifiedLocalGuides": "المرشدين المحليين المعتمدين",
   "exploreEgyptThroughTheEyesOfExpertsWhoKnowEveryStory": "استكشف مصر من خلال عيني الخبراء الذين يعرفون كل القصص.",
-  "viewProfile": "عرض الملف الشخصي"
+  "viewProfile": "عرض الملف الشخصي",
   "createNewPassword":"انشاء كلمة مرور جديدة",
   "enterYourNewPasswordBelow":"ادخل كلمة المرور الجديدة",
   "enterYourPassword":"ادخل كلمة المرور",

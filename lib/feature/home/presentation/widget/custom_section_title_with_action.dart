@@ -14,10 +14,10 @@ class CustomSectionTitleWithAction extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            LocaleKeys.popular_places.tr(),
+            LocaleKeys.popularPlaces.tr(),
             style: AppTextStyle.primaryTextW500S21,
           ),
-          Text(LocaleKeys.show_all.tr(), style: AppTextStyle.primaryW500S16),
+          Text(LocaleKeys.showAll.tr(), style: AppTextStyle.primaryW500S16),
         ],
       ),
     );

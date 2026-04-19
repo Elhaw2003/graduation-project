@@ -10,8 +10,7 @@
   "appName": "Smart Guide",
   "egypt": "Egypt",
   "tourist": "Tourist",
-  "guide": "TourGuide",
-  "guideLogin": "Guide",
+  "guide": "Guide",
   "loginWelcome": "Welcome, Enter your details to start your tasks.",
   "passwordDescription": "At least 8 characters, use numbers, and do not use symbols such as (@-#-%-*....)",
   "emailRequired": "Email is required",
@@ -86,7 +85,7 @@
   "popularPlaces": "Popular Places",
   "serchDestinationsAndGuides": "Search Destinations and Guides",
   "hello": "Hello",
-  "viewProfile": "View Profile"
+  "viewProfile": "View Profile",
   "verificationSuccessful": "Verification Successful!",
   "welcomeMessage": "Welcome to SmartGuide Egypt!",
   "accountReady": "Your account is ready — start exploring Egypt the smart way!",

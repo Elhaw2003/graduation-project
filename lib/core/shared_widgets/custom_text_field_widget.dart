@@ -46,6 +46,7 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.width,
     this.fieldEnabled,
     this.inputFormatters,
+    this.onChanged,
   });
 
   final TextEditingController? controller;
@@ -87,24 +88,27 @@ class CustomTextFieldWidget extends StatelessWidget {
   final double? width;
   final bool? fieldEnabled;
   final List<TextInputFormatter>? inputFormatters;
+  final void Function(String)? onChanged;
+
   @override
   Widget build(BuildContext context) {
     final isRTL = Directionality.of(context) == TextDirection.rtl;
 
     return SizedBox(
-      width: width ?? double.infinity, // 👈 هنا السحر
-
+      width: width ?? double.infinity,
       child: Theme(
         data: ThemeData(
           textSelectionTheme: TextSelectionThemeData(
             selectionColor:
-                selectionColor ?? AppColors.primaryColor.withValues(alpha: 0.5),
+                selectionColor ?? AppColors.primaryColor.withOpacity(0.5),
             selectionHandleColor:
                 selectionHandleColor ?? AppColors.primaryColor,
           ),
         ),
         child: TextFormField(
+          enabled: fieldEnabled ?? true,
           controller: controller,
+          onChanged: onChanged,
           minLines: minLines ?? 1,
           maxLines: obscureText == true ? 1 : (maxLines ?? minLines ?? 1),
           keyboardType: keyboardType ?? TextInputType.text,
@@ -114,6 +118,7 @@ class CustomTextFieldWidget extends StatelessWidget {
           cursorColor: cursorColor ?? AppColors.primaryColor,
           obscuringCharacter: obscuringCharacter ?? "•",
           textDirection: textDirection,
+          inputFormatters: inputFormatters,
           textAlign: isRTL ? TextAlign.right : TextAlign.left,
           decoration: InputDecoration(
             hintTextDirection:
@@ -124,19 +129,10 @@ class CustomTextFieldWidget extends StatelessWidget {
             helperMaxLines: helperMaxLines ?? 1,
             hintText: hintText,
             hintStyle: hintTextStyle ?? AppTextStyle.grey300W400S16,
-            suffixIcon: suffixIcon != null
-                ? IconButton(
-                    onPressed: suffixOnPressed,
-                    highlightColor: AppColors.primaryColor.withValues(
-                      alpha: 0.3,
-                    ),
-                    icon: Icon(
-                      suffixIcon,
-                      color: suffixColor ?? AppColors.secondaryTextColor,
-                      size: suffixSize?.sp ?? 25.sp,
-                    ),
-                  )
-                : null,
+            fillColor: fillColor ?? AppColors.whiteColor,
+            filled: true,
+
+            // Prefix Icon
             prefixIcon: prefixIcon != null
                 ? IconButton(
                     onPressed: prefixOnPressed,
@@ -147,81 +143,47 @@ class CustomTextFieldWidget extends StatelessWidget {
                     ),
                   )
                 : null,
-            fillColor: fillColor ?? AppColors.whiteColor,
-            filled: true,
+
+            // Suffix Icon
+            suffixIcon: suffixIcon != null
+                ? IconButton(
+                    onPressed: suffixOnPressed,
+                    highlightColor: AppColors.primaryColor.withOpacity(0.3),
+                    icon: Icon(
+                      suffixIcon,
+                      color: suffixColor ?? AppColors.secondaryTextColor,
+                      size: suffixSize?.sp ?? 25.sp,
+                    ),
+                  )
+                : null,
+
+            // Borders
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(enableBorderRadius?.r ?? 8.r),
               borderSide: BorderSide(
                 color: enableBorderColor ?? AppColors.whiteColor,
+                width: enableBorderSide ?? 1.0,
               ),
-      ),
-      child: TextFormField(
-        enabled: fieldEnabled ?? true,
-        controller: controller,
-        minLines: minLines ?? 1,
-        maxLines: obscureText == true ? 1 : (maxLines ?? minLines ?? 1),
-        keyboardType: keyboardType ?? TextInputType.text,
-        obscureText: obscureText ?? false,
-        validator: validator,
-        keyboardAppearance: keyboardAppearance ?? Brightness.light,
-        cursorColor: cursorColor ?? AppColors.primaryColor,
-        obscuringCharacter: obscuringCharacter ?? "•",
-        textDirection: textDirection,
-        textAlign: isRTL ? TextAlign.right : TextAlign.left,
-        inputFormatters: inputFormatters,
-        decoration: InputDecoration(
-          hintTextDirection:
-              hintTextDirection ??
-              (isRTL ? TextDirection.rtl : TextDirection.ltr),
-          helperText: helperText,
-          helperStyle: helperTextStyle ?? AppTextStyle.grey300W400S16,
-          helperMaxLines: helperMaxLines ?? 1,
-          hintText: hintText,
-          hintStyle: hintTextStyle ?? AppTextStyle.grey300W400S16,
-          suffixIcon: suffixIcon != null
-              ? IconButton(
-                  onPressed: suffixOnPressed,
-                  highlightColor: AppColors.primaryColor.withValues(alpha: 0.3),
-                  icon: Icon(
-                    suffixIcon,
-                    color: suffixColor ?? AppColors.secondaryTextColor,
-                    size: suffixSize?.sp ?? 25.sp,
-                  ),
-                )
-              : null,
-          prefixIcon: prefixIcon != null
-              ? IconButton(
-                  onPressed: prefixOnPressed,
-                  icon: Icon(
-                    prefixIcon,
-                    color: prefixColor ?? AppColors.primaryTextColor,
-                    size: prefixSize?.sp ?? 25.sp,
-                  ),
-                )
-              : null,
-          fillColor: fillColor ?? AppColors.whiteColor,
-          filled: true,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(enableBorderRadius?.r ?? 8.r),
-            borderSide: BorderSide(
-              color: enableBorderColor ?? AppColors.whiteColor,
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(focusBorderRadius?.r ?? 8.r),
               borderSide: BorderSide(
                 color: focusBorderColor ?? AppColors.primaryColor,
+                width: focusBorderSide ?? 1.0,
               ),
             ),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(errorBorderRadius?.r ?? 8.r),
               borderSide: BorderSide(
                 color: errorBorderColor ?? AppColors.redColor,
+                width: errorBorderSide ?? 1.0,
               ),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(errorBorderRadius?.r ?? 8.r),
               borderSide: BorderSide(
                 color: errorBorderColor ?? AppColors.redColor,
+                width: errorBorderSide ?? 1.0,
               ),
             ),
           ),

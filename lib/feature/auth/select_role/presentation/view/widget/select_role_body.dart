@@ -88,7 +88,7 @@ class _SelectRoleBodyState extends State<SelectRoleBody> {
             duration: const Duration(milliseconds: 800),
             child: SelectRoleNewWidget(
               isSelected: selectType == UserTypeEnum.TourGuide,
-              title: LocaleKeys.guideLogin.tr(),
+              title: LocaleKeys.guide.tr(),
               image: Assets.imagesPngGuide, // الصورة الجديدة
               onTap: () {
                 setState(() {

@@ -1,10 +1,8 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/generated/assets.dart';
-import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class CustomHomeAppBar extends StatelessWidget {
   const CustomHomeAppBar({

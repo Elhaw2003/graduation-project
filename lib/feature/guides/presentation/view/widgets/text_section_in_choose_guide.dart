@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
+import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class TextSectionInChooseGuids extends StatelessWidget {
   const TextSectionInChooseGuids({
@@ -9,20 +11,20 @@ class TextSectionInChooseGuids extends StatelessWidget {
   });
   final String title;
   final String subTitle;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Text(title, style: AppTextStyle.primaryTextW600S22),
         Text(
-          subTitle,
-          textAlign: TextAlign.center,
-          LocaleKeys.choose_your_guide.tr(),
+          subTitle, // النص الأول
+          textAlign: TextAlign.center, // الباراميترز بعده
           style: AppTextStyle.primaryTextW600S22,
         ),
         Text(
-          textAlign: TextAlign.center,
-          LocaleKeys.pick_a_local_expert_or_smart_ai.tr(),
+          LocaleKeys.pickALocalExpertOrSmartAI.tr(), // النص الأول
+          textAlign: TextAlign.center, // الباراميترز بعده
           style: AppTextStyle.secondaryTextW400S17,
         ),
       ],
