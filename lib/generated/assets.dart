@@ -172,6 +172,10 @@ class Assets {
   /// assets/images/svg/support.svg
   static const String imagesSvgSupport = "assets/images/svg/support.svg";
 
+  /// Assets for imagesSvgTermsOfService
+  /// assets/images/svg/terms_of_service.svg
+  static const String imagesSvgTermsOfService = "assets/images/svg/terms_of_service.svg";
+
   /// Assets for lottieDone
   /// assets/lottie/done.json
   static const String lottieDone = "assets/lottie/done.json";

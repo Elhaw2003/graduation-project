@@ -9,6 +9,7 @@ class CacheHelper {
   // ============= Cache Keys Constants =============
   static const String kIsOnBoardingViewSeen = 'isOnBoardingViewSeen';
   static const String kToken = 'token';
+  static const String kRefreshToken = 'refreshToken';
   static const String kUserId = 'userId';
   static const String kUserName = 'userName';
   static const String kUserEmail = 'userEmail';

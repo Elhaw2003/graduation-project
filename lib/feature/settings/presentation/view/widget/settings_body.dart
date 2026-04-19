@@ -1,9 +1,16 @@
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_guide/core/network/dio_consumer.dart';
 import 'package:smart_guide/core/shared_widgets/custom_arrow_forward.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_switch_widget.dart';
+import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
+import 'package:smart_guide/feature/settings/data/repo/log_out/log_out_repo_imple.dart';
+import 'package:smart_guide/feature/settings/presentation/cubit/log_out/cubit/log_out_cubit.dart';
+import 'package:smart_guide/feature/settings/presentation/view/widget/log_out_dialog.dart';
 import 'package:smart_guide/feature/settings/presentation/view/widget/settings_card_widget.dart';
 import 'package:smart_guide/generated/assets.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
@@ -92,31 +99,51 @@ class SettingsBody extends StatelessWidget {
             ],
           ),
           CustomHeightSpacingWidget(height: 16),
-          // SettingsCardWidget(
-          //   items: [
-          //     ListTileCardWidget(
-          //       title: LocaleKeys.account_settings.tr(),
-          //       titleStyle: AppTextStyle.secondaryTextPoppinsColorW500S16,
-          //       svgIconPath: Assets.imagesSvgAccountSettings,
-          //     ),
-          //     ListTileCardWidget(
-          //       title: LocaleKeys.personal_info.tr(),
-          //       svgIconPath: Assets.imagesSvgPersonalInfo,
-          //       trailing: CustomArrowForward(),
-          //     ),
-          //     ListTileCardWidget(
-          //       title: LocaleKeys.password_security.tr(),
-          //       svgIconPath: Assets.imagesSvgPassSecurity,
-          //       trailing: CustomArrowForward(),
-          //     ),
-          //     ListTileCardWidget(
-          //       title: LocaleKeys.notifications.tr(),
-          //       svgIconPath: Assets.imagesSvgNotification,
-          //       trailing: CustomSwitchWidget(value: false),
-          //     ),
-          //   ],
-          // ),
-          CustomHeightSpacingWidget(height: 16),
+          SettingsCardWidget(
+            items: [
+              ListTileCardWidget(
+                title: LocaleKeys.about_app.tr(),
+                titleStyle: AppTextStyle.secondaryTextPoppinsColorW500S16,
+                svgIconPath: Assets.imagesSvgAbout,
+              ),
+              ListTileCardWidget(
+                title: LocaleKeys.terms_of_service.tr(),
+                svgIconPath: Assets.imagesSvgTermsOfService,
+                trailing: CustomArrowForward(),
+              ),
+              Center(
+                child: TextButton.icon(
+                  style: ButtonStyle(
+                    overlayColor: WidgetStatePropertyAll(
+                      Colors.red.withOpacity(0.1),
+                    ),
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return BlocProvider.value(
+                          value: LogOutCubit(
+                            logOutRepo: LogOutRepoImple(
+                              apiConsumer: DioConsumer(dio: Dio()),
+                            ),
+                          ),
+                          child: const LogOutDialog(),
+                        );
+                      },
+                    );
+                  },
+                  label: Text(
+                    LocaleKeys.logout.tr(),
+                    style: AppTextStyle.primaryPoppinsTextW500S15.copyWith(
+                      color: AppColors.redAppColor,
+                    ),
+                  ),
+                  icon: const Icon(Icons.logout, color: AppColors.redAppColor),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

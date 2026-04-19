@@ -144,5 +144,10 @@
     "help_center": "Help Center",
     "contact_support": "Contact Support",
     "rate_app": "Rate the App",
-    "about_app": "About the App"
+    "about_app": "About the App",
+    "terms_of_service": "Terms of Service",
+    "logout": "Log Out",
+    "logoutPrompt": "Are you sure you want to log out?",
+    "logoutMessage": "You will need to log in again to access your account.",
+    "confirm": "Confirm"
 }
