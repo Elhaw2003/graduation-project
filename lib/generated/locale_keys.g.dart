@@ -149,5 +149,10 @@ abstract class  LocaleKeys {
   static const contact_support = 'contact_support';
   static const rate_app = 'rate_app';
   static const about_app = 'about_app';
+  static const terms_of_service = 'terms_of_service';
+  static const logout = 'logout';
+  static const logoutPrompt = 'logoutPrompt';
+  static const logoutMessage = 'logoutMessage';
+  static const confirm = 'confirm';
 
 }

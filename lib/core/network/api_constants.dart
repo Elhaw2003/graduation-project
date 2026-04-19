@@ -9,6 +9,7 @@ class EndPoint {
   static String verifyCode = "Auth/verify-reset-otp";
   static String newPassword = "Auth/reset-password";
   static String googleSignIn = "Auth/google-login";
+  static String logout = "Auth/logout";
 }
 
 class ApiKey {

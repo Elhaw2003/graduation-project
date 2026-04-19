@@ -160,7 +160,12 @@ class CodegenLoader extends AssetLoader{
   "help_center": "مركز المساعدة",
   "contact_support": "تواصل مع الدعم",
   "rate_app": "قيّم التطبيق",
-  "about_app": "عن التطبيق"
+  "about_app": "عن التطبيق",
+  "terms_of_service": "شروط الخدمة",
+  "logout": "تسجيل الخروج",
+  "logoutPrompt": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+  "logoutMessage": "يجب عليك تسجيل الدخول مرة اخرى للوصول لحسابك.",
+  "confirm": "تأكيد"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -299,7 +304,12 @@ static const Map<String,dynamic> _en = {
   "help_center": "Help Center",
   "contact_support": "Contact Support",
   "rate_app": "Rate the App",
-  "about_app": "About the App"
+  "about_app": "About the App",
+  "terms_of_service": "Terms of Service",
+  "logout": "Log Out",
+  "logoutPrompt": "Are you sure you want to log out?",
+  "logoutMessage": "You will need to log in again to access your account.",
+  "confirm": "Confirm"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

@@ -79,6 +79,11 @@ class AppTextStyle {
     fontSize: 20.sp,
     fontWeight: FontWeight.w600,
   );
+  static TextStyle whitePoppinsW500S20 = GoogleFonts.poppins(
+    color: AppColors.whiteColor,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w500,
+  );
 
   /// primary color
   static TextStyle primaryW500S22 = GoogleFonts.readexPro(
@@ -118,6 +123,11 @@ class AppTextStyle {
     fontSize: 15.sp,
     fontWeight: FontWeight.w500,
   );
+  static TextStyle primaryPoppinsTextW500S20 = GoogleFonts.poppins(
+    color: AppColors.primaryTextColor,
+    fontSize: 20.sp,
+    fontWeight: FontWeight.w500,
+  );
   static TextStyle primaryTextW400S16 = GoogleFonts.readexPro(
     color: AppColors.primaryTextColor,
     fontSize: 16.sp,
@@ -151,6 +161,11 @@ class AppTextStyle {
   static TextStyle secondaryTextW400S17 = GoogleFonts.readexPro(
     color: AppColors.secondaryTextColor,
     fontSize: 17.sp,
+    fontWeight: FontWeight.w400,
+  );
+  static TextStyle secondaryTextPoppinsColorW400S13 = GoogleFonts.poppins(
+    color: AppColors.secondaryTextColor,
+    fontSize: 13.sp,
     fontWeight: FontWeight.w400,
   );
 
@@ -211,5 +226,12 @@ class AppTextStyle {
     fontSize: 16.sp,
     fontWeight: FontWeight.w500,
     color: AppColors.secondaryTextColor,
+  );
+
+  /// red color
+  static TextStyle redAppColorpoppinsW500S13 = TextStyle(
+    fontSize: 13.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.redAppColor,
   );
 }

@@ -36,13 +36,10 @@ class SettingsCardWidget extends StatelessWidget {
             children: [
               item,
               if (index < items.length - 1)
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: Divider(
-                    height: 1,
-                    thickness: 0.5,
-                    color: Colors.grey.shade300,
-                  ),
+                Divider(
+                  height: 1,
+                  thickness: 0.2,
+                  color: AppColors.primaryColor.withOpacity(0.63),
                 ),
             ],
           );
@@ -59,7 +56,7 @@ class ListTileCardWidget extends StatelessWidget {
     this.titleStyle,
     required this.svgIconPath,
     this.trailing,
-    this.onTap, // ضفنا الـ onTap هنا
+    this.onTap,
   });
 
   final String title;
