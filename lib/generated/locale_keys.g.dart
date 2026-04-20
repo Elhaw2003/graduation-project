@@ -155,5 +155,8 @@ abstract class  LocaleKeys {
   static const logoutPrompt = 'logoutPrompt';
   static const logoutMessage = 'logoutMessage';
   static const confirm = 'confirm';
+  static const distanceCalculation = 'distanceCalculation';
+  static const viewDetails = 'viewDetails';
+  static const reviews = 'reviews';
 
 }
