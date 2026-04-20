@@ -12,6 +12,7 @@ class PopularPlacesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
+      resizeToAvoidBottomInset: true,
       body: CustomScrollView(
         slivers: [
           // 1. الـ AppBar العلوي

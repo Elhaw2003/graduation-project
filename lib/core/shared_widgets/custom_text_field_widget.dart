@@ -107,6 +107,9 @@ class CustomTextFieldWidget extends StatelessWidget {
         ),
         child: TextFormField(
           enabled: fieldEnabled ?? true,
+          scrollPadding: EdgeInsets.only(
+            bottom: 150.h,
+          ), // 👈 بيزود مساحة وهمية تحت الفيلد في السكرول
           controller: controller,
           onChanged: onChanged,
           minLines: minLines ?? 1,

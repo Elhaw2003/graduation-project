@@ -169,7 +169,19 @@ class CodegenLoader extends AssetLoader{
   "confirm": "تأكيد",
   "distanceCalculation": "المسافات المعروضة محسوبة من القاهرة، مصر.",
   "viewDetails": "إظهار التفاصيل",
-  "reviews": "تقييمات"
+  "reviews": "تقييمات",
+  "filter": "تصفية",
+  "reset": "إعادة تعيين",
+  "distance": "المسافة",
+  "rating": "التقييم",
+  "price": "السعر",
+  "apply": "تطبيق",
+  "category": "الفئة",
+  "km": "كم",
+  "filterDescription": "قم بتحسين الأماكن لتتطابق مع تفضيلاتك",
+  "filterResults": "نتائج التصفية",
+  "location": "الموقع",
+  "searchForCityOrPlace": "ابحث عن المدينة أو المكان"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -325,7 +337,19 @@ static const Map<String,dynamic> _en = {
   "searchDestinationsAndGuides": "Search destinations & guides",
   "distanceCalculation": "Distances shown are calculated from Cairo, Egypt.",
   "viewDetails": "View Details",
-  "reviews": "reviews"
+  "reviews": "reviews",
+  "filter": "Filter",
+  "reset": "Reset",
+  "distance": "Distance",
+  "rating": "Rating",
+  "price": "Price",
+  "apply": "Apply",
+  "category": "Category",
+  "km": "km",
+  "filterDescription": "Refine places to match your preferences",
+  "filterResults": "Filter Results",
+  "location": "Location",
+  "searchForCityOrPlace": "Search for city or place"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

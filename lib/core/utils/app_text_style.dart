@@ -118,6 +118,7 @@ class AppTextStyle {
     fontSize: 16.sp,
     fontWeight: FontWeight.w500,
   );
+
   static TextStyle secondaryColorW400S13 = GoogleFonts.readexPro(
     color: AppColors.secondaryColor,
     fontSize: 13.sp,
@@ -134,6 +135,11 @@ class AppTextStyle {
     color: AppColors.primaryTextColor,
     fontSize: 15.sp,
     fontWeight: FontWeight.w500,
+  );
+  static TextStyle primaryPoppinsTextW600S18 = GoogleFonts.poppins(
+    color: AppColors.primaryTextColor,
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w600,
   );
   static TextStyle primaryPoppinsTextW500S20 = GoogleFonts.poppins(
     color: AppColors.primaryTextColor,
