@@ -166,7 +166,10 @@ class CodegenLoader extends AssetLoader{
   "logout": "تسجيل الخروج",
   "logoutPrompt": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
   "logoutMessage": "يجب عليك تسجيل الدخول مرة اخرى للوصول لحسابك.",
-  "confirm": "تأكيد"
+  "confirm": "تأكيد",
+  "distanceCalculation": "المسافات المعروضة محسوبة من القاهرة، مصر.",
+  "viewDetails": "إظهار التفاصيل",
+  "reviews": "تقييمات"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -318,7 +321,11 @@ static const Map<String,dynamic> _en = {
   "logout": "Log Out",
   "logoutPrompt": "Are you sure you want to log out?",
   "logoutMessage": "You will need to log in again to access your account.",
-  "confirm": "Confirm"
+  "confirm": "Confirm",
+  "searchDestinationsAndGuides": "Search destinations & guides",
+  "distanceCalculation": "Distances shown are calculated from Cairo, Egypt.",
+  "viewDetails": "View Details",
+  "reviews": "reviews"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

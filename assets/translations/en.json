@@ -148,5 +148,9 @@
     "logout": "Log Out",
     "logoutPrompt": "Are you sure you want to log out?",
     "logoutMessage": "You will need to log in again to access your account.",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "searchDestinationsAndGuides": "Search destinations & guides",
+    "distanceCalculation": "Distances shown are calculated from Cairo, Egypt.",
+    "viewDetails": "View Details",
+    "reviews": "reviews"
 }
