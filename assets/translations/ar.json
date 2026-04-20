@@ -153,5 +153,17 @@
     "confirm": "تأكيد",
     "distanceCalculation": "المسافات المعروضة محسوبة من القاهرة، مصر.",
     "viewDetails": "إظهار التفاصيل",
-    "reviews": "تقييمات"
+    "reviews": "تقييمات",
+    "filter": "تصفية",
+    "reset": "إعادة تعيين",
+    "distance": "المسافة",
+    "rating": "التقييم",
+    "price": "السعر",
+    "apply": "تطبيق",
+    "category":"الفئة",
+    "km":"كم",
+    "filterDescription":"قم بتحسين الأماكن لتتطابق مع تفضيلاتك",
+    "filterResults":"نتائج التصفية",
+    "location":"الموقع",
+    "searchForCityOrPlace":"ابحث عن المدينة أو المكان"
 }

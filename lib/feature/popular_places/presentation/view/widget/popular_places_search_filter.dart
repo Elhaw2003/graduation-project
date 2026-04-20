@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_text_field_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
+import 'package:smart_guide/feature/popular_places/presentation/view/widget/filter_bottom_sheet.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class PopularPlacesSearchFilter extends StatelessWidget {
@@ -25,15 +26,30 @@ class PopularPlacesSearchFilter extends StatelessWidget {
             ),
             CustomWidthSpacingWidget(width: 8.w),
             Container(
-              padding: EdgeInsets.all(12.r),
               decoration: BoxDecoration(
                 border: Border.all(color: AppColors.grey200Color),
                 borderRadius: BorderRadius.circular(8.r),
               ),
-              child: Icon(
-                Icons.tune,
-                color: AppColors.primaryColor,
-                size: 24.sp,
+              child: IconButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    backgroundColor: AppColors.whiteColor,
+                    isScrollControlled: true,
+                    useSafeArea: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20.r),
+                      ),
+                    ),
+                    builder: (context) => const FilterBottomSheet(),
+                  );
+                },
+                icon: Icon(
+                  Icons.tune,
+                  color: AppColors.primaryColor,
+                  size: 24.sp,
+                ),
               ),
             ),
           ],

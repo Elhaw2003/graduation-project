@@ -158,5 +158,17 @@ abstract class  LocaleKeys {
   static const distanceCalculation = 'distanceCalculation';
   static const viewDetails = 'viewDetails';
   static const reviews = 'reviews';
+  static const filter = 'filter';
+  static const reset = 'reset';
+  static const distance = 'distance';
+  static const rating = 'rating';
+  static const price = 'price';
+  static const apply = 'apply';
+  static const category = 'category';
+  static const km = 'km';
+  static const filterDescription = 'filterDescription';
+  static const filterResults = 'filterResults';
+  static const location = 'location';
+  static const searchForCityOrPlace = 'searchForCityOrPlace';
 
 }

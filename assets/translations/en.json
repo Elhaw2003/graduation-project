@@ -152,5 +152,17 @@
     "searchDestinationsAndGuides": "Search destinations & guides",
     "distanceCalculation": "Distances shown are calculated from Cairo, Egypt.",
     "viewDetails": "View Details",
-    "reviews": "reviews"
+    "reviews": "reviews",
+    "filter": "Filter",
+    "reset": "Reset",
+    "distance": "Distance",
+    "rating": "Rating",
+    "price": "Price",
+    "apply": "Apply",
+    "category":"Category",
+    "km":"km",
+    "filterDescription":"Refine places to match your preferences",
+    "filterResults":"Filter Results",
+    "location":"Location",
+    "searchForCityOrPlace":"Search for city or place"
 }
