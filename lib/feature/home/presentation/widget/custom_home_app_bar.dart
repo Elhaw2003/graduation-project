@@ -24,13 +24,18 @@ class CustomHomeAppBar extends StatelessWidget {
             child: ListTile(
               title: Text(title, style: AppTextStyle.thirdTextW900S20),
               subtitle: Text(subTitle, style: AppTextStyle.thirdTextW400S17),
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(25.0),
-                child: Image.asset(
-                  height: 60,
-                  width: 60,
-                  Assets.imagesPngSphinx,
-                  fit: BoxFit.cover,
+              leading: GestureDetector(
+                onTap: () {
+                  context.pushNamed(AppRoutes.profileScreen);
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25.0),
+                  child: Image.asset(
+                    height: 60,
+                    width: 60,
+                    Assets.imagesPngSphinx,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),

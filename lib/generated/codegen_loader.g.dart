@@ -181,7 +181,8 @@ class CodegenLoader extends AssetLoader{
   "filterDescription": "قم بتحسين الأماكن لتتطابق مع تفضيلاتك",
   "filterResults": "نتائج التصفية",
   "location": "الموقع",
-  "searchForCityOrPlace": "ابحث عن المدينة أو المكان"
+  "searchForCityOrPlace": "ابحث عن المدينة أو المكان",
+  "editProfile": "تعديل الملف الشخصي"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -349,7 +350,8 @@ static const Map<String,dynamic> _en = {
   "filterDescription": "Refine places to match your preferences",
   "filterResults": "Filter Results",
   "location": "Location",
-  "searchForCityOrPlace": "Search for city or place"
+  "searchForCityOrPlace": "Search for city or place",
+  "editProfile": "Edit Profile"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

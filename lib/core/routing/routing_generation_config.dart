@@ -18,6 +18,7 @@ import 'package:smart_guide/feature/auth/verify_otp/presentation/view/verify_otp
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
 import 'package:smart_guide/feature/onboarding/presentation/view/onboarding_screen.dart';
 import 'package:smart_guide/feature/popular_places/presentation/view/popular_places_screen.dart';
+import 'package:smart_guide/feature/profile/presentation/view/profile_screen.dart';
 import 'package:smart_guide/feature/settings/presentation/view/settings_screen.dart';
 import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart';
 
@@ -161,6 +162,13 @@ class RoutingGenerationConfig {
         name: AppRoutes.popularPlacesScreen,
         pageBuilder: (context, state) {
           return CustomSpringPage(child: PopularPlacesScreen());
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.profileScreen,
+        name: AppRoutes.profileScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(child: ProfileScreen());
         },
       ),
     ],

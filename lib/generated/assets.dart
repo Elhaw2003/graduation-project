@@ -94,6 +94,10 @@ class Assets {
   /// assets/images/svg/bank.svg
   static const String imagesSvgBank = "assets/images/svg/bank.svg";
 
+  /// Assets for imagesSvgCity
+  /// assets/images/svg/city.svg
+  static const String imagesSvgCity = "assets/images/svg/city.svg";
+
   /// Assets for imagesSvgCompass
   /// assets/images/svg/compass.svg
   static const String imagesSvgCompass = "assets/images/svg/compass.svg";
@@ -106,9 +110,17 @@ class Assets {
   /// assets/images/svg/dark_mode.svg
   static const String imagesSvgDarkMode = "assets/images/svg/dark_mode.svg";
 
+  /// Assets for imagesSvgEmail
+  /// assets/images/svg/email.svg
+  static const String imagesSvgEmail = "assets/images/svg/email.svg";
+
   /// Assets for imagesSvgExplorIcon
   /// assets/images/svg/explor_icon.svg
   static const String imagesSvgExplorIcon = "assets/images/svg/explor_icon.svg";
+
+  /// Assets for imagesSvgFavorite
+  /// assets/images/svg/favorite.svg
+  static const String imagesSvgFavorite = "assets/images/svg/favorite.svg";
 
   /// Assets for imagesSvgFilter
   /// assets/images/svg/filter.svg
@@ -146,6 +158,10 @@ class Assets {
   /// assets/images/svg/more_icon.svg
   static const String imagesSvgMoreIcon = "assets/images/svg/more_icon.svg";
 
+  /// Assets for imagesSvgNational
+  /// assets/images/svg/national.svg
+  static const String imagesSvgNational = "assets/images/svg/national.svg";
+
   /// Assets for imagesSvgNotification
   /// assets/images/svg/notification.svg
   static const String imagesSvgNotification = "assets/images/svg/notification.svg";
@@ -161,6 +177,10 @@ class Assets {
   /// Assets for imagesSvgPersonalInfo
   /// assets/images/svg/personal_info.svg
   static const String imagesSvgPersonalInfo = "assets/images/svg/personal_info.svg";
+
+  /// Assets for imagesSvgPhone
+  /// assets/images/svg/phone.svg
+  static const String imagesSvgPhone = "assets/images/svg/phone.svg";
 
   /// Assets for imagesSvgPopularPlaces
   /// assets/images/svg/popular_places.svg
@@ -178,6 +198,10 @@ class Assets {
   /// assets/images/svg/robot.svg
   static const String imagesSvgRobot = "assets/images/svg/robot.svg";
 
+  /// Assets for imagesSvgSaved
+  /// assets/images/svg/saved.svg
+  static const String imagesSvgSaved = "assets/images/svg/saved.svg";
+
   /// Assets for imagesSvgSettings
   /// assets/images/svg/settings.svg
   static const String imagesSvgSettings = "assets/images/svg/settings.svg";
@@ -190,9 +214,17 @@ class Assets {
   /// assets/images/svg/terms_of_service.svg
   static const String imagesSvgTermsOfService = "assets/images/svg/terms_of_service.svg";
 
+  /// Assets for imagesSvgTrips
+  /// assets/images/svg/trips.svg
+  static const String imagesSvgTrips = "assets/images/svg/trips.svg";
+
   /// Assets for imagesSvgVerified
   /// assets/images/svg/verified.svg
   static const String imagesSvgVerified = "assets/images/svg/verified.svg";
+
+  /// Assets for imagesSvgVisited
+  /// assets/images/svg/visited.svg
+  static const String imagesSvgVisited = "assets/images/svg/visited.svg";
 
   /// Assets for lottieDone
   /// assets/lottie/done.json

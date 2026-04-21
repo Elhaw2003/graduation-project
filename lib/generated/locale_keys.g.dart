@@ -170,5 +170,6 @@ abstract class  LocaleKeys {
   static const filterResults = 'filterResults';
   static const location = 'location';
   static const searchForCityOrPlace = 'searchForCityOrPlace';
+  static const editProfile = 'editProfile';
 
 }

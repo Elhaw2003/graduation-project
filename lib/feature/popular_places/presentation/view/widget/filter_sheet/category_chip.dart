@@ -10,14 +10,15 @@ class CategoryChips extends StatefulWidget {
 }
 
 class _CategoryChipsState extends State<CategoryChips> {
-  bool _selected = false;
+  String _selectedCategory = "Historical";
   final List<String> categories = const [
     "Historical",
+    "Restaurants",
+    "Beaches",
+    "Entertainment",
+    "Shopping",
     "Museums",
-    "Parks",
-    "Religious",
   ];
-
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -25,13 +26,15 @@ class _CategoryChipsState extends State<CategoryChips> {
       children: categories
           .map(
             (cat) => ChoiceChip(
-              backgroundColor: _selected
-                  ? AppColors.primaryColor
-                  : AppColors.backgroundColor,
+              selectedColor: AppColors.primaryColor,
               label: Text(cat),
-              selected: _selected,
+              selected: _selectedCategory == cat,
               onSelected: (selected) {
-                _selected = selected;
+                setState(() {
+                  if (selected) {
+                    _selectedCategory = cat; // تحديث المختار
+                  }
+                });
               },
             ),
           )
