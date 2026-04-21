@@ -164,5 +164,6 @@
     "filterDescription":"Refine places to match your preferences",
     "filterResults":"Filter Results",
     "location":"Location",
-    "searchForCityOrPlace":"Search for city or place"
+    "searchForCityOrPlace":"Search for city or place",
+    "editProfile":"Edit Profile"
 }
