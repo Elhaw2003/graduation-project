@@ -1,0 +1,1 @@
+enum TripTypeEnum { upcoming, past }

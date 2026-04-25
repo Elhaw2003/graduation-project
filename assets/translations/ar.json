@@ -166,5 +166,10 @@
     "filterResults":"نتائج التصفية",
     "location":"الموقع",
     "searchForCityOrPlace":"ابحث عن المدينة أو المكان",
-    "editProfile":"تعديل الملف الشخصي"
+    "editProfile":"تعديل الملف الشخصي",
+    "myTrips":"رحلاتي",
+    "myTripsDescription":"قم بتحسين الأماكن لتتطابق مع تفضيلاتك",
+    "upcoming":"المقبلة",
+    "pastTrips":"الماضية",
+    "travelEmpty":"لا يوجد رحلات بعد!\nابحث عن مدينة او مكان\nوحجز رحلة جديدة !"
 }

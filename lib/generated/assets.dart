@@ -214,6 +214,10 @@ class Assets {
   /// assets/images/svg/terms_of_service.svg
   static const String imagesSvgTermsOfService = "assets/images/svg/terms_of_service.svg";
 
+  /// Assets for imagesSvgTravelEmpty
+  /// assets/images/svg/travel_empty.svg
+  static const String imagesSvgTravelEmpty = "assets/images/svg/travel_empty.svg";
+
   /// Assets for imagesSvgTrips
   /// assets/images/svg/trips.svg
   static const String imagesSvgTrips = "assets/images/svg/trips.svg";

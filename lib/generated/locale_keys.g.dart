@@ -171,5 +171,10 @@ abstract class  LocaleKeys {
   static const location = 'location';
   static const searchForCityOrPlace = 'searchForCityOrPlace';
   static const editProfile = 'editProfile';
+  static const myTrips = 'myTrips';
+  static const myTripsDescription = 'myTripsDescription';
+  static const upcoming = 'upcoming';
+  static const pastTrips = 'pastTrips';
+  static const travelEmpty = 'travelEmpty';
 
 }

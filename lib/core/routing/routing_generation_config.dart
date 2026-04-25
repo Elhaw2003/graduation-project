@@ -16,6 +16,9 @@ import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_sc
 import 'package:smart_guide/feature/guides/tour_guide_profile_screen.dart';
 import 'package:smart_guide/feature/auth/verify_otp/presentation/view/verify_otp_screen.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
+import 'package:smart_guide/feature/my_trips/data/enum/trip_type_enum.dart';
+import 'package:smart_guide/feature/my_trips/presentation/view/screens/my_trips_screen.dart';
+import 'package:smart_guide/feature/my_trips/presentation/view/screens/trip_type_screen.dart';
 import 'package:smart_guide/feature/onboarding/presentation/view/onboarding_screen.dart';
 import 'package:smart_guide/feature/popular_places/presentation/view/popular_places_screen.dart';
 import 'package:smart_guide/feature/profile/presentation/view/profile_screen.dart';
@@ -169,6 +172,25 @@ class RoutingGenerationConfig {
         name: AppRoutes.profileScreen,
         pageBuilder: (context, state) {
           return CustomSpringPage(child: ProfileScreen());
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.myTripsScreen,
+        name: AppRoutes.myTripsScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(child: MyTripsScreen());
+        },
+      ),
+      GoRoute(
+        path: '${AppRoutes.tripsTypeScreen}/:tripType',
+        name: AppRoutes.tripsTypeScreen,
+        pageBuilder: (context, state) {
+          final typeString = state.pathParameters['tripType'];
+          final tripType = TripTypeEnum.values.firstWhere(
+            (e) => e.name == typeString,
+            orElse: () => TripTypeEnum.upcoming,
+          );
+          return CustomSpringPage(child: TripTypeScreen(tripType: tripType));
         },
       ),
     ],

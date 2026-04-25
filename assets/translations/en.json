@@ -165,5 +165,10 @@
     "filterResults":"Filter Results",
     "location":"Location",
     "searchForCityOrPlace":"Search for city or place",
-    "editProfile":"Edit Profile"
+    "editProfile":"Edit Profile",
+    "myTrips":"My Trips",
+    "myTripsDescription":"Manage your booked tours and history",
+    "upcoming":"Upcoming",
+    "pastTrips":"Past",
+    "travelEmpty":"No adventures yet!\nStart exploring Egypt and book\nyour first trip !"
 }
