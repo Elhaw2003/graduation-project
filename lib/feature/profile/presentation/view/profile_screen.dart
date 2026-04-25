@@ -26,8 +26,8 @@ class ProfileScreen extends StatelessWidget {
                 childAspectRatio: 0.8, // ضبط النسبة عشان التصميم ميبقاش مضغوط
               ),
               delegate: SliverChildBuilderDelegate((context, index) {
-                return DashboardCard(item: dashboardItems[index]);
-              }, childCount: dashboardItems.length),
+                return DashboardCard(item: dashboards(context)[index]);
+              }, childCount: dashboards(context).length),
             ),
           ),
           SliverToBoxAdapter(child: CustomHeightSpacingWidget(height: 20.h)),

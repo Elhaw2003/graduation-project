@@ -10,7 +10,6 @@ import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class DashboardCard extends StatelessWidget {
   final DashboardModel item;
-
   const DashboardCard({super.key, required this.item});
 
   @override
@@ -58,7 +57,7 @@ class DashboardCard extends StatelessWidget {
           CustomHeightSpacingWidget(height: 16),
           // زرار View details
           GestureDetector(
-            onTap: () {},
+            onTap: item.onTap,
             child: Container(
               alignment: Alignment.center,
               height: 40.h,

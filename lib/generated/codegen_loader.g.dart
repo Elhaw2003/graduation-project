@@ -182,7 +182,12 @@ class CodegenLoader extends AssetLoader{
   "filterResults": "نتائج التصفية",
   "location": "الموقع",
   "searchForCityOrPlace": "ابحث عن المدينة أو المكان",
-  "editProfile": "تعديل الملف الشخصي"
+  "editProfile": "تعديل الملف الشخصي",
+  "myTrips": "رحلاتي",
+  "myTripsDescription": "قم بتحسين الأماكن لتتطابق مع تفضيلاتك",
+  "upcoming": "المقبلة",
+  "pastTrips": "الماضية",
+  "travelEmpty": "لا يوجد رحلات بعد!\nابحث عن مدينة او مكان\nوحجز رحلة جديدة !"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -351,7 +356,12 @@ static const Map<String,dynamic> _en = {
   "filterResults": "Filter Results",
   "location": "Location",
   "searchForCityOrPlace": "Search for city or place",
-  "editProfile": "Edit Profile"
+  "editProfile": "Edit Profile",
+  "myTrips": "My Trips",
+  "myTripsDescription": "Manage your booked tours and history",
+  "upcoming": "Upcoming",
+  "pastTrips": "Past",
+  "travelEmpty": "No adventures yet!\nStart exploring Egypt and book\nyour first trip !"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
