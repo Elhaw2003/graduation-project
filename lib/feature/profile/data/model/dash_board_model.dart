@@ -26,7 +26,9 @@ List<DashboardModel> dashboards(BuildContext context) {
       subTitle: "Favorite Places",
       info: "12 Spots • 4 Cities",
       icon: Assets.imagesSvgFavorite,
-      onTap: () {},
+      onTap: () {
+        if (context.mounted) context.pushNamed(AppRoutes.favoritePlacesScreen);
+      },
     ),
     DashboardModel(
       title: "Trips",

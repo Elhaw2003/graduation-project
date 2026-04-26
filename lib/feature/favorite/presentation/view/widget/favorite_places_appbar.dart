@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:smart_guide/core/shared_widgets/custom_sliver_appbar_widget.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
-class SettingsAppbar extends StatelessWidget {
-  const SettingsAppbar({super.key});
+class FavoriteSliverAppBar extends StatelessWidget {
+  const FavoriteSliverAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return CustomSliverAppbarWidget(title: LocaleKeys.settings.tr());
+    return CustomSliverAppbarWidget(title: LocaleKeys.favoritePlaces.tr());
   }
 }

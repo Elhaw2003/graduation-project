@@ -13,6 +13,7 @@ import 'package:smart_guide/feature/auth/reset_password/presentation/view/reset_
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
 import 'package:smart_guide/feature/auth/success_verification/presentation/view/success_verification_screen.dart';
 import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_screen.dart';
+import 'package:smart_guide/feature/favorite/presentation/view/favorite_screen.dart';
 import 'package:smart_guide/feature/guides/tour_guide_profile_screen.dart';
 import 'package:smart_guide/feature/auth/verify_otp/presentation/view/verify_otp_screen.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
@@ -192,6 +193,12 @@ class RoutingGenerationConfig {
           );
           return CustomSpringPage(child: TripTypeScreen(tripType: tripType));
         },
+      ),
+      GoRoute(
+        path: AppRoutes.favoritePlacesScreen,
+        name: AppRoutes.favoritePlacesScreen,
+        pageBuilder: (context, state) =>
+            CustomSpringPage(child: const FavoritePlacesScreen()),
       ),
     ],
   );
