@@ -29,7 +29,7 @@ class TripButtonWidget extends StatelessWidget {
           child: Text(
             title,
             style: AppTextStyle.whiteW500S18.copyWith(
-              fontSize: 13,
+              fontSize: 13.sp,
               fontWeight: FontWeight.w400,
             ),
           ),

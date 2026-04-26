@@ -170,5 +170,8 @@
     "myTripsDescription":"Manage your booked tours and history",
     "upcoming":"Upcoming",
     "pastTrips":"Past",
-    "travelEmpty":"No adventures yet!\nStart exploring Egypt and book\nyour first trip !"
+    "travelEmpty":"No adventures yet!\nStart exploring Egypt and book\nyour first trip !",
+    "favoritePlaces":"Favorite Places",
+    "favoritePlacesDescription":"Explore the spots you've loved and planned to visit",
+    "exploreMore":"Explore More"
 }
