@@ -28,7 +28,7 @@ class _VerifyEmailOtpState extends State<VerifyOtpBody> {
     return BlocConsumer<VerifyOtpCubit, VerifyOtpState>(
       listener: (context, state) {
         if (state is VerifyOtpFailureState) {
-          CustomAnimatedShowSnackBar.failureSnackBar(
+          CustomAnimatedShowSnackBar.failureOrWarningSnackBar(
             context: context,
             message: state.message,
           );
@@ -53,7 +53,7 @@ class _VerifyEmailOtpState extends State<VerifyOtpBody> {
         return BlocConsumer<ResendOtpCubit, ResendOtpState>(
           listener: (context, resendOtpState) {
             if (resendOtpState is ResendOtpFailureState) {
-              CustomAnimatedShowSnackBar.failureSnackBar(
+              CustomAnimatedShowSnackBar.failureOrWarningSnackBar(
                 context: context,
                 message: resendOtpState.message,
               );

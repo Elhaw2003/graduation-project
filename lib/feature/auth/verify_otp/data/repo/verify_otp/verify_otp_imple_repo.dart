@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:smart_guide/core/errors/exceptions.dart';
 import 'package:smart_guide/core/errors/failures.dart';
+import 'package:smart_guide/core/network/connectivity_guard.dart';
 import 'package:smart_guide/core/network/api_constants.dart';
 import 'package:smart_guide/core/network/api_consumer.dart';
 import 'package:smart_guide/feature/auth/verify_otp/data/repo/verify_otp/verify_otp_repo.dart';
@@ -17,6 +18,10 @@ class VerifyOtpImpleRepo implements VerifyOtpRepo {
     required String otp,
   }) async {
     try {
+      if (!await ConnectivityGuard.hasInternet()) {
+        return Left(NetworkFailure(LocaleKeys.noInternetConnection.tr()));
+      }
+
       final response = await apiConsumer.post(
         EndPoint.verifyCode,
         data: {"email": email, "otp": otp},

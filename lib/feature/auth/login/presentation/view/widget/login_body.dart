@@ -53,7 +53,7 @@ class _LoginBodyState extends State<LoginBody> {
             }
           });
         } else if (state is LoginFailureStates) {
-          CustomAnimatedShowSnackBar.failureSnackBar(
+          CustomAnimatedShowSnackBar.failureOrWarningSnackBar(
             context: context,
             message: state.message,
           );
@@ -161,7 +161,7 @@ class _LoginBodyState extends State<LoginBody> {
                       listener: (context, state) {
                         if (state is LoginWithGoogleFailureStates) {
                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                            CustomAnimatedShowSnackBar.failureSnackBar(
+                            CustomAnimatedShowSnackBar.failureOrWarningSnackBar(
                               context: context,
                               message: state.message,
                             );

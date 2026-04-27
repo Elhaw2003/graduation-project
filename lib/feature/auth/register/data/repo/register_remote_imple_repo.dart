@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:smart_guide/core/errors/exceptions.dart';
 import 'package:smart_guide/core/errors/failures.dart';
+import 'package:smart_guide/core/network/connectivity_guard.dart';
 import 'package:smart_guide/core/network/api_constants.dart';
 import 'package:smart_guide/core/network/api_consumer.dart';
 import 'package:smart_guide/feature/auth/register/data/model/register_request_model.dart';
@@ -20,6 +21,10 @@ class RegisterRemoteImpleRepo implements RegisterRepo {
     required RegisterRequestModel registerRequestModel,
   }) async {
     try {
+      if (!await ConnectivityGuard.hasInternet()) {
+        return Left(NetworkFailure(LocaleKeys.noInternetConnection.tr()));
+      }
+
       // 1. تحويل الداتا العادية لـ Map (تأكد أن المسميات في الموديل تطابق الصورة)
       // ملاحظة: الـ API بيبدأ بحروف كبيرة حسب الصورة (FirstName, LastName, etc.)
       Map<String, dynamic> data = {

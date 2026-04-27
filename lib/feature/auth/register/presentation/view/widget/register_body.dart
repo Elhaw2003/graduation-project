@@ -77,7 +77,7 @@ class _RegisterBodyState extends State<RegisterBody> {
             }
           });
         } else if (state is RegisterFailureStates) {
-          CustomAnimatedShowSnackBar.failureSnackBar(
+          CustomAnimatedShowSnackBar.failureOrWarningSnackBar(
             context: context,
             message: state.message,
           );

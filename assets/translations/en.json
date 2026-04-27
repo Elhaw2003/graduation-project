@@ -177,5 +177,6 @@
     "bookYourExperience":"Book Your Experience",
     "bookYourExperienceDescription":"With -Name of tour guide-",
     "whatKindOfTour":"What kind of tour are you looking for?",
-    "expectedPrice":"Expected price"
+    "expectedPrice":"Expected price",
+    "noInterntConnection":"No Internet Connection"
 }

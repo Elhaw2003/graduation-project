@@ -33,7 +33,7 @@ class _NewPasswordBodyState extends State<NewPasswordBody> {
     return BlocConsumer<NewPasswordCubit, NewPasswordState>(
       listener: (context, state) {
         if (state is NewPasswordFailureState) {
-          CustomAnimatedShowSnackBar.failureSnackBar(
+          CustomAnimatedShowSnackBar.failureOrWarningSnackBar(
             context: context,
             message: state.message,
           );
