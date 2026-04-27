@@ -86,6 +86,10 @@ class Assets {
   /// assets/images/svg/appearence.svg
   static const String imagesSvgAppearence = "assets/images/svg/appearence.svg";
 
+  /// Assets for imagesSvgArrowBottom
+  /// assets/images/svg/arrow_bottom.svg
+  static const String imagesSvgArrowBottom = "assets/images/svg/arrow_bottom.svg";
+
   /// Assets for imagesSvgArrowForward
   /// assets/images/svg/arrow_forward.svg
   static const String imagesSvgArrowForward = "assets/images/svg/arrow_forward.svg";

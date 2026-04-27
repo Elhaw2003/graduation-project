@@ -179,5 +179,9 @@ abstract class  LocaleKeys {
   static const favoritePlaces = 'favoritePlaces';
   static const favoritePlacesDescription = 'favoritePlacesDescription';
   static const exploreMore = 'exploreMore';
+  static const bookYourExperience = 'bookYourExperience';
+  static const bookYourExperienceDescription = 'bookYourExperienceDescription';
+  static const whatKindOfTour = 'whatKindOfTour';
+  static const expectedPrice = 'expectedPrice';
 
 }

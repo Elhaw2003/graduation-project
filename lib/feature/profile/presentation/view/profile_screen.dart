@@ -14,7 +14,7 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          ProfileAppbar(),
+          const ProfileAppbar(),
           ProfileBody(),
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: 17.w),
