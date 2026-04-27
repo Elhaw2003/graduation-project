@@ -1,12 +1,40 @@
 import 'package:animated_snack_bar/animated_snack_bar.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
-import 'package:smart_guide/generated/locale_keys.g.dart';
 import '../utils/app_text_style.dart';
 
 class CustomAnimatedShowSnackBar {
+  static bool _isNetworkMessage(String message) {
+    final m = message.toLowerCase();
+    return m.contains('لا يوجد اتصال') ||
+        m.contains('internet') ||
+        m.contains('connection') ||
+        m.contains('timeout') ||
+        m.contains('dns') ||
+        m.contains('network');
+  }
+
+  static void failureOrWarningSnackBar({
+    required BuildContext context,
+    required String message,
+    MobileSnackBarPosition? mobileSnackBarPosition,
+  }) {
+    if (_isNetworkMessage(message)) {
+      return warningSnackBar(
+        context: context,
+        message: message,
+        mobileSnackBarPosition: mobileSnackBarPosition,
+      );
+    }
+
+    return failureSnackBar(
+      context: context,
+      message: message,
+      mobileSnackBarPosition: mobileSnackBarPosition,
+    );
+  }
+
   static void successSnackBar({
     required BuildContext context,
     required String message,
@@ -21,7 +49,7 @@ class CustomAnimatedShowSnackBar {
       animationCurve: Curves.easeOutBack,
       builder: ((context) {
         return MaterialAnimatedSnackBar(
-          titleText: LocaleKeys.success.tr(),
+          // titleText: LocaleKeys.success.tr(),
           backgroundColor: AppColors.greenColor,
           foregroundColor: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(10.r),
@@ -49,7 +77,7 @@ class CustomAnimatedShowSnackBar {
       animationCurve: Curves.easeOutBack,
       builder: ((context) {
         return MaterialAnimatedSnackBar(
-          titleText: LocaleKeys.error.tr(),
+          // titleText: LocaleKeys.error.tr(),
           backgroundColor: AppColors.redColor,
           foregroundColor: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(15.r),
@@ -77,7 +105,7 @@ class CustomAnimatedShowSnackBar {
       animationCurve: Curves.easeOutBack,
       builder: ((context) {
         return MaterialAnimatedSnackBar(
-          titleText: LocaleKeys.warning.tr(),
+          // titleText: LocaleKeys.warning.tr(),
           backgroundColor: AppColors.orangeColor,
           foregroundColor: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(10.r),
@@ -105,7 +133,7 @@ class CustomAnimatedShowSnackBar {
       animationCurve: Curves.easeOutBack,
       builder: ((context) {
         return MaterialAnimatedSnackBar(
-          titleText: LocaleKeys.info.tr(),
+          // titleText: LocaleKeys.info.tr(),
           backgroundColor: AppColors.primaryColor,
           foregroundColor: AppColors.whiteColor,
           borderRadius: BorderRadius.circular(10.r),

@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:smart_guide/core/errors/exceptions.dart';
 import 'package:smart_guide/core/errors/failures.dart';
+import 'package:smart_guide/core/network/connectivity_guard.dart';
 import 'package:smart_guide/core/network/api_constants.dart';
 import 'package:smart_guide/core/network/api_consumer.dart';
 import 'package:smart_guide/feature/auth/new_password/data/repo/new_password_repo.dart';
@@ -19,6 +20,10 @@ class NewPasswordImpleRepo implements NewPasswordRepo {
     required String otp,
   }) async {
     try {
+      if (!await ConnectivityGuard.hasInternet()) {
+        return Left(NetworkFailure(LocaleKeys.noInternetConnection.tr()));
+      }
+
       final response = await apiConsumer.post(
         EndPoint.newPassword,
         data: {

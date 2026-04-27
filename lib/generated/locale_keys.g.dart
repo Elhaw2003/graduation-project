@@ -183,5 +183,6 @@ abstract class  LocaleKeys {
   static const bookYourExperienceDescription = 'bookYourExperienceDescription';
   static const whatKindOfTour = 'whatKindOfTour';
   static const expectedPrice = 'expectedPrice';
+  static const noInternetConnection = 'noInternetConnection';
 
 }

@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:smart_guide/core/errors/exceptions.dart';
 import 'package:smart_guide/core/errors/failures.dart';
+import 'package:smart_guide/core/network/connectivity_guard.dart';
 import 'package:smart_guide/core/network/api_constants.dart';
 import 'package:smart_guide/core/network/api_consumer.dart';
 import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
@@ -22,6 +23,10 @@ class LoginRemoteImpleRepo implements LoginRepo {
     required String password,
   }) async {
     try {
+      if (!await ConnectivityGuard.hasInternet()) {
+        return Left(NetworkFailure(LocaleKeys.noInternetConnection.tr()));
+      }
+
       final response = await apiConsumer.post(
         EndPoint.login,
         data: {"email": email, "password": password},
@@ -51,6 +56,10 @@ class LoginRemoteImpleRepo implements LoginRepo {
     required String idToken,
   }) async {
     try {
+      if (!await ConnectivityGuard.hasInternet()) {
+        return Left(NetworkFailure(LocaleKeys.noInternetConnection.tr()));
+      }
+
       final response = await apiConsumer.post(
         EndPoint.googleSignIn,
         data: {ApiKey.idToken: idToken},

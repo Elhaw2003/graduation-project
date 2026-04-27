@@ -178,5 +178,6 @@
     "bookYourExperience":"حجز تجربتك",
     "bookYourExperienceDescription":"ب-اسم الاثائر-",
     "whatKindOfTour":"ما نوع الرحلة الذي تبحث عنه؟",
-    "expectedPrice":"السعر المتوقع"
+    "expectedPrice":"السعر المتوقع",
+    "noInternetConnection":"لا يوجد اتصال بالانترنت"
 }

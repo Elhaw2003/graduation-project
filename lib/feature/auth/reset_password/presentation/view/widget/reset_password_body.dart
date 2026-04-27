@@ -35,7 +35,7 @@ class _ResetPasswordBodyState extends State<ResetPasswordBody> {
     return BlocConsumer<ResetPasswordCubit, ResetPasswordState>(
       listener: (context, state) {
         if (state is ResetPasswordFailureState) {
-          CustomAnimatedShowSnackBar.failureSnackBar(
+          CustomAnimatedShowSnackBar.failureOrWarningSnackBar(
             context: context,
             message: state.message,
           );
