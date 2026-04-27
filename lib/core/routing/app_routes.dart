@@ -24,4 +24,5 @@ class AppRoutes {
   static const String myTripsScreen = '/myTripsScreen';
   static const String tripsTypeScreen = '/tripsTypeScreen';
   static const String favoritePlacesScreen = '/favoritePlacesScreen';
+  static const String bookNowScreen = '/bookNowScreen';
 }

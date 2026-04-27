@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
@@ -66,6 +68,9 @@ class TourGuideProfileScreen extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(15),
         child: CustomButtonWidget(
+          onPressed: () {
+            if (context.mounted) context.pushNamed(AppRoutes.bookNowScreen);
+          },
           borderSideColor: AppColors.greenColor,
           title: 'Book Now',
           titleStyle: AppTextStyle.secondaryTextW400S17,

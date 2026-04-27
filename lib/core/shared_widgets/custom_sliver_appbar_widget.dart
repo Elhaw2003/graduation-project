@@ -19,7 +19,7 @@ class CustomSliverAppbarWidget extends StatelessWidget {
       backgroundColor: AppColors.backgroundColor,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
-        title: Text(title, style: AppTextStyle.primaryTextW500S25),
+        title: Text(title, style: AppTextStyle.primaryTextW500S21),
         // ده الشكل وهو تحت قبل الـ scroll
         expandedTitleScale: 1.4,
         background: Container(color: AppColors.backgroundColor),

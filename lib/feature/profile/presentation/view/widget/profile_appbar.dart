@@ -13,43 +13,57 @@ class ProfileAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final expandedHeight = 264.h;
     return SliverAppBar(
-      expandedHeight: 264.h,
+      expandedHeight: expandedHeight,
       pinned: true,
       stretch: true,
       elevation: 10,
       forceElevated: true,
+      automaticallyImplyLeading: false,
       shadowColor: AppColors.blackColor.withOpacity(0.15),
       backgroundColor: AppColors.secondaryColor,
       leading: const BackButton(color: Colors.white),
-      flexibleSpace: FlexibleSpaceBar(
-        // السطر ده بيخلي الـ Background يختفي بنعومة وأنت بتسكرول
-        collapseMode: CollapseMode.pin,
-        background: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius: 50.r, // كبرنا الصورة شوية عشان ده الـ Profile
-              backgroundImage: AssetImage(Assets.imagesPngSphinx),
+      flexibleSpace: LayoutBuilder(
+        builder: (context, constraints) {
+          final topPadding = MediaQuery.of(context).padding.top;
+          final minHeight = kToolbarHeight + topPadding;
+          final t = ((constraints.maxHeight - minHeight) /
+                  (expandedHeight - minHeight))
+              .clamp(0.0, 1.0);
+
+          return FlexibleSpaceBar(
+            collapseMode: CollapseMode.pin,
+            background: Opacity(
+              opacity: t,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 50.r,
+                    backgroundImage: AssetImage(Assets.imagesPngSphinx),
+                  ),
+                  CustomHeightSpacingWidget(height: 16),
+                  Text('John Doe', style: AppTextStyle.whitePoppinsW500S24),
+                  CustomHeightSpacingWidget(height: 8),
+                  CustomButtonWidget(
+                    buttonHeight: 40,
+                    buttonColor: AppColors.secondaryColor,
+                    borderSideColor: AppColors.whiteColor,
+                    buttonWidth: 180.w,
+                    borderRadiusButton: 12,
+                    title: LocaleKeys.editProfile.tr(),
+                    titleStyle: AppTextStyle.whitePoppinsW400S16,
+                    prefixIcon: Icons.edit_outlined,
+                    prefixIconColor: AppColors.whiteColor,
+                    prefixIconSize: 20.sp,
+                    onPressed: () {},
+                  ),
+                ],
+              ),
             ),
-            CustomHeightSpacingWidget(height: 16),
-            Text('John Doe', style: AppTextStyle.whitePoppinsW500S24),
-            CustomHeightSpacingWidget(height: 8),
-            CustomButtonWidget(
-              buttonHeight: 40,
-              buttonColor: AppColors.secondaryColor,
-              borderSideColor: AppColors.whiteColor,
-              buttonWidth: 180.w,
-              borderRadiusButton: 12,
-              title: LocaleKeys.editProfile.tr(),
-              titleStyle: AppTextStyle.whitePoppinsW400S16,
-              prefixIcon: Icons.edit_outlined,
-              prefixIconColor: AppColors.whiteColor,
-              prefixIconSize: 20.sp,
-              onPressed: () {},
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

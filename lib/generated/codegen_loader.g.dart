@@ -190,7 +190,11 @@ class CodegenLoader extends AssetLoader{
   "travelEmpty": "لا يوجد رحلات بعد!\nابحث عن مدينة او مكان\nوحجز رحلة جديدة !",
   "favoritePlaces": "المواقع المفضلة",
   "favoritePlacesDescription": "ابحث عن المواقع المفضلة وادخلها في رحلتك",
-  "exploreMore": "اكتشف أكثر"
+  "exploreMore": "اكتشف أكثر",
+  "bookYourExperience": "حجز تجربتك",
+  "bookYourExperienceDescription": "ب-اسم الاثائر-",
+  "whatKindOfTour": "ما نوع الرحلة الذي تبحث عنه؟",
+  "expectedPrice": "السعر المتوقع"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -367,7 +371,11 @@ static const Map<String,dynamic> _en = {
   "travelEmpty": "No adventures yet!\nStart exploring Egypt and book\nyour first trip !",
   "favoritePlaces": "Favorite Places",
   "favoritePlacesDescription": "Explore the spots you've loved and planned to visit",
-  "exploreMore": "Explore More"
+  "exploreMore": "Explore More",
+  "bookYourExperience": "Book Your Experience",
+  "bookYourExperienceDescription": "With -Name of tour guide-",
+  "whatKindOfTour": "What kind of tour are you looking for?",
+  "expectedPrice": "Expected price"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

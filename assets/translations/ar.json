@@ -174,5 +174,9 @@
     "travelEmpty":"لا يوجد رحلات بعد!\nابحث عن مدينة او مكان\nوحجز رحلة جديدة !",
     "favoritePlaces":"المواقع المفضلة",
     "favoritePlacesDescription":"ابحث عن المواقع المفضلة وادخلها في رحلتك",
-    "exploreMore":"اكتشف أكثر"
+    "exploreMore":"اكتشف أكثر",
+    "bookYourExperience":"حجز تجربتك",
+    "bookYourExperienceDescription":"ب-اسم الاثائر-",
+    "whatKindOfTour":"ما نوع الرحلة الذي تبحث عنه؟",
+    "expectedPrice":"السعر المتوقع"
 }

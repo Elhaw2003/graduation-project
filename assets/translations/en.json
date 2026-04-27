@@ -173,5 +173,9 @@
     "travelEmpty":"No adventures yet!\nStart exploring Egypt and book\nyour first trip !",
     "favoritePlaces":"Favorite Places",
     "favoritePlacesDescription":"Explore the spots you've loved and planned to visit",
-    "exploreMore":"Explore More"
+    "exploreMore":"Explore More",
+    "bookYourExperience":"Book Your Experience",
+    "bookYourExperienceDescription":"With -Name of tour guide-",
+    "whatKindOfTour":"What kind of tour are you looking for?",
+    "expectedPrice":"Expected price"
 }

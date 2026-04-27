@@ -12,6 +12,7 @@ import 'package:smart_guide/feature/auth/register/presentation/view/register_scr
 import 'package:smart_guide/feature/auth/reset_password/presentation/view/reset_password_screen.dart';
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
 import 'package:smart_guide/feature/auth/success_verification/presentation/view/success_verification_screen.dart';
+import 'package:smart_guide/feature/book_now/presentation/view/book_now_screen.dart';
 import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_screen.dart';
 import 'package:smart_guide/feature/favorite/presentation/view/favorite_screen.dart';
 import 'package:smart_guide/feature/guides/tour_guide_profile_screen.dart';
@@ -199,6 +200,13 @@ class RoutingGenerationConfig {
         name: AppRoutes.favoritePlacesScreen,
         pageBuilder: (context, state) =>
             CustomSpringPage(child: const FavoritePlacesScreen()),
+      ),
+      GoRoute(
+        path: AppRoutes.bookNowScreen,
+        name: AppRoutes.bookNowScreen,
+        builder: (context, state) {
+          return BookNowScreen();
+        },
       ),
     ],
   );
