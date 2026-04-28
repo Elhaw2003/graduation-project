@@ -1,4 +1,4 @@
-package com.example.smart_guide
+package com.smartguide.app
 
 import io.flutter.embedding.android.FlutterActivity
 

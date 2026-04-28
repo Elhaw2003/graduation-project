@@ -1,16 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_guide/core/services/google_auth_config.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class GoogleAuthService {
   final GoogleSignIn googleSignIn = GoogleSignIn(
     scopes: ["email", "profile"],
-    // clientId:
-    //     "919550202879-8eq161ednr5s8o9qg18r8ht48gtgo496.apps.googleusercontent.com",
-    // // "919550202879-l111l25c7s01ss2sa71i75ha0gp0dkmc.apps.googleusercontent.com",
+    serverClientId: GoogleAuthConfig.serverClientId,
   );
   Future<String?> signIn() async {
     try {
+      if (GoogleAuthConfig.requiresApplePlist) {
+        throw Exception(
+          'Google Sign-In on iOS/macOS needs GoogleService-Info.plist from Firebase.',
+        );
+      }
+
       final account = await googleSignIn.signIn();
 
       if (account == null) {
@@ -38,7 +43,7 @@ class GoogleAuthService {
       return firebaseIdToken;
     } catch (e) {
       debugPrint('❌ Error signing in with Google: $e');
-      return null;
+      rethrow;
     }
   }
 

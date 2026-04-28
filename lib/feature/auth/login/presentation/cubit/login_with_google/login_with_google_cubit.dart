@@ -10,18 +10,23 @@ class LoginWithGoogleCubit extends Cubit<LoginWithGoogleStates> {
   final LoginRepo loginRepo;
   Future<void> loginWithGoogle() async {
     emit(LoginWithGoogleLoadingStates());
-    final googleService = GoogleAuthService();
-    final idToken = await googleService.signIn();
+    try {
+      final googleService = GoogleAuthService();
+      final idToken = await googleService.signIn();
 
-    if (idToken == null) {
-      emit(LoginWithGoogleFailureStates(message: 'Google login was cancelled'));
-      return;
+      if (idToken == null) {
+        emit(
+          LoginWithGoogleFailureStates(message: 'Google login was cancelled'),
+        );
+        return;
+      }
+      var result = await loginRepo.loginWithGoogle(idToken: idToken);
+      result.fold(
+        (l) => emit(LoginWithGoogleFailureStates(message: l.message)),
+        (r) => emit(LoginWithGoogleSuccessStates(loginWithGoogleModel: r)),
+      );
+    } catch (e) {
+      emit(LoginWithGoogleFailureStates(message: e.toString()));
     }
-    var result = await loginRepo.loginWithGoogle(idToken: idToken);
-    // print("idToken ::::::::: $idToken");
-    result.fold(
-      (l) => emit(LoginWithGoogleFailureStates(message: l.message)),
-      (r) => emit(LoginWithGoogleSuccessStates(loginWithGoogleModel: r)),
-    );
   }
 }
