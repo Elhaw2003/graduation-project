@@ -179,5 +179,8 @@
     "bookYourExperienceDescription":"ب-اسم الاثائر-",
     "whatKindOfTour":"ما نوع الرحلة الذي تبحث عنه؟",
     "expectedPrice":"السعر المتوقع",
-    "noInternetConnection":"لا يوجد اتصال بالانترنت"
+    "noInternetConnection":"لا يوجد اتصال بالانترنت",
+    "savedForLater":"المحفوظة لاحقا",
+    "savedDescription":"جمع افكارك وخطط رحلتك القادمة",
+    "addNewPlace":"اضافة مكان جديد"
 }
