@@ -184,5 +184,8 @@ abstract class  LocaleKeys {
   static const whatKindOfTour = 'whatKindOfTour';
   static const expectedPrice = 'expectedPrice';
   static const noInternetConnection = 'noInternetConnection';
+  static const savedForLater = 'savedForLater';
+  static const savedDescription = 'savedDescription';
+  static const addNewPlace = 'addNewPlace';
 
 }

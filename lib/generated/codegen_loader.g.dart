@@ -195,7 +195,10 @@ class CodegenLoader extends AssetLoader{
   "bookYourExperienceDescription": "ب-اسم الاثائر-",
   "whatKindOfTour": "ما نوع الرحلة الذي تبحث عنه؟",
   "expectedPrice": "السعر المتوقع",
-  "noInternetConnection": "لا يوجد اتصال بالانترنت"
+  "noInternetConnection": "لا يوجد اتصال بالانترنت",
+  "savedForLater": "المحفوظة لاحقا",
+  "savedDescription": "جمع افكارك وخطط رحلتك القادمة",
+  "addNewPlace": "اضافة مكان جديد"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -377,7 +380,10 @@ static const Map<String,dynamic> _en = {
   "bookYourExperienceDescription": "With -Name of tour guide-",
   "whatKindOfTour": "What kind of tour are you looking for?",
   "expectedPrice": "Expected price",
-  "noInterntConnection": "No Internet Connection"
+  "noInterntConnection": "No Internet Connection",
+  "savedForLater": "Saved for Later",
+  "savedDescription": "Collect your inspirations and plan your next journey",
+  "addNewPlace": "Add a new place"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

@@ -51,7 +51,9 @@ List<DashboardModel> dashboards(BuildContext context) {
       subTitle: "Saved for later",
       info: "8 Spots • 2 Cities",
       icon: Assets.imagesSvgSaved,
-      onTap: () {},
+      onTap: () {
+        if (context.mounted) context.pushNamed(AppRoutes.savedScreen);
+      },
     ),
   ];
 }

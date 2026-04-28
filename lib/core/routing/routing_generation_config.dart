@@ -24,12 +24,13 @@ import 'package:smart_guide/feature/my_trips/presentation/view/screens/trip_type
 import 'package:smart_guide/feature/onboarding/presentation/view/onboarding_screen.dart';
 import 'package:smart_guide/feature/popular_places/presentation/view/popular_places_screen.dart';
 import 'package:smart_guide/feature/profile/presentation/view/profile_screen.dart';
+import 'package:smart_guide/feature/saved/presentation/view/saved_screen.dart';
 import 'package:smart_guide/feature/settings/presentation/view/settings_screen.dart';
 import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart';
 
 class RoutingGenerationConfig {
   static GoRouter routerGeneratorConfig = GoRouter(
-    initialLocation: AppRoutes.loginScreen,
+    initialLocation: AppRoutes.appMain,
     errorBuilder: (context, state) => errorBuilder(),
     routes: [
       /// Splash, Onboarding & Select Role
@@ -207,6 +208,11 @@ class RoutingGenerationConfig {
         builder: (context, state) {
           return BookNowScreen();
         },
+      ),
+      GoRoute(
+        path: AppRoutes.savedScreen,
+        name: AppRoutes.savedScreen,
+        builder: (context, state) => const SavedScreen(),
       ),
     ],
   );
