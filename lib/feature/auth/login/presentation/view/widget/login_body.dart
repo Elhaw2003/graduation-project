@@ -183,7 +183,7 @@ class _LoginBodyState extends State<LoginBody> {
                                 .loginWithGoogle();
                           },
                           buttonWidth: double.infinity,
-                          title: "Login",
+                          title: "Login with Google",
                           titleStyle: TextStyle(
                             color: AppColors.backgroundColor,
                           ),

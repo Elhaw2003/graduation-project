@@ -25,6 +25,11 @@ void main() async {
       statusBarIconBrightness: Brightness.dark,
     ),
   );
+  // make device vertical
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitDown,
+    DeviceOrientation.portraitUp,
+  ]);
   runApp(
     EasyLocalization(
       supportedLocales: [Locale('en'), Locale('ar')],

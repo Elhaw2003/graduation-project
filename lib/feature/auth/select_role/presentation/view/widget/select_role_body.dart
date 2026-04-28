@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
-import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
-import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:smart_guide/feature/auth/select_role/presentation/view/widget/select_role_widget.dart';
@@ -76,6 +74,12 @@ class _SelectRoleBodyState extends State<SelectRoleBody> {
               onTap: () {
                 setState(() {
                   selectType = UserTypeEnum.Tourist;
+                  selectType != null
+                      ? context.pushNamed(
+                          AppRoutes.registerScreen,
+                          pathParameters: {'userType': selectType!.name},
+                        )
+                      : null;
                 });
               },
             ),
@@ -93,6 +97,12 @@ class _SelectRoleBodyState extends State<SelectRoleBody> {
               onTap: () {
                 setState(() {
                   selectType = UserTypeEnum.TourGuide;
+                  selectType != null
+                      ? context.pushNamed(
+                          AppRoutes.registerScreen,
+                          pathParameters: {'userType': selectType!.name},
+                        )
+                      : null;
                 });
               },
             ),
@@ -101,27 +111,27 @@ class _SelectRoleBodyState extends State<SelectRoleBody> {
           const Spacer(),
 
           // زرار التالي
-          FadeInUp(
-            duration: const Duration(milliseconds: 600),
-            child: CustomButtonWidget(
-              buttonWidth: double.infinity,
-              onPressed: selectType != null
-                  ? () {
-                      context.pushNamed(
-                        AppRoutes.registerScreen,
-                        pathParameters: {'userType': selectType!.name},
-                      );
-                    }
-                  : null,
-              title: LocaleKeys.next.tr(),
-              buttonColor: selectType == null
-                  ? AppColors.grey300Color
-                  : AppColors.primaryColor,
-              borderSideColor: selectType == null
-                  ? AppColors.grey300Color
-                  : AppColors.primaryColor,
-            ),
-          ),
+          // FadeInUp(
+          //   duration: const Duration(milliseconds: 600),
+          //   child: CustomButtonWidget(
+          //     buttonWidth: double.infinity,
+          //     onPressed: selectType != null
+          //         ? () {
+          //             context.pushNamed(
+          //               AppRoutes.registerScreen,
+          //               pathParameters: {'userType': selectType!.name},
+          //             );
+          //           }
+          //         : null,
+          //     title: LocaleKeys.next.tr(),
+          //     buttonColor: selectType == null
+          //         ? AppColors.grey300Color
+          //         : AppColors.primaryColor,
+          //     borderSideColor: selectType == null
+          //         ? AppColors.grey300Color
+          //         : AppColors.primaryColor,
+          //   ),
+          // ),
         ],
       ),
     );
