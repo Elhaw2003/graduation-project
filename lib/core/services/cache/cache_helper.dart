@@ -16,6 +16,7 @@ class CacheHelper {
   static const String kIsLoggedIn = 'isLoggedIn';
   static const String kLanguage = 'language';
   static const String kThemeMode = 'themeMode';
+  static const String kIsRememberMe = 'isRememberMe';
 
   // ============= Initialize =============
   static Future<void> init() async {

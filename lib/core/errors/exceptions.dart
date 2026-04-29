@@ -9,7 +9,7 @@ class ServerException implements Exception {
 
 /// Helper function to parse error response (handles both String and Map responses)
 ErrorModel parseErrorResponse(dynamic data, int statusCode) {
-  // If data is null or empty
+  // 1. لو الداتا null
   if (data == null) {
     return ErrorModel(
       statusCode: statusCode,
@@ -18,23 +18,33 @@ ErrorModel parseErrorResponse(dynamic data, int statusCode) {
     );
   }
 
-  // If data is a String
+  // 2. معالجة الـ String (هنا بنمسك الـ HTML)
   if (data is String) {
+    // تشيك لو الـ String ده عبارة عن HTML (بيبدأ بـ <!DOCTYPE أو <html>)
+    if (data.trim().toLowerCase().startsWith('<!doctype') ||
+        data.trim().toLowerCase().startsWith('<html')) {
+      return ErrorModel(
+        statusCode: statusCode,
+        message: getDefaultErrorMessage(
+          statusCode,
+        ), // هيرجع الرسالة "الآدمية" اللي أنت كاتبها تحت
+        generalErrors: [getDefaultErrorMessage(statusCode)],
+      );
+    }
+
     return ErrorModel(
       statusCode: statusCode,
       message: data.isEmpty ? getDefaultErrorMessage(statusCode) : data,
-      generalErrors: [
-        data.isEmpty ? getDefaultErrorMessage(statusCode) : data,
-      ],
+      generalErrors: [data.isEmpty ? getDefaultErrorMessage(statusCode) : data],
     );
   }
 
-  // If data is a Map
+  // 3. لو الداتا Map (JSON طبيعي)
   if (data is Map<String, dynamic>) {
     return ErrorModel.fromJson(data);
   }
 
-  // Fallback for unexpected types
+  // 4. أي حاجة تانية
   return ErrorModel(
     statusCode: statusCode,
     message: getDefaultErrorMessage(statusCode),

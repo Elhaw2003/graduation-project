@@ -6,17 +6,16 @@ import 'package:go_router/go_router.dart';
 import 'package:smart_guide/core/methods/custom_animated_snack_bar.dart';
 import 'package:smart_guide/core/methods/input_validator.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
-import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
-import 'package:smart_guide/core/shared_widgets/custom_loading_widget.dart';
+import 'package:smart_guide/core/services/cache/cache_helper.dart';
 import 'package:smart_guide/core/shared_widgets/custom_rich_text_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_text_field_widget.dart';
-import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/auth/login/presentation/cubit/login_with_google/login_with_google_cubit.dart';
 import 'package:smart_guide/feature/auth/login/presentation/cubit/login_with_google/login_with_google_states.dart';
 import 'package:smart_guide/feature/auth/login/presentation/cubit/login_email/login_with_email_cubit.dart';
 import 'package:smart_guide/feature/auth/login/presentation/cubit/login_email/login_with_email_states.dart';
+import 'package:smart_guide/feature/auth/login/presentation/view/widget/google_button.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/widget/login_button_widget.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/widget/remember_and_forgot_wiget.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
@@ -31,6 +30,8 @@ class _LoginBodyState extends State<LoginBody> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  bool isRememberMeChecked = false;
   @override
   void dispose() {
     emailController.dispose();
@@ -43,13 +44,14 @@ class _LoginBodyState extends State<LoginBody> {
     return BlocConsumer<LoginCubit, LoginStates>(
       listener: (context, state) {
         if (state is LoginSuccessStates) {
+          CacheHelper.setBool(CacheHelper.kIsRememberMe, isRememberMeChecked);
           CustomAnimatedShowSnackBar.successSnackBar(
             context: context,
             message: LocaleKeys.loginSuccessfully.tr(),
           );
           Future.delayed(const Duration(seconds: 1), () {
             if (context.mounted) {
-              context.goNamed(AppRoutes.homeScreen);
+              context.goNamed(AppRoutes.appMain);
             }
           });
         } else if (state is LoginFailureStates) {
@@ -148,7 +150,15 @@ class _LoginBodyState extends State<LoginBody> {
                       },
                     ),
                     CustomHeightSpacingWidget(height: 10),
-                    RememberAndForgotWiget(email: emailController),
+                    RememberAndForgotWiget(
+                      email: emailController,
+                      value: isRememberMeChecked,
+                      onChanged: (value) {
+                        setState(() {
+                          isRememberMeChecked = value!;
+                        });
+                      },
+                    ),
                     CustomHeightSpacingWidget(height: 30),
                     LoginButtonWidget(
                       state: state,
@@ -176,20 +186,11 @@ class _LoginBodyState extends State<LoginBody> {
                         }
                       },
                       builder: (context, state) {
-                        return CustomButtonWidget(
-                          onPressed: () {
-                            context
-                                .read<LoginWithGoogleCubit>()
-                                .loginWithGoogle();
-                          },
-                          buttonWidth: double.infinity,
-                          title: "Login with Google",
-                          titleStyle: TextStyle(
-                            color: AppColors.backgroundColor,
-                          ),
-                          child: state is LoginWithGoogleLoadingStates
-                              ? CustomLoadingWidget()
-                              : null,
+                        return GoogleSignInButton(
+                          onPressed: () => context
+                              .read<LoginWithGoogleCubit>()
+                              .loginWithGoogle(),
+                          isLoading: state is LoginWithGoogleLoadingStates,
                         );
                       },
                     ),

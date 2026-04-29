@@ -181,5 +181,6 @@
     "noInterntConnection":"No Internet Connection",
     "savedForLater":"Saved for Later",
     "savedDescription":"Collect your inspirations and plan your next journey",
-    "addNewPlace":"Add a new place"
+    "addNewPlace":"Add a new place",
+    "continueWithGoogle":"Continue with Google"
 }

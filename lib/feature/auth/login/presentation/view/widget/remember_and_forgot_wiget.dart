@@ -6,14 +6,18 @@ class RememberAndForgotWiget extends StatelessWidget {
   const RememberAndForgotWiget({
     super.key,
     required this.email,
+    required this.value,
+    this.onChanged,
   });
   final TextEditingController email;
+  final bool value;
+  final void Function(bool?)? onChanged;
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        RememberMeWidget(),
+        RememberMeWidget(onChanged: onChanged, value: value),
         ResetPasswordWidget(email: email),
       ],
     );

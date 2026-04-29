@@ -187,5 +187,6 @@ abstract class  LocaleKeys {
   static const savedForLater = 'savedForLater';
   static const savedDescription = 'savedDescription';
   static const addNewPlace = 'addNewPlace';
+  static const continueWithGoogle = 'continueWithGoogle';
 
 }

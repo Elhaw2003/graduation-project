@@ -5,7 +5,7 @@ import 'package:smart_guide/feature/auth/login/presentation/cubit/login_with_goo
 
 class LoginWithGoogleCubit extends Cubit<LoginWithGoogleStates> {
   LoginWithGoogleCubit({required this.loginRepo})
-    : super(LoginWithGoogleLoadingStates());
+    : super(LoginWithGoogleInitialStates());
 
   final LoginRepo loginRepo;
   Future<void> loginWithGoogle() async {

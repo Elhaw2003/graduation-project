@@ -5,27 +5,18 @@ import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
-class RememberMeWidget extends StatefulWidget {
-  const RememberMeWidget({super.key});
-
-  @override
-  State<RememberMeWidget> createState() => _RememberMeWidgetState();
-}
-
-class _RememberMeWidgetState extends State<RememberMeWidget> {
-  bool isChecked = false;
+class RememberMeWidget extends StatelessWidget {
+  const RememberMeWidget({super.key, required this.value, this.onChanged});
+  final bool value;
+  final void Function(bool?)? onChanged;
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Checkbox(
-          value: isChecked,
-          onChanged: (v) {
-            setState(() {
-              isChecked = v!;
-            });
-          },
+          value: value,
+          onChanged: onChanged,
           activeColor: AppColors.primaryColor,
           checkColor: AppColors.whiteColor,
           side: BorderSide(color: AppColors.greyCFC9C9olor),

@@ -58,7 +58,7 @@ class LogOutDialog extends StatelessWidget {
             ],
           ),
           CustomHeightSpacingWidget(height: 5),
-          RememberMeWidget(),
+          // RememberMeWidget(),
         ],
       ),
     );

@@ -198,7 +198,8 @@ class CodegenLoader extends AssetLoader{
   "noInternetConnection": "لا يوجد اتصال بالانترنت",
   "savedForLater": "المحفوظة لاحقا",
   "savedDescription": "جمع افكارك وخطط رحلتك القادمة",
-  "addNewPlace": "اضافة مكان جديد"
+  "addNewPlace": "اضافة مكان جديد",
+  "continueWithGoogle": "استمر بواسطة جوجل"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -383,7 +384,8 @@ static const Map<String,dynamic> _en = {
   "noInterntConnection": "No Internet Connection",
   "savedForLater": "Saved for Later",
   "savedDescription": "Collect your inspirations and plan your next journey",
-  "addNewPlace": "Add a new place"
+  "addNewPlace": "Add a new place",
+  "continueWithGoogle": "Continue with Google"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
