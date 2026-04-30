@@ -15,7 +15,8 @@ import 'package:smart_guide/feature/auth/success_verification/presentation/view/
 import 'package:smart_guide/feature/book_now/presentation/view/book_now_screen.dart';
 import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_screen.dart';
 import 'package:smart_guide/feature/favorite/presentation/view/favorite_screen.dart';
-import 'package:smart_guide/feature/guides/tour_guide_profile_screen.dart';
+import 'package:smart_guide/feature/human_guide/choose_humen_guides_screen.dart';
+import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_screen.dart';
 import 'package:smart_guide/feature/auth/verify_otp/presentation/view/verify_otp_screen.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
 import 'package:smart_guide/feature/my_trips/data/enum/trip_type_enum.dart';
@@ -213,6 +214,11 @@ class RoutingGenerationConfig {
         path: AppRoutes.savedScreen,
         name: AppRoutes.savedScreen,
         builder: (context, state) => const SavedScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.chooseHumenGuidesScreen,
+        name: AppRoutes.chooseHumenGuidesScreen,
+        builder: (context, state) => const ChooseHumenGuidesScreen(),
       ),
     ],
   );

@@ -4,7 +4,7 @@ import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
-import 'package:smart_guide/feature/guides/presentation/view/widgets/grid_view_for_languages.dart';
+import 'package:smart_guide/feature/human_guide/grid_view_for_languages.dart';
 import 'package:smart_guide/generated/assets.dart';
 
 class CustomContainerExpertiseAndSkills extends StatelessWidget {

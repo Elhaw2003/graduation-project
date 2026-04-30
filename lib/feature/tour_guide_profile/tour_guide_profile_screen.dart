@@ -4,9 +4,9 @@ import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
-import 'package:smart_guide/feature/guides/presentation/view/widgets/tour_guide_info.dart';
-import 'package:smart_guide/feature/guides/presentation/view/widgets/tour_guide_profile_body.dart';
-import 'package:smart_guide/feature/guides/presentation/view/widgets/tour_guide_profile_image.dart';
+import 'package:smart_guide/feature/human_guide/tour_guide_info.dart';
+import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_body.dart';
+import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_image.dart';
 
 class TourGuideProfileScreen extends StatelessWidget {
   const TourGuideProfileScreen({super.key});

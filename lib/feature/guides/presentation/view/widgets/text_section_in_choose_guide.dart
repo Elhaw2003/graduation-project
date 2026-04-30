@@ -1,7 +1,6 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
-import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class TextSectionInChooseGuids extends StatelessWidget {
   const TextSectionInChooseGuids({
@@ -15,17 +14,18 @@ class TextSectionInChooseGuids extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(title, style: AppTextStyle.primaryTextW600S22),
-        Text(
-          subTitle, // النص الأول
-          textAlign: TextAlign.center, // الباراميترز بعده
-          style: AppTextStyle.primaryTextW600S22,
-        ),
-        Text(
-          LocaleKeys.pickALocalExpertOrSmartAI.tr(), // النص الأول
-          textAlign: TextAlign.center, // الباراميترز بعده
-          style: AppTextStyle.secondaryTextW400S17,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+          child: Text(
+            subTitle,
+            textAlign: TextAlign.center,
+            style: AppTextStyle.primaryTextW400S15.copyWith(
+              color: AppColors.grey300Color,
+            ),
+          ),
         ),
       ],
     );

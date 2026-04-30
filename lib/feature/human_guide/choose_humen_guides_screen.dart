@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_guide/core/shared_widgets/custom_arrow_back_button.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
-import 'package:smart_guide/feature/guides/presentation/view/widgets/choose_humen_guides_screen_body.dart';
+import 'package:smart_guide/feature/human_guide/choose_humen_guides_screen_body.dart';
 
 class ChooseHumenGuidesScreen extends StatelessWidget {
   const ChooseHumenGuidesScreen({super.key});

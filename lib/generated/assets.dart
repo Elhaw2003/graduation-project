@@ -146,6 +146,10 @@ class Assets {
   /// assets/images/svg/home_icon.svg
   static const String imagesSvgHomeIcon = "assets/images/svg/home_icon.svg";
 
+  /// Assets for imagesSvgHuman
+  /// assets/images/svg/human.svg
+  static const String imagesSvgHuman = "assets/images/svg/human.svg";
+
   /// Assets for imagesSvgInstagramLogo
   /// assets/images/svg/instagram_logo.svg
   static const String imagesSvgInstagramLogo = "assets/images/svg/instagram_logo.svg";

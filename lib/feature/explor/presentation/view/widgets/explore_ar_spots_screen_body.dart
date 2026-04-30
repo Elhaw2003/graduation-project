@@ -3,7 +3,7 @@ import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/explor/presentation/view/widgets/app_bar_for_explore_ar_spots_screen.dart';
-import 'package:smart_guide/feature/guides/presentation/view/widgets/custom_pointe_widgets.dart';
+import 'package:smart_guide/feature/human_guide/custom_pointe_widgets.dart';
 import 'package:smart_guide/generated/assets.dart';
 
 class ExploreArSpotsScreenBody extends StatelessWidget {

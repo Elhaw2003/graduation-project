@@ -26,4 +26,5 @@ class AppRoutes {
   static const String favoritePlacesScreen = '/favoritePlacesScreen';
   static const String bookNowScreen = '/bookNowScreen';
   static const String savedScreen = '/savedScreen';
+  static const String chooseHumenGuidesScreen = '/chooseHumenGuidesScreen';
 }

@@ -4,7 +4,7 @@ import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_text_field_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
-import 'package:smart_guide/feature/guides/presentation/view/widgets/custom_container_info_guides.dart';
+import 'package:smart_guide/feature/human_guide/custom_container_info_guides.dart';
 
 import 'package:smart_guide/feature/guides/presentation/view/widgets/text_section_in_choose_guide.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
@@ -38,9 +38,7 @@ class ChooseHumenGuidesScreenBody extends StatelessWidget {
               prefixIcon: Icons.search,
               prefixColor: AppColors.secondaryTextColor,
             ),
-            CustomWidthSpacingWidget(
-              width: 4,
-            ),
+            CustomWidthSpacingWidget(width: 4),
             Container(
               height: 45,
               width: 50,

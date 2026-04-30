@@ -199,7 +199,9 @@ class CodegenLoader extends AssetLoader{
   "savedForLater": "المحفوظة لاحقا",
   "savedDescription": "جمع افكارك وخطط رحلتك القادمة",
   "addNewPlace": "اضافة مكان جديد",
-  "continueWithGoogle": "استمر بواسطة جوجل"
+  "continueWithGoogle": "استمر بواسطة جوجل",
+  "aiGuide": "اثائر AI",
+  "humanGuides": "اثائر شخصية"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -385,7 +387,9 @@ static const Map<String,dynamic> _en = {
   "savedForLater": "Saved for Later",
   "savedDescription": "Collect your inspirations and plan your next journey",
   "addNewPlace": "Add a new place",
-  "continueWithGoogle": "Continue with Google"
+  "continueWithGoogle": "Continue with Google",
+  "aiGuide": "AI Guide",
+  "humanGuides": "Human Guides"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }

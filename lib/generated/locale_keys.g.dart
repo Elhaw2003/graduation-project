@@ -188,5 +188,7 @@ abstract class  LocaleKeys {
   static const savedDescription = 'savedDescription';
   static const addNewPlace = 'addNewPlace';
   static const continueWithGoogle = 'continueWithGoogle';
+  static const aiGuide = 'aiGuide';
+  static const humanGuides = 'humanGuides';
 
 }
