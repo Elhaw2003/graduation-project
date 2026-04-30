@@ -10,26 +10,23 @@ class CustomSectionTitleWithAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 16.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            LocaleKeys.popularPlaces.tr(),
-            style: AppTextStyle.primaryTextW500S21,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          LocaleKeys.popularPlaces.tr(),
+          style: AppTextStyle.primaryTextW500S21,
+        ),
+        TextButton(
+          onPressed: () {
+            context.pushNamed(AppRoutes.popularPlacesScreen);
+          },
+          child: Text(
+            LocaleKeys.showAll.tr(),
+            style: AppTextStyle.primaryW500S16,
           ),
-          TextButton(
-            onPressed: () {
-              context.pushNamed(AppRoutes.popularPlacesScreen);
-            },
-            child: Text(
-              LocaleKeys.showAll.tr(),
-              style: AppTextStyle.primaryW500S16,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
