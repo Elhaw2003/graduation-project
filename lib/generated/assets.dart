@@ -2,6 +2,10 @@
 class Assets {
   Assets._();
   
+  /// Assets for imagesGifAiChat
+  /// assets/images/gif/ai_chat.gif
+  static const String imagesGifAiChat = "assets/images/gif/ai_chat.gif";
+
   /// Assets for imagesPngArIcon
   /// assets/images/png/ar_icon.png
   static const String imagesPngArIcon = "assets/images/png/ar_icon.png";
@@ -94,9 +98,17 @@ class Assets {
   /// assets/images/svg/arrow_forward.svg
   static const String imagesSvgArrowForward = "assets/images/svg/arrow_forward.svg";
 
+  /// Assets for imagesSvgArrowSend
+  /// assets/images/svg/arrow_send.svg
+  static const String imagesSvgArrowSend = "assets/images/svg/arrow_send.svg";
+
   /// Assets for imagesSvgBank
   /// assets/images/svg/bank.svg
   static const String imagesSvgBank = "assets/images/svg/bank.svg";
+
+  /// Assets for imagesSvgBucketListEmpty
+  /// assets/images/svg/bucket_list_empty.svg
+  static const String imagesSvgBucketListEmpty = "assets/images/svg/bucket_list_empty.svg";
 
   /// Assets for imagesSvgCity
   /// assets/images/svg/city.svg

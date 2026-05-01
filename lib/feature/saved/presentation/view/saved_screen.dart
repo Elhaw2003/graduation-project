@@ -56,6 +56,66 @@ class _SavedScreenState extends State<SavedScreen> {
       subtitle: 'The only remaining wonder of the ancient world.',
       imageUrl: Assets.imagesPngSphinx,
     ),
+    SavedPlaceedCardModel(
+      tag: 'Diving & Nature.',
+      title: 'The Blue Hole, Dahab',
+      subtitle:
+          'A world-renowned diving spot with deep blue waters and vibrant coral reefs.',
+      imageUrl: Assets.imagesPngSphinx,
+    ),
+    SavedPlaceedCardModel(
+      tag: 'Luxury & Lifestyle',
+      title: 'Abu Tig Marina, El Gouna',
+      subtitle:
+          'A luxurious waterfront destination featuring upscale dining and stunning yacht views.',
+      imageUrl: Assets.imagesPngSphinx,
+    ),
+    SavedPlaceedCardModel(
+      tag: 'Historic Visit',
+      title: 'Giza Pyramids',
+      subtitle: 'The only remaining wonder of the ancient world.',
+      imageUrl: Assets.imagesPngSphinx,
+    ),
+    SavedPlaceedCardModel(
+      tag: 'Diving & Nature.',
+      title: 'The Blue Hole, Dahab',
+      subtitle:
+          'A world-renowned diving spot with deep blue waters and vibrant coral reefs.',
+      imageUrl: Assets.imagesPngSphinx,
+    ),
+    SavedPlaceedCardModel(
+      tag: 'Luxury & Lifestyle',
+      title: 'Abu Tig Marina, El Gouna',
+      subtitle:
+          'A luxurious waterfront destination featuring upscale dining and stunning yacht views.',
+      imageUrl: Assets.imagesPngSphinx,
+    ),
+    SavedPlaceedCardModel(
+      tag: 'Historic Visit',
+      title: 'Giza Pyramids',
+      subtitle: 'The only remaining wonder of the ancient world.',
+      imageUrl: Assets.imagesPngSphinx,
+    ),
+    SavedPlaceedCardModel(
+      tag: 'Diving & Nature.',
+      title: 'The Blue Hole, Dahab',
+      subtitle:
+          'A world-renowned diving spot with deep blue waters and vibrant coral reefs.',
+      imageUrl: Assets.imagesPngSphinx,
+    ),
+    SavedPlaceedCardModel(
+      tag: 'Luxury & Lifestyle',
+      title: 'Abu Tig Marina, El Gouna',
+      subtitle:
+          'A luxurious waterfront destination featuring upscale dining and stunning yacht views.',
+      imageUrl: Assets.imagesPngSphinx,
+    ),
+    SavedPlaceedCardModel(
+      tag: 'Historic Visit',
+      title: 'Giza Pyramids',
+      subtitle: 'The only remaining wonder of the ancient world.',
+      imageUrl: Assets.imagesPngSphinx,
+    ),
   ];
 
   @override

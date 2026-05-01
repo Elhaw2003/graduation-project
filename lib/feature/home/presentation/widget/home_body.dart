@@ -70,7 +70,7 @@ class HomeBody extends StatelessWidget {
               const CustomSectionTitleWithAction(),
               // CustomHeightSpacingWidget(height: 12.h),
               const CustomGridView(),
-              CustomHeightSpacingWidget(height: 50.h),
+              CustomHeightSpacingWidget(height: 100.h),
             ]),
           ),
         ),

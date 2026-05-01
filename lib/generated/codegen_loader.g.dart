@@ -201,7 +201,13 @@ class CodegenLoader extends AssetLoader{
   "addNewPlace": "اضافة مكان جديد",
   "continueWithGoogle": "استمر بواسطة جوجل",
   "aiGuide": "اثائر AI",
-  "humanGuides": "اثائر شخصية"
+  "humanGuides": "اثائر شخصية",
+  "bucketListEmpty": "قايمة المحفوظات\nفي الانتظار!",
+  "bucketListEmptyDescription": "لم تقم باختيار اي مواقع\nبعد. ابحث عن المواقع المفضلة لرحلتك\nالقادمة.",
+  "aiTravelCompanion": "اثائر AI للسفر",
+  "aiTravelCompanionDescription": "ابحث عن السجلات واحصل على اجابات سريعة مع\nاثائر AI",
+  "aiGuideDescription": "مرحبا! انا اثائر AI. اساعدني بالسؤال\nعن اي موقع او معلومة...",
+  "aiGuidePlaceholder": "اساعدني بالسؤال عن اي موقع او معلومة..."
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -389,7 +395,13 @@ static const Map<String,dynamic> _en = {
   "addNewPlace": "Add a new place",
   "continueWithGoogle": "Continue with Google",
   "aiGuide": "AI Guide",
-  "humanGuides": "Human Guides"
+  "humanGuides": "Human Guides",
+  "bucketListEmpty": "Your bucket list is\nwaiting!",
+  "bucketListEmptyDescription": "You haven’t saved any places\nyet. Start exploring and collect\nyour favorite spots for your\nnext adventure.",
+  "aiTravelCompanion": "AI Travel Companion",
+  "aiTravelCompanionDescription": "Explore history and get instant answers with\nour smart AI guide",
+  "aiGuideDescription": "Hi! I’m your AI guide. Ask me\nanything about Egypt or upload\na photo of an ancient site",
+  "aiGuidePlaceholder": "Ask me about any site or info..."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
