@@ -32,7 +32,7 @@ class SavePlacedCategory extends StatelessWidget {
                 child: CategoryChipSaved(
                   savedCategoryModel: categories[index],
                   selected: index == selectedCategoryIndex,
-                  onTap: ()=>onTap(index),
+                  onTap: () => onTap(index),
                 ),
               );
             },

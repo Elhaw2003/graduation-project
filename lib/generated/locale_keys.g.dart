@@ -190,5 +190,11 @@ abstract class  LocaleKeys {
   static const continueWithGoogle = 'continueWithGoogle';
   static const aiGuide = 'aiGuide';
   static const humanGuides = 'humanGuides';
+  static const bucketListEmpty = 'bucketListEmpty';
+  static const bucketListEmptyDescription = 'bucketListEmptyDescription';
+  static const aiTravelCompanion = 'aiTravelCompanion';
+  static const aiTravelCompanionDescription = 'aiTravelCompanionDescription';
+  static const aiGuideDescription = 'aiGuideDescription';
+  static const aiGuidePlaceholder = 'aiGuidePlaceholder';
 
 }

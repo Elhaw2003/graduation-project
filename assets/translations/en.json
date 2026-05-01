@@ -184,5 +184,11 @@
     "addNewPlace":"Add a new place",
     "continueWithGoogle":"Continue with Google",
     "aiGuide":"AI Guide",
-    "humanGuides":"Human Guides"
+    "humanGuides":"Human Guides",
+    "bucketListEmpty":"Your bucket list is\nwaiting!",
+    "bucketListEmptyDescription":"You haven’t saved any places\nyet. Start exploring and collect\nyour favorite spots for your\nnext adventure.",
+    "aiTravelCompanion":"AI Travel Companion",
+    "aiTravelCompanionDescription":"Explore history and get instant answers with\nour smart AI guide",
+    "aiGuideDescription":"Hi! I’m your AI guide. Ask me\nanything about Egypt or upload\na photo of an ancient site",
+    "aiGuidePlaceholder":"Ask me about any site or info..."
 }

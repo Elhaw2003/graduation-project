@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
-import 'package:smart_guide/feature/auth/login/presentation/view/widget/remember_me_widget.dart';
 import 'package:smart_guide/feature/settings/presentation/view/widget/log_out_button_widget.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -21,7 +20,11 @@ class LogOutDialog extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
-            child: Icon(Icons.error_outline, color: Colors.red, size: 130.sp),
+            child: Icon(
+              Icons.error_outline,
+              color: AppColors.redAppColor,
+              size: 130.sp,
+            ),
           ),
           CustomHeightSpacingWidget(height: 16),
           Text(
