@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
+import 'package:smart_guide/feature/home/presentation/widget/custom_drawer_widget.dart';
 import 'package:smart_guide/feature/home/presentation/widget/home_body.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -7,9 +8,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.backgroundColor,
-      child: Material(color: Colors.transparent, child: HomeBody()),
+    return Scaffold(
+      drawer: const CustomDrawer(),
+      backgroundColor: AppColors.backgroundColor,
+      body: const HomeBody(),
     );
   }
 }

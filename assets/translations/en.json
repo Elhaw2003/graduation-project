@@ -190,5 +190,9 @@
     "aiTravelCompanion":"AI Travel Companion",
     "aiTravelCompanionDescription":"Explore history and get instant answers with\nour smart AI guide",
     "aiGuideDescription":"Hi! I’m your AI guide. Ask me\nanything about Egypt or upload\na photo of an ancient site",
-    "aiGuidePlaceholder":"Ask me about any site or info..."
+    "aiGuidePlaceholder":"Ask me about any site or info...",
+    "arSpots":"AR Spots",
+    "map":"Map",
+    "myArchives":"My Archives",
+    "myGuides":"My Guides"
 }
