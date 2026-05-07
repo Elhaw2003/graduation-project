@@ -10,109 +10,124 @@ class CustomGridView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      padding: EdgeInsets.zero,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 15.w,
-        mainAxisSpacing: 15.h,
-        mainAxisExtent: 220.h,
-      ),
-      itemBuilder: (context, index) {
-        return Container(
-          decoration: BoxDecoration(
-            color: AppColors.whiteColor,
-            borderRadius: BorderRadius.circular(8.r),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return GridView.builder(
+          padding: EdgeInsets.zero,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: 10,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 15.w,
+            mainAxisSpacing: 15.h,
+            // 👈 الـ Ratio هو السر: (العرض / الطول)
+            // لو قللت الرقم ده الـ Card هيطول، ولو زودته الـ Card هيقصر
+            childAspectRatio: 0.75,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 120.h,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  image: const DecorationImage(
-                    image: AssetImage(Assets.imagesPngFirstSplashScreen),
-                    fit: BoxFit.cover,
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8.r),
-                    topRight: Radius.circular(8.r),
-                    bottomLeft: Radius.circular(50.r),
-                  ),
-                ),
-              ),
-              CustomHeightSpacingWidget(height: 8.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Great Pyramids of Giza',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyle.primaryTextW400S16.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                    CustomHeightSpacingWidget(height: 4.h),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.star,
-                          color: AppColors.starColore,
-                          size: 16.sp,
-                        ),
-                        CustomWidthSpacingWidget(width: 4.w),
-                        Text(
-                          '4.8',
-                          style: AppTextStyle.grey300W400S16.copyWith(
-                            fontSize: 12.sp,
-                          ),
-                        ),
-                        Spacer(),
-                        Icon(
-                          Icons.location_on_outlined,
-                          color: AppColors.redAppColor,
-                          size: 16.sp,
-                        ),
-                        Text(
-                          '4.5 km',
-                          style: AppTextStyle.grey300W400S16.copyWith(
-                            fontSize: 12.sp,
-                          ),
-                        ),
-                      ],
-                    ),
-                    CustomHeightSpacingWidget(height: 12.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Free paid',
-                          style: AppTextStyle.grey300W400S16.copyWith(
-                            fontSize: 12.sp,
-                          ),
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios_rounded,
-                          color: AppColors.primaryColor,
-                          size: 20.sp,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+          itemBuilder: (context, index) {
+            return _buildGridItem();
+          },
         );
       },
-      itemCount: 10,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+    );
+  }
+
+  Widget _buildGridItem() {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.whiteColor,
+        borderRadius: BorderRadius.circular(12.r),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // 1. الجزء الخاص بالصورة (ياخد مساحة مرنة)
+          Expanded(
+            flex: 6, // يمثل 60% من طول الـ Card
+            child: Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                image: const DecorationImage(
+                  image: AssetImage(Assets.imagesPngFirstSplashScreen),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(12.r),
+                  topRight: Radius.circular(12.r),
+                  bottomLeft: Radius.circular(35.r),
+                ),
+              ),
+            ),
+          ),
+
+          // 2. الجزء الخاص بالنصوص (ياخد مساحة مرنة)
+          Expanded(
+            flex: 5, // يمثل 50% من طول الـ Card عشان يمنع الـ Overflow
+            child: Padding(
+              padding: EdgeInsets.all(8.r),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween, // يوزع العناصر بانتظام
+                children: [
+                  Text(
+                    'Great Pyramids of Giza',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle.primaryTextW400S16.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.sp,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.star,
+                        color: AppColors.starColore,
+                        size: 14.sp,
+                      ),
+                      CustomWidthSpacingWidget(width: 4),
+                      Text(
+                        '4.8',
+                        style: TextStyle(fontSize: 11.sp, color: Colors.grey),
+                      ),
+                      const Spacer(),
+                      Icon(
+                        Icons.location_on,
+                        color: AppColors.redAppColor,
+                        size: 14.sp,
+                      ),
+                      Text(
+                        '4.5 km',
+                        style: TextStyle(fontSize: 11.sp, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                  const Divider(height: 8, color: Color(0xFFF3F4F6)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Free paid', style: AppTextStyle.primaryW500S16),
+                      Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        color: AppColors.primaryColor,
+                        size: 14.sp,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

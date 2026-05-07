@@ -196,5 +196,9 @@ abstract class  LocaleKeys {
   static const aiTravelCompanionDescription = 'aiTravelCompanionDescription';
   static const aiGuideDescription = 'aiGuideDescription';
   static const aiGuidePlaceholder = 'aiGuidePlaceholder';
+  static const arSpots = 'arSpots';
+  static const map = 'map';
+  static const myArchives = 'myArchives';
+  static const myGuides = 'myGuides';
 
 }

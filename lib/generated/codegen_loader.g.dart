@@ -207,7 +207,11 @@ class CodegenLoader extends AssetLoader{
   "aiTravelCompanion": "اثائر AI للسفر",
   "aiTravelCompanionDescription": "ابحث عن السجلات واحصل على اجابات سريعة مع\nاثائر AI",
   "aiGuideDescription": "مرحبا! انا اثائر AI. اساعدني بالسؤال\nعن اي موقع او معلومة...",
-  "aiGuidePlaceholder": "اساعدني بالسؤال عن اي موقع او معلومة..."
+  "aiGuidePlaceholder": "اساعدني بالسؤال عن اي موقع او معلومة...",
+  "arSpots": "مواقع AR",
+  "map": "الخريطة",
+  "myArchives": "الارشيفات الخاصة بي",
+  "myGuides": "اثائري"
 };
 static const Map<String,dynamic> _en = {
   "exploreEgyptHistory": "Explore Egypt's Great History",
@@ -401,7 +405,11 @@ static const Map<String,dynamic> _en = {
   "aiTravelCompanion": "AI Travel Companion",
   "aiTravelCompanionDescription": "Explore history and get instant answers with\nour smart AI guide",
   "aiGuideDescription": "Hi! I’m your AI guide. Ask me\nanything about Egypt or upload\na photo of an ancient site",
-  "aiGuidePlaceholder": "Ask me about any site or info..."
+  "aiGuidePlaceholder": "Ask me about any site or info...",
+  "arSpots": "AR Spots",
+  "map": "Map",
+  "myArchives": "My Archives",
+  "myGuides": "My Guides"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": _ar, "en": _en};
 }
