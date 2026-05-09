@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/generated/assets.dart';
 
@@ -17,7 +19,7 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final iconList = <String>[
-      Assets.imagesSvgHomeIcon, // 🔹 أيقونة الصفحة الرئيسية
+      Assets.imagesSvgHomeIcon,
       Assets.imagesSvgGuidesIcon,
       Assets.imagesSvgRobot,
       Assets.imagesSvgExplorIcon,
@@ -26,126 +28,136 @@ class CustomBottomNavBar extends StatelessWidget {
 
     final labelList = <String>["Home", "Guides", "Ai Chat", "Explore", "More"];
 
-    final screenWidth = MediaQuery.of(context).size.width;
-    const horizontalPadding = 32.0;
-    const itemCount = 5;
-
-    final totalWidth = screenWidth - horizontalPadding;
-    final itemWidth = totalWidth / itemCount;
-    const circleRadius = 30.0;
-
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: SizedBox(
-          height: 85,
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              /// الـ Bottom Nav مع بوردر من تحت
-              Container(
-                height: 75,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryTextColor,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(16),
-                    topRight: Radius.circular(16),
-                    bottomLeft: Radius.circular(16), // 🔹 بوردر من تحت
-                    bottomRight: Radius.circular(16), // 🔹 بوردر من تحت
-                  ),
-                ),
-                child: AnimatedBottomNavigationBar.builder(
-                  itemCount: iconList.length,
-                  height: 75,
-                  backgroundColor: Colors
-                      .transparent, // 🔹 شفاف عشان الـ Container هو اللي فيه اللون
-                  activeIndex: currentIndex,
-                  gapLocation: GapLocation.none,
-                  splashColor: Colors.transparent,
-                  leftCornerRadius:
-                      0, // 🔹 صفر عشان الـ Container بيدير البوردر
-                  rightCornerRadius:
-                      0, // 🔹 صفر عشان الـ Container بيدير البوردر
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // حساب العرض المتاح بدقة لمنع الـ Overflow في التابلت
+          double availableWidth =
+              constraints.maxWidth - 32.w; // 16 padding من كل جانب
+          double itemWidth = availableWidth / iconList.length;
+          double circleRadius = 28.r;
 
-                  tabBuilder: (int index, bool isActive) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 20),
-                        SvgPicture.asset(
-                          iconList[index],
-                          width: 24,
-                          height: 24,
-                          color: isActive
-                              ? Colors.transparent
-                              : AppColors.whiteColor,
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+            child: SizedBox(
+              height: 85.h,
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  /// Background Container (The NavBar Body)
+                  Container(
+                    height: 70.h,
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryTextColor,
+                      borderRadius: BorderRadius.circular(16.r),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 10,
+                          offset: const Offset(0, -2),
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          labelList[index],
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: isActive
-                                ? Colors.transparent
-                                : AppColors.whiteColor,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
                       ],
-                    );
-                  },
-                  onTap: onTap,
-                ),
-              ),
+                    ),
+                    child: AnimatedBottomNavigationBar.builder(
+                      itemCount: iconList.length,
+                      height: 70.h,
+                      backgroundColor: Colors.transparent,
+                      activeIndex: currentIndex,
+                      gapLocation: GapLocation.none,
+                      splashColor: Colors.transparent,
+                      tabBuilder: (int index, bool isActive) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min, // منع الـ Overflow
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomHeightSpacingWidget(height: 15),
+                            Opacity(
+                              opacity: isActive
+                                  ? 0
+                                  : 1, // إخفاء الأيقونة غير النشطة خلف الدائرة
+                              child: SvgPicture.asset(
+                                iconList[index],
+                                width: 22.w,
+                                height: 22.h,
+                                colorFilter: const ColorFilter.mode(
+                                  AppColors.whiteColor,
+                                  BlendMode.srcIn,
+                                ),
+                              ),
+                            ),
+                            CustomHeightSpacingWidget(height: 4),
+                            Opacity(
+                              opacity: isActive ? 0 : 1,
+                              child: Text(
+                                labelList[index],
+                                style: TextStyle(
+                                  fontSize: 11.sp,
+                                  color: AppColors.whiteColor,
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                      onTap: onTap,
+                    ),
+                  ),
 
-              /// الزرار المتحرك
-              AnimatedPositioned(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeOutCubic,
-                bottom: 35,
-                left:
-                    (itemWidth * currentIndex) + (itemWidth / 2) - circleRadius,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      height: 60,
-                      width: 60,
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(.25),
-                            blurRadius: 15,
-                            offset: const Offset(0, 8),
+                  /// Floating Active Indicator (The Moving Circle)
+                  AnimatedPositioned(
+                    duration: const Duration(milliseconds: 350),
+                    curve: Curves.easeInOutCubic,
+                    bottom: 25.h, // تحريك الدائرة للأعلى قليلاً
+                    left:
+                        (itemWidth * currentIndex) +
+                        (itemWidth / 2) -
+                        circleRadius,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          height: 56.r,
+                          width: 56.r,
+                          decoration: BoxDecoration(
+                            color: Colors.blueAccent,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.blueAccent.withOpacity(0.4),
+                                blurRadius: 12,
+                                offset: const Offset(0, 6),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      child: Center(
-                        child: SvgPicture.asset(
-                          iconList[currentIndex], // path أول
-                          width: 26,
-                          height: 26,
-                          color: Colors.white,
+                          child: Center(
+                            child: SvgPicture.asset(
+                              iconList[currentIndex],
+                              width: 24.w,
+                              height: 24.h,
+                              colorFilter: const ColorFilter.mode(
+                                Colors.white,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        SizedBox(height: 4.h),
+                        Text(
+                          labelList[currentIndex],
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      labelList[currentIndex],
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

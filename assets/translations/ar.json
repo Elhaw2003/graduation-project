@@ -191,5 +191,9 @@
     "aiTravelCompanion":"اثائر AI للسفر",
     "aiTravelCompanionDescription":"ابحث عن السجلات واحصل على اجابات سريعة مع\nاثائر AI",
     "aiGuideDescription":"مرحبا! انا اثائر AI. اساعدني بالسؤال\nعن اي موقع او معلومة...",
-    "aiGuidePlaceholder":"اساعدني بالسؤال عن اي موقع او معلومة..."
+    "aiGuidePlaceholder":"اساعدني بالسؤال عن اي موقع او معلومة...",
+    "arSpots":"مواقع AR",
+    "map":"الخريطة",
+    "myArchives":"الارشيفات الخاصة بي",
+    "myGuides":"اثائري"
 }

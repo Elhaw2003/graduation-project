@@ -18,18 +18,19 @@ class _AppMainState extends State<AppMain> {
   final List<Widget> pages = const [
     HomeScreen(),
     ChooseGuidesScreen(),
-    Center(child: Text("Chat")),
+    Center(child: Text("Ai Chat Screen")),
     ExploreArSpotsScreen(),
-    Center(child: Text("Menu")),
+    Center(child: Text("More Menu Screen")),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBody: true,
+      // جعلناها false لتجنب الـ Overflow في التابلت وضمان استقرار المحتوى
+      extendBody: false,
       backgroundColor: AppColors.backgroundColor,
-      body: pages[_bottomNavIndex],
-
+      // IndexedStack يحافظ على الـ Scroll position لكل صفحة
+      body: IndexedStack(index: _bottomNavIndex, children: pages),
       bottomNavigationBar: CustomBottomNavBar(
         currentIndex: _bottomNavIndex,
         onTap: (index) => setState(() => _bottomNavIndex = index),
