@@ -4,7 +4,9 @@ import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 
 class CustomContainerAboutTheGuide extends StatelessWidget {
-  const CustomContainerAboutTheGuide({super.key});
+  const CustomContainerAboutTheGuide({super.key, required this.name, required this.aboutGuide});
+  final String name;
+  final String aboutGuide;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class CustomContainerAboutTheGuide extends StatelessWidget {
             minVerticalPadding: 0,
 
             title: Text('About the Guide'),
-            subtitle: Text('Get to know Abdallah and his expertise.'),
+            subtitle: Text('Get to know $name and his expertise.'),
             titleTextStyle: AppTextStyle.primaryTextW500S21,
             subtitleTextStyle: AppTextStyle.primaryTextW400S14.copyWith(
               fontSize: 12.sp,
@@ -38,7 +40,7 @@ class CustomContainerAboutTheGuide extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Text(
-              'I am a licensed Egyptologist with over ten years of experience. I don\'t just present archaeological sites \; I bring history to life with stories you won\'t find in travel',
+              aboutGuide,
               style: AppTextStyle.primaryTextW400S16,
             ),
           ),

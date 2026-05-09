@@ -1,5 +1,5 @@
 class EndPoint {
-  static String baseUrl = "http://smartguide.runasp.net/api/";
+  static String baseUrl = "https://smartguide.runasp.net/api/";
   static String register = "Auth/register";
   static String login = "Auth/login";
   static String refreshToken = "Auth/refreshtoken";

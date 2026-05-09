@@ -5,6 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 import 'package:smart_guide/core/shared_widgets/custom_text_field_widget.dart';
+class CustomContainerForSearchOnly extends StatelessWidget {
+  const CustomContainerForSearchOnly({
+    super.key,
+    required this.onChanged,
+  });
+
+  final Function(String value) onChanged;
 
 class CustomContainerForSearchOnly extends StatefulWidget {
   const CustomContainerForSearchOnly({super.key});
@@ -109,6 +116,9 @@ class _CustomContainerForSearchOnlyState
         // بنباصي الـ currentHint اللي بيتغير كل شوية
         hintText: _currentHint,
         fillColor: AppColors.backgroundColor.withOpacity(0.5),
+
+        /// 🔥 أهم سطر
+        onChanged: onChanged,
       ),
     );
   }
