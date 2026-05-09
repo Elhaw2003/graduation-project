@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
+import 'package:smart_guide/feature/human_guide/custom_container_info_guides.dart';
 import 'package:smart_guide/generated/assets.dart';
 
 class TourGuideProfileImage extends StatelessWidget {
-  const TourGuideProfileImage({super.key});
+  const TourGuideProfileImage({super.key, required this.imageUrl});
+  final String imageUrl ;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class TourGuideProfileImage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(3),
         child: ClipOval(
-          child: Image.asset(Assets.imagesPngPerson, fit: BoxFit.fill),
+          child: Image.network(imageUrl.toHttps(), fit: BoxFit.fill),
         ),
       ),
     );

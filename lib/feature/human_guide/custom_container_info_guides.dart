@@ -10,134 +10,143 @@ import 'package:smart_guide/generated/assets.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class CustomContainerInfoGuides extends StatelessWidget {
-  const CustomContainerInfoGuides({super.key});
+  const CustomContainerInfoGuides({
+    super.key,
+    required this.firstName,
+    required this.lastName,
+    required this.imageUrl,
+    required this.rating,
+    required this.price,
+    required this.userID,
+  });
+
+  final String firstName;
+  final String lastName;
+  final String imageUrl;
+  final double rating;
+  final int? price;
+  final String userID; // Replace with actual user ID
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 150,
+      height: 160,
       width: double.infinity,
       decoration: BoxDecoration(
         color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 5,
-            offset: Offset(0, 3), // changes position of shadow
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 6,
+            offset: const Offset(0, 3),
           ),
         ],
       ),
       child: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.only(top: 15, left: 16.0, right: 8),
+            padding: const EdgeInsets.only(top: 15, left: 16, right: 8),
             child: Column(
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(50),
-                  child: Image.asset(
-                    Assets.imagesPngPerson,
+                  child: Image.network(
+                    imageUrl.toHttps(),
                     height: 100,
                     width: 100,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                CustomHeightSpacingWidget(height: 4),
-                Text(
-                  'Trips +150',
-                  style: AppTextStyle.secondaryColorW400S13.copyWith(
-                    fontSize: 13,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Icon(Icons.image_not_supported, size: 100);
+                    },
                   ),
                 ),
               ],
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Mostafa Hekal - Egyptologist',
-                style: AppTextStyle.primaryTextW400S16.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              CustomHeightSpacingWidget(height: 8),
-              Row(
+
+          /// ================= DETAILS =================
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '4.9',
+                    "$firstName $lastName",
                     style: AppTextStyle.primaryTextW400S16.copyWith(
-                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  CustomWidthSpacingWidget(width: 4),
-                  Icon(Icons.star_sharp, color: AppColors.starColore, size: 17),
-                  Icon(Icons.star_sharp, color: AppColors.starColore, size: 17),
-                  Icon(Icons.star_sharp, color: AppColors.starColore, size: 17),
-                  Icon(Icons.star_sharp, color: AppColors.starColore, size: 17),
-                  Icon(Icons.star_sharp, color: AppColors.starColore, size: 17),
-                ],
-              ),
-              Text(
-                'Price : \$20/hr',
-                style: AppTextStyle.primaryTextW400S14.copyWith(fontSize: 13),
-              ),
-              CustomHeightSpacingWidget(height: 8),
-              CustomButtonWidget(
-                onPressed: () {
-                  GoRouter.of(
-                    context,
-                  ).pushNamed(AppRoutes.tourGuideProfileScreen);
-                },
-                borderRadiusButton: 5,
-                buttonHeight: 24,
-                buttonWidth: 130,
-                child: Text(
-                  LocaleKeys.viewProfile.tr(),
-                  style: AppTextStyle.primaryTextW400S14.copyWith(
-                    color: AppColors.whiteColor,
-                    fontSize: 13,
+
+                  const SizedBox(height: 6),
+
+                  /// ================= STARS =================
+                  Row(
+                    children: [
+                      Text(
+                        rating.toStringAsFixed(1),
+                        style: AppTextStyle.primaryTextW400S16,
+                      ),
+                      const SizedBox(width: 4),
+
+                      Row(
+                        children: List.generate(5, (index) {
+                          return Icon(
+                            index < rating.round()
+                                ? Icons.star
+                                : Icons.star_border,
+                            color: AppColors.starColore,
+                            size: 16,
+                          );
+                        }),
+                      ),
+                    ],
                   ),
-                ),
-              ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Image.asset(
-                      'icons/flags/png100px/eg.png',
-                      package: 'country_icons',
-                      height: 20,
-                      width: 20,
-                    ),
+
+                  const SizedBox(height: 6),
+
+                  Text(
+                    "Price: \$${price ?? 0}",
+                    style: AppTextStyle.primaryTextW400S14,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Image.asset(
-                      'icons/flags/png100px/de.png',
-                      package: 'country_icons',
-                      height: 20,
-                      width: 20,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Image.asset(
-                      'icons/flags/png100px/fr.png',
-                      package: 'country_icons',
-                      height: 20,
-                      width: 20,
+
+                  const SizedBox(height: 10),
+
+                  /// ================= BUTTON =================
+                  CustomButtonWidget(
+                    onPressed: () {
+                      GoRouter.of(context).pushNamed(
+                        AppRoutes.tourGuideProfileScreen,
+                        pathParameters: {'userId': userID},
+                      );
+                    },
+                    borderRadiusButton: 5,
+                    buttonHeight: 28,
+                    buttonWidth: 130,
+                    child: Text(
+                      LocaleKeys.viewProfile.tr(),
+                      style: AppTextStyle.primaryTextW400S14.copyWith(
+                        color: AppColors.whiteColor,
+                        fontSize: 13,
+                      ),
                     ),
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ],
       ),
     );
+  }
+}
+
+extension ImageUrlFix on String {
+  String toHttps() {
+    if (startsWith('http://')) {
+      return replaceFirst('http://', 'https://');
+    }
+    return this;
   }
 }

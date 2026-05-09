@@ -7,7 +7,9 @@ import 'package:smart_guide/feature/human_guide/custom_container_expertise_and_s
 import 'package:smart_guide/generated/assets.dart';
 
 class TourGuideProfileBody extends StatelessWidget {
-  const TourGuideProfileBody({super.key});
+  const TourGuideProfileBody({super.key, required this.name, required this.aboutGuide});
+  final String name;
+  final String aboutGuide;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +27,10 @@ class TourGuideProfileBody extends StatelessWidget {
           child: ActionRowInTourGuideScreen(),
         ),
         CustomHeightSpacingWidget(height: 100),
-        CustomContainerAboutTheGuide(),
-
+        CustomContainerAboutTheGuide(
+          name: name,
+          aboutGuide: aboutGuide,
+        ),
         CustomContainerExpertiseAndSkills(),
       ],
     );

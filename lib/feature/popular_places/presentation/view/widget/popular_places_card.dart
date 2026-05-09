@@ -7,25 +7,15 @@ import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class PopularPlaceCard extends StatelessWidget {
-  final String title,
-      image,
-      rating,
-      reviews,
-      location,
-      distance,
-      entryType,
-      category;
-
-  const PopularPlaceCard({
+  final String title, rating, category, imageUrl;
+ final void Function()? onPressed;
+   PopularPlaceCard({
     super.key,
     required this.title,
-    required this.image,
     required this.rating,
-    required this.reviews,
-    required this.location,
-    required this.distance,
-    required this.entryType,
+
     required this.category,
+    required this.imageUrl, this.onPressed,
   });
 
   @override
@@ -50,8 +40,8 @@ class PopularPlaceCard extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.horizontal(left: Radius.circular(12.r)),
             child: Image.network(
+              imageUrl, // استخدم imageUrl بدلاً من image
               // استخدم NetworkImage مؤقتاً للتجربة
-              "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368",
               width: 140.w,
               height: double.infinity,
               fit: BoxFit.cover,
@@ -79,24 +69,16 @@ class PopularPlaceCard extends StatelessWidget {
                       Icon(Icons.star, color: Colors.amber, size: 16.sp),
                       SizedBox(width: 4.w),
                       Text(
-                        "$rating • $reviews ${LocaleKeys.reviews.tr()}",
-                        style: TextStyle(fontSize: 12.sp),
+                        rating,
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          color: AppColors.secondaryTextColor,
+                        ),
                       ),
                     ],
                   ),
 
                   // الموقع والمسافة
-                  _buildIconText(
-                    Icons.location_on_outlined,
-                    "$location • $distance",
-                  ),
-
-                  // حالة الدخول
-                  _buildIconText(
-                    Icons.payments_outlined,
-                    entryType,
-                    color: AppColors.greenColor,
-                  ),
 
                   // التصنيف
                   _buildIconText(
@@ -108,7 +90,7 @@ class PopularPlaceCard extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed:onPressed ,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColor,
                         padding: EdgeInsets.symmetric(
