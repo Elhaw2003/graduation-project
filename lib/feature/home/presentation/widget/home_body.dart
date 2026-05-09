@@ -1,9 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:smart_guide/core/shared_widgets/custom_grid_view.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
+import 'package:smart_guide/feature/home/data/get_places/get_places_cubit.dart';
+import 'package:smart_guide/feature/home/data/get_places/get_places_state.dart';
+import 'package:smart_guide/feature/home/presentation/place_details_screen.dart';
 import 'package:smart_guide/feature/home/presentation/widget/custom_container_for_filters.dart';
 import 'package:smart_guide/feature/home/presentation/widget/custom_container_for_search.dart';
 import 'package:smart_guide/feature/home/presentation/widget/custom_home_app_bar.dart';
@@ -18,7 +23,7 @@ class HomeBody extends StatelessWidget {
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
-        // 1. الـ AppBar الثابت في سقف الشاشة
+        /// ================= APP BAR =================
         SliverPersistentHeader(
           pinned: true,
           delegate: FixedAppBarDelegate(
@@ -34,21 +39,25 @@ class HomeBody extends StatelessWidget {
           ),
         ),
 
-        // 2. الـ Search (يختفي مع السكرول)
+        /// ================= SEARCH =================
         SliverToBoxAdapter(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: Column(
               children: [
-                CustomHeightSpacingWidget(height: 25.h),
-                const CustomContainerForSearchOnly(),
+                CustomHeightSpacingWidget(height: 20.h),
+                CustomContainerForSearchOnly(
+                  onChanged: (value) {
+                    context.read<PlacesCubit>().searchPlaces(value);
+                  },
+                ),
                 CustomHeightSpacingWidget(height: 15.h),
               ],
             ),
           ),
         ),
 
-        // 3. الـ Filters الثابتة (تخبط تحت الـ AppBar)
+        /// ================= FILTERS =================
         SliverPersistentHeader(
           pinned: true,
           delegate: StickyFiltersHeaderDelegate(
@@ -61,31 +70,101 @@ class HomeBody extends StatelessWidget {
           ),
         ),
 
-        // 4. المحتوى (العناوين والـ Grid)
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          sliver: SliverList(
-            delegate: SliverChildListDelegate([
-              CustomHeightSpacingWidget(height: 10.h),
-              const CustomSectionTitleWithAction(),
-              // CustomHeightSpacingWidget(height: 12.h),
-              const CustomGridView(),
-              CustomHeightSpacingWidget(height: 100.h),
-            ]),
-          ),
+        /// ================= CONTENT =================
+        BlocBuilder<PlacesCubit, PlacesState>(
+          builder: (context, state) {
+            /// ---------- Loading ----------
+            if (state is PlacesLoading) {
+              return const SliverFillRemaining(
+                child: Center(child: CircularProgressIndicator()),
+              );
+            }
+
+            /// ---------- Error ----------
+            if (state is PlacesError) {
+              return SliverFillRemaining(
+                child: Center(
+                  child: Text(
+                    state.message,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              );
+            }
+
+            /// ---------- Success ----------
+            if (state is PlacesSuccess) {
+              return SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                sliver: SliverMainAxisGroup(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: Column(
+                        children: [
+                          CustomHeightSpacingWidget(height: 10.h),
+                          const CustomSectionTitleWithAction(),
+                          CustomHeightSpacingWidget(height: 12.h),
+                        ],
+                      ),
+                    ),
+
+                    SliverGrid(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        final place = state.places[index];
+
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    PlaceDetailsScreen(id: place.id),
+                              ),
+                            );
+                          },
+                          child: CustomGridView(
+                            title: place.name,
+                            imageUrl: NetworkImage(place.imageUrl),
+                            rating: place.rating,
+                          ),
+                        );
+                      }, childCount: state.places.length),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 15.w,
+                        mainAxisSpacing: 15.h,
+                        mainAxisExtent: 220.h,
+                      ),
+                    ),
+
+                    SliverToBoxAdapter(
+                      child: CustomHeightSpacingWidget(height: 100.h),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return const SliverToBoxAdapter(child: SizedBox.shrink());
+          },
         ),
       ],
     );
   }
 }
 
-// Delegate للـ AppBar الثابت
+/// ================= FIXED APP BAR =================
 class FixedAppBarDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
+
   FixedAppBarDelegate({required this.child});
 
   @override
-  double get maxExtent => 110.h; // مساحة كافية للـ Status bar والـ AppBar
+  double get maxExtent => 110.h;
+
   @override
   double get minExtent => 110.h;
 
@@ -95,22 +174,30 @@ class FixedAppBarDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    return child;
+    return Material(
+      color: AppColors.backgroundColor,
+      elevation: overlapsContent ? 2 : 0,
+      child: SafeArea(bottom: false, child: child),
+    );
   }
 
   @override
-  bool shouldRebuild(covariant FixedAppBarDelegate oldDelegate) => false;
+  bool shouldRebuild(covariant FixedAppBarDelegate oldDelegate) {
+    return false;
+  }
 }
 
-// Delegate للفلاتر الثابتة
+/// ================= STICKY FILTERS =================
 class StickyFiltersHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
+
   StickyFiltersHeaderDelegate({required this.child});
 
   @override
-  double get maxExtent => 54.h;
+  double get maxExtent => 60.h;
+
   @override
-  double get minExtent => 54.h;
+  double get minExtent => 60.h;
 
   @override
   Widget build(
@@ -119,12 +206,14 @@ class StickyFiltersHeaderDelegate extends SliverPersistentHeaderDelegate {
     bool overlapsContent,
   ) {
     return Material(
-      elevation: overlapsContent ? 2 : 0, // ظل خفيف لما تخبط تحت الـ AppBar
+      elevation: overlapsContent ? 3 : 0,
       color: AppColors.backgroundColor,
       child: child,
     );
   }
 
   @override
-  bool shouldRebuild(covariant StickyFiltersHeaderDelegate oldDelegate) => true;
+  bool shouldRebuild(covariant StickyFiltersHeaderDelegate oldDelegate) {
+    return false;
+  }
 }

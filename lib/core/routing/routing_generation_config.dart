@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_guide/app_main.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
@@ -15,6 +16,9 @@ import 'package:smart_guide/feature/auth/success_verification/presentation/view/
 import 'package:smart_guide/feature/book_now/presentation/view/book_now_screen.dart';
 import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_screen.dart';
 import 'package:smart_guide/feature/favorite/presentation/view/favorite_screen.dart';
+import 'package:smart_guide/feature/guides/data/tour_guide_profile/tour_guide_profile_cubit.dart';
+import 'package:smart_guide/feature/guides/data/tour_guides/tour_guides_cubit.dart';
+import 'package:smart_guide/feature/home/data/get_places/get_places_cubit.dart';
 import 'package:smart_guide/feature/human_guide/choose_humen_guides_screen.dart';
 import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_screen.dart';
 import 'package:smart_guide/feature/auth/verify_otp/presentation/view/verify_otp_screen.dart';
@@ -31,7 +35,7 @@ import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart'
 
 class RoutingGenerationConfig {
   static GoRouter routerGeneratorConfig = GoRouter(
-    initialLocation: AppRoutes.appMain,
+    initialLocation: AppRoutes.spalshScreen,
     errorBuilder: (context, state) => errorBuilder(),
     routes: [
       /// Splash, Onboarding & Select Role
@@ -144,10 +148,17 @@ class RoutingGenerationConfig {
             CustomSpringPage(child: const SettingsScreen()),
       ),
       GoRoute(
-        path: AppRoutes.tourGuideProfileScreen,
+        path: '/tourGuideProfileScreen/:userId',
         name: AppRoutes.tourGuideProfileScreen,
         pageBuilder: (context, state) {
-          return CustomSpringPage(child: TourGuideProfileScreen());
+          final userId = state.pathParameters['userId']!;
+
+          return CustomSpringPage(
+            child: BlocProvider(
+              create: (context) => TourGuideProfileCubit()..getProfile(userId),
+              child: const TourGuideProfileScreen(),
+            ),
+          );
         },
       ),
       GoRoute(
@@ -168,7 +179,12 @@ class RoutingGenerationConfig {
         path: AppRoutes.popularPlacesScreen,
         name: AppRoutes.popularPlacesScreen,
         pageBuilder: (context, state) {
-          return CustomSpringPage(child: PopularPlacesScreen());
+          return CustomSpringPage(
+            child: BlocProvider(
+              create: (context) => PlacesCubit()..getPlaces(),
+              child: PopularPlacesScreen(),
+            ),
+          );
         },
       ),
       GoRoute(
@@ -218,7 +234,10 @@ class RoutingGenerationConfig {
       GoRoute(
         path: AppRoutes.chooseHumenGuidesScreen,
         name: AppRoutes.chooseHumenGuidesScreen,
-        builder: (context, state) => const ChooseHumenGuidesScreen(),
+        builder: (context, state) => BlocProvider(
+          create: (context) => TourGuidesCubit()..getTourGuides(),
+          child: const ChooseHumenGuidesScreen(),
+        ),
       ),
     ],
   );

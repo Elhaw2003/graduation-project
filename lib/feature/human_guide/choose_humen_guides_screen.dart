@@ -16,7 +16,7 @@ class ChooseHumenGuidesScreen extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ChooseHumenGuidesScreenBody(),
+                child: ChooseHumenGuidesScreenBody(itemCount: 10),
               ),
 
               /// Back Button

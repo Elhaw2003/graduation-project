@@ -4,9 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 import 'package:smart_guide/core/shared_widgets/custom_text_field_widget.dart';
-
 class CustomContainerForSearchOnly extends StatelessWidget {
-  const CustomContainerForSearchOnly({super.key});
+  const CustomContainerForSearchOnly({
+    super.key,
+    required this.onChanged,
+  });
+
+  final Function(String value) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +37,9 @@ class CustomContainerForSearchOnly extends StatelessWidget {
         ),
         hintText: LocaleKeys.searchDestinationsAndGuides.tr(),
         fillColor: AppColors.backgroundColor.withOpacity(0.5),
+
+        /// 🔥 أهم سطر
+        onChanged: onChanged,
       ),
     );
   }
