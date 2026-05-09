@@ -14,6 +14,7 @@ import 'package:smart_guide/feature/auth/reset_password/presentation/view/reset_
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
 import 'package:smart_guide/feature/auth/success_verification/presentation/view/success_verification_screen.dart';
 import 'package:smart_guide/feature/book_now/presentation/view/book_now_screen.dart';
+import 'package:smart_guide/feature/details/presentation/view/details_screen.dart';
 import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_screen.dart';
 import 'package:smart_guide/feature/favorite/presentation/view/favorite_screen.dart';
 import 'package:smart_guide/feature/guides/data/tour_guide_profile/tour_guide_profile_cubit.dart';
@@ -238,6 +239,11 @@ class RoutingGenerationConfig {
           create: (context) => TourGuidesCubit()..getTourGuides(),
           child: const ChooseHumenGuidesScreen(),
         ),
+      ),
+      GoRoute(
+        path: AppRoutes.detailsScreen,
+        name: AppRoutes.detailsScreen,
+        builder: (context, state) => const TouristPlaceDetailsScreen(),
       ),
     ],
   );
