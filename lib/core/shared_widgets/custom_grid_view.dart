@@ -4,6 +4,8 @@ import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 
+// ملحوظة: الاسم CustomGridView ممكن يكون مضلل شوية لأن ده بيعبر عن "كارت واحد" مش Grid كاملة،
+// بس هنحافظ عليه زي ما هو عشان منكسرش استدعاءات زميلك في الـ HomeBody
 class CustomGridView extends StatelessWidget {
   const CustomGridView({
     super.key,
@@ -14,123 +16,11 @@ class CustomGridView extends StatelessWidget {
 
   final String title;
   final ImageProvider imageUrl;
-  final int rating;
+  final dynamic
+  rating; // خليناها dynamic عشان لو الـ API رجع int أو double متضربش
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.whiteColor,
-        borderRadius: BorderRadius.circular(8.r),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 120.h,
-            width: double.infinity,
-            decoration: BoxDecoration(
-              image: DecorationImage(image: imageUrl, fit: BoxFit.cover),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(8.r),
-                topRight: Radius.circular(8.r),
-                bottomLeft: Radius.circular(50.r),
-              ),
-            ),
-          ),
-
-          CustomHeightSpacingWidget(height: 8.h),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyle.primaryTextW400S16.copyWith(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14.sp,
-                  ),
-                ),
-
-                CustomHeightSpacingWidget(height: 4.h),
-
-                Row(
-                  children: [
-                    Icon(Icons.star, color: AppColors.starColore, size: 16.sp),
-
-                    CustomWidthSpacingWidget(width: 4.w),
-
-                    Text(
-                      rating.toString(),
-                      style: AppTextStyle.grey300W400S16.copyWith(
-                        fontSize: 12.sp,
-                      ),
-                    ),
-
-                    const Spacer(),
-
-                    Icon(
-                      Icons.location_on_outlined,
-                      color: AppColors.redAppColor,
-                      size: 16.sp,
-                    ),
-
-                    Text(
-                      '4.5 km',
-                      style: AppTextStyle.grey300W400S16.copyWith(
-                        fontSize: 12.sp,
-                      ),
-                    ),
-                  ],
-                ),
-
-                CustomHeightSpacingWidget(height: 12.h),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    // Text(
-                    //   'Free paid',
-                    //   style: AppTextStyle.grey300W400S16.copyWith(
-                    //     fontSize: 12.sp,
-                    //   ),
-                    // ),
-                    Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      color: AppColors.primaryColor,
-                      size: 20.sp,
-                    ),
-                  ],
-                ),
-              ],
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return GridView.builder(
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: 10,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 15.w,
-            mainAxisSpacing: 15.h,
-            // 👈 الـ Ratio هو السر: (العرض / الطول)
-            // لو قللت الرقم ده الـ Card هيطول، ولو زودته الـ Card هيقصر
-            childAspectRatio: 0.75,
-          ),
-          itemBuilder: (context, index) {
-            return _buildGridItem();
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildGridItem() {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.whiteColor,
@@ -147,12 +37,12 @@ class CustomGridView extends StatelessWidget {
         children: [
           // 1. الجزء الخاص بالصورة (ياخد مساحة مرنة)
           Expanded(
-            flex: 6, // يمثل 60% من طول الـ Card
+            flex: 6, // 60% من الارتفاع للصورة
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                image: const DecorationImage(
-                  image: AssetImage(Assets.imagesPngFirstSplashScreen),
+                image: DecorationImage(
+                  image: imageUrl, // 👈 الداتا اللي جاية من زميلك
                   fit: BoxFit.cover,
                 ),
                 borderRadius: BorderRadius.only(
@@ -166,7 +56,7 @@ class CustomGridView extends StatelessWidget {
 
           // 2. الجزء الخاص بالنصوص (ياخد مساحة مرنة)
           Expanded(
-            flex: 5, // يمثل 50% من طول الـ Card عشان يمنع الـ Overflow
+            flex: 5, // 50% من الارتفاع عشان يمنع الـ Overflow
             child: Padding(
               padding: EdgeInsets.all(8.r),
               child: Column(
@@ -175,7 +65,7 @@ class CustomGridView extends StatelessWidget {
                     MainAxisAlignment.spaceBetween, // يوزع العناصر بانتظام
                 children: [
                   Text(
-                    'Great Pyramids of Giza',
+                    title, // 👈 الداتا اللي جاية من زميلك
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyle.primaryTextW400S16.copyWith(
@@ -190,9 +80,9 @@ class CustomGridView extends StatelessWidget {
                         color: AppColors.starColore,
                         size: 14.sp,
                       ),
-                      CustomWidthSpacingWidget(width: 4),
+                      CustomWidthSpacingWidget(width: 4.w),
                       Text(
-                        '4.8',
+                        rating.toString(), // 👈 الداتا اللي جاية من زميلك
                         style: TextStyle(fontSize: 11.sp, color: Colors.grey),
                       ),
                       const Spacer(),
@@ -202,7 +92,7 @@ class CustomGridView extends StatelessWidget {
                         size: 14.sp,
                       ),
                       Text(
-                        '4.5 km',
+                        '4.5 km', // (ممكن تتعدل لديناميك لو ضفتوها في الـ API)
                         style: TextStyle(fontSize: 11.sp, color: Colors.grey),
                       ),
                     ],
@@ -211,7 +101,14 @@ class CustomGridView extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('Free paid', style: AppTextStyle.primaryW500S16),
+                      Text(
+                        'Free paid',
+                        style: TextStyle(
+                          fontSize: 11.sp,
+                          color: AppColors.primaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                       Icon(
                         Icons.arrow_forward_ios_rounded,
                         color: AppColors.primaryColor,

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/feature/human_guide/custom_container_info_guides.dart';
-import 'package:smart_guide/generated/assets.dart';
 
 class TourGuideProfileImage extends StatelessWidget {
   const TourGuideProfileImage({super.key, required this.imageUrl});

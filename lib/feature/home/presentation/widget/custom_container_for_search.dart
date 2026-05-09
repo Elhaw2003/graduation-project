@@ -5,16 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 import 'package:smart_guide/core/shared_widgets/custom_text_field_widget.dart';
-class CustomContainerForSearchOnly extends StatelessWidget {
-  const CustomContainerForSearchOnly({
-    super.key,
-    required this.onChanged,
-  });
-
-  final Function(String value) onChanged;
 
 class CustomContainerForSearchOnly extends StatefulWidget {
-  const CustomContainerForSearchOnly({super.key});
+  // 👈 ضفنا الـ onChanged بتاعة زميلك في الـ StatefulWidget
+  final Function(String value) onChanged;
+
+  const CustomContainerForSearchOnly({super.key, required this.onChanged});
 
   @override
   State<CustomContainerForSearchOnly> createState() =>
@@ -23,7 +19,6 @@ class CustomContainerForSearchOnly extends StatefulWidget {
 
 class _CustomContainerForSearchOnlyState
     extends State<CustomContainerForSearchOnly> {
-  // قائمة النصوص اللي هتتبدل (ممكن تضيف أكتر)
   late List<String> _hintTexts;
 
   String _currentHint = "";
@@ -35,7 +30,6 @@ class _CustomContainerForSearchOnlyState
   @override
   void initState() {
     super.initState();
-    // بنجهز النصوص من الـ Localization
     _hintTexts = [
       LocaleKeys.searchDestinationsAndGuides.tr(),
       "Search for Pyramids...",
@@ -46,7 +40,6 @@ class _CustomContainerForSearchOnlyState
   }
 
   void _startAnimation() {
-    // السرعة: لو بيمسح بيبقى أسرع
     Duration duration = _isDeleting
         ? const Duration(milliseconds: 50)
         : const Duration(milliseconds: 100);
@@ -57,23 +50,19 @@ class _CustomContainerForSearchOnlyState
           String fullText = _hintTexts[_textIndex];
 
           if (!_isDeleting) {
-            // حالة الكتابة: بنزود حرف
             _currentHint = fullText.substring(0, _charIndex + 1);
             _charIndex++;
 
             if (_charIndex == fullText.length) {
-              // خلص كتابة الجملة، يستنى شوية وبعدين يبدأ يمسح
               _isDeleting = true;
               Future.delayed(const Duration(seconds: 2), _startAnimation);
               return;
             }
           } else {
-            // حالة المسح: بننقص حرف
             _currentHint = fullText.substring(0, _charIndex - 1);
             _charIndex--;
 
             if (_charIndex == 0) {
-              // خلص مسح، يدخل على الكلمة اللي بعدها
               _isDeleting = false;
               _textIndex = (_textIndex + 1) % _hintTexts.length;
             }
@@ -86,7 +75,7 @@ class _CustomContainerForSearchOnlyState
 
   @override
   void dispose() {
-    _timer?.cancel(); // مهم جداً عشان الميموري
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -113,12 +102,12 @@ class _CustomContainerForSearchOnlyState
           color: AppColors.secondaryTextColor,
           fontSize: 14.sp,
         ),
-        // بنباصي الـ currentHint اللي بيتغير كل شوية
         hintText: _currentHint,
         fillColor: AppColors.backgroundColor.withOpacity(0.5),
 
-        /// 🔥 أهم سطر
-        onChanged: onChanged,
+        // 👈 نادينا على הـ onChanged باستخدام widget.onChanged
+        // لأننا جوه الـ State مش الـ StatefulWidget نفسه
+        onChanged: widget.onChanged,
       ),
     );
   }

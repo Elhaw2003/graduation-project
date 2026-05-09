@@ -20,148 +20,13 @@ class HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      physics: const BouncingScrollPhysics(),
-      slivers: [
-        /// ================= APP BAR =================
-        SliverPersistentHeader(
-          pinned: true,
-          delegate: FixedAppBarDelegate(
-            child: Container(
-              color: AppColors.backgroundColor,
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              alignment: Alignment.bottomCenter,
-              child: CustomHomeAppBar(
-                title: LocaleKeys.hello.tr(),
-                subTitle: LocaleKeys.cairoEgypt.tr(),
-              ),
-            ),
-          ),
-        ),
-
-        /// ================= SEARCH =================
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            child: Column(
-              children: [
-                CustomHeightSpacingWidget(height: 20.h),
-                CustomContainerForSearchOnly(
-                  onChanged: (value) {
-                    context.read<PlacesCubit>().searchPlaces(value);
-                  },
-                ),
-                CustomHeightSpacingWidget(height: 15.h),
-              ],
-            ),
-          ),
-        ),
-
-        /// ================= FILTERS =================
-        SliverPersistentHeader(
-          pinned: true,
-          delegate: StickyFiltersHeaderDelegate(
-            child: Container(
-              color: AppColors.backgroundColor,
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-              alignment: Alignment.center,
-              child: const CustomContainerForFilters(),
-            ),
-          ),
-        ),
-
-        /// ================= CONTENT =================
-        BlocBuilder<PlacesCubit, PlacesState>(
-          builder: (context, state) {
-            /// ---------- Loading ----------
-            if (state is PlacesLoading) {
-              return const SliverFillRemaining(
-                child: Center(child: CircularProgressIndicator()),
-              );
-            }
-
-            /// ---------- Error ----------
-            if (state is PlacesError) {
-              return SliverFillRemaining(
-                child: Center(
-                  child: Text(
-                    state.message,
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              );
-            }
-
-            /// ---------- Success ----------
-            if (state is PlacesSuccess) {
-              return SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                sliver: SliverMainAxisGroup(
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: Column(
-                        children: [
-                          CustomHeightSpacingWidget(height: 10.h),
-                          const CustomSectionTitleWithAction(),
-                          CustomHeightSpacingWidget(height: 12.h),
-                        ],
-                      ),
-                    ),
-
-                    SliverGrid(
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        final place = state.places[index];
-
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    PlaceDetailsScreen(id: place.id),
-                              ),
-                            );
-                          },
-                          child: CustomGridView(
-                            title: place.name,
-                            imageUrl: NetworkImage(place.imageUrl),
-                            rating: place.rating,
-                          ),
-                        );
-                      }, childCount: state.places.length),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 15.w,
-                        mainAxisSpacing: 15.h,
-                        mainAxisExtent: 220.h,
-                      ),
-                    ),
-
-                    SliverToBoxAdapter(
-                      child: CustomHeightSpacingWidget(height: 100.h),
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            return const SliverToBoxAdapter(child: SizedBox.shrink());
-          },
-        ),
-      ],
-    );
-  }
-}
-
-/// ================= FIXED APP BAR =================
+    // استخدمنا الـ SafeArea بتاعتك لضمان عدم ضرب الـ AppBar
     return SafeArea(
-      top: false, // لضمان وصول الـ AppBar للسقف تماماً
+      top: false,
       child: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
+          /// ================= APP BAR (Fixed) =================
           SliverPersistentHeader(
             pinned: true,
             delegate: FixedAppBarDelegate(
@@ -176,18 +41,27 @@ class HomeBody extends StatelessWidget {
               ),
             ),
           ),
+
+          /// ================= SEARCH =================
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Column(
                 children: [
                   CustomHeightSpacingWidget(height: 20.h),
-                  const CustomContainerForSearchOnly(),
+                  // دمجنا الـ onChanged بتاع صاحبك
+                  CustomContainerForSearchOnly(
+                    onChanged: (value) {
+                      context.read<PlacesCubit>().searchPlaces(value);
+                    },
+                  ),
                   CustomHeightSpacingWidget(height: 15.h),
                 ],
               ),
             ),
           ),
+
+          /// ================= STICKY FILTERS =================
           SliverPersistentHeader(
             pinned: true,
             delegate: StickyFiltersHeaderDelegate(
@@ -199,15 +73,92 @@ class HomeBody extends StatelessWidget {
               ),
             ),
           ),
-          SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                const CustomSectionTitleWithAction(),
-                const CustomGridView(), // الـ Grid سيقوم بمعالجة الأبعاد داخلياً
-                CustomHeightSpacingWidget(height: 80.h),
-              ]),
-            ),
+
+          /// ================= CONTENT (BLoC) =================
+          // دمجنا الـ BlocBuilder بتاعه اللي بيعرض الداتا من الـ API
+          BlocBuilder<PlacesCubit, PlacesState>(
+            builder: (context, state) {
+              /// ---------- Loading ----------
+              if (state is PlacesLoading) {
+                return const SliverFillRemaining(
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              /// ---------- Error ----------
+              if (state is PlacesError) {
+                return SliverFillRemaining(
+                  child: Center(
+                    child: Text(
+                      state.message,
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                );
+              }
+
+              /// ---------- Success ----------
+              if (state is PlacesSuccess) {
+                return SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  sliver: SliverMainAxisGroup(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: Column(
+                          children: [
+                            CustomHeightSpacingWidget(height: 10.h),
+                            const CustomSectionTitleWithAction(),
+                            CustomHeightSpacingWidget(height: 12.h),
+                          ],
+                        ),
+                      ),
+
+                      // الـ Grid بتاعه اللي بيعرض الداتا الحقيقية
+                      SliverGrid(
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          final place = state.places[index];
+
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      PlaceDetailsScreen(id: place.id),
+                                ),
+                              );
+                            },
+                            child: CustomGridView(
+                              title: place.name,
+                              imageUrl: NetworkImage(place.imageUrl),
+                              rating: place.rating,
+                            ),
+                          );
+                        }, childCount: state.places.length),
+                        // إعدادات الـ Grid اللي كانت عندك
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 15.w,
+                          mainAxisSpacing: 15.h,
+                          mainAxisExtent: 220
+                              .h, // أو استخدم childAspectRatio لو حابب تظبطها للتابلت زي ما عملنا قبل كده
+                        ),
+                      ),
+
+                      SliverToBoxAdapter(
+                        child: CustomHeightSpacingWidget(height: 100.h),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              // Default state
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
+            },
           ),
         ],
       ),
@@ -215,16 +166,19 @@ class HomeBody extends StatelessWidget {
   }
 }
 
+/// ================= DELEGATES =================
+// احتفظت بالـ Delegates بتاعتك لأنها مظبوطة كـ UI أكتر
 class FixedAppBarDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
 
   FixedAppBarDelegate({required this.child});
-  @override
-  double get maxExtent => 110.h;
 
+  @override
   double get maxExtent => 100.h;
+
   @override
   double get minExtent => 100.h;
+
   @override
   Widget build(
     BuildContext context,
@@ -238,27 +192,23 @@ class FixedAppBarDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
-  ) => child;
   @override
   bool shouldRebuild(covariant FixedAppBarDelegate oldDelegate) {
     return false;
   }
 }
 
-/// ================= STICKY FILTERS =================
 class StickyFiltersHeaderDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
 
   StickyFiltersHeaderDelegate({required this.child});
-  @override
-  double get maxExtent => 60.h;
 
   @override
-  double get minExtent => 60.h;
-
   double get maxExtent => 56.h;
+
   @override
   double get minExtent => 56.h;
+
   @override
   Widget build(
     BuildContext context,
@@ -266,7 +216,6 @@ class StickyFiltersHeaderDelegate extends SliverPersistentHeaderDelegate {
     bool overlapsContent,
   ) {
     return Material(
-      elevation: overlapsContent ? 3 : 0,
       elevation: overlapsContent ? 1 : 0,
       color: AppColors.backgroundColor,
       child: child,

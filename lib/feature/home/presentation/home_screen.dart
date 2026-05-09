@@ -10,19 +10,13 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: AppColors.backgroundColor,
-      child: Material(
-        color: Colors.transparent,
-        child: BlocProvider(
-          create: (context) => PlacesCubit()..getPlaces(),
-          child: HomeBody(),
-        ),
+    return BlocProvider(
+      create: (context) => PlacesCubit()..getPlaces(),
+      child: Scaffold(
+        drawer: const CustomDrawer(),
+        backgroundColor: AppColors.backgroundColor,
+        body: const HomeBody(),
       ),
-    return Scaffold(
-      drawer: const CustomDrawer(),
-      backgroundColor: AppColors.backgroundColor,
-      body: const HomeBody(),
     );
   }
 }

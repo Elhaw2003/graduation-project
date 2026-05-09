@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
-import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
-import 'package:smart_guide/feature/human_guide/custom_pointe_widgets.dart';
 import 'package:smart_guide/generated/assets.dart';
 
 class TourGuideInfoDetiles extends StatelessWidget {
-  const TourGuideInfoDetiles({super.key, 
+  const TourGuideInfoDetiles({
+    super.key,
     required this.firstName,
     required this.lastName,
     required this.rating,
     required this.price,
-    required this.number
+    required this.number,
   });
   final String firstName;
   final String lastName;
