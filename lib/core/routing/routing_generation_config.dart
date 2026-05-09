@@ -13,6 +13,7 @@ import 'package:smart_guide/feature/auth/reset_password/presentation/view/reset_
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
 import 'package:smart_guide/feature/auth/success_verification/presentation/view/success_verification_screen.dart';
 import 'package:smart_guide/feature/book_now/presentation/view/book_now_screen.dart';
+import 'package:smart_guide/feature/details/presentation/view/details_screen.dart';
 import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_screen.dart';
 import 'package:smart_guide/feature/favorite/presentation/view/favorite_screen.dart';
 import 'package:smart_guide/feature/human_guide/choose_humen_guides_screen.dart';
@@ -31,7 +32,7 @@ import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart'
 
 class RoutingGenerationConfig {
   static GoRouter routerGeneratorConfig = GoRouter(
-    initialLocation: AppRoutes.appMain,
+    initialLocation: AppRoutes.detailsScreen,
     errorBuilder: (context, state) => errorBuilder(),
     routes: [
       /// Splash, Onboarding & Select Role
@@ -219,6 +220,11 @@ class RoutingGenerationConfig {
         path: AppRoutes.chooseHumenGuidesScreen,
         name: AppRoutes.chooseHumenGuidesScreen,
         builder: (context, state) => const ChooseHumenGuidesScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.detailsScreen,
+        name: AppRoutes.detailsScreen,
+        builder: (context, state) => const TouristPlaceDetailsScreen(),
       ),
     ],
   );
