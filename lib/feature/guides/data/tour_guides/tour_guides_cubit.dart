@@ -1,3 +1,5 @@
+// tour_guides_cubit.dart
+
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:http/http.dart' as http;
@@ -7,7 +9,9 @@ import 'package:smart_guide/feature/guides/model/tour_guides_model.dart';
 import 'tour_guides_state.dart';
 
 class TourGuidesCubit extends Cubit<TourGuidesState> {
-  TourGuidesCubit() : super(TourGuidesInitial());
+  TourGuidesCubit() : super(TourGuidesInitial()) {
+    getTourGuides();
+  }
 
   Future<void> getTourGuides() async {
     final token = await SecureStorageHelper.instance.getAccessToken();

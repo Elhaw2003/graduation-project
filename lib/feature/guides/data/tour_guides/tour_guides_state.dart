@@ -1,3 +1,5 @@
+// tour_guides_state.dart
+
 import 'package:smart_guide/feature/guides/model/tour_guides_model.dart';
 
 abstract class TourGuidesState {}

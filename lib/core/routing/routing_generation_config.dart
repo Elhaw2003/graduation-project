@@ -20,7 +20,7 @@ import 'package:smart_guide/feature/favorite/presentation/view/favorite_screen.d
 import 'package:smart_guide/feature/guides/data/tour_guide_profile/tour_guide_profile_cubit.dart';
 import 'package:smart_guide/feature/guides/data/tour_guides/tour_guides_cubit.dart';
 import 'package:smart_guide/feature/home/data/get_places/get_places_cubit.dart';
-import 'package:smart_guide/feature/human_guide/choose_humen_guides_screen.dart';
+import 'package:smart_guide/feature/human_guide/all_guides/presentation/view/all_guides_screen.dart';
 import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_screen.dart';
 import 'package:smart_guide/feature/auth/verify_otp/presentation/view/verify_otp_screen.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
@@ -237,7 +237,7 @@ class RoutingGenerationConfig {
         name: AppRoutes.chooseHumenGuidesScreen,
         builder: (context, state) => BlocProvider(
           create: (context) => TourGuidesCubit()..getTourGuides(),
-          child: const ChooseHumenGuidesScreen(),
+          child: const AllGuidesScreen(),
         ),
       ),
       GoRoute(
