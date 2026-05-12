@@ -9,20 +9,15 @@ import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/guides/data/tour_guide_profile/tour_guide_profile_cubit.dart';
 import 'package:smart_guide/feature/guides/data/tour_guide_profile/tour_guide_profile_state.dart';
 
-import 'package:smart_guide/feature/human_guide/tour_guide_info.dart';
 import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_body.dart';
-import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_image.dart';
 
 class TourGuideProfileScreen extends StatelessWidget {
   const TourGuideProfileScreen({super.key});
-
-  // final String userID;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
-
       body: BlocBuilder<TourGuideProfileCubit, TourGuideProfileState>(
         builder: (context, state) {
           if (state is TourGuideProfileLoading) {
@@ -36,48 +31,21 @@ class TourGuideProfileScreen extends StatelessWidget {
           if (state is TourGuideProfileSuccess) {
             final data = state.profile;
 
-            return Stack(
-              children: [
-                SingleChildScrollView(
-                  child: Stack(
-                    children: [
-                      TourGuideProfileBody(
-                        name: data.firstName ?? '',
-                        aboutGuide: data.bio ?? '',
-                      ),
-
-                      Positioned(
-                        top: 215,
-                        left: 15,
-                        child: TourGuideProfileImage(
-                          imageUrl: data.profilePicture ?? '',
-                        ),
-                      ),
-
-                      Positioned(
-                        top: 275,
-                        left: 145,
-                        child: TourGuideInfoDetiles(
-                          firstName: data.firstName ?? '',
-                          lastName: data.lastName ?? '',
-                          rating: (data.rating ?? 0).toString(),
-                          price: "${data.pricePerDay ?? 0}/hr",
-                          number: "",
-                        ),
-                      ),
-
-                      const SizedBox(height: 200),
-                    ],
-                  ),
-                ),
-              ],
+            return SingleChildScrollView(
+              child: TourGuideProfileBody(
+                name: data.firstName ,
+                lastName: data.lastName ,
+                aboutGuide: data.bio ?? '',
+                imageUrl: data.profilePicture ?? '',
+                rating: (data.rating).toString(),
+                price: "${data.pricePerDay ?? 0}/hr",
+              ),
             );
           }
 
           return const SizedBox();
         },
       ),
-
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(15),
         child: CustomButtonWidget(

@@ -1,3 +1,5 @@
+// GridViewForLanguages.dart
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
@@ -16,16 +18,16 @@ class GridViewForLanguages extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        mainAxisExtent: 40.h, // 👈 ارتفاع ثابت
-        crossAxisSpacing: 8.w,
-        mainAxisSpacing: 8.h,
+        mainAxisExtent: 40.h,
+        crossAxisSpacing: 10.w,
+        mainAxisSpacing: 10.h,
       ),
       itemCount: languages.length,
       itemBuilder: (context, index) {
         return Container(
           decoration: BoxDecoration(
             color: AppColors.primaryColor,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(8.r),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -33,22 +35,29 @@ class GridViewForLanguages extends StatelessWidget {
               Image.asset(
                 'icons/flags/png100px/${flags[index]}.png',
                 package: 'country_icons',
-                height: 18,
-                width: 18,
+                height: 16.h,
+                width: 16.w,
               ),
-              CustomWidthSpacingWidget(width: 4),
-              Text(
-                languages[index],
-                style: AppTextStyle.whiteW500S17.copyWith(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.normal,
+              CustomWidthSpacingWidget(width: 4.w),
+              Flexible(
+                child: Text(
+                  languages[index],
+                  style: AppTextStyle.whiteW500S17.copyWith(
+                    fontSize: 11.sp,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
-              Icon(Icons.star_sharp, color: AppColors.starColore, size: 17),
-              Icon(Icons.star_sharp, color: AppColors.starColore, size: 17),
-              Icon(Icons.star_sharp, color: AppColors.starColore, size: 17),
-              Icon(Icons.star_sharp, color: AppColors.starColore, size: 17),
-              Icon(Icons.star_sharp, color: AppColors.starColore, size: 17),
+              CustomWidthSpacingWidget(width: 2.w),
+              ...List.generate(
+                4,
+                (i) => Icon(
+                  Icons.star_sharp,
+                  color: AppColors.starColore,
+                  size: 12.sp,
+                ),
+              ),
             ],
           ),
         );
