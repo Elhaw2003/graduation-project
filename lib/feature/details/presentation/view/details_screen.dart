@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:readmore/readmore.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
-import 'package:smart_guide/feature/details/presentation/view/widget/details_tour_about_title.dart';
 import 'package:smart_guide/feature/details/presentation/view/widget/details_tour_appbar_widget.dart';
 import 'package:smart_guide/feature/details/presentation/view/widget/details_tour_must_see_widget.dart';
+import 'package:smart_guide/feature/home/presentation/cubit/get_place_details/get_place_details_cubit.dart';
+import 'package:smart_guide/feature/home/presentation/cubit/get_place_details/get_place_details_state.dart';
 
 class TouristPlaceDetailsScreen extends StatefulWidget {
   const TouristPlaceDetailsScreen({super.key});
@@ -93,69 +96,109 @@ class _TouristPlaceDetailsScreenState extends State<TouristPlaceDetailsScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+    return BlocBuilder<GetPlaceDetailsCubit, GetPlaceDetailsState>(
+      builder: (context, state) {
+        if (state is GetPlaceDetailsLoading) {
+          return Scaffold(
+            backgroundColor: AppColors.backgroundColor,
+            body: Center(
+              child: CircularProgressIndicator(color: AppColors.primaryColor),
+            ),
+          );
+        }
 
-      body: Stack(
-        children: [
-          CustomScrollView(
-            controller: _scrollController,
-            physics: const BouncingScrollPhysics(),
-            slivers: [
-              DetailsTourAppbarWidget(
-                headerAnimationController: _headerAnimationController,
-                scrollOffset: _scrollOffset,
+        if (state is GetPlaceDetailsFailure) {
+          return Scaffold(
+            backgroundColor: AppColors.backgroundColor,
+            body: Center(
+              child: Text(
+                state.errorMessage,
+                style: TextStyle(color: Colors.red, fontSize: 16.sp),
               ),
+            ),
+          );
+        }
 
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 30.h),
+        if (state is GetPlaceDetailsSuccess) {
+          final place = state.place;
 
-                      /// About Section
-                      DetailsTourAboutTitle(
-                        sectionFadeAnimations: _sectionFadeAnimations,
-                        sectionSlideAnimations: _sectionSlideAnimations,
+          return Scaffold(
+            backgroundColor: AppColors.backgroundColor,
+            body: Stack(
+              children: [
+                CustomScrollView(
+                  controller: _scrollController,
+                  physics: const BouncingScrollPhysics(),
+                  slivers: [
+                    DetailsTourAppbarWidget(
+                      headerAnimationController: _headerAnimationController,
+                      scrollOffset: _scrollOffset,
+                      imageUrl: place.imageUrl,
+                      title: place.name,
+                      rating: place.rating,
+                    ),
+
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: 30.h),
+
+                            /// ABOUT
+                            _buildAboutSection(place),
+
+                            SizedBox(height: 24.h),
+
+                            /// HIGHLIGHTS
+                            DetailsTourMustSeeWidget(
+                              place: place,
+                              sectionFadeAnimations: _sectionFadeAnimations,
+                              sectionSlideAnimations: _sectionSlideAnimations,
+                            ),
+
+                            SizedBox(height: 24.h),
+
+                            /// PLACE INFO
+                            _buildPlaceInfoSection(place),
+
+                            SizedBox(height: 24.h),
+
+                            /// LOCATION
+                            _buildLocationSection(place),
+
+                            SizedBox(height: 24.h),
+
+                            /// QUICK FACTS
+                            _buildQuickFactsSection(place),
+
+                            SizedBox(height: 120.h),
+                          ],
+                        ),
                       ),
-
-                      SizedBox(height: 30.h),
-
-                      /// Must See
-                      DetailsTourMustSeeWidget(
-                        sectionFadeAnimations: _sectionFadeAnimations,
-                        sectionSlideAnimations: _sectionSlideAnimations,
-                      ),
-
-                      SizedBox(height: 30.h),
-
-                      /// Plan Your Visit
-                      _buildPlanYourVisitSection(),
-
-                      SizedBox(height: 20.h),
-
-                      /// Reviews
-                      _buildExperienceSection(),
-
-                      SizedBox(height: 120.h),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
 
-          /// Bottom Button
-          Positioned(
-            bottom: 20.h,
-            left: 50.w,
-            right: 50.w,
-            child: _buildBookButton(),
+                Positioned(
+                  bottom: 20.h,
+                  left: 40.w,
+                  right: 40.w,
+                  child: _buildBookButton(),
+                ),
+              ],
+            ),
+          );
+        }
+
+        return Scaffold(
+          backgroundColor: AppColors.backgroundColor,
+          body: Center(
+            child: Text("No data available", style: TextStyle(fontSize: 16.sp)),
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -173,12 +216,12 @@ class _TouristPlaceDetailsScreenState extends State<TouristPlaceDetailsScreen>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.calendar_today_rounded, color: Colors.white, size: 18.sp),
+          Icon(Icons.travel_explore_rounded, color: Colors.white, size: 18.sp),
 
           SizedBox(width: 10.w),
 
           Text(
-            "Book a Tour",
+            "Explore Now",
             style: AppTextStyle.whiteW500S17.copyWith(
               fontWeight: FontWeight.bold,
               fontSize: 16.sp,
@@ -189,7 +232,126 @@ class _TouristPlaceDetailsScreenState extends State<TouristPlaceDetailsScreen>
     );
   }
 
-  Widget _buildPlanYourVisitSection() {
+  Widget _buildAboutSection(dynamic place) {
+    return SlideTransition(
+      position: _sectionSlideAnimations[0],
+      child: FadeTransition(
+        opacity: _sectionFadeAnimations[0],
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(16.r),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(18.r),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "About ${place.name}",
+                style: AppTextStyle.thirdTextW900S20.copyWith(fontSize: 17.sp),
+              ),
+
+              SizedBox(height: 14.h),
+
+              ReadMoreText(
+                place.description.isNotEmpty
+                    ? place.description
+                    : "No description available",
+                trimLines: 4,
+                colorClickableText: AppColors.primaryColor,
+                trimMode: TrimMode.Line,
+                trimCollapsedText: ' Read More',
+                trimExpandedText: ' Read Less',
+                style: TextStyle(
+                  fontSize: 13.sp,
+                  color: Colors.grey.shade700,
+                  height: 1.7,
+                ),
+                moreStyle: TextStyle(
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primaryColor,
+                ),
+                lessStyle: TextStyle(
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.primaryColor,
+                ),
+              ),
+
+              if (place.historicalBackground.isNotEmpty) ...[
+                SizedBox(height: 22.h),
+
+                Text(
+                  "Historical Background",
+                  style: AppTextStyle.thirdTextW900S20.copyWith(
+                    fontSize: 15.sp,
+                  ),
+                ),
+
+                SizedBox(height: 10.h),
+
+                ReadMoreText(
+                  place.historicalBackground,
+                  trimLines: 3,
+                  trimMode: TrimMode.Line,
+                  trimCollapsedText: ' Read More',
+                  trimExpandedText: ' Read Less',
+                  colorClickableText: AppColors.primaryColor,
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    color: Colors.grey.shade700,
+                    height: 1.7,
+                  ),
+                ),
+              ],
+
+              if (place.period.isNotEmpty) ...[
+                SizedBox(height: 18.h),
+
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 12.w,
+                    vertical: 10.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryColor.withOpacity(.08),
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.history_edu_rounded,
+                        size: 18.sp,
+                        color: AppColors.primaryColor,
+                      ),
+
+                      SizedBox(width: 10.w),
+
+                      Expanded(
+                        child: Text(
+                          place.period,
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: AppColors.primaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPlaceInfoSection(dynamic place) {
     return SlideTransition(
       position: _sectionSlideAnimations[2],
       child: FadeTransition(
@@ -199,165 +361,39 @@ class _TouristPlaceDetailsScreenState extends State<TouristPlaceDetailsScreen>
           padding: EdgeInsets.all(16.r),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(16.r),
+            borderRadius: BorderRadius.circular(18.r),
             border: Border.all(color: Colors.grey.shade300),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Plan Your Visit",
+                "Place Information",
                 style: AppTextStyle.thirdTextW900S20.copyWith(fontSize: 17.sp),
               ),
 
-              SizedBox(height: 16.h),
+              SizedBox(height: 18.h),
 
-              /// Open now
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.access_time_outlined,
-                    size: 18.sp,
-                    color: AppColors.primaryColor,
-                  ),
+              _buildInfoRow(Icons.category_outlined, "Type", place.type),
 
-                  SizedBox(width: 10.w),
+              SizedBox(height: 14.h),
 
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 7.w,
-                            height: 7.h,
-                            decoration: const BoxDecoration(
-                              color: Colors.green,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
+              _buildInfoRow(Icons.location_city_outlined, "City", place.city),
 
-                          SizedBox(width: 6.w),
+              SizedBox(height: 14.h),
 
-                          Text(
-                            "Open now",
-                            style: TextStyle(
-                              fontSize: 13.sp,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      SizedBox(height: 4.h),
-
-                      Text(
-                        "07:00 Am - 06:00 Pm",
-                        style: TextStyle(
-                          color: AppColors.primaryColor,
-                          fontSize: 13.sp,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+              _buildInfoRow(
+                Icons.map_outlined,
+                "Governorate",
+                place.governorate,
               ),
 
               SizedBox(height: 14.h),
 
-              /// Tickets
-              Row(
-                children: [
-                  Icon(
-                    Icons.confirmation_number_outlined,
-                    size: 18.sp,
-                    color: AppColors.primaryColor,
-                  ),
-
-                  SizedBox(width: 10.w),
-
-                  Text(
-                    "Tickets from 300 EGP",
-                    style: TextStyle(fontSize: 13.sp),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 18.h),
-
-              /// Services
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(
-                    Icons.chair_alt_outlined,
-                    size: 18.sp,
-                    color: AppColors.primaryColor,
-                  ),
-
-                  SizedBox(width: 10.w),
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Services",
-                        style: TextStyle(
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-
-                      SizedBox(height: 4.h),
-
-                      Text(
-                        "Electric Train\nRestrooms\nVisitor Center\nParking\nAccessibility",
-                        style: TextStyle(
-                          height: 1.5,
-                          fontSize: 13.sp,
-                          color: AppColors.primaryColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 18.h),
-
-              /// Essentials
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Icon(Icons.auto_awesome, size: 18.sp, color: Colors.green),
-
-                  SizedBox(width: 10.w),
-
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Essentials",
-                        style: TextStyle(
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-
-                      SizedBox(height: 4.h),
-
-                      Text(
-                        "Shoes\nSunscreen\nWater",
-                        style: TextStyle(
-                          height: 1.5,
-                          fontSize: 13.sp,
-                          color: AppColors.primaryColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+              _buildInfoRow(
+                Icons.person_outline_rounded,
+                "Created By",
+                place.createdBy.isNotEmpty ? place.createdBy : "Unknown",
               ),
             ],
           ),
@@ -366,7 +402,7 @@ class _TouristPlaceDetailsScreenState extends State<TouristPlaceDetailsScreen>
     );
   }
 
-  Widget _buildExperienceSection() {
+  Widget _buildLocationSection(dynamic place) {
     return SlideTransition(
       position: _sectionSlideAnimations[3],
       child: FadeTransition(
@@ -376,52 +412,53 @@ class _TouristPlaceDetailsScreenState extends State<TouristPlaceDetailsScreen>
           padding: EdgeInsets.all(16.r),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(16.r),
+            borderRadius: BorderRadius.circular(18.r),
             border: Border.all(color: Colors.grey.shade300),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Experience & Reviews",
+                "Location",
                 style: AppTextStyle.thirdTextW900S20.copyWith(fontSize: 17.sp),
               ),
 
               SizedBox(height: 16.h),
 
-              _buildReviewItem(
-                name: "John D.",
-                review: "Breathtaking! Must-see for vibrant colors",
-                image: "https://i.pravatar.cc/150?img=11",
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(14.r),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryColor.withOpacity(.06),
+                  borderRadius: BorderRadius.circular(14.r),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.location_on_rounded,
+                      color: AppColors.primaryColor,
+                      size: 22.sp,
+                    ),
+
+                    SizedBox(width: 10.w),
+
+                    Expanded(
+                      child: Text(
+                        place.location.isNotEmpty
+                            ? place.location
+                            : "Unknown location",
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: Colors.grey.shade700,
+                          height: 1.6,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-
-              SizedBox(height: 16.h),
-
-              _buildReviewItem(
-                name: "Sarah M",
-                review: "Stunning. Tutankhamun's tomb is worth it",
-                image: "https://i.pravatar.cc/150?img=32",
-              ),
-
-              SizedBox(height: 16.h),
-
-              _buildReviewItem(
-                name: "Ahmed K",
-                review: "Incredible! Arrive early, bring water",
-                image: "https://i.pravatar.cc/150?img=15",
-              ),
-
-              SizedBox(height: 18.h),
-
-              // ClipRRect(
-              //   borderRadius: BorderRadius.circular(12.r),
-              //   child: Image.asset(
-              //     "assets/images/map.png",
-              //     height: 110.h,
-              //     width: double.infinity,
-              //     fit: BoxFit.cover,
-              //   ),
-              // ),
             ],
           ),
         ),
@@ -429,53 +466,124 @@ class _TouristPlaceDetailsScreenState extends State<TouristPlaceDetailsScreen>
     );
   }
 
-  Widget _buildReviewItem({
-    required String image,
-    required String name,
-    required String review,
+  Widget _buildQuickFactsSection(dynamic place) {
+    return SlideTransition(
+      position: _sectionSlideAnimations[4],
+      child: FadeTransition(
+        opacity: _sectionFadeAnimations[4],
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(16.r),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(18.r),
+            border: Border.all(color: Colors.grey.shade300),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Quick Facts",
+                style: AppTextStyle.thirdTextW900S20.copyWith(fontSize: 17.sp),
+              ),
+
+              SizedBox(height: 18.h),
+
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildFactCard(
+                      icon: Icons.star_rounded,
+                      title: "Rating",
+                      value: place.rating.toString(),
+                    ),
+                  ),
+
+                  SizedBox(width: 12.w),
+
+                  Expanded(
+                    child: _buildFactCard(
+                      icon: Icons.calendar_month_rounded,
+                      title: "Start Year",
+                      value: place.startYear?.toString() ?? "Unknown",
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFactCard({
+    required IconData icon,
+    required String title,
+    required String value,
   }) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.h),
+      decoration: BoxDecoration(
+        color: AppColors.primaryColor.withOpacity(.06),
+        borderRadius: BorderRadius.circular(14.r),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: AppColors.primaryColor, size: 22.sp),
+
+          SizedBox(height: 10.h),
+
+          Text(
+            title,
+            style: TextStyle(fontSize: 12.sp, color: Colors.grey.shade600),
+          ),
+
+          SizedBox(height: 6.h),
+
+          Text(
+            value,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(IconData icon, String label, String value) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CircleAvatar(radius: 18.r, backgroundImage: NetworkImage(image)),
+        Container(
+          padding: EdgeInsets.all(8.r),
+          decoration: BoxDecoration(
+            color: AppColors.primaryColor.withOpacity(.08),
+            borderRadius: BorderRadius.circular(10.r),
+          ),
+          child: Icon(icon, size: 18.sp, color: AppColors.primaryColor),
+        ),
 
-        SizedBox(width: 10.w),
+        SizedBox(width: 12.w),
 
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 13.sp,
-                    ),
-                  ),
-
-                  SizedBox(width: 4.w),
-
-                  const Text("🇺🇸"),
-                ],
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: Colors.grey.shade600,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
 
-              SizedBox(height: 2.h),
+              SizedBox(height: 5.h),
 
-              Text(review, style: TextStyle(fontSize: 12.sp)),
-
-              SizedBox(height: 4.h),
-
-              Row(
-                children: List.generate(
-                  5,
-                  (index) => Icon(
-                    Icons.star,
-                    color: AppColors.starColore,
-                    size: 14.sp,
-                  ),
-                ),
+              Text(
+                value.isNotEmpty ? value : "Unknown",
+                style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
               ),
             ],
           ),

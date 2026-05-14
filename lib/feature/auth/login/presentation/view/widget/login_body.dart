@@ -42,13 +42,24 @@ class _LoginBodyState extends State<LoginBody> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LoginCubit, LoginStates>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is LoginSuccessStates) {
           CacheHelper.setBool(CacheHelper.kIsRememberMe, isRememberMeChecked);
-          CustomAnimatedShowSnackBar.successSnackBar(
-            context: context,
-            message: LocaleKeys.loginSuccessfully.tr(),
+          await CacheHelper.setString(
+            CacheHelper.kUserName,
+            state.loginModel.userName ?? '',
           );
+          // await CacheHelper.setString(
+          //   CacheHelper.kUserImage,
+          //   state.loginModel. ?? '',
+          // );
+          if (context.mounted) {
+            CustomAnimatedShowSnackBar.successSnackBar(
+              context: context,
+              message: LocaleKeys.loginSuccessfully.tr(),
+            );
+          }
+
           Future.delayed(const Duration(seconds: 1), () {
             if (context.mounted) {
               context.goNamed(AppRoutes.appMain);
