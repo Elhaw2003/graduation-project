@@ -8,16 +8,23 @@ class ConnectivityGuard {
   }
 
   /// Returns true only when there's real internet reachability (not just WiFi).
-  static Future<bool> hasInternet({Duration timeout = const Duration(seconds: 2)}) async {
-    final connectivity = await Connectivity().checkConnectivity();
-    if (connectivity == ConnectivityResult.none) return false;
+  static Future<bool> hasInternet({
+    Duration timeout = const Duration(seconds: 2),
+  }) async {
+    final results = await Connectivity().checkConnectivity();
+
+    if (results.contains(ConnectivityResult.none)) {
+      return false;
+    }
 
     try {
-      final result = await InternetAddress.lookup('example.com').timeout(timeout);
+      final result = await InternetAddress.lookup(
+        'google.com',
+      ).timeout(timeout);
+
       return result.isNotEmpty && result.first.rawAddress.isNotEmpty;
     } catch (_) {
       return false;
     }
   }
 }
-

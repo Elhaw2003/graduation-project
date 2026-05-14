@@ -11,10 +11,16 @@ class DetailsTourAppbarWidget extends StatelessWidget {
     super.key,
     required this.headerAnimationController,
     required this.scrollOffset,
+    this.imageUrl,
+    this.title,
+    this.rating,
   });
 
   final AnimationController headerAnimationController;
   final double scrollOffset;
+  final String? imageUrl;
+  final String? title;
+  final num? rating;
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +34,17 @@ class DetailsTourAppbarWidget extends StatelessWidget {
       backgroundColor: AppColors.primaryColor,
       surfaceTintColor: Colors.transparent,
 
-      // أزرار الرجوع والبوكمارك
       leading: DetailsTopButtonWidget(
         icon: Icons.arrow_back,
         onTap: () => Navigator.pop(context),
       ),
+
       actions: [
         DetailsTopButtonWidget(
           icon: Icons.bookmark_border_rounded,
           onTap: () {},
         ),
+
         SizedBox(width: 8.w),
       ],
 
@@ -46,9 +53,22 @@ class DetailsTourAppbarWidget extends StatelessWidget {
         background: Stack(
           fit: StackFit.expand,
           children: [
-            Image.asset(Assets.imagesPngFirstSplashScreen, fit: BoxFit.cover),
+            imageUrl != null && imageUrl!.isNotEmpty
+                ? Image.network(
+                    imageUrl!,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        Assets.imagesPngFirstSplashScreen,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  )
+                : Image.asset(
+                    Assets.imagesPngFirstSplashScreen,
+                    fit: BoxFit.cover,
+                  ),
 
-            // 2. تدرج لوني عشان الكلام يظهر (Gradient Overlay)
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -63,7 +83,6 @@ class DetailsTourAppbarWidget extends StatelessWidget {
               ),
             ),
 
-            // 3. البيانات (الاسم، الموقع، التقييم)
             Positioned(
               bottom: 20.h,
               left: 20.w,
@@ -73,43 +92,26 @@ class DetailsTourAppbarWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Great Pyramids of Giza",
+                    title ?? "Unknown Place",
+                    textAlign: TextAlign.center,
                     style: AppTextStyle.whitePoppinsW500S24.copyWith(
                       fontSize: 20.sp,
                     ),
                   ),
-                  Text(
-                    "The final resting place\nof Egypt's greatest Pharaohs",
-                    style: AppTextStyle.whitePoppinsW400S16,
-                    textAlign: TextAlign.center,
-                  ),
+
                   CustomHeightSpacingWidget(height: 10),
+
                   Row(
                     mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.location_on_outlined,
-                        color: Colors.white70,
-                        size: 16.sp,
-                      ),
-                      SizedBox(width: 4.w),
-                      Text(
-                        "West Bank, Luxor",
-                        style: AppTextStyle.whitePoppinsW400S16.copyWith(
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.star, color: Colors.yellow, size: 16.sp),
+
                       SizedBox(width: 4.w),
+
                       Text(
-                        "4.9",
+                        rating != null && rating! > 0
+                            ? rating!.toStringAsFixed(1)
+                            : "New",
                         style: AppTextStyle.whitePoppinsW400S16.copyWith(
                           fontSize: 14.sp,
                         ),

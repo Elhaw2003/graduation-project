@@ -11,6 +11,8 @@ import 'package:smart_guide/core/services/cache/cache_helper.dart';
 import 'package:smart_guide/core/services/manage_cubit_servise.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/feature/auth/register/presentation/cubit/pick_image/pick_image_cubit.dart';
+import 'package:smart_guide/feature/home/data/repo/get_places/get_places_repo_imple.dart';
+import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_cubit.dart';
 import 'package:smart_guide/feature/settings/data/repo/log_out/log_out_repo_imple.dart';
 import 'package:smart_guide/feature/settings/presentation/cubit/log_out/cubit/log_out_cubit.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
@@ -42,11 +44,18 @@ void main() async {
       fallbackLocale: Locale('en'),
       child: MultiBlocProvider(
         providers: [
+          BlocProvider(create: (context) => PickImageCubit()),
           BlocProvider(
-            create: (context) => PickImageCubit(),
+            create: (context) => LogOutCubit(
+              logOutRepo: LogOutRepoImple(apiConsumer: DioConsumer(dio: Dio())),
+            ),
           ),
           BlocProvider(
-            create: (context) => LogOutCubit(logOutRepo: LogOutRepoImple(apiConsumer: DioConsumer(dio: Dio()))),
+            create: (context) => PlacesCubit(
+              getPlacesRepo: GetPlacesRepoImple(
+                apiConsumer: DioConsumer(dio: Dio()),
+              ),
+            )..getPlaces(),
           ),
         ],
         child: SmartGuide(),

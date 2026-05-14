@@ -1,7 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_guide/app_main.dart';
+import 'package:smart_guide/core/network/dio_consumer.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spring_animation.dart';
 import 'package:smart_guide/feature/aiGuide/presentation/view/ai_guide_screen.dart';
@@ -19,11 +21,14 @@ import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_sc
 import 'package:smart_guide/feature/favorite/presentation/view/favorite_screen.dart';
 import 'package:smart_guide/feature/guides/data/tour_guide_profile/tour_guide_profile_cubit.dart';
 import 'package:smart_guide/feature/guides/data/tour_guides/tour_guides_cubit.dart';
-import 'package:smart_guide/feature/home/data/get_places/get_places_cubit.dart';
+import 'package:smart_guide/feature/home/presentation/home_screen.dart';
 import 'package:smart_guide/feature/human_guide/all_guides/presentation/view/all_guides_screen.dart';
 import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_screen.dart';
 import 'package:smart_guide/feature/auth/verify_otp/presentation/view/verify_otp_screen.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
+import 'package:smart_guide/feature/home/presentation/cubit/get_place_details/get_place_details_cubit.dart';
+import 'package:smart_guide/feature/home/data/repo/get_place_detail/get_place_datil_repo_imple.dart';
+import 'package:smart_guide/core/network/api_consumer.dart';
 import 'package:smart_guide/feature/my_trips/data/enum/trip_type_enum.dart';
 import 'package:smart_guide/feature/my_trips/presentation/view/screens/my_trips_screen.dart';
 import 'package:smart_guide/feature/my_trips/presentation/view/screens/trip_type_screen.dart';
@@ -180,12 +185,7 @@ class RoutingGenerationConfig {
         path: AppRoutes.popularPlacesScreen,
         name: AppRoutes.popularPlacesScreen,
         pageBuilder: (context, state) {
-          return CustomSpringPage(
-            child: BlocProvider(
-              create: (context) => PlacesCubit()..getPlaces(),
-              child: PopularPlacesScreen(),
-            ),
-          );
+          return CustomSpringPage(child: PopularPlacesScreen());
         },
       ),
       GoRoute(
@@ -241,9 +241,21 @@ class RoutingGenerationConfig {
         ),
       ),
       GoRoute(
-        path: AppRoutes.detailsScreen,
+        path: '${AppRoutes.detailsScreen}/:placeId',
         name: AppRoutes.detailsScreen,
-        builder: (context, state) => const TouristPlaceDetailsScreen(),
+        pageBuilder: (context, state) {
+          final placeId = state.pathParameters['placeId']!;
+          return CustomSpringPage(
+            child: BlocProvider(
+              create: (context) => GetPlaceDetailsCubit(
+                getPlaceDetailsRepo: GetPlaceDetailRepoImple(
+                  apiConsumer: DioConsumer(dio: Dio()),
+                ),
+              )..getPlaceDetails(placeId: placeId),
+              child: const TouristPlaceDetailsScreen(),
+            ),
+          );
+        },
       ),
     ],
   );

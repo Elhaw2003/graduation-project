@@ -47,6 +47,8 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.fieldEnabled,
     this.inputFormatters,
     this.onChanged,
+    this.focusNode,
+    this.autoFocus,
   });
 
   final TextEditingController? controller;
@@ -89,7 +91,8 @@ class CustomTextFieldWidget extends StatelessWidget {
   final bool? fieldEnabled;
   final List<TextInputFormatter>? inputFormatters;
   final void Function(String)? onChanged;
-
+  final FocusNode? focusNode;
+  final bool? autoFocus;
   @override
   Widget build(BuildContext context) {
     final isRTL = Directionality.of(context) == TextDirection.rtl;
@@ -106,6 +109,8 @@ class CustomTextFieldWidget extends StatelessWidget {
           ),
         ),
         child: TextFormField(
+          autofocus: autoFocus ?? false,
+          focusNode: focusNode,
           enabled: fieldEnabled ?? true,
           scrollPadding: EdgeInsets.only(
             bottom: 150.h,

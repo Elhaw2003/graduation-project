@@ -10,6 +10,8 @@ class EndPoint {
   static String newPassword = "Auth/reset-password";
   static String googleSignIn = "Auth/google-login";
   static String logout = "Auth/logout";
+  static String getPlaces = "places";
+  static String getPlaceDetails ({required String id})=> "places/$id";
 }
 
 class ApiKey {

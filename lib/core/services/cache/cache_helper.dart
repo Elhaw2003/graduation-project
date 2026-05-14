@@ -12,6 +12,7 @@ class CacheHelper {
   static const String kRefreshToken = 'refreshToken';
   static const String kUserId = 'userId';
   static const String kUserName = 'userName';
+  static const String kUserImage = 'userImage';
   static const String kUserEmail = 'userEmail';
   static const String kIsLoggedIn = 'isLoggedIn';
   static const String kLanguage = 'language';

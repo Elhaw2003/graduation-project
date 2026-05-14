@@ -26,7 +26,7 @@ class PopularPlacesScreen extends StatelessWidget {
           // 3. نصوص العنوان والوصف
           const PopularPlacesTitle(),
           // 4. قائمة الأماكن (The Place Cards)
-          const PopularPlacesCards(),
+          // const PopularPlacesCards(),
         ],
       ),
     );
