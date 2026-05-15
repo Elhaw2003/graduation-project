@@ -12,9 +12,12 @@ class CustomHomeAppBar extends StatelessWidget {
     super.key,
     required this.title,
     required this.subTitle,
+    this.imageUrl,
   });
+
   final String title;
   final String subTitle;
+  final String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -39,18 +42,20 @@ class CustomHomeAppBar extends StatelessWidget {
                     ),
                     child: CircleAvatar(
                       radius: 22.r,
-                      backgroundImage: AssetImage(Assets.imagesPngSphinx),
+                      backgroundImage: _getProfileImage(),
                     ),
                   ),
                 ),
+
                 SizedBox(width: 10.w),
+
                 Flexible(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        title,
+                        title.isEmpty ? 'User' : title,
                         style: AppTextStyle.thirdTextW900S20.copyWith(
                           fontSize: 16.sp,
                         ),
@@ -64,6 +69,7 @@ class CustomHomeAppBar extends StatelessWidget {
                           color: Colors.grey,
                         ),
                         maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
@@ -72,6 +78,7 @@ class CustomHomeAppBar extends StatelessWidget {
             ),
           ),
         ),
+
         _buildActionIcon(
           icon: SvgPicture.asset(
             Assets.imagesSvgSettings,
@@ -80,7 +87,9 @@ class CustomHomeAppBar extends StatelessWidget {
           ),
           onTap: () => context.pushNamed(AppRoutes.settingsScreen),
         ),
+
         SizedBox(width: 8.w),
+
         _buildActionIcon(
           icon: Icon(
             Icons.menu_open_rounded,
@@ -93,7 +102,19 @@ class CustomHomeAppBar extends StatelessWidget {
     );
   }
 
-  Widget _buildActionIcon({required Widget icon, required VoidCallback onTap}) {
+  ImageProvider _getProfileImage() {
+    if (imageUrl != null &&
+        imageUrl!.isNotEmpty &&
+        imageUrl!.startsWith('http')) {
+      return NetworkImage(imageUrl!);
+    }
+    return AssetImage(Assets.imagesPngSphinx);
+  }
+
+  Widget _buildActionIcon({
+    required Widget icon,
+    required VoidCallback onTap,
+  }) {
     return TweenAnimationBuilder(
       tween: Tween<double>(begin: 0, end: 1),
       duration: const Duration(milliseconds: 500),

@@ -13,7 +13,7 @@ import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class LoginRemoteImpleRepo implements LoginRepo {
   final ApiConsumer apiConsumer;
-  final SecureStorageHelper storage; // تمرير الـ Storage هنا
+  final SecureStorageHelper storage;
 
   LoginRemoteImpleRepo({required this.apiConsumer, required this.storage});
 
@@ -32,21 +32,20 @@ class LoginRemoteImpleRepo implements LoginRepo {
         data: {"email": email, "password": password},
       );
 
-      final loginRespone = LoginModel.fromJson(response);
+      final loginModel = LoginModel.fromJson(response);
 
-      // حفظ التوكنات بأمان
+      // 🔥 tokens
       await storage.saveTokens(
-        accessToken: loginRespone.token ?? '',
-        refreshToken: loginRespone.refreshToken ?? '',
-        expiresAt: loginRespone.expiresOn ?? '',
-        refreshTokenExpiresOn: loginRespone.refreshTokenExpiresOn ?? '',
+        accessToken: loginModel.token ?? '',
+        refreshToken: loginModel.refreshToken ?? '',
+        expiresAt: loginModel.expiresOn ?? '',
+        refreshTokenExpiresOn: loginModel.refreshTokenExpiresOn ?? '',
       );
 
-      return Right(loginRespone);
+      return Right(loginModel);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.errModel.errorMessage));
-    } catch (e) {
-      // طباعة الخطأ لمعرفته أثناء التطوير
+    } catch (_) {
       return Left(ServerFailure(LocaleKeys.error.tr()));
     }
   }
@@ -65,20 +64,10 @@ class LoginRemoteImpleRepo implements LoginRepo {
         data: {ApiKey.idToken: idToken},
       );
 
-      final loginRespone = LoginGoogleResponseModel.fromJson(response);
-
-      // تفعيل الحفظ للـ Google Login برضه مهم عشان الـ Session تفضل شغالة
-      /*
-      await storage.saveTokens(
-         accessToken: loginRespone.accessToken,
-         ...
-      );
-      */
-
-      return Right(loginRespone);
+      return Right(LoginGoogleResponseModel.fromJson(response));
     } on ServerException catch (e) {
       return Left(ServerFailure(e.errModel.errorMessage));
-    } catch (e) {
+    } catch (_) {
       return Left(ServerFailure(LocaleKeys.error.tr()));
     }
   }

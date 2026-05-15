@@ -136,6 +136,7 @@ class _TouristPlaceDetailsScreenState extends State<TouristPlaceDetailsScreen>
                       imageUrl: place.imageUrl,
                       title: place.name,
                       rating: place.rating,
+                      placeId: place.id,
                     ),
 
                     SliverToBoxAdapter(

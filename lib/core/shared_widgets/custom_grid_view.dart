@@ -15,6 +15,9 @@ class CustomGridView extends StatelessWidget {
     required this.imageUrl,
     required this.rating,
     required this.placeId,
+    required this.isSaved,
+    required this.onSaveTap,
+    required this.isTourist,
     this.city,
     this.type,
     this.period,
@@ -24,6 +27,12 @@ class CustomGridView extends StatelessWidget {
   final String imageUrl;
   final dynamic rating;
   final String placeId;
+
+  final bool isSaved;
+  final VoidCallback onSaveTap;
+
+  final bool isTourist;
+
   final String? city;
   final String? type;
   final String? period;
@@ -47,13 +56,10 @@ class CustomGridView extends StatelessWidget {
             ),
           ],
         ),
-
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// =====================================================
-            /// IMAGE
-            /// =====================================================
+            /// ================= IMAGE =================
             Expanded(
               flex: 6,
               child: Stack(
@@ -61,29 +67,16 @@ class CustomGridView extends StatelessWidget {
                   Positioned.fill(
                     child: CachedNetworkImage(
                       imageUrl: imageUrl,
-
                       fit: BoxFit.cover,
-
-                      fadeInDuration: const Duration(milliseconds: 250),
-
-                      placeholder: (context, url) {
-                        return Shimmer.fromColors(
-                          baseColor: Colors.grey.shade300,
-                          highlightColor: Colors.grey.shade100,
-                          child: Container(color: Colors.white),
-                        );
-                      },
-
-                      errorWidget: (context, url, error) {
-                        return Container(
-                          color: Colors.grey.shade200,
-                          child: Icon(
-                            Icons.image_not_supported,
-                            color: Colors.grey.shade500,
-                            size: 35.sp,
-                          ),
-                        );
-                      },
+                      placeholder: (context, url) => Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(color: Colors.white),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.grey.shade200,
+                        child: Icon(Icons.image_not_supported, size: 35.sp),
+                      ),
                     ),
                   ),
 
@@ -104,7 +97,7 @@ class CustomGridView extends StatelessWidget {
                   ),
 
                   /// TYPE
-                  if (type != null && type!.trim().isNotEmpty)
+                  if (type != null && type!.isNotEmpty)
                     Positioned(
                       top: 12.h,
                       left: 12.w,
@@ -154,20 +147,41 @@ class CustomGridView extends StatelessWidget {
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 11.sp,
-                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],
                       ),
                     ),
                   ),
+
+                  /// ================= BOOKMARK =================
+                  if (isTourist)
+                    Positioned(
+                      top: 12.h,
+                      right: 12.w,
+                      child: GestureDetector(
+                        onTap: onSaveTap,
+                        child: Container(
+                          padding: EdgeInsets.all(8.r),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.4),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            isSaved ? Icons.bookmark : Icons.bookmark_border,
+                            color: isSaved
+                                ? AppColors.primaryColor
+                                : Colors.white,
+                            size: 20.sp,
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             ),
 
-            /// =====================================================
-            /// CONTENT
-            /// =====================================================
+            /// ================= CONTENT =================
             Expanded(
               flex: 4,
               child: Padding(
@@ -175,31 +189,27 @@ class CustomGridView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    /// TITLE
                     Text(
                       title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppTextStyle.primaryTextW400S16.copyWith(
-                        fontWeight: FontWeight.w600,
                         fontSize: 12.sp,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
 
                     CustomHeightSpacingWidget(height: 8.h),
 
-                    /// LOCATION
-                    if (city != null && city!.trim().isNotEmpty)
+                    if (city != null && city!.isNotEmpty)
                       Row(
                         children: [
                           Icon(
-                            Icons.location_on_rounded,
+                            Icons.location_on,
                             size: 15.sp,
-                            color: AppColors.redAppColor,
+                            color: Colors.red,
                           ),
-
                           CustomWidthSpacingWidget(width: 4.w),
-
                           Expanded(
                             child: Text(
                               city!,
@@ -207,8 +217,7 @@ class CustomGridView extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 fontSize: 11.sp,
-                                color: Colors.grey.shade600,
-                                fontWeight: FontWeight.w500,
+                                color: Colors.grey,
                               ),
                             ),
                           ),
@@ -217,8 +226,7 @@ class CustomGridView extends StatelessWidget {
 
                     const Spacer(),
 
-                    /// PERIOD
-                    if (period != null && period!.trim().isNotEmpty)
+                    if (period != null && period!.isNotEmpty)
                       Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: 10.w,
@@ -230,8 +238,6 @@ class CustomGridView extends StatelessWidget {
                         ),
                         child: Text(
                           period!,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 10.sp,
                             color: AppColors.primaryColor,

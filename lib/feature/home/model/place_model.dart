@@ -31,7 +31,9 @@ class PlaceModel {
 
   factory PlaceModel.fromJson(Map<String, dynamic> json) {
     return PlaceModel(
-      id: json['id'] ?? 0,
+      /// 🔥 أهم سطر هنا
+      id: json['id'] ?? json['placeId'] ?? 0,
+
       name: json['name'] ?? 'Unknown Place',
       type: json['type'] ?? 'Unknown Type',
       description: json['description'] ?? '',

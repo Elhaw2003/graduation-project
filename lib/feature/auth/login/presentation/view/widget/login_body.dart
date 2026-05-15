@@ -7,6 +7,7 @@ import 'package:smart_guide/core/methods/custom_animated_snack_bar.dart';
 import 'package:smart_guide/core/methods/input_validator.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/services/cache/cache_helper.dart';
+import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
 import 'package:smart_guide/core/shared_widgets/custom_rich_text_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_text_field_widget.dart';
@@ -44,26 +45,20 @@ class _LoginBodyState extends State<LoginBody> {
     return BlocConsumer<LoginCubit, LoginStates>(
       listener: (context, state) async {
         if (state is LoginSuccessStates) {
+          final userType = state.loginModel.userType;
+
+          // خزّنه
+          await SecureStorageHelper.instance.saveUserType(userType.name);
+
           CacheHelper.setBool(CacheHelper.kIsRememberMe, isRememberMeChecked);
-          await CacheHelper.setString(
-            CacheHelper.kUserName,
-            state.loginModel.userName ?? '',
+
+          CustomAnimatedShowSnackBar.successSnackBar(
+            context: context,
+            message: LocaleKeys.loginSuccessfully.tr(),
           );
-          // await CacheHelper.setString(
-          //   CacheHelper.kUserImage,
-          //   state.loginModel. ?? '',
-          // );
-          if (context.mounted) {
-            CustomAnimatedShowSnackBar.successSnackBar(
-              context: context,
-              message: LocaleKeys.loginSuccessfully.tr(),
-            );
-          }
 
           Future.delayed(const Duration(seconds: 1), () {
-            if (context.mounted) {
-              context.goNamed(AppRoutes.appMain);
-            }
+            context.goNamed(AppRoutes.appMain);
           });
         } else if (state is LoginFailureStates) {
           CustomAnimatedShowSnackBar.failureOrWarningSnackBar(
