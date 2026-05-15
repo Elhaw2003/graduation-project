@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_guide/feature/home/model/place_model.dart';
 
 class SavedPlaceedCardModel {
   const SavedPlaceedCardModel({
@@ -6,11 +7,24 @@ class SavedPlaceedCardModel {
     required this.title,
     required this.subtitle,
     required this.imageUrl,
+    required this.placeId,
   });
+
   final String tag;
   final String title;
   final String subtitle;
   final String imageUrl;
+  final int placeId;
+
+  factory SavedPlaceedCardModel.fromPlaceModel(PlaceModel place) {
+    return SavedPlaceedCardModel(
+      tag: place.type,
+      title: place.name,
+      subtitle: place.description,
+      imageUrl: place.imageUrl,
+      placeId: place.id,
+    );
+  }
 }
 
 class SavedCategoryModel {

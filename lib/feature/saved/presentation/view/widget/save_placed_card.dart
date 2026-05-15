@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/saved/data/model/save_placed_card_model.dart';
+import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_cubit.dart';
 
 class SavePlacedCard extends StatelessWidget {
   const SavePlacedCard({super.key, required this.savedPlaceedCardModel});
   final SavedPlaceedCardModel savedPlaceedCardModel;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,9 +32,17 @@ class SavePlacedCard extends StatelessWidget {
           children: [
             // صورة المكان
             Positioned.fill(
-              child: Image.asset(
-                savedPlaceedCardModel.imageUrl,
+              child: CachedNetworkImage(
+                imageUrl: savedPlaceedCardModel.imageUrl,
                 fit: BoxFit.cover,
+                errorWidget: (context, url, error) => Container(
+                  color: Colors.grey.shade200,
+                  child: Icon(Icons.image_not_supported, size: 35.sp),
+                ),
+                placeholder: (context, url) => Container(
+                  color: Colors.grey.shade200,
+                  child: Icon(Icons.image, size: 35.sp),
+                ),
               ),
             ),
 
@@ -50,7 +62,7 @@ class SavePlacedCard extends StatelessWidget {
               ),
             ),
 
-            // التاج وزر الحفظ
+            // التاج وزر الحذف
             Positioned(
               top: 15.h,
               left: 15.w,
@@ -76,13 +88,20 @@ class SavePlacedCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  CircleAvatar(
-                    radius: 18.r,
-                    backgroundColor: Colors.white,
-                    child: Icon(
-                      Icons.bookmark,
-                      color: AppColors.primaryColor,
-                      size: 20.sp,
+                  GestureDetector(
+                    onTap: () {
+                      context.read<SavedPlacesCubit>().removePlace(
+                        placeId: savedPlaceedCardModel.placeId,
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 18.r,
+                      backgroundColor: Colors.red.withOpacity(0.8),
+                      child: Icon(
+                        Icons.close,
+                        color: Colors.white,
+                        size: 20.sp,
+                      ),
                     ),
                   ),
                 ],
@@ -99,6 +118,8 @@ class SavePlacedCard extends StatelessWidget {
                 children: [
                   Text(
                     savedPlaceedCardModel.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: AppTextStyle.whitePoppinsW500S24.copyWith(
                       fontSize: 20.sp,
                       fontWeight: FontWeight.bold,

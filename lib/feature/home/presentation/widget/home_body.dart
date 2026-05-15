@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
 import 'package:smart_guide/core/shared_widgets/custom_grid_view.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
-import 'package:smart_guide/feature/home/model/place_model.dart';
+import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_cubit.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_state.dart';
 import 'package:smart_guide/feature/home/presentation/search_screen.dart';
 import 'package:smart_guide/feature/home/presentation/widget/custom_home_app_bar.dart';
 import 'package:smart_guide/feature/home/presentation/widget/home_search_widget.dart';
+import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_cubit.dart';
+import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_states.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class HomeBody extends StatefulWidget {
@@ -23,25 +26,44 @@ class HomeBody extends StatefulWidget {
 
 class _HomeBodyState extends State<HomeBody> {
   late final ScrollController scrollController;
-  final TextEditingController searchController = TextEditingController();
+
+  bool isTourist = false;
 
   @override
   void initState() {
     super.initState();
 
+    _loadUserType();
+
     scrollController = ScrollController();
     scrollController.addListener(_paginationListener);
 
-    // جلب البيانات لأول مرة بطريقة آمنة
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<PlacesCubit>().getPlaces();
+
+      /// ✅ load saved once
+      context.read<SavedPlacesCubit>().getSavedPlaces();
     });
+  }
+
+  Future<void> _loadUserType() async {
+    final userType = await SecureStorageHelper.instance.getUserType();
+
+    setState(() {
+      isTourist =
+          userType?.toLowerCase() == UserTypeEnum.Tourist.name.toLowerCase();
+    });
+  }
+
+  Future<void> _onRefresh() async {
+    await context.read<PlacesCubit>().getPlaces();
+
+    await context.read<SavedPlacesCubit>().getSavedPlaces();
   }
 
   void _paginationListener() {
     final cubit = context.read<PlacesCubit>();
 
-    // Pagination Logic: لو وصلنا قبل النهاية بـ 300 بكسل، ومش بنحمل أصلاً
     if (scrollController.position.pixels >=
         scrollController.position.maxScrollExtent - 300) {
       if (cubit.state is! PlacesPaginationLoading &&
@@ -54,115 +76,151 @@ class _HomeBodyState extends State<HomeBody> {
   @override
   void dispose() {
     scrollController.dispose();
-    searchController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: false,
-      child: CustomScrollView(
-        controller: scrollController,
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          /// ================= APP BAR =================
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: FixedAppBarDelegate(
-              child: Container(
-                color: AppColors.backgroundColor,
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                alignment: Alignment.bottomCenter,
-                child: CustomHomeAppBar(
-                  title: LocaleKeys.hello.tr(),
-                  subTitle: LocaleKeys.cairoEgypt.tr(),
+    return BlocListener<SavedPlacesCubit, SavedPlacesState>(
+      listener: (context, state) {
+        if (state is SavePlaceSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.green,
+            ),
+          );
+        }
+
+        if (state is RemovePlaceSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+          );
+        }
+
+        if (state is SavedPlacesFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+          );
+        }
+      },
+      child: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: SafeArea(
+          top: false,
+          child: CustomScrollView(
+            controller: scrollController,
+            physics: const AlwaysScrollableScrollPhysics(
+              parent: BouncingScrollPhysics(),
+            ),
+            slivers: [
+              SliverPersistentHeader(
+  pinned: true,
+  delegate: FixedAppBarDelegate(
+    child: FutureBuilder(
+      future: Future.wait([
+        SecureStorageHelper.instance.getUserName(),
+        SecureStorageHelper.instance.getProfilePic(),
+      ]),
+      builder: (context, snapshot) {
+        final userName = snapshot.data?[0] ?? '';
+        final profilePic = snapshot.data?[1];
+
+        return Container(
+          color: AppColors.backgroundColor,
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          alignment: Alignment.bottomCenter,
+          child: CustomHomeAppBar(
+            title: userName.isNotEmpty
+                ? userName
+                : LocaleKeys.hello.tr(),
+            subTitle: LocaleKeys.cairoEgypt.tr(),
+            imageUrl: profilePic,
+          ),
+        );
+      },
+    ),
+  ),
+),
+
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Column(
+                    children: [
+                      CustomHeightSpacingWidget(height: 20.h),
+
+                      HomeSearchContainer(
+                        onTap: () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => const SearchPlacesScreen(),
+                            ),
+                          );
+
+                          /// ✅ يرجع الهوم الطبيعي بعد البحث
+                          context.read<PlacesCubit>().getPlaces();
+                        },
+                      ),
+
+                      CustomHeightSpacingWidget(height: 20.h),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ),
 
-          /// ================= SEARCH =================
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Column(
-                children: [
-                  CustomHeightSpacingWidget(height: 20.h),
+              BlocBuilder<PlacesCubit, PlacesState>(
+                builder: (context, state) {
+                  if (state is PlacesLoading) {
+                    return const PlacesShimmerGrid();
+                  }
 
-                  /// استخدام הـ Widget بعد التعديل (readOnly)
-                  HomeSearchContainer(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const SearchPlacesScreen(),
-                        ),
-                      );
-                    },
-                  ),
+                  if (state is PlacesFailure) {
+                    return SliverFillRemaining(
+                      child: Center(child: Text(state.errorMessage)),
+                    );
+                  }
 
-                  CustomHeightSpacingWidget(height: 20.h),
-                ],
-              ),
-            ),
-          ),
+                  if (state is PlacesSuccess ||
+                      state is PlacesPaginationLoading) {
+                    final places = context.read<PlacesCubit>().places;
 
-          /// ================= CONTENT =================
-          BlocBuilder<PlacesCubit, PlacesState>(
-            builder: (context, state) {
-              /// ---------- LOADING (Initial) ----------
-              if (state is PlacesLoading) {
-                return const PlacesShimmerGrid();
-              }
+                    final savedState = context.watch<SavedPlacesCubit>().state;
 
-              /// ---------- ERROR ----------
-              if (state is PlacesFailure) {
-                return SliverFillRemaining(
-                  child: Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 24.w),
-                      child: Text(
-                        state.errorMessage,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }
+                    final Set<int> savedIds = savedState is SavedPlacesSuccess
+                        ? savedState.savedIds
+                        : {};
 
-              /// ---------- SUCCESS & PAGINATION ----------
-              if (state is PlacesSuccess || state is PlacesPaginationLoading) {
-                // نجيب البيانات من الكيوبيت لضمان استمرار عرضها أثناء الباجينيشن
-                final places = context.read<PlacesCubit>().places;
-
-                if (places.isEmpty) {
-                  return SliverFillRemaining(
-                    child: Center(
-                      child: Text(
-                        'No Places Found',
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  );
-                }
-
-                return SliverPadding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  sliver: SliverMainAxisGroup(
-                    slivers: [
-                      /// GRID
-                      SliverGrid(
+                    return SliverPadding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      sliver: SliverGrid(
                         delegate: SliverChildBuilderDelegate((context, index) {
                           final place = places[index];
-                          return _PlaceItem(place: place);
+
+                          final isSaved = savedIds.contains(place.id);
+
+                          return CustomGridView(
+                            title: place.name,
+                            imageUrl: place.imageUrl,
+                            rating: place.rating,
+                            placeId: place.id.toString(),
+                            city: place.city,
+                            type: place.type,
+                            period: place.period,
+                            isSaved: isSaved,
+                            isTourist: isTourist,
+                            onSaveTap: () {
+                              final savedCubit = context
+                                  .read<SavedPlacesCubit>();
+
+                              if (isSaved) {
+                                savedCubit.removePlace(placeId: place.id);
+                              } else {
+                                savedCubit.savePlace(placeId: place.id);
+                              }
+                            },
+                          );
                         }, childCount: places.length),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
@@ -171,70 +229,19 @@ class _HomeBodyState extends State<HomeBody> {
                           mainAxisExtent: 220.h,
                         ),
                       ),
+                    );
+                  }
 
-                      /// PAGINATION LOADING INDICATOR
-                      if (state is PlacesPaginationLoading)
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(vertical: 20.h),
-                            child: const Center(
-                              child: CircularProgressIndicator(
-                                color: AppColors.primaryColor,
-                              ),
-                            ),
-                          ),
-                        ),
-
-                      /// BOTTOM SPACE
-                      SliverToBoxAdapter(
-                        child: CustomHeightSpacingWidget(height: 100.h),
-                      ),
-                    ],
-                  ),
-                );
-              }
-
-              return const SliverToBoxAdapter(child: SizedBox.shrink());
-            },
+                  return const SliverToBoxAdapter(child: SizedBox());
+                },
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
 }
-
-/// =====================================================
-/// PLACE ITEM
-/// =====================================================
-
-class _PlaceItem extends StatelessWidget {
-  const _PlaceItem({required this.place});
-
-  final PlaceModel place;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(20.r),
-      onTap: () {
-        /// NAVIGATION
-      },
-      child: CustomGridView(
-        title: place.name,
-        imageUrl: place.imageUrl,
-        rating: place.rating,
-        placeId: place.id.toString(),
-        city: place.city,
-        type: place.type,
-        period: place.period,
-      ),
-    );
-  }
-}
-
-/// =====================================================
-/// SHIMMER
-/// =====================================================
 
 class PlacesShimmerGrid extends StatelessWidget {
   const PlacesShimmerGrid({super.key});
@@ -266,10 +273,6 @@ class PlacesShimmerGrid extends StatelessWidget {
     );
   }
 }
-
-/// =====================================================
-/// APP BAR DELEGATE
-/// =====================================================
 
 class FixedAppBarDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;

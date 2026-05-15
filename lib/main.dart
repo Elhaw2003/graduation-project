@@ -13,6 +13,8 @@ import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/feature/auth/register/presentation/cubit/pick_image/pick_image_cubit.dart';
 import 'package:smart_guide/feature/home/data/repo/get_places/get_places_repo_imple.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_cubit.dart';
+import 'package:smart_guide/feature/saved/data/repo/saved_places_repo_imple.dart';
+import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_cubit.dart';
 import 'package:smart_guide/feature/settings/data/repo/log_out/log_out_repo_imple.dart';
 import 'package:smart_guide/feature/settings/presentation/cubit/log_out/cubit/log_out_cubit.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
@@ -56,6 +58,13 @@ void main() async {
                 apiConsumer: DioConsumer(dio: Dio()),
               ),
             )..getPlaces(),
+          ),
+          BlocProvider(
+            create: (context) => SavedPlacesCubit(
+              savedPlacesRepo: SavedPlacesRepoImpl(
+                apiConsumer: DioConsumer(dio: Dio()),
+              ),
+            )..getSavedPlaces(),
           ),
         ],
         child: SmartGuide(),

@@ -1,11 +1,16 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:smart_guide/core/utils/app_colors.dart';
+import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
 import 'package:smart_guide/core/shared_widgets/custom_grid_view.dart';
+import 'package:smart_guide/core/utils/app_colors.dart';
+import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_cubit.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_state.dart';
+import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_cubit.dart';
+import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_states.dart';
 
 class SearchPlacesScreen extends StatefulWidget {
   const SearchPlacesScreen({super.key});
@@ -16,10 +21,32 @@ class SearchPlacesScreen extends StatefulWidget {
 
 class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
   final TextEditingController _searchController = TextEditingController();
+
   Timer? _debounce;
 
+  bool isTourist = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _loadUserType();
+  }
+
+  Future<void> _loadUserType() async {
+    final userType = await SecureStorageHelper.instance.getUserType();
+
+    setState(() {
+      isTourist =
+          userType?.toLowerCase() == UserTypeEnum.Tourist.name.toLowerCase();
+    });
+  }
+
   void _onSearchChanged(String value) {
-    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    if (_debounce?.isActive ?? false) {
+      _debounce!.cancel();
+    }
+
     _debounce = Timer(const Duration(milliseconds: 500), () {
       context.read<PlacesCubit>().searchPlaces(value);
     });
@@ -34,92 +61,148 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0.5,
-        leading: const BackButton(color: Colors.black),
-        title: TextField(
-          controller: _searchController,
-          autofocus: true,
-          onChanged: _onSearchChanged,
-          decoration: InputDecoration(
-            hintText: 'Search places...',
-            prefixIcon: const Icon(Icons.search),
-            filled: true,
-            fillColor: Colors.grey.shade100,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16.r),
-              borderSide: BorderSide.none,
+    return BlocListener<SavedPlacesCubit, SavedPlacesState>(
+      listener: (context, state) {
+        if (state is SavePlaceSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: Colors.green,
             ),
-            contentPadding: EdgeInsets.symmetric(vertical: 0.h),
+          );
+        }
+
+        if (state is RemovePlaceSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+          );
+        }
+
+        if (state is SavedPlacesFailure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+          );
+        }
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundColor,
+
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0.5,
+          leading: const BackButton(color: Colors.black),
+
+          title: TextField(
+            controller: _searchController,
+            autofocus: true,
+            onChanged: _onSearchChanged,
+
+            decoration: InputDecoration(
+              hintText: 'Search places...',
+              prefixIcon: const Icon(Icons.search),
+              filled: true,
+              fillColor: Colors.grey.shade100,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16.r),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: EdgeInsets.symmetric(vertical: 0.h),
+            ),
           ),
+
+          toolbarHeight: 80.h,
         ),
-        toolbarHeight: 80.h, // لضمان مساحة كافية للـ Widget
-      ),
-      body: BlocBuilder<PlacesCubit, PlacesState>(
-        builder: (context, state) {
-          // حالة البداية: لم يتم كتابة شيء
-          if (_searchController.text.trim().isEmpty) {
-            return _buildStatusMessage(
-              Icons.search_rounded,
-              "Search for your next adventure...",
-            );
-          }
 
-          // حالة التحميل
-          if (state is PlacesLoading) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.primaryColor),
-            );
-          }
+        body: BlocBuilder<PlacesCubit, PlacesState>(
+          builder: (context, state) {
+            final searchText = _searchController.text.trim();
 
-          // حالة النجاح
-          if (state is PlacesSuccess) {
-            if (state.places.isEmpty) {
+            if (searchText.isEmpty) {
               return _buildStatusMessage(
-                Icons.fmd_bad_outlined,
-                "No Items Found",
+                Icons.search_rounded,
+                "Search for your next adventure...",
               );
             }
 
-            return GridView.builder(
-              padding: EdgeInsets.all(16.r),
-              itemCount: state.places.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 15.w,
-                mainAxisSpacing: 15.h,
-                mainAxisExtent: 220.h,
-              ),
-              itemBuilder: (context, index) {
-                final place = state.places[index];
-                return CustomGridView(
-                  title: place.name,
-                  imageUrl: place.imageUrl,
-                  rating: place.rating,
-                  placeId: place.id.toString(),
-                  city: place.city,
-                  type: place.type,
-                  period: place.period,
+            if (state is PlacesLoading) {
+              return const Center(
+                child: CircularProgressIndicator(color: AppColors.primaryColor),
+              );
+            }
+
+            if (state is PlacesSuccess) {
+              if (state.places.isEmpty) {
+                return _buildStatusMessage(
+                  Icons.fmd_bad_outlined,
+                  "No Items Found",
                 );
-              },
-            );
-          }
+              }
 
-          // حالة الفشل
-          if (state is PlacesFailure) {
-            return Center(
-              child: Text(
-                state.errorMessage,
-                style: const TextStyle(color: Colors.red),
-              ),
-            );
-          }
+              final savedState = context.watch<SavedPlacesCubit>().state;
 
-          return const SizedBox.shrink();
-        },
+              final Set<int> savedIds = savedState is SavedPlacesSuccess
+                  ? savedState.savedIds
+                  : {};
+
+              return RefreshIndicator(
+                onRefresh: () async {
+                  context.read<PlacesCubit>().searchPlaces(searchText);
+                },
+                child: GridView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.all(16.r),
+
+                  itemCount: state.places.length,
+
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 15.w,
+                    mainAxisSpacing: 15.h,
+                    mainAxisExtent: 220.h,
+                  ),
+
+                  itemBuilder: (context, index) {
+                    final place = state.places[index];
+
+                    final isSaved = savedIds.contains(place.id);
+
+                    return CustomGridView(
+                      title: place.name,
+                      imageUrl: place.imageUrl,
+                      rating: place.rating,
+                      placeId: place.id.toString(),
+                      city: place.city,
+                      type: place.type,
+                      period: place.period,
+                      isSaved: isSaved,
+                      isTourist: isTourist,
+                      onSaveTap: () {
+                        final savedCubit = context.read<SavedPlacesCubit>();
+
+                        if (isSaved) {
+                          savedCubit.removePlace(placeId: place.id);
+                        } else {
+                          savedCubit.savePlace(placeId: place.id);
+                        }
+                      },
+                    );
+                  },
+                ),
+              );
+            }
+
+            if (state is PlacesFailure) {
+              return Center(
+                child: Text(
+                  state.errorMessage,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              );
+            }
+
+            return const SizedBox.shrink();
+          },
+        ),
       ),
     );
   }
@@ -130,7 +213,9 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(icon, size: 80.r, color: Colors.grey.shade300),
+
           SizedBox(height: 16.h),
+
           Text(
             message,
             style: TextStyle(

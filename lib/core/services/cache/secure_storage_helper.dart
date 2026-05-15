@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 
 class SecureStorageHelper {
   // Singleton Pattern
@@ -13,6 +14,7 @@ class SecureStorageHelper {
   static const String refreshTokenKey = 'refreshToken';
   static const String expiresAtKey = 'expiresOn';
   static const String refreshTokenExpiresOnKey = 'refreshTokenExpiresOn';
+  static const String userTypeKey = 'userType';
 
   // Save tokens
   Future<void> saveTokens({
@@ -28,6 +30,47 @@ class SecureStorageHelper {
       key: refreshTokenExpiresOnKey,
       value: refreshTokenExpiresOn,
     );
+  }
+
+  /// 🔥 NEW
+  Future<void> saveUserType(String userType) async {
+    await storage.write(key: userTypeKey, value: userType);
+  }
+
+  Future<String?> getUserType() async {
+    return await storage.read(key: userTypeKey);
+  }
+
+  static const String userNameKey = 'userName';
+static const String profilePicKey = 'profilePic';
+
+Future<void> saveUserData({
+  required String userName,
+  required String profilePic,
+}) async {
+  await storage.write(key: userNameKey, value: userName);
+  await storage.write(key: profilePicKey, value: profilePic);
+}
+
+Future<String?> getUserName() async {
+  return await storage.read(key: userNameKey);
+}
+
+Future<String?> getProfilePic() async {
+  return await storage.read(key: profilePicKey);
+}
+
+  /// ✅ ROLE MAPPING (ADDED)
+  Future<UserTypeEnum?> getUserTypeEnum() async {
+    final value = await storage.read(key: userTypeKey);
+
+    if (value == null) return null;
+
+    if (value.toLowerCase() == "tourguide") {
+      return UserTypeEnum.TourGuide;
+    }
+
+    return UserTypeEnum.Tourist;
   }
 
   // Get access token
@@ -56,6 +99,7 @@ class SecureStorageHelper {
     await storage.delete(key: refreshTokenKey);
     await storage.delete(key: expiresAtKey);
     await storage.delete(key: refreshTokenExpiresOnKey);
+    await storage.delete(key: userTypeKey);
   }
 
   // Check if user is logged in

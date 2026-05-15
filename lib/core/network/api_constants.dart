@@ -11,7 +11,11 @@ class EndPoint {
   static String googleSignIn = "Auth/google-login";
   static String logout = "Auth/logout";
   static String getPlaces = "places";
-  static String getPlaceDetails ({required String id})=> "places/$id";
+  static String getPlaceDetails({required String id}) => "places/$id";
+
+  /// ================= SAVED PLACES =================
+
+  static const String savedPlaces = "tourists/me/savedplaces";
 }
 
 class ApiKey {
