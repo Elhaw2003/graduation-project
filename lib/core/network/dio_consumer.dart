@@ -3,6 +3,7 @@ import 'package:smart_guide/core/errors/exceptions.dart';
 import 'package:smart_guide/core/network/api_constants.dart';
 import 'package:smart_guide/core/network/api_consumer.dart';
 import 'package:smart_guide/core/network/api_interceptors.dart';
+import 'package:smart_guide/core/network/pretty_network_logger.dart';
 
 class DioConsumer extends ApiConsumer {
   final Dio dio;
@@ -10,16 +11,7 @@ class DioConsumer extends ApiConsumer {
   DioConsumer({required this.dio}) {
     dio.options.baseUrl = EndPoint.baseUrl;
     dio.interceptors.add(ApiInterceptor());
-    dio.interceptors.add(
-      LogInterceptor(
-        request: true,
-        requestHeader: true,
-        requestBody: true,
-        responseHeader: true,
-        responseBody: true,
-        error: true,
-      ),
-    );
+    dio.interceptors.add(PrettyNetworkLogger());
   }
 
   @override
@@ -88,7 +80,7 @@ class DioConsumer extends ApiConsumer {
     try {
       final response = await dio.post(
         path,
-        // التعديل هنا: ابعث الداتا كما هي لأن الـ Repo جهزها كـ FormData بالفعل
+        // Send data as-is since the Repo already prepares FormData when needed
         data: data,
         queryParameters: queryParameters,
       );
@@ -116,9 +108,4 @@ class DioConsumer extends ApiConsumer {
       handleDioExceptions(e);
     }
   }
-
-  // @override
-  // Future<dynamic> fetch(RequestOptions requestOptions) async {
-  //   return await dio.fetch(requestOptions);
-  // }
 }

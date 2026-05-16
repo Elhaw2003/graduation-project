@@ -1,52 +1,109 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:smart_guide/feature/home/data/get_places/get_places_cubit.dart';
-// import 'package:smart_guide/feature/home/data/get_places/get_places_state.dart';
-// import 'package:smart_guide/feature/home/presentation/place_details_screen.dart';
-// import 'package:smart_guide/feature/popular_places/presentation/view/widget/popular_places_card.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:smart_guide/core/routing/app_routes.dart';
+import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_cubit.dart';
+import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_state.dart';
+import 'package:smart_guide/feature/popular_places/presentation/view/widget/popular_places_card.dart';
+import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_cubit.dart';
+import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_states.dart';
 
-// class PopularPlacesCards extends StatelessWidget {
-//   const PopularPlacesCards({super.key});
+class PopularPlacesCards extends StatelessWidget {
+  const PopularPlacesCards({super.key});
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<PlacesCubit, PlacesState>(
-//       builder: (context, state) {
-//         if (state is PlacesLoading) {
-//           return const SliverToBoxAdapter(
-//             child: Center(child: CircularProgressIndicator()),
-//           );
-//         }
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PlacesCubit, PlacesState>(
+      builder: (context, state) {
+        if (state is PlacesLoading) {
+          return SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => const PopularPlaceShimmerCard(),
+              childCount: 6,
+            ),
+          );
+        }
 
-//         if (state is PlacesError) {
-//           return SliverToBoxAdapter(child: Center(child: Text(state.message)));
-//         }
+        if (state is PlacesFailure) {
+          return SliverFillRemaining(
+            child: Center(child: Text(state.errorMessage)),
+          );
+        }
 
-//         if (state is PlacesSuccess) {
-//           return SliverList(
-//             delegate: SliverChildBuilderDelegate((context, index) {
-//               final place = state.places[index];
+        final places = context.read<PlacesCubit>().places;
 
-//               return PopularPlaceCard(
-//                 onPressed: () {
-//                   Navigator.push(
-//                     context,
-//                     MaterialPageRoute(
-//                       builder: (_) => PlaceDetailsScreen(id: place.id),
-//                     ),
-//                   );
-//                 },
-//                 title: place.name,
-//                 rating: place.rating.toString(),
-//                 category: "Historical Site",
-//                 imageUrl: place.imageUrl,
-//               );
-//             }, childCount: state.places.length),
-//           );
-//         }
+        final savedState = context.watch<SavedPlacesCubit>().state;
 
-//         return const SliverToBoxAdapter(child: SizedBox());
-//       },
-//     );
-//   }
-// }
+        final Set<int> savedIds = savedState is SavedPlacesSuccess
+            ? savedState.savedIds
+            : {};
+
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              if (index >= places.length) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(vertical: 20.h),
+                  child: const Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              final place = places[index];
+
+              final isSaved = savedIds.contains(place.id);
+
+              return PopularPlaceCard(
+                title: place.name,
+                rating: place.rating.toString(),
+                category: place.type,
+                imageUrl: place.imageUrl,
+                isSaved: isSaved,
+
+                onSaveTap: () {
+                  final savedCubit = context.read<SavedPlacesCubit>();
+
+                  if (isSaved) {
+                    savedCubit.removePlace(placeId: place.id);
+                  } else {
+                    savedCubit.savePlace(placeId: place.id);
+                  }
+                },
+
+                onPressed: () {
+                  context.push('${AppRoutes.detailsScreen}/${place.id}');
+                },
+              );
+            },
+            childCount: state is PlacesPaginationLoading
+                ? places.length + 1
+                : places.length,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class PopularPlaceShimmerCard extends StatelessWidget {
+  const PopularPlaceShimmerCard({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+      child: Shimmer.fromColors(
+        baseColor: Colors.grey.shade300,
+        highlightColor: Colors.grey.shade100,
+        child: Container(
+          height: 180.h,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+        ),
+      ),
+    );
+  }
+}

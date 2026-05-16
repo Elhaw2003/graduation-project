@@ -23,7 +23,7 @@ class ProfileScreen extends StatelessWidget {
                 crossAxisCount: 2,
                 mainAxisSpacing: 16.h,
                 crossAxisSpacing: 16.w,
-                childAspectRatio: 0.8, // ضبط النسبة عشان التصميم ميبقاش مضغوط
+                childAspectRatio: 0.8,
               ),
               delegate: SliverChildBuilderDelegate((context, index) {
                 return DashboardCard(item: dashboards(context)[index]);

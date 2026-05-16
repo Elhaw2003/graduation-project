@@ -21,14 +21,14 @@ class ApiInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    // 1. لو الخطأ 401 (Unauthorized)
+    // Handle 401 Unauthorized by refreshing the token
     if (err.response?.statusCode == 401) {
       final refreshToken = await SecureStorageHelper.instance.getRefreshToken();
       final accessToken = await SecureStorageHelper.instance.getAccessToken();
 
       if (refreshToken != null && accessToken != null) {
         try {
-          // 2. استخدم Dio جديد تماماً لعملية الـ Refresh عشان تتجنب الـ Loop
+          // Use a fresh Dio instance to avoid interceptor loops
           final dio = Dio();
           final response = await dio.post(
             '${EndPoint.baseUrl}${EndPoint.refreshToken}',
@@ -38,14 +38,14 @@ class ApiInterceptor extends Interceptor {
             },
           );
 
-          // 3. استخراج البيانات الجديدة
+          // Extract new tokens
           final newToken = response.data["token"];
           final newRefreshToken = response.data["refreshToken"];
           final newExpiresAt = response.data["expiresOn"];
           final newRefreshTokenExpiresOn =
               response.data["refreshTokenExpiresOn"];
 
-          // 4. حفظ البيانات الجديدة
+          // Persist new tokens
           await SecureStorageHelper.instance.saveTokens(
             accessToken: newToken,
             refreshToken: newRefreshToken,
@@ -53,26 +53,24 @@ class ApiInterceptor extends Interceptor {
             refreshTokenExpiresOn: newRefreshTokenExpiresOn,
           );
 
-          // 5. تعديل الـ Header بتاع الـ Request القديم اللي فشل
+          // Update the failed request's Authorization header
           err.requestOptions.headers['Authorization'] =
               '${ApiKey.tokenPrefix} $newToken';
 
-          // 6. إعادة إرسال الـ Request القديم (Retry)
-          // بنستخدم Dio() جديد هنا برضه أو الـ Instance الأساسية بس نبعت الـ RequestOptions
+          // Retry the original request with the new token
           final retryDio = Dio();
           final retryResponse = await retryDio.fetch(err.requestOptions);
 
-          // 7. حل المشكلة ورجع الـ Response الناجح للـ App وكأن مفيش حاجة حصلت
+          // Resolve with the successful retry response
           return handler.resolve(retryResponse);
         } catch (e) {
-          // لو الـ Refresh نفسه فشل (مثلاً الـ Refresh token انتهى)
-          // هنا لازم تعمل Logout لليوزر وتوديه لشاشة الـ Login
-          // ممكن تستخدم Event Bus أو أي طريقة تانية لتنبيه الـ UI
+          // If refresh itself fails (e.g. refresh token expired),
+          // propagate the error. Consider triggering a global logout here.
           return handler.next(err);
         }
       }
     }
-    // لو مش 401، كمل الـ Error عادي
+    // For non-401 errors, continue the error chain
     return handler.next(err);
   }
 }

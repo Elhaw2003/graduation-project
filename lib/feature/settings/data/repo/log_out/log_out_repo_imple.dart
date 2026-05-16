@@ -17,13 +17,10 @@ class LogOutRepoImple implements LogOutRepo {
         EndPoint.logout,
         data: {"refreshToken": refreshToken},
       );
-      print("LogOutRepoImple logOut response: $response");
       return Right(response['message'] ?? "Logged out successfully");
     } on ServerException catch (e) {
-      print("LogOutRepoImple logOut error: ${e.errModel.errorMessage}");
       return Left(ServerFailure(e.errModel.errorMessage));
     } catch (e) {
-      print("LogOutRepoImple logOut error: $e");
       return Left(ServerFailure(LocaleKeys.error.tr()));
     }
   }

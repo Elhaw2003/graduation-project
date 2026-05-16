@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
+import 'package:smart_guide/core/errors/exceptions.dart';
 import 'package:smart_guide/core/errors/failures.dart';
 import 'package:smart_guide/core/network/api_constants.dart';
 import 'package:smart_guide/core/network/api_consumer.dart';
@@ -18,12 +18,10 @@ class SavedPlacesRepoImpl implements SavedPlacesRepo {
       await apiConsumer.post(EndPoint.savedPlaces, data: {"placeId": placeId});
 
       return const Right("Place saved successfully");
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(e.response?.data["message"] ?? "Something went wrong"),
-      );
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.errModel.errorMessage));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(ServerFailure('Something went wrong'));
     }
   }
 
@@ -36,12 +34,10 @@ class SavedPlacesRepoImpl implements SavedPlacesRepo {
       await apiConsumer.delete("${EndPoint.savedPlaces}/$placeId");
 
       return const Right("Place removed successfully");
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(e.response?.data["message"] ?? "Something went wrong"),
-      );
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.errModel.errorMessage));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(ServerFailure('Something went wrong'));
     }
   }
 
@@ -56,12 +52,10 @@ class SavedPlacesRepoImpl implements SavedPlacesRepo {
       }).toList();
 
       return Right(places);
-    } on DioException catch (e) {
-      return Left(
-        ServerFailure(e.response?.data["message"] ?? "Something went wrong"),
-      );
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.errModel.errorMessage));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return Left(ServerFailure('Something went wrong'));
     }
   }
 }

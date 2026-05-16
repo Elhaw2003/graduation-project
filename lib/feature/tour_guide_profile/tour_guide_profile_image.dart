@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
-import 'package:smart_guide/feature/human_guide/all_guides/presentation/view/widgets/custom_container_info_guides.dart';
+import 'package:smart_guide/core/utils/image_url_extension.dart';
 
 class TourGuideProfileImage extends StatelessWidget {
   const TourGuideProfileImage({super.key, required this.imageUrl});
@@ -10,18 +10,18 @@ class TourGuideProfileImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100.r, // استخدام .r لضمان التساوي (مربع مثالي)
+      height: 100.r,
       width: 100.r,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(color: AppColors.primaryColor, width: 3.r),
       ),
       child: Padding(
-        padding: EdgeInsets.all(3.r), // مسافات متساوية من كل الاتجاهات
+        padding: EdgeInsets.all(3.r),
         child: ClipOval(
           child: Image.network(
             imageUrl.toHttps(),
-            fit: BoxFit.cover, // الصورة هتملا المساحة الدائرية المتاحة لوحدها
+            fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) {
               return Container(
                 color: AppColors.grey100Color,

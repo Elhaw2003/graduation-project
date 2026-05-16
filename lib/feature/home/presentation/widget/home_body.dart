@@ -2,8 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
+import 'package:smart_guide/core/utils/image_url_extension.dart';
 import 'package:smart_guide/core/shared_widgets/custom_grid_view.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
@@ -25,58 +28,41 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
-  late final ScrollController scrollController;
-
   bool isTourist = false;
+  String _userName = '';
+  String? _profilePic;
 
   @override
   void initState() {
     super.initState();
 
-    _loadUserType();
-
-    scrollController = ScrollController();
-    scrollController.addListener(_paginationListener);
+    _loadUserData();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<PlacesCubit>().getPlaces();
 
-      /// ✅ load saved once
       context.read<SavedPlacesCubit>().getSavedPlaces();
     });
   }
 
-  Future<void> _loadUserType() async {
+  Future<void> _loadUserData() async {
     final userType = await SecureStorageHelper.instance.getUserType();
+    final userName = await SecureStorageHelper.instance.getUserName();
+    final profilePic = await SecureStorageHelper.instance.getProfilePic();
 
+    if (!mounted) return;
     setState(() {
       isTourist =
           userType?.toLowerCase() == UserTypeEnum.Tourist.name.toLowerCase();
+      _userName = userName ?? '';
+      _profilePic = profilePic;
     });
   }
 
   Future<void> _onRefresh() async {
-    await context.read<PlacesCubit>().getPlaces();
+    await context.read<PlacesCubit>().refreshPlaces();
 
     await context.read<SavedPlacesCubit>().getSavedPlaces();
-  }
-
-  void _paginationListener() {
-    final cubit = context.read<PlacesCubit>();
-
-    if (scrollController.position.pixels >=
-        scrollController.position.maxScrollExtent - 300) {
-      if (cubit.state is! PlacesPaginationLoading &&
-          cubit.state is! PlacesLoading) {
-        cubit.getPlaces(loadMore: true);
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    scrollController.dispose();
-    super.dispose();
   }
 
   @override
@@ -105,43 +91,32 @@ class _HomeBodyState extends State<HomeBody> {
         }
       },
       child: RefreshIndicator(
+        color: AppColors.primaryColor,
         onRefresh: _onRefresh,
         child: SafeArea(
           top: false,
           child: CustomScrollView(
-            controller: scrollController,
             physics: const AlwaysScrollableScrollPhysics(
               parent: BouncingScrollPhysics(),
             ),
             slivers: [
               SliverPersistentHeader(
-  pinned: true,
-  delegate: FixedAppBarDelegate(
-    child: FutureBuilder(
-      future: Future.wait([
-        SecureStorageHelper.instance.getUserName(),
-        SecureStorageHelper.instance.getProfilePic(),
-      ]),
-      builder: (context, snapshot) {
-        final userName = snapshot.data?[0] ?? '';
-        final profilePic = snapshot.data?[1];
-
-        return Container(
-          color: AppColors.backgroundColor,
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          alignment: Alignment.bottomCenter,
-          child: CustomHomeAppBar(
-            title: userName.isNotEmpty
-                ? userName
-                : LocaleKeys.hello.tr(),
-            subTitle: LocaleKeys.cairoEgypt.tr(),
-            imageUrl: profilePic,
-          ),
-        );
-      },
-    ),
-  ),
-),
+                pinned: true,
+                delegate: FixedAppBarDelegate(
+                  child: Container(
+                    color: AppColors.backgroundColor,
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    alignment: Alignment.bottomCenter,
+                    child: CustomHomeAppBar(
+                      title: LocaleKeys.hello.tr(),
+                      subTitle: _userName.isNotEmpty
+                          ? _userName
+                          : LocaleKeys.cairoEgypt.tr(),
+                      imageUrl: _profilePic?.toHttps(),
+                    ),
+                  ),
+                ),
+              ),
 
               SliverToBoxAdapter(
                 child: Padding(
@@ -151,20 +126,46 @@ class _HomeBodyState extends State<HomeBody> {
                       CustomHeightSpacingWidget(height: 20.h),
 
                       HomeSearchContainer(
-                        onTap: () async {
-                          await Navigator.push(
+                        onTap: () {
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (_) => const SearchPlacesScreen(),
                             ),
                           );
-
-                          /// ✅ يرجع الهوم الطبيعي بعد البحث
-                          context.read<PlacesCubit>().getPlaces();
                         },
                       ),
 
                       CustomHeightSpacingWidget(height: 20.h),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            LocaleKeys.popularPlaces.tr(),
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+
+                          TextButton(
+                            onPressed: () {
+                              context.pushNamed(AppRoutes.popularPlacesScreen);
+                            },
+                            child: Text(
+                              LocaleKeys.showAll.tr(),
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: AppColors.primaryColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      CustomHeightSpacingWidget(height: 10.h),
                     ],
                   ),
                 ),
@@ -186,6 +187,8 @@ class _HomeBodyState extends State<HomeBody> {
                       state is PlacesPaginationLoading) {
                     final places = context.read<PlacesCubit>().places;
 
+                    final displayedPlaces = places.take(10).toList();
+
                     final savedState = context.watch<SavedPlacesCubit>().state;
 
                     final Set<int> savedIds = savedState is SavedPlacesSuccess
@@ -196,7 +199,7 @@ class _HomeBodyState extends State<HomeBody> {
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
                       sliver: SliverGrid(
                         delegate: SliverChildBuilderDelegate((context, index) {
-                          final place = places[index];
+                          final place = displayedPlaces[index];
 
                           final isSaved = savedIds.contains(place.id);
 
@@ -221,7 +224,7 @@ class _HomeBodyState extends State<HomeBody> {
                               }
                             },
                           );
-                        }, childCount: places.length),
+                        }, childCount: displayedPlaces.length),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 15.w,
@@ -300,6 +303,6 @@ class FixedAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(covariant FixedAppBarDelegate oldDelegate) {
-    return false;
+    return oldDelegate.child != child;
   }
 }

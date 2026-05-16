@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,6 +33,8 @@ class CustomHomeAppBar extends StatelessWidget {
                 Hero(
                   tag: 'profile_pic',
                   child: Container(
+                    width: 44.r,
+                    height: 44.r,
                     padding: EdgeInsets.all(2.r),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -40,9 +43,26 @@ class CustomHomeAppBar extends StatelessWidget {
                         width: 2,
                       ),
                     ),
-                    child: CircleAvatar(
-                      radius: 22.r,
-                      backgroundImage: _getProfileImage(),
+                    child: ClipOval(
+                      child: CachedNetworkImage(
+                        imageUrl: imageUrl ?? '',
+                        width: 44.r,
+                        height: 44.r,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Container(
+                          width: 44.r,
+                          height: 44.r,
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Image.asset(
+                          Assets.imagesPngSphinx,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -102,19 +122,7 @@ class CustomHomeAppBar extends StatelessWidget {
     );
   }
 
-  ImageProvider _getProfileImage() {
-    if (imageUrl != null &&
-        imageUrl!.isNotEmpty &&
-        imageUrl!.startsWith('http')) {
-      return NetworkImage(imageUrl!);
-    }
-    return AssetImage(Assets.imagesPngSphinx);
-  }
-
-  Widget _buildActionIcon({
-    required Widget icon,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildActionIcon({required Widget icon, required VoidCallback onTap}) {
     return TweenAnimationBuilder(
       tween: Tween<double>(begin: 0, end: 1),
       duration: const Duration(milliseconds: 500),

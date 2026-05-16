@@ -12,11 +12,11 @@ class LogOutCubit extends Cubit<LogOutState> {
   Future<void> logOut() async {
     emit(LogOutLoadingState());
 
-    // سحب التوكن بأمان بدون !
+    // Safely retrieve the refresh token
     final refreshToken = await SecureStorageHelper.instance.getRefreshToken();
 
     if (refreshToken == null) {
-      // لو مفيش توكن أصلاً، نظف الداتا وخرجه
+      // No token found — clear local data and proceed
       await SecureStorageHelper.instance.clearTokens();
       emit(const LogOutSuccessState(message: "Logged out"));
       return;
@@ -26,7 +26,7 @@ class LogOutCubit extends Cubit<LogOutState> {
 
     result.fold(
       (failure) async {
-        // حتى لو فشل السيرفر، يفضل تمسح الداتا محلياً وتخرجه
+        // Even if the server fails, consider clearing local data here
         // await SecureStorageHelper.instance.clearTokens();
         emit(LogOutFailureState(errorMessage: failure.message));
       },

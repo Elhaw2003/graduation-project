@@ -14,7 +14,7 @@ import 'package:smart_guide/generated/assets.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class TripsTypeBody extends StatefulWidget {
-  final TripTypeEnum tripType; // القيمة المستلمة من الـ Router
+  final TripTypeEnum tripType;
   const TripsTypeBody({super.key, required this.tripType});
 
   @override
@@ -27,22 +27,22 @@ class _TripsTypeBodyState extends State<TripsTypeBody> {
   @override
   void initState() {
     super.initState();
-    // تهيئة النوع المختار بناءً على ما تم تمريره من الصفحة السابقة
+    // Initialize selected type from the route parameter
     currentType = widget.tripType;
   }
 
   @override
   Widget build(BuildContext context) {
-    // تحديد قائمة البيانات بناءً على النوع الحالي
+    // Select trip list based on current type
     final List<MyTripModel> trips = currentType == TripTypeEnum.upcoming
         ? upcomingTripsStatic
         : pastTripsStatic;
 
     return CustomScrollView(
       slivers: [
-        // 1. الـ App Bar
+        // 1. App Bar
         MyTripAppbar(),
-        // 2. الـ Tabs للتبديل بين Upcoming و Past
+        // 2. Tabs for switching between Upcoming and Past
         SliverToBoxAdapter(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -75,7 +75,7 @@ class _TripsTypeBodyState extends State<TripsTypeBody> {
           ),
         ),
         SliverToBoxAdapter(child: CustomHeightSpacingWidget(height: 24)),
-        // 3. عرض القائمة بناءً على الطول الفعلي للبيانات
+        // 3. Display trip list based on actual data length
         trips.isEmpty
             ? SliverFillRemaining(child: emptyTripsWidget())
             : SliverList.separated(

@@ -14,13 +14,13 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   Future<void> _checkAuthStatus() async {
-    // 1. الانتظار لرؤية اللوجو
+    // 1. Wait for logo display
     await Future.delayed(const Duration(seconds: 5));
 
-    // تأكد إن الصفحة لسه موجودة في الـ Widget Tree
+    // Ensure the widget is still in the tree
     if (!mounted) return;
 
-    // 2. التحقق من الـ Onboarding (مع التعامل مع الـ null)
+    // 2. Check onboarding status (handle null)
     final bool isOnBoardingViewSeen = CacheHelper.getBool(
       CacheHelper.kIsOnBoardingViewSeen,
     );
@@ -30,15 +30,15 @@ class _SplashScreenState extends State<SplashScreen> {
       return;
     }
 
-    // 3. التحقق من الـ Remember Me
+    // 3. Check Remember Me preference
     final bool isRememberMe = CacheHelper.getBool(CacheHelper.kIsRememberMe);
 
     if (!isRememberMe) {
-      // لو مش مفعلها، نمسح التوكنز ونوديه يسجل دخول
+      // Not enabled — clear tokens and redirect to login
       await SecureStorageHelper().clearTokens();
       if (mounted) context.go(AppRoutes.loginScreen);
     } else {
-      // لو مفعلها، نشيك على التوكن
+      // Enabled — validate token
       final bool isLoggedIn = await SecureStorageHelper().isLoggedIn();
       if (mounted) {
         if (isLoggedIn) {
@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // تنفيذ الكود بعد رسم أول Frame
+    // Run after the first frame is rendered
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkAuthStatus();
     });

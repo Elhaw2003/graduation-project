@@ -7,11 +7,11 @@ class MyTripModel {
   final String date;
   final String guideName;
   final double totalPrice;
-  final String status; // Upcoming أو Completed
-  final double? rating; // موجود في الـ Past بس
-  final String? startingPoint; // موجود في الـ Upcoming بس
-  final String? startTime; // موجود في الـ Upcoming بس
-  final String? pickupTime; // موجود في الـ Upcoming بس
+  final String status; // "Upcoming" or "Completed"
+  final double? rating; // Only present for past trips
+  final String? startingPoint; // Only present for upcoming trips
+  final String? startTime; // Only present for upcoming trips
+  final String? pickupTime; // Only present for upcoming trips
 
   MyTripModel({
     required this.id,
@@ -112,7 +112,7 @@ List<MyTripModel> pastTripsStatic = [
     guideName: "Mostafa",
     totalPrice: 120.0,
     status: "Completed",
-    rating: 5.0, // التقييم اللي هيظهر نجوم
+    rating: 5.0,
   ),
   MyTripModel(
     id: "102",
@@ -142,7 +142,7 @@ List<MyTripModel> pastTripsStatic = [
     guideName: "Mostafa",
     totalPrice: 120.0,
     status: "Completed",
-    rating: 5.0, // التقييم اللي هيظهر نجوم
+    rating: 5.0,
   ),
   MyTripModel(
     id: "102",
@@ -172,7 +172,7 @@ List<MyTripModel> pastTripsStatic = [
     guideName: "Mostafa",
     totalPrice: 120.0,
     status: "Completed",
-    rating: 5.0, // التقييم اللي هيظهر نجوم
+    rating: 5.0,
   ),
   MyTripModel(
     id: "102",
