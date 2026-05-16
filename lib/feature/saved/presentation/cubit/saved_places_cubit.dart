@@ -31,29 +31,30 @@ class SavedPlacesCubit extends Cubit<SavedPlacesState> {
     // Try fetching from API
     final result = await savedPlacesRepo.getSavedPlaces();
 
-    result.fold((failure) {
-      // If API fails, fallback to cached ids
-      emit(SavedPlacesSuccess(cachedIds, places: []));
-      emit(SavedPlacesFailure(failure.message));
-    }, (
-      places,
-    ) {
-      final ids = places.map((e) => e.id).toSet();
+    result.fold(
+      (failure) {
+        // If API fails, fallback to cached ids
+        emit(SavedPlacesSuccess(cachedIds, places: []));
+        emit(SavedPlacesFailure(failure.message));
+      },
+      (places) {
+        final ids = places.map((e) => e.id).toSet();
 
-      // merge cached ids with API ids to avoid losing client-only saves
-      final merged = <int>{}..addAll(cachedIds)..addAll(ids);
+        // merge cached ids with API ids to avoid losing client-only saves
+        final merged = <int>{}
+          ..addAll(cachedIds)
+          ..addAll(ids);
 
-      // persist merged ids locally
-      CacheHelper.setString(kSavedPlaceIds, jsonEncode(merged.toList()));
+        // persist merged ids locally
+        CacheHelper.setString(kSavedPlaceIds, jsonEncode(merged.toList()));
 
-      emit(SavedPlacesSuccess(merged, places: places));
-    });
+        emit(SavedPlacesSuccess(merged, places: places));
+      },
+    );
   }
 
   /// ================= SAVE =================
   Future<void> savePlace({required int placeId}) async {
-    final currentState = state;
-
     final currentIds = _getCurrentIds();
     final currentPlaces = _getCurrentPlaces();
 

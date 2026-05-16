@@ -33,20 +33,20 @@ class _MyTripBodyState extends State<MyTripBody> {
           ),
           CustomHeightSpacingWidget(height: 80),
 
-          // كارد Upcoming
+          // Upcoming trips card
           TripTypeCard(
             title: LocaleKeys.upcoming.tr(),
             icon: Icons.confirmation_number_outlined,
             onTap: () {
-              // 1. تحديث الحالة في الكيوبيت
+              // 1. Update state
               setState(() => selectTripType = TripTypeEnum.upcoming);
-              // 2. الانتقال للاسكرينة اللي هتعرض النوع
+              // 2. Navigate to the trips type screen
               if (context.mounted) {
                 context.pushNamed(
                   AppRoutes.tripsTypeScreen,
                   pathParameters: {'tripType': TripTypeEnum.upcoming.name},
                 );
-              } // استبدلها بـ Route بتاعك
+              }
             },
             height: 200,
             width: 190,
@@ -54,16 +54,16 @@ class _MyTripBodyState extends State<MyTripBody> {
 
           CustomHeightSpacingWidget(height: 32),
 
-          // كارد Past Trips
+          // Past trips card
           TripTypeCard(
             title: LocaleKeys.pastTrips.tr(),
             icon: Icons.history,
             height: 200,
             width: 190,
             onTap: () {
-              // 1. تحديث الحالة في الكيوبيت لـ Past
+              // 1. Update state for Past
               setState(() => selectTripType = TripTypeEnum.past);
-              // 2. الانتقال
+              // 2. Navigate
               if (context.mounted) {
                 context.pushNamed(
                   AppRoutes.tripsTypeScreen,

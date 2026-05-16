@@ -7,6 +7,7 @@ import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
+import 'package:smart_guide/core/utils/image_url_extension.dart';
 
 class CustomContainerInfoGuides extends StatefulWidget {
   const CustomContainerInfoGuides({
@@ -304,11 +305,4 @@ class _CustomContainerInfoGuidesState extends State<CustomContainerInfoGuides>
   }
 }
 
-extension ImageUrlFix on String {
-  String toHttps() {
-    if (startsWith('http://')) {
-      return replaceFirst('http://', 'https://');
-    }
-    return this;
-  }
-}
+

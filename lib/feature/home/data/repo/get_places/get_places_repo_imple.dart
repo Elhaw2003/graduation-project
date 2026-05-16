@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
+import 'package:smart_guide/core/errors/exceptions.dart';
 import 'package:smart_guide/core/errors/failures.dart';
 import 'package:smart_guide/core/network/api_constants.dart';
 import 'package:smart_guide/core/network/api_consumer.dart';
@@ -19,13 +19,13 @@ class GetPlacesRepoImple implements GetPlacesRepo {
     String? search,
   }) async {
     try {
-      /// 1. التحقق من الإنترنت
+      // 1. Check internet connectivity
       final hasInternet = await ConnectivityGuard.hasInternet();
       if (!hasInternet) {
         return const Left(ServerFailure('No Internet Connection'));
       }
 
-      /// 2. طلب البيانات من الـ API
+      // 2. Fetch data from the API
       final response = await apiConsumer.get(
         EndPoint.getPlaces,
         queryParameters: {
@@ -36,13 +36,12 @@ class GetPlacesRepoImple implements GetPlacesRepo {
         },
       );
 
-      /// 3. تحويل الـ JSON إلى Model
+      // 3. Parse JSON into Model
       final data = PlacesPaginationModel.fromJson(response);
 
       return Right(data);
-    } on DioException catch (e) {
-      // التعامل مع أخطاء Dio بشكل احترافي
-      return Left(ServerFailure(e.message ?? 'Server Error occurred'));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.errModel.errorMessage));
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }

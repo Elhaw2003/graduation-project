@@ -25,9 +25,9 @@ class CustomDrawer extends StatelessWidget {
       backgroundColor: const Color(0xff1F222A),
       child: SafeArea(
         child: Column(
-          // استخدمنا Column هنا عشان نقسم الشاشة
+          // Main layout split into scrollable content and fixed footer
           children: [
-            // الجزء القابل للتمرير (Expanded)
+            // Scrollable section
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -120,7 +120,7 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
 
-            // الجزء الثابت في الأسفل (Fixed Footer)
+            // Fixed footer section
             Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(vertical: 20.h),
@@ -155,7 +155,7 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-  // الـ Methods التانية (_buildProfileSection, _buildDrawerItem) تفضل زي ما هي
+
 
   Widget _buildProfileSection() {
     return TweenAnimationBuilder(

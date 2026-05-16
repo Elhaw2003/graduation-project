@@ -24,10 +24,10 @@ class FilterBottomSheet extends StatelessWidget {
       ),
       child: SingleChildScrollView(
         child: Column(
-          mainAxisSize: MainAxisSize.min, // عشان تاخد مساحة المحتوى بس
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // الـ Handle اللي فوق
+            // Drag handle indicator
             Center(
               child: Container(
                 width: 50.w,
@@ -39,22 +39,22 @@ class FilterBottomSheet extends StatelessWidget {
               ),
             ),
             SizedBox(height: 50.h),
-            // العناوين (Filter & Reset)
+            // Header (Filter & Reset)
             const FilterHeader(),
             CustomHeightSpacingWidget(height: 25),
-            // قسم الموقع (Location)
+            // Location section
             LocationFilter(),
             const CustomHeightSpacingWidget(height: 20),
             const CategoryChips(),
             const CustomHeightSpacingWidget(height: 20),
-            // قسم المسافة (Distance)
+            // Distance section
             const DistanceSlider(),
             const CustomHeightSpacingWidget(height: 20),
 
-            // قسم التقييم (Rating)
+            // Rating section
             const RatingFilter(),
             const CustomHeightSpacingWidget(height: 25),
-            // زرار Apply
+            // Apply button
             ApplyReset(),
           ],
         ),

@@ -14,9 +14,8 @@ class ApplyReset extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // زرار Apply
+        // Apply button
         Expanded(
-          // استخدمت Expanded عشان يملوا العرض صح
           child: SizedBox(
             height: 55.h,
             child: ElevatedButton(
@@ -35,7 +34,7 @@ class ApplyReset extends StatelessWidget {
           ),
         ),
         CustomWidthSpacingWidget(width: 16.w),
-        // زرار Reset
+        // Reset button
         Expanded(
           child: SizedBox(
             height: 55.h,

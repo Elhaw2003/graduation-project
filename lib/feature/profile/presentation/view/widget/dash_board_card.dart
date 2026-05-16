@@ -55,7 +55,7 @@ class DashboardCard extends StatelessWidget {
             ),
           ),
           CustomHeightSpacingWidget(height: 16),
-          // زرار View details
+          // View details button
           GestureDetector(
             onTap: item.onTap,
             child: Container(

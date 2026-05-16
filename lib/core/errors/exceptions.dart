@@ -9,7 +9,7 @@ class ServerException implements Exception {
 
 /// Helper function to parse error response (handles both String and Map responses)
 ErrorModel parseErrorResponse(dynamic data, int statusCode) {
-  // 1. لو الداتا null
+  // If data is null, return a default error
   if (data == null) {
     return ErrorModel(
       statusCode: statusCode,
@@ -18,16 +18,13 @@ ErrorModel parseErrorResponse(dynamic data, int statusCode) {
     );
   }
 
-  // 2. معالجة الـ String (هنا بنمسك الـ HTML)
+  // Handle String responses (catch HTML error pages)
   if (data is String) {
-    // تشيك لو الـ String ده عبارة عن HTML (بيبدأ بـ <!DOCTYPE أو <html>)
     if (data.trim().toLowerCase().startsWith('<!doctype') ||
         data.trim().toLowerCase().startsWith('<html')) {
       return ErrorModel(
         statusCode: statusCode,
-        message: getDefaultErrorMessage(
-          statusCode,
-        ), // هيرجع الرسالة "الآدمية" اللي أنت كاتبها تحت
+        message: getDefaultErrorMessage(statusCode),
         generalErrors: [getDefaultErrorMessage(statusCode)],
       );
     }
@@ -39,12 +36,12 @@ ErrorModel parseErrorResponse(dynamic data, int statusCode) {
     );
   }
 
-  // 3. لو الداتا Map (JSON طبيعي)
+  // Handle Map (standard JSON response)
   if (data is Map<String, dynamic>) {
     return ErrorModel.fromJson(data);
   }
 
-  // 4. أي حاجة تانية
+  // Fallback for any other type
   return ErrorModel(
     statusCode: statusCode,
     message: getDefaultErrorMessage(statusCode),
@@ -139,35 +136,35 @@ void handleDioExceptions(DioException e) {
       );
     case DioExceptionType.badResponse:
       switch (e.response?.statusCode) {
-        case 400: // Bad request
+        case 400:
           throw ServerException(
             errModel: parseErrorResponse(e.response?.data, 400),
           );
-        case 401: //unauthorized
+        case 401:
           throw ServerException(
             errModel: parseErrorResponse(e.response?.data, 401),
           );
-        case 403: //forbidden
+        case 403:
           throw ServerException(
             errModel: parseErrorResponse(e.response?.data, 403),
           );
-        case 404: //not found
+        case 404:
           throw ServerException(
             errModel: parseErrorResponse(e.response?.data, 404),
           );
-        case 409: //conflict
+        case 409:
           throw ServerException(
             errModel: parseErrorResponse(e.response?.data, 409),
           );
-        case 422: //  Unprocessable Entity
+        case 422:
           throw ServerException(
             errModel: parseErrorResponse(e.response?.data, 422),
           );
-        case 500: // Internal server error
+        case 500:
           throw ServerException(
             errModel: parseErrorResponse(e.response?.data, 500),
           );
-        case 504: // Server timeout
+        case 504:
           throw ServerException(
             errModel: parseErrorResponse(e.response?.data, 504),
           );

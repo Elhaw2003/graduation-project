@@ -9,7 +9,7 @@ class LoginModel extends Equatable {
   final String? email;
   final String? country;
   final String? whatsAppNumber;
-  final String? profilePictureUrl
+  final String? profilePictureUrl;
   final String? token;
   final String? refreshToken;
   final String? expiresOn;
@@ -43,7 +43,7 @@ class LoginModel extends Equatable {
       email: json['email'],
       country: json['country'],
       whatsAppNumber: json['whatsAppNumber'],
-      profilePictureUrl: json['profilePictureUrl'], 
+      profilePictureUrl: json['profilePictureUrl'],
       token: json['token'],
       refreshToken: json['refreshToken'],
       expiresOn: json['expiresOn'],

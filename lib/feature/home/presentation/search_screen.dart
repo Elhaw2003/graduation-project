@@ -1,25 +1,46 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smart_guide/core/network/dio_consumer.dart';
 import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
 import 'package:smart_guide/core/shared_widgets/custom_grid_view.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
-import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_cubit.dart';
-import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_state.dart';
+import 'package:smart_guide/feature/home/data/repo/get_places/get_places_repo_imple.dart';
+import 'package:smart_guide/feature/home/presentation/cubit/search_places/search_places_cubit.dart';
+import 'package:smart_guide/feature/home/presentation/cubit/search_places/search_places_state.dart';
 import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_cubit.dart';
 import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_states.dart';
 
-class SearchPlacesScreen extends StatefulWidget {
+/// Wraps the actual search screen with its own isolated [SearchPlacesCubit]
+/// so that search activity never mutates the global [PlacesCubit].
+class SearchPlacesScreen extends StatelessWidget {
   const SearchPlacesScreen({super.key});
 
   @override
-  State<SearchPlacesScreen> createState() => _SearchPlacesScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => SearchPlacesCubit(
+        getPlacesRepo: GetPlacesRepoImple(
+          apiConsumer: DioConsumer(dio: Dio()),
+        ),
+      ),
+      child: const _SearchPlacesBody(),
+    );
+  }
 }
 
-class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
+class _SearchPlacesBody extends StatefulWidget {
+  const _SearchPlacesBody();
+
+  @override
+  State<_SearchPlacesBody> createState() => _SearchPlacesBodyState();
+}
+
+class _SearchPlacesBodyState extends State<_SearchPlacesBody> {
   final TextEditingController _searchController = TextEditingController();
 
   Timer? _debounce;
@@ -48,7 +69,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
     }
 
     _debounce = Timer(const Duration(milliseconds: 500), () {
-      context.read<PlacesCubit>().searchPlaces(value);
+      context.read<SearchPlacesCubit>().searchPlaces(value);
     });
   }
 
@@ -113,7 +134,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
           toolbarHeight: 80.h,
         ),
 
-        body: BlocBuilder<PlacesCubit, PlacesState>(
+        body: BlocBuilder<SearchPlacesCubit, SearchPlacesState>(
           builder: (context, state) {
             final searchText = _searchController.text.trim();
 
@@ -124,13 +145,13 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
               );
             }
 
-            if (state is PlacesLoading) {
+            if (state is SearchPlacesLoading) {
               return const Center(
                 child: CircularProgressIndicator(color: AppColors.primaryColor),
               );
             }
 
-            if (state is PlacesSuccess) {
+            if (state is SearchPlacesSuccess) {
               if (state.places.isEmpty) {
                 return _buildStatusMessage(
                   Icons.fmd_bad_outlined,
@@ -146,7 +167,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
 
               return RefreshIndicator(
                 onRefresh: () async {
-                  context.read<PlacesCubit>().searchPlaces(searchText);
+                  context.read<SearchPlacesCubit>().searchPlaces(searchText);
                 },
                 child: GridView.builder(
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -191,7 +212,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
               );
             }
 
-            if (state is PlacesFailure) {
+            if (state is SearchPlacesFailure) {
               return Center(
                 child: Text(
                   state.errorMessage,

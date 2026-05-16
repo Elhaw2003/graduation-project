@@ -30,7 +30,7 @@ class SavePlacedCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(20.r),
         child: Stack(
           children: [
-            // صورة المكان
+            // Place image
             Positioned.fill(
               child: CachedNetworkImage(
                 imageUrl: savedPlaceedCardModel.imageUrl,
@@ -46,7 +46,7 @@ class SavePlacedCard extends StatelessWidget {
               ),
             ),
 
-            // الطبقة المظلمة (Overlay) للقراءة
+            // Dark overlay for text readability
             Positioned.fill(
               child: Container(
                 decoration: BoxDecoration(
@@ -62,7 +62,7 @@ class SavePlacedCard extends StatelessWidget {
               ),
             ),
 
-            // التاج وزر الحذف
+            // Tag badge and delete button
             Positioned(
               top: 15.h,
               left: 15.w,
@@ -108,7 +108,7 @@ class SavePlacedCard extends StatelessWidget {
               ),
             ),
 
-            // النصوص السفلية
+            // Bottom text labels
             Positioned(
               bottom: 15.h,
               left: 15.w,

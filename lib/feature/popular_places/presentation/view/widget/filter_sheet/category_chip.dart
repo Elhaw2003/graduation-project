@@ -32,7 +32,7 @@ class _CategoryChipsState extends State<CategoryChips> {
               onSelected: (selected) {
                 setState(() {
                   if (selected) {
-                    _selectedCategory = cat; // تحديث المختار
+                    _selectedCategory = cat;
                   }
                 });
               },

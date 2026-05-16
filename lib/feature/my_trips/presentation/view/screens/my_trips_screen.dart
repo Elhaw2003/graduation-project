@@ -12,9 +12,9 @@ class MyTripsScreen extends StatelessWidget {
       backgroundColor: AppColors.backgroundColor,
       body: CustomScrollView(
         slivers: [
-          /// 1. الـ AppBar
+          /// App Bar
           const MyTripAppbar(),
-          // 2. الكاردات (الـ Body)
+          // Body cards
           MyTripBody(),
         ],
       ),

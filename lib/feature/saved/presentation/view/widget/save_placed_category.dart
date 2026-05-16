@@ -20,7 +20,7 @@ class SavePlacedCategory extends StatelessWidget {
       pinned: true,
       delegate: _StickyCategoryDelegate(
         child: Container(
-          color: AppColors.backgroundColor, // نفس لون خلفية الشاشة للدمج
+          color: AppColors.backgroundColor,
           padding: EdgeInsets.symmetric(vertical: 8.h),
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
@@ -43,7 +43,7 @@ class SavePlacedCategory extends StatelessWidget {
   }
 }
 
-// ميثود لجعل الهيدر Sticky
+// Sticky header delegate for pinned category bar
 class _StickyCategoryDelegate extends SliverPersistentHeaderDelegate {
   final Widget child;
   _StickyCategoryDelegate({required this.child});

@@ -24,7 +24,7 @@ class _CustomContainerForFiltersState extends State<CustomContainerForFilters> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 42.h, // ارتفاع مرن قليلاً للتابلت
+      height: 42.h,
       child: ListView.separated(
         separatorBuilder: (context, index) => SizedBox(width: 12.w),
         scrollDirection: Axis.horizontal,

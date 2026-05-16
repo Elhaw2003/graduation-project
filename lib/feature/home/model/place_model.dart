@@ -31,7 +31,7 @@ class PlaceModel {
 
   factory PlaceModel.fromJson(Map<String, dynamic> json) {
     return PlaceModel(
-      /// 🔥 أهم سطر هنا
+      // Supports both 'id' and 'placeId' keys for compatibility
       id: json['id'] ?? json['placeId'] ?? 0,
 
       name: json['name'] ?? 'Unknown Place',

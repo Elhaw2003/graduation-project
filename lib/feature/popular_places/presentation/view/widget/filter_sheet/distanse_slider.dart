@@ -42,32 +42,32 @@ class _DistanceSliderState extends State<DistanceSlider> {
           ),
           child: SliderTheme(
             data: SliderTheme.of(context).copyWith(
-              trackHeight: 12.h, // ارتفاع الـ Track عشان يبان عريض زي الصورة
+              trackHeight: 12.h,
               activeTrackColor: AppColors.primaryColor,
               inactiveTrackColor: AppColors.whiteColor,
               tickMarkShape: SliderTickMarkShape.noTickMark,
 
-              // 1. شكل الدائرة (Thumb) - بنخليها بيضاء وليها برواز أزرق غامق
+              // Thumb style: white circle with dark blue border
               thumbColor: Colors.white,
               thumbShape: RoundSliderThumbShape(
                 enabledThumbRadius: 12.r,
                 elevation: 5,
                 pressedElevation: 8,
               ),
-              // هنا بنرسم البرواز الأزرق اللي حول الدائرة البيضاء
+              // Overlay color for the blue border effect around the thumb
               overlayColor: AppColors.primaryColor.withOpacity(0.2),
 
-              // 2. شكل الـ Label (الفقاعة اللي فوق)
+              // Value indicator (tooltip bubble) style
               // valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
               valueIndicatorColor: AppColors.primaryColor,
               valueIndicatorTextStyle: AppTextStyle.whitePoppinsW500S20
-                  .copyWith(fontSize: 16.sp), // استايل الخط جواها
+                  .copyWith(fontSize: 16.sp),
             ),
             child: Slider(
               value: _currentValue,
-              max: 700, // حسب الصورة الـ Max واصل لـ 700
+              max: 700,
               min: 0,
-              divisions: 7, // عشان يتحرك خطوات 100، 200...
+              divisions: 7,
               label: "${_currentValue.round()} Km",
               onChanged: (value) {
                 setState(() {

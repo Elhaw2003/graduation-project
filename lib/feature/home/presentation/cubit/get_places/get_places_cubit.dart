@@ -10,7 +10,6 @@ class PlacesCubit extends Cubit<PlacesState> {
 
   final List<PlaceModel> _allPlaces = [];
 
-  // 👇 هذا هو السطر الناقص الذي يحل المشكلة
   List<PlaceModel> get places => _allPlaces;
 
   int _currentPage = 1;
@@ -19,18 +18,21 @@ class PlacesCubit extends Cubit<PlacesState> {
   String _currentSearch = '';
 
   Future<void> getPlaces({bool loadMore = false, String? search}) async {
-    // منع الطلبات المتكررة إذا كنا نحمل حالياً أو وصلنا للنهاية
+    // Prevent duplicate requests while loading or after reaching the end
     if (state is PlacesPaginationLoading || (loadMore && _hasReachedMax))
       return;
 
-    // تحديث كلمة البحث إذا تم إرسالها
+    // Update search term if provided
     if (search != null) {
-      // إذا كان يبحث عن نفس الكلمة وهو ليس LoadMore، لا تفعل شيء
+      // Skip if searching the same term and not loading more
       if (_currentSearch == search && !loadMore) return;
       _currentSearch = search;
+    } else if (!loadMore) {
+      // Plain refresh call — clear any leftover search
+      _currentSearch = '';
     }
 
-    // تجهيز الحالة قبل البدء
+    // Prepare state before fetching
     if (!loadMore) {
       emit(PlacesLoading());
       _currentPage = 1;
@@ -49,14 +51,13 @@ class PlacesCubit extends Cubit<PlacesState> {
     result.fold(
       (failure) {
         if (loadMore) {
-          // إذا فشل الـ pagination، لا نمسح البيانات، بل نعيد الحالة الناجحة بالبيانات الحالية
+          // On pagination failure, preserve existing data instead of clearing
           emit(
             PlacesSuccess(
               places: List.from(_allPlaces),
               hasReachedMax: _hasReachedMax,
             ),
           );
-          // اختياري: يمكنك إرسال Trigger لعرض SnackBar هنا
         } else {
           emit(PlacesFailure(failure.message));
         }
@@ -70,7 +71,7 @@ class PlacesCubit extends Cubit<PlacesState> {
           _allPlaces.addAll(newPlaces);
           _currentPage++;
 
-          // التحقق إذا وصلنا للحد الأقصى بناءً على الـ count الراجع من الـ API
+          // Check if we reached the total count from the API
           if (_allPlaces.length >= response.count) {
             _hasReachedMax = true;
           }
@@ -86,13 +87,17 @@ class PlacesCubit extends Cubit<PlacesState> {
     );
   }
 
-  /// دالة البحث: يفضل استدعاؤها مع Debouncer من الـ UI
+  /// Searches places by query. Best used with a Debouncer from the UI.
   Future<void> searchPlaces(String value) async {
     await getPlaces(search: value);
   }
 
-  /// دالة التحديث (Pull to Refresh)
+  /// Clears any previous search term and fetches the fresh default list.
   Future<void> refreshPlaces() async {
-    await getPlaces(search: _currentSearch);
+    _currentSearch = '';
+    _currentPage = 1;
+    _hasReachedMax = false;
+    _allPlaces.clear();
+    await getPlaces();
   }
 }

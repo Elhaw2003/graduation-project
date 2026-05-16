@@ -34,13 +34,13 @@ class RatingFilter extends StatelessWidget {
               ),
             ],
           ),
-          height: 70.h, // ارتفاع مناسب للـ Row
+          height: 70.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: 5,
-            // بنبدأ من 5 وننزل لـ 1 عشان الترتيب المنطقي (أو العكس حسب تصميمك)
+
             itemBuilder: (context, index) {
-              int ratingValue = index + 1; // لأن index بيبدأ من 0
+              int ratingValue = index + 1;
               return RatingItem(rating: ratingValue);
             },
           ),
@@ -51,7 +51,7 @@ class RatingFilter extends StatelessWidget {
 }
 
 class RatingItem extends StatelessWidget {
-  final int rating; // عدد النجوم اللي هتكون صفراء
+  final int rating;
 
   const RatingItem({super.key, required this.rating});
 
@@ -61,7 +61,7 @@ class RatingItem extends StatelessWidget {
       margin: EdgeInsets.only(right: 12.w),
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: AppColors.whiteColor, // لون خلفية خفيف
+        color: AppColors.whiteColor,
         borderRadius: BorderRadius.circular(10.r),
         border: Border.all(color: AppColors.grey200Color),
       ),
@@ -69,7 +69,7 @@ class RatingItem extends StatelessWidget {
         children: List.generate(5, (starIndex) {
           return Icon(
             starIndex < rating ? Icons.star : Icons.star_border,
-            // 👈 السحر هنا: لو رقم النجمة أقل من التقييم المطلوب تتلون أصفر
+            // Filled star if star index < rating, otherwise outlined
             color: AppColors.starColore,
             size: 18.sp,
           );

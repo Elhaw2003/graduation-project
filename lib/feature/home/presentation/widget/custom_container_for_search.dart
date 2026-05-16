@@ -46,7 +46,7 @@ class _CustomContainerForSearchOnlyState
       'Explore Luxor Temple...',
     ];
 
-    // الأنيميشن يشتغل فقط في حالة الـ Home (readOnly = true)
+    // Only animate the hint text on the Home screen (readOnly mode)
     if (widget.readOnly) {
       _startAnimation();
     } else {

@@ -13,15 +13,14 @@ class PopularPlacesAppbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      surfaceTintColor: Colors.transparent,
+    return SliverAppBar(
+      pinned: true,
+      automaticallyImplyLeading: false,
+      expandedHeight: 120.h,
+      collapsedHeight: 60.h,
       backgroundColor: AppColors.backgroundColor,
-      title: Text(
-        LocaleKeys.popularPlaces.tr(),
-        style: AppTextStyle.blackPoppinsW500S24,
-      ),
-      centerTitle: true,
-      leading: CustomArrowBackButton(),
+      surfaceTintColor: Colors.transparent,
+      leading: const CustomArrowBackButton(),
       actions: [
         Container(
           width: 40.w,
@@ -36,6 +35,15 @@ class PopularPlacesAppbar extends StatelessWidget {
           child: SvgPicture.asset(Assets.imagesSvgPopularPlaces),
         ),
       ],
+      flexibleSpace: FlexibleSpaceBar(
+        titlePadding: EdgeInsets.only(left: 56.w, bottom: 16.h),
+        title: Text(
+          LocaleKeys.popularPlaces.tr(),
+          style: AppTextStyle.blackPoppinsW500S24.copyWith(
+            fontSize: 18.sp,
+          ),
+        ),
+      ),
     );
   }
 }
