@@ -17,7 +17,6 @@ class CustomGridView extends StatelessWidget {
     required this.placeId,
     required this.isSaved,
     required this.onSaveTap,
-    required this.isTourist,
     this.city,
     this.type,
     this.period,
@@ -31,7 +30,7 @@ class CustomGridView extends StatelessWidget {
   final bool isSaved;
   final VoidCallback onSaveTap;
 
-  final bool isTourist;
+
 
   final String? city;
   final String? type;
@@ -155,8 +154,7 @@ class CustomGridView extends StatelessWidget {
                   ),
 
                   /// ================= BOOKMARK =================
-                  if (isTourist)
-                    Positioned(
+                  Positioned(
                       top: 12.h,
                       right: 12.w,
                       child: GestureDetector(

@@ -1,5 +1,3 @@
-// TourGuideInfoDetiles.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,26 +13,31 @@ class TourGuideInfoDetiles extends StatelessWidget {
     required this.rating,
     required this.price,
     required this.number,
+    required this.cities,
   });
+
   final String firstName;
   final String lastName;
   final String rating;
   final String price;
   final String number;
+  final List<String> cities;
 
   @override
   Widget build(BuildContext context) {
+    // Dynamic calculation of text for covered cities or falling back to default
+    final String locationText = cities.isNotEmpty ? cities.join(' / ') : 'Cairo / Giza';
+
     return SizedBox(
       width: double.infinity,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Name and verified badge
           Row(
             children: [
               Flexible(
                 child: Text(
-                  '$firstName $lastName',
+                  '${firstName.isNotEmpty ? firstName : 'Local'} ${lastName.isNotEmpty ? lastName : 'Guide'}',
                   style: AppTextStyle.primaryTextW500S17.copyWith(
                     fontWeight: FontWeight.bold,
                     fontSize: 16.sp,
@@ -52,7 +55,6 @@ class TourGuideInfoDetiles extends StatelessWidget {
             ],
           ),
           SizedBox(height: 6.h),
-          // Trips, Location, Price info
           Row(
             children: [
               Text(
@@ -79,7 +81,7 @@ class TourGuideInfoDetiles extends StatelessWidget {
               SizedBox(width: 4.w),
               Flexible(
                 child: Text(
-                  'Giza / Cairo',
+                  locationText,
                   style: AppTextStyle.primaryTextW400S14.copyWith(
                     color: AppColors.secondaryColor,
                     fontSize: 12.sp,

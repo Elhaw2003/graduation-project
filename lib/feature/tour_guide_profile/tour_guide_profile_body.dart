@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/feature/tour_guide_profile/action_row_in_tour_guide_screen.dart';
+import 'package:smart_guide/feature/tour_guide_profile/tour_guide_gallery_widget.dart';
 import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_image.dart';
 import 'package:smart_guide/feature/tour_guide_profile/tour_guide_info.dart';
 import 'package:smart_guide/feature/tour_guide_profile/custom_container_about_the_guide.dart';
@@ -17,6 +18,10 @@ class TourGuideProfileBody extends StatelessWidget {
     required this.lastName,
     required this.rating,
     required this.price,
+    required this.cities,
+    required this.languages,
+    required this.gallery,
+    required this.guidedId,
   });
 
   final String name;
@@ -25,10 +30,14 @@ class TourGuideProfileBody extends StatelessWidget {
   final String imageUrl;
   final String rating;
   final String price;
-
+  final List<String> cities;
+  final List<String> languages;
+  final List<String> gallery;
+  final String guidedId;
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Stack(
           clipBehavior: Clip.none,
@@ -42,7 +51,7 @@ class TourGuideProfileBody extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              child: const ActionRowInTourGuideScreen(),
+              child: ActionRowInTourGuideScreen(guideId: guidedId),
             ),
             Positioned(
               bottom: -45.h,
@@ -61,6 +70,7 @@ class TourGuideProfileBody extends StatelessWidget {
                         lastName: lastName,
                         rating: rating,
                         price: price,
+                        cities: cities,
                         number: '',
                       ),
                     ),
@@ -74,10 +84,15 @@ class TourGuideProfileBody extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomContainerAboutTheGuide(name: name, aboutGuide: aboutGuide),
               CustomHeightSpacingWidget(height: 16.h),
-              CustomContainerExpertiseAndSkills(),
+              CustomContainerExpertiseAndSkills(languages: languages),
+              if (gallery.isNotEmpty) ...[
+                CustomHeightSpacingWidget(height: 16.h),
+                TourGuideGalleryWidget(galleryUrls: gallery),
+              ],
               CustomHeightSpacingWidget(height: 20.h),
             ],
           ),

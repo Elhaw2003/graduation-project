@@ -1,5 +1,3 @@
-// CustomContainerAboutTheGuide.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
@@ -25,6 +23,11 @@ class _CustomContainerAboutTheGuideState
 
   @override
   Widget build(BuildContext context) {
+    // Inject fallback description pattern if the profile bio is empty or missing
+    final String parsedBio = widget.aboutGuide.isNotEmpty
+        ? widget.aboutGuide
+        : "Hello, I am ${widget.name}. I am a certified professional tour guide. I love sharing ancient stories, history, and introducing tourists to our culture and beautiful hidden landmarks.";
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -55,7 +58,7 @@ class _CustomContainerAboutTheGuideState
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  'Get to know ${widget.name} and his expertise.',
+                  'Get to know ${widget.name.isNotEmpty ? widget.name : 'your guide'} and their background.',
                   style: AppTextStyle.primaryTextW400S14.copyWith(
                     color: AppColors.secondaryTextColor,
                     fontSize: 12.sp,
@@ -71,7 +74,7 @@ class _CustomContainerAboutTheGuideState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.aboutGuide,
+                  parsedBio,
                   style: AppTextStyle.primaryTextW400S16.copyWith(
                     fontSize: 14.sp,
                     height: 1.5,

@@ -29,7 +29,7 @@ class ChooseGuidesBody extends StatelessWidget {
           iconPath: Assets.imagesSvgHuman,
           isSvg: true,
           onTap: () {
-            context.pushNamed(AppRoutes.chooseHumenGuidesScreen);
+            context.pushNamed(AppRoutes.allGuidesScreen);
           },
         ),
         CustomHeightSpacingWidget(height: 30.h),

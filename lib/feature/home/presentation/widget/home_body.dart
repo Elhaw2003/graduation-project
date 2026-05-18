@@ -10,7 +10,6 @@ import 'package:smart_guide/core/utils/image_url_extension.dart';
 import 'package:smart_guide/core/shared_widgets/custom_grid_view.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
-import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_cubit.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_state.dart';
 import 'package:smart_guide/feature/home/presentation/search_screen.dart';
@@ -28,7 +27,6 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
-  bool isTourist = false;
   String _userName = '';
   String? _profilePic;
 
@@ -46,14 +44,11 @@ class _HomeBodyState extends State<HomeBody> {
   }
 
   Future<void> _loadUserData() async {
-    final userType = await SecureStorageHelper.instance.getUserType();
     final userName = await SecureStorageHelper.instance.getUserName();
     final profilePic = await SecureStorageHelper.instance.getProfilePic();
 
     if (!mounted) return;
     setState(() {
-      isTourist =
-          userType?.toLowerCase() == UserTypeEnum.Tourist.name.toLowerCase();
       _userName = userName ?? '';
       _profilePic = profilePic;
     });
@@ -212,7 +207,6 @@ class _HomeBodyState extends State<HomeBody> {
                             type: place.type,
                             period: place.period,
                             isSaved: isSaved,
-                            isTourist: isTourist,
                             onSaveTap: () {
                               final savedCubit = context
                                   .read<SavedPlacesCubit>();

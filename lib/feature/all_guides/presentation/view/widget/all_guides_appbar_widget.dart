@@ -12,17 +12,17 @@ class AllGuidesAppbar extends StatelessWidget {
     required this.fadeAnimations,
     required this.slideAnimations,
   });
+
   final List<Animation<double>> fadeAnimations;
   final List<Animation<Offset>> slideAnimations;
+
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
       pinned: true,
       expandedHeight: 200.h,
-      collapsedHeight:
-          200.h, // 👈 بيمنع الـ AppBar من إنه يصغر أو يلم مع السكرول
-      toolbarHeight:
-          60.h, // 👈 بيحافظ على حجم شريط زرار الرجوع فوق عشان ميبوظش المسافات
+      collapsedHeight: 200.h,
+      toolbarHeight: 60.h,
       automaticallyImplyLeading: false,
       leading: CustomArrowBackButton(iconColor: AppColors.arrowBackColor),
       backgroundColor: AppColors.backgroundColor,
@@ -30,7 +30,6 @@ class AllGuidesAppbar extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         background: Stack(
           children: [
-            /// Gradient Background
             Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -43,14 +42,10 @@ class AllGuidesAppbar extends StatelessWidget {
                 ),
               ),
             ),
-
-            /// Content
             SafeArea(
               child: Center(
-                // 👈 بيضمن إن الـ Column كله ييجي في النص بالظبط (أفقياً ورأسياً)
                 child: Column(
-                  mainAxisSize: MainAxisSize
-                      .min, // 👈 بيخلي الـ Column ياخد مساحة العناصر اللي جواه بس
+                  mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

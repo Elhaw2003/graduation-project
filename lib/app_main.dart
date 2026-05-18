@@ -5,14 +5,14 @@ import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_sc
 import 'package:smart_guide/feature/guides/presentation/view/choose_guides_screen.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
 
-class AppMain extends StatefulWidget {
-  const AppMain({super.key});
+class TouristApp extends StatefulWidget {
+  const TouristApp({super.key});
 
   @override
-  State<AppMain> createState() => _AppMainState();
+  State<TouristApp> createState() => _TouristAppState();
 }
 
-class _AppMainState extends State<AppMain> {
+class _TouristAppState extends State<TouristApp> {
   int _bottomNavIndex = 0;
 
   final List<Widget> pages = const [

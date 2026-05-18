@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/services/cache/cache_helper.dart';
 import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
+import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:smart_guide/feature/splash/presentation/view/widget/splash_body.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -42,7 +43,14 @@ class _SplashScreenState extends State<SplashScreen> {
       final bool isLoggedIn = await SecureStorageHelper().isLoggedIn();
       if (mounted) {
         if (isLoggedIn) {
-          context.go(AppRoutes.appMain);
+          final userType = await SecureStorageHelper.instance.getUserTypeEnum();
+
+          if (userType == UserTypeEnum.Tourist) {
+            context.go(AppRoutes.touristApp);
+          } else {
+            // Route guides to the dedicated guide dashboard
+            context.go(AppRoutes.guideApp);
+          }
         } else {
           await SecureStorageHelper().clearTokens();
           context.go(AppRoutes.loginScreen);

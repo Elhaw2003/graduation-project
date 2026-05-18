@@ -16,6 +16,15 @@ class EndPoint {
   /// ================= SAVED PLACES =================
 
   static const String savedPlaces = "tourists/me/savedplaces";
+
+  /// ================= TOUR GUIDES =================
+
+  static const String tourGuides = "tour-guides";
+
+  /// ================= SAVED GUIDES (Favorites) =================
+  static const String savedGuides = "tourists/me/savedguides";
+  static String deleteSavedGuide({required String guideId}) =>
+      "tourists/me/savedguides/$guideId";
 }
 
 class ApiKey {
@@ -38,4 +47,17 @@ class ApiKey {
 
   /// Authentication token prefix for Bearer-style authentication
   static const String tokenPrefix = "Bearer";
+
+  /// ================= TOUR GUIDES KEYS =================
+
+  static const String userId = "userId";
+  static const String country = "country";
+  static const String whatsAppNumber = "whatsAppNumber";
+  static const String bio = "bio";
+  static const String pricePerDay = "pricePerDay";
+  static const String rating = "rating";
+  static const String profilePicture = "profilePicture";
+  static const String cities = "cities";
+  static const String languages = "languages";
+  static const String gallery = "gallery";
 }

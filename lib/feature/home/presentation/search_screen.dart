@@ -5,10 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/network/dio_consumer.dart';
-import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
 import 'package:smart_guide/core/shared_widgets/custom_grid_view.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
-import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:smart_guide/feature/home/data/repo/get_places/get_places_repo_imple.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/search_places/search_places_cubit.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/search_places/search_places_state.dart';
@@ -45,22 +43,9 @@ class _SearchPlacesBodyState extends State<_SearchPlacesBody> {
 
   Timer? _debounce;
 
-  bool isTourist = false;
-
   @override
   void initState() {
     super.initState();
-
-    _loadUserType();
-  }
-
-  Future<void> _loadUserType() async {
-    final userType = await SecureStorageHelper.instance.getUserType();
-
-    setState(() {
-      isTourist =
-          userType?.toLowerCase() == UserTypeEnum.Tourist.name.toLowerCase();
-    });
   }
 
   void _onSearchChanged(String value) {
@@ -196,7 +181,6 @@ class _SearchPlacesBodyState extends State<_SearchPlacesBody> {
                       type: place.type,
                       period: place.period,
                       isSaved: isSaved,
-                      isTourist: isTourist,
                       onSaveTap: () {
                         final savedCubit = context.read<SavedPlacesCubit>();
 
