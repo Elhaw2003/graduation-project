@@ -1,5 +1,3 @@
-// CustomContainerExpertiseAndSkills.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
@@ -10,7 +8,9 @@ import 'package:smart_guide/feature/tour_guide_profile/grid_view_for_languages.d
 import 'package:smart_guide/generated/assets.dart';
 
 class CustomContainerExpertiseAndSkills extends StatelessWidget {
-  const CustomContainerExpertiseAndSkills({super.key});
+  const CustomContainerExpertiseAndSkills({super.key, required this.languages});
+  final List<String> languages;
+
   final List<String> specialties = const [
     'Ancient History',
     'Photo-Friendly',
@@ -84,6 +84,20 @@ class CustomContainerExpertiseAndSkills extends StatelessWidget {
                     physics: const BouncingScrollPhysics(),
                     itemCount: specialties.length,
                     separatorBuilder: (context, index) => SizedBox(width: 10.w),
+                    // itemGroup: (context, index) {
+                    //   return CustomButtonWidget(
+                    //     buttonWidth: 130.w,
+                    //     buttonHeight: 38.h,
+                    //     buttonColor: AppColors.primaryColor,
+                    //     prefixSvgIcon: icons[index],
+                    //     title: specialties[index],
+                    //     borderRadiusButton: 8.r,
+                    //     titleStyle: AppTextStyle.whiteW500S17.copyWith(
+                    //       fontSize: 12.sp,
+                    //       fontWeight: FontWeight.w500,
+                    //     ),
+                    //   );
+                    // },
                     itemBuilder: (context, index) {
                       return CustomButtonWidget(
                         buttonWidth: 130.w,
@@ -109,7 +123,7 @@ class CustomContainerExpertiseAndSkills extends StatelessWidget {
                   ),
                 ),
                 CustomHeightSpacingWidget(height: 12.h),
-                GridViewForLanguages(),
+                GridViewForLanguages(languages: languages),
               ],
             ),
           ),

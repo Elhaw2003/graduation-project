@@ -7,6 +7,9 @@ import 'package:smart_guide/core/network/dio_consumer.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spring_animation.dart';
 import 'package:smart_guide/feature/aiGuide/presentation/view/ai_guide_screen.dart';
+import 'package:smart_guide/feature/all_guides/data/repo/tour_guides_repo_imple.dart';
+import 'package:smart_guide/feature/all_guides/presentation/cubit/tour_guides_cubit.dart';
+import 'package:smart_guide/feature/all_guides/presentation/view/all_guides_screen.dart';
 import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/login_screen.dart';
 import 'package:smart_guide/feature/auth/new_password/presentation/view/new_password_screen.dart';
@@ -19,16 +22,14 @@ import 'package:smart_guide/feature/book_now/presentation/view/book_now_screen.d
 import 'package:smart_guide/feature/details/presentation/view/details_screen.dart';
 import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_screen.dart';
 import 'package:smart_guide/feature/favorite/presentation/view/favorite_screen.dart';
-import 'package:smart_guide/feature/guides/data/tour_guide_profile/tour_guide_profile_cubit.dart';
-import 'package:smart_guide/feature/guides/data/tour_guides/tour_guides_cubit.dart';
+import 'package:smart_guide/feature/guid_app/presentation/view/guide_app.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
-import 'package:smart_guide/feature/human_guide/all_guides/presentation/view/all_guides_screen.dart';
+import 'package:smart_guide/feature/tour_guide_profile/data/repo/save_guides/save_guides_repo_imple.dart';
+import 'package:smart_guide/feature/tour_guide_profile/presentation/cubit/save_guides/save_guides_cubit.dart';
 import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_screen.dart';
 import 'package:smart_guide/feature/auth/verify_otp/presentation/view/verify_otp_screen.dart';
-import 'package:smart_guide/feature/home/presentation/home_screen.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_place_details/get_place_details_cubit.dart';
 import 'package:smart_guide/feature/home/data/repo/get_place_detail/get_place_datil_repo_imple.dart';
-import 'package:smart_guide/core/network/api_consumer.dart';
 import 'package:smart_guide/feature/my_trips/data/enum/trip_type_enum.dart';
 import 'package:smart_guide/feature/my_trips/presentation/view/screens/my_trips_screen.dart';
 import 'package:smart_guide/feature/my_trips/presentation/view/screens/trip_type_screen.dart';
@@ -44,7 +45,6 @@ class RoutingGenerationConfig {
     initialLocation: AppRoutes.spalshScreen,
     errorBuilder: (context, state) => errorBuilder(),
     routes: [
-      /// Splash, Onboarding & Select Role
       GoRoute(
         path: AppRoutes.spalshScreen,
         name: AppRoutes.spalshScreen,
@@ -60,15 +60,11 @@ class RoutingGenerationConfig {
         name: AppRoutes.selectRoleScreen,
         builder: (context, state) => const SelectRoleScreen(),
       ),
-
-      /// Login Screen (General - No Params)
       GoRoute(
         path: AppRoutes.loginScreen,
         name: AppRoutes.loginScreen,
         builder: (context, state) => const LoginScreen(),
       ),
-
-      /// Register Screen (The only one with Path Parameter)
       GoRoute(
         path: '${AppRoutes.registerScreen}/:userType',
         name: AppRoutes.registerScreen,
@@ -83,8 +79,6 @@ class RoutingGenerationConfig {
           );
         },
       ),
-
-      /// Forgot Password Flow (General - Use 'extra' for data)
       GoRoute(
         path: AppRoutes.resetPasswordScreen,
         name: AppRoutes.resetPasswordScreen,
@@ -93,7 +87,6 @@ class RoutingGenerationConfig {
           return CustomSpringPage(child: ResetPasswordScreen(email: email));
         },
       ),
-
       GoRoute(
         path: AppRoutes.verifyOtpScreen,
         name: AppRoutes.verifyOtpScreen,
@@ -102,7 +95,6 @@ class RoutingGenerationConfig {
           return CustomSpringPage(child: VerifyOtpScreen(email: email));
         },
       ),
-
       GoRoute(
         path: AppRoutes.newPasswordScreen,
         name: AppRoutes.newPasswordScreen,
@@ -116,23 +108,18 @@ class RoutingGenerationConfig {
           );
         },
       ),
-
-      /// Success Screens (General)
       GoRoute(
         path: AppRoutes.successVerificationScreen,
         name: AppRoutes.successVerificationScreen,
         pageBuilder: (context, state) =>
             CustomSpringPage(child: SuccessVerificationScreen()),
       ),
-
       GoRoute(
         path: AppRoutes.passwordResetSuccessfullyScreen,
         name: AppRoutes.passwordResetSuccessfullyScreen,
         pageBuilder: (context, state) =>
             CustomSpringPage(child: PasswordResetSuccessfullyScreen()),
       ),
-
-      /// Home & App Core
       GoRoute(
         path: AppRoutes.homeScreen,
         name: AppRoutes.homeScreen,
@@ -140,13 +127,17 @@ class RoutingGenerationConfig {
             CustomSpringPage(child: const HomeScreen()),
       ),
       GoRoute(
-        path: AppRoutes.appMain,
-        name: AppRoutes.appMain,
+        path: AppRoutes.touristApp,
+        name: AppRoutes.touristApp,
         pageBuilder: (context, state) =>
-            CustomSpringPage(child: const AppMain()),
+            CustomSpringPage(child: const TouristApp()),
       ),
-
-      /// Settings
+      GoRoute(
+        path: AppRoutes.guideApp,
+        name: AppRoutes.guideApp,
+        pageBuilder: (context, state) =>
+            CustomSpringPage(child: const GuideApp()),
+      ),
       GoRoute(
         path: AppRoutes.settingsScreen,
         name: AppRoutes.settingsScreen,
@@ -158,10 +149,13 @@ class RoutingGenerationConfig {
         name: AppRoutes.tourGuideProfileScreen,
         pageBuilder: (context, state) {
           final userId = state.pathParameters['userId']!;
-
           return CustomSpringPage(
             child: BlocProvider(
-              create: (context) => TourGuideProfileCubit()..getProfile(userId),
+              create: (context) => TourGuidesCubit(
+                repository: TourGuidesRepositoryImpl(
+                  apiConsumer: DioConsumer(dio: Dio()),
+                ),
+              )..fetchTourGuideProfile(userId),
               child: const TourGuideProfileScreen(),
             ),
           );
@@ -215,16 +209,16 @@ class RoutingGenerationConfig {
         },
       ),
       GoRoute(
-        path: AppRoutes.favoritePlacesScreen,
-        name: AppRoutes.favoritePlacesScreen,
+        path: AppRoutes.guidesSavedScreen,
+        name: AppRoutes.guidesSavedScreen,
         pageBuilder: (context, state) =>
-            CustomSpringPage(child: const FavoritePlacesScreen()),
+            CustomSpringPage(child: const GuidesSavedScreen()),
       ),
       GoRoute(
         path: AppRoutes.bookNowScreen,
         name: AppRoutes.bookNowScreen,
-        builder: (context, state) {
-          return BookNowScreen();
+        pageBuilder: (context, state) {
+          return CustomSpringPage(child: BookNowScreen());
         },
       ),
       GoRoute(
@@ -233,10 +227,18 @@ class RoutingGenerationConfig {
         builder: (context, state) => const SavedScreen(),
       ),
       GoRoute(
-        path: AppRoutes.chooseHumenGuidesScreen,
-        name: AppRoutes.chooseHumenGuidesScreen,
-        builder: (context, state) => BlocProvider(
-          create: (context) => TourGuidesCubit()..getTourGuides(),
+        path: AppRoutes.allGuidesScreen,
+        name: AppRoutes.allGuidesScreen,
+        builder: (context, state) => MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => TourGuidesCubit(
+                repository: TourGuidesRepositoryImpl(
+                  apiConsumer: DioConsumer(dio: Dio()),
+                ),
+              ),
+            ),
+          ],
           child: const AllGuidesScreen(),
         ),
       ),

@@ -1,5 +1,3 @@
-// AllGuidesBody.dart
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,10 +6,10 @@ import 'package:shimmer/shimmer.dart';
 import 'package:smart_guide/core/shared_widgets/custom_text_field_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
-import 'package:smart_guide/feature/guides/data/tour_guides/tour_guides_cubit.dart';
-import 'package:smart_guide/feature/guides/data/tour_guides/tour_guides_state.dart';
-import 'package:smart_guide/feature/human_guide/all_guides/presentation/view/widgets/all_guides_appbar.dart';
-import 'package:smart_guide/feature/human_guide/all_guides/presentation/view/widgets/custom_container_info_guides.dart';
+import 'package:smart_guide/feature/all_guides/presentation/cubit/tour_guides_cubit.dart';
+import 'package:smart_guide/feature/all_guides/presentation/cubit/tour_guides_states.dart';
+import 'package:smart_guide/feature/all_guides/presentation/view/widget/all_guides_appbar_widget.dart';
+import 'package:smart_guide/feature/all_guides/presentation/view/widget/custom_container_info_guides.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class AllGuidesBody extends StatefulWidget {
@@ -26,11 +24,20 @@ class AllGuidesBody extends StatefulWidget {
 class _AllGuidesBodyState extends State<AllGuidesBody> {
   late List<Animation<double>> _fadeAnimations;
   late List<Animation<Offset>> _slideAnimations;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = "";
 
   @override
   void initState() {
     super.initState();
     _initializeAnimations();
+    context.read<TourGuidesCubit>().fetchTourGuides();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   void _initializeAnimations() {
@@ -50,46 +57,49 @@ class _AllGuidesBodyState extends State<AllGuidesBody> {
 
     _slideAnimations = List.generate(
       10,
-      (index) => Tween<Offset>(begin: Offset(0, 0.3), end: Offset.zero).animate(
-        CurvedAnimation(
-          parent: widget.animationController,
-          curve: Interval(
-            (index * 0.08).clamp(0.0, 1.0),
-            ((index * 0.08) + 0.4).clamp(0.0, 1.0),
-            curve: Curves.easeOut,
+      (index) =>
+          Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+            CurvedAnimation(
+              parent: widget.animationController,
+              curve: Interval(
+                (index * 0.08).clamp(0.0, 1.0),
+                ((index * 0.08) + 0.4).clamp(0.0, 1.0),
+                curve: Curves.easeOut,
+              ),
+            ),
           ),
-        ),
-      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
-      // physics: const BouncingScrollPhysics(),
       slivers: [
-        /// ================= CREATIVE SLIVER APP BAR =================
         AllGuidesAppbar(
           fadeAnimations: _fadeAnimations,
           slideAnimations: _slideAnimations,
         ),
-
-        /// ================= SEARCH & FILTER SECTION =================
         SliverToBoxAdapter(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 20.h),
             child: FadeTransition(
               opacity: _fadeAnimations.length > 1
                   ? _fadeAnimations[1]
-                  : AlwaysStoppedAnimation(1.0),
+                  : const AlwaysStoppedAnimation(1.0),
               child: SlideTransition(
                 position: _slideAnimations.length > 1
                     ? _slideAnimations[1]
-                    : AlwaysStoppedAnimation(Offset.zero),
+                    : const AlwaysStoppedAnimation(Offset.zero),
                 child: Row(
                   children: [
                     Expanded(
                       child: CustomTextFieldWidget(
+                        controller: _searchController,
+                        onChanged: (value) {
+                          setState(() {
+                            _searchQuery = value.trim().toLowerCase();
+                          });
+                        },
                         width: double.infinity,
                         hintTextStyle: AppTextStyle.primaryW400S15.copyWith(
                           color: AppColors.secondaryTextColor,
@@ -131,11 +141,8 @@ class _AllGuidesBodyState extends State<AllGuidesBody> {
             ),
           ),
         ),
-
-        /// ================= GUIDES LIST WITH ANIMATIONS =================
         BlocBuilder<TourGuidesCubit, TourGuidesState>(
           builder: (context, state) {
-            /// Loading State with Shimmer
             if (state is TourGuidesLoading) {
               return SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -151,9 +158,9 @@ class _AllGuidesBodyState extends State<AllGuidesBody> {
               );
             }
 
-            /// Error State
-            if (state is TourGuidesError) {
+            if (state is TourGuidesFailure) {
               return SliverFillRemaining(
+                hasScrollBody: false,
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -165,7 +172,7 @@ class _AllGuidesBodyState extends State<AllGuidesBody> {
                       ),
                       SizedBox(height: 16.h),
                       Text(
-                        state.message,
+                        state.errorMessage,
                         style: AppTextStyle.primaryTextW500S17,
                         textAlign: TextAlign.center,
                       ),
@@ -175,11 +182,17 @@ class _AllGuidesBodyState extends State<AllGuidesBody> {
               );
             }
 
-            /// Success State with Staggered Animations
             if (state is TourGuidesSuccess) {
-              final guides = state.guides;
-              if (guides.isEmpty) {
+              // Client-side filtering logic based on firstName and lastName fields
+              final filteredGuides = state.tourGuides.where((guide) {
+                final fullName = "${guide.firstName} ${guide.lastName}"
+                    .toLowerCase();
+                return fullName.contains(_searchQuery);
+              }).toList();
+
+              if (filteredGuides.isEmpty) {
                 return SliverFillRemaining(
+                  hasScrollBody: false,
                   child: Center(
                     child: Text(
                       "No guides found",
@@ -193,7 +206,7 @@ class _AllGuidesBodyState extends State<AllGuidesBody> {
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
                 sliver: SliverList(
                   delegate: SliverChildBuilderDelegate((context, index) {
-                    final guide = guides[index];
+                    final guide = filteredGuides[index];
                     final animationIndex = index % 10;
 
                     return FadeTransition(
@@ -201,38 +214,36 @@ class _AllGuidesBodyState extends State<AllGuidesBody> {
                           _fadeAnimations.isNotEmpty &&
                               animationIndex < _fadeAnimations.length
                           ? _fadeAnimations[animationIndex]
-                          : AlwaysStoppedAnimation(1.0),
+                          : const AlwaysStoppedAnimation(1.0),
                       child: SlideTransition(
                         position:
                             _slideAnimations.isNotEmpty &&
                                 animationIndex < _slideAnimations.length
                             ? _slideAnimations[animationIndex]
-                            : AlwaysStoppedAnimation(Offset.zero),
+                            : const AlwaysStoppedAnimation(Offset.zero),
                         child: Padding(
                           padding: EdgeInsets.only(bottom: 16.h),
                           child: CustomContainerInfoGuides(
                             userID: guide.userId,
                             firstName: guide.firstName,
                             lastName: guide.lastName,
-                            imageUrl:
-                                guide.profilePicture ??
-                                "https://via.placeholder.com/100",
+                            imageUrl: guide.profilePicture.isNotEmpty
+                                ? guide.profilePicture
+                                : "https://via.placeholder.com/150",
                             rating: guide.rating,
-                            price: 0,
+                            price: guide.pricePerDay.toInt(),
                           ),
                         ),
                       ),
                     );
-                  }, childCount: guides.length),
+                  }, childCount: filteredGuides.length),
                 ),
               );
             }
 
-            return SliverToBoxAdapter(child: SizedBox(height: 100.h));
+            return const SliverToBoxAdapter(child: SizedBox.shrink());
           },
         ),
-
-        /// Bottom Spacing
         SliverToBoxAdapter(child: SizedBox(height: 40.h)),
       ],
     );
@@ -253,7 +264,6 @@ class _AllGuidesBodyState extends State<AllGuidesBody> {
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 15.h),
           child: Row(
             children: [
-              /// Profile Picture Skeleton
               Container(
                 height: 100.h,
                 width: 100.w,
@@ -263,8 +273,6 @@ class _AllGuidesBodyState extends State<AllGuidesBody> {
                 ),
               ),
               SizedBox(width: 16.w),
-
-              /// Content Skeleton
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

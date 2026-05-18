@@ -42,23 +42,23 @@ class SecureStorageHelper {
   }
 
   static const String userNameKey = 'userName';
-static const String profilePicKey = 'profilePic';
+  static const String profilePicKey = 'profilePic';
 
-Future<void> saveUserData({
-  required String userName,
-  required String profilePic,
-}) async {
-  await storage.write(key: userNameKey, value: userName);
-  await storage.write(key: profilePicKey, value: profilePic);
-}
+  Future<void> saveUserData({
+    required String userName,
+    required String profilePic,
+  }) async {
+    await storage.write(key: userNameKey, value: userName);
+    await storage.write(key: profilePicKey, value: profilePic);
+  }
 
-Future<String?> getUserName() async {
-  return await storage.read(key: userNameKey);
-}
+  Future<String?> getUserName() async {
+    return await storage.read(key: userNameKey);
+  }
 
-Future<String?> getProfilePic() async {
-  return await storage.read(key: profilePicKey);
-}
+  Future<String?> getProfilePic() async {
+    return await storage.read(key: profilePicKey);
+  }
 
   /// ✅ ROLE MAPPING (ADDED)
   Future<UserTypeEnum?> getUserTypeEnum() async {

@@ -23,11 +23,11 @@ List<DashboardModel> dashboards(BuildContext context) {
   return [
     DashboardModel(
       title: "Favorites",
-      subTitle: "Favorite Places",
-      info: "12 Spots • 4 Cities",
+      subTitle: "Favorite Guides",
+      info: "12 Guides • 4 Cities",
       icon: Assets.imagesSvgFavorite,
       onTap: () {
-        if (context.mounted) context.pushNamed(AppRoutes.favoritePlacesScreen);
+        if (context.mounted) context.pushNamed(AppRoutes.guidesSavedScreen);
       },
     ),
     DashboardModel(

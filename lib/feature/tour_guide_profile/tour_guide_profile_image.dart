@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/image_url_extension.dart';
 
@@ -19,20 +21,36 @@ class TourGuideProfileImage extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(3.r),
         child: ClipOval(
-          child: Image.network(
-            imageUrl.toHttps(),
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                color: AppColors.grey100Color,
-                child: Icon(
-                  Icons.person,
-                  size: 50.r,
-                  color: AppColors.primaryColor,
+          child: imageUrl.isNotEmpty
+              ? CachedNetworkImage(
+                  imageUrl: imageUrl.toHttps(),
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => Shimmer.fromColors(
+                    baseColor: AppColors.grey100Color,
+                    highlightColor: AppColors.whiteColor,
+                    child: Container(
+                      height: 100.r,
+                      width: 100.r,
+                      color: AppColors.whiteColor,
+                    ),
+                  ),
+                  errorWidget: (context, url, error) => Container(
+                    color: AppColors.grey100Color,
+                    child: Icon(
+                      Icons.person,
+                      size: 50.r,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                )
+              : Container(
+                  color: AppColors.grey100Color,
+                  child: Icon(
+                    Icons.person,
+                    size: 50.r,
+                    color: AppColors.primaryColor,
+                  ),
                 ),
-              );
-            },
-          ),
         ),
       ),
     );

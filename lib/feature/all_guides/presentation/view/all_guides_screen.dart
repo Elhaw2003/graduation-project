@@ -1,8 +1,6 @@
-// AllGuidesScreen.dart
-
 import 'package:flutter/material.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
-import 'package:smart_guide/feature/human_guide/all_guides/presentation/view/widgets/all_guides_body.dart';
+import 'package:smart_guide/feature/all_guides/presentation/view/widget/all_guides_body.dart';
 
 class AllGuidesScreen extends StatefulWidget {
   const AllGuidesScreen({super.key});

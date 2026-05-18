@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -58,7 +59,12 @@ class _LoginBodyState extends State<LoginBody> {
           );
 
           Future.delayed(const Duration(seconds: 1), () {
-            context.goNamed(AppRoutes.appMain);
+            if (userType == UserTypeEnum.Tourist) {
+              context.goNamed(AppRoutes.touristApp);
+            } else {
+              // Route guides to the dedicated guide dashboard
+              context.goNamed(AppRoutes.guideApp);
+            }
           });
         } else if (state is LoginFailureStates) {
           CustomAnimatedShowSnackBar.failureOrWarningSnackBar(

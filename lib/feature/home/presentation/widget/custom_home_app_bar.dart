@@ -58,9 +58,11 @@ class CustomHomeAppBar extends StatelessWidget {
                             shape: BoxShape.circle,
                           ),
                         ),
-                        errorWidget: (context, url, error) => Image.asset(
-                          Assets.imagesPngSphinx,
-                          fit: BoxFit.cover,
+                        errorWidget: (context, url, error) => ClipOval(
+                          child: Image.asset(
+                            Assets.imagesPngSphinx,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
