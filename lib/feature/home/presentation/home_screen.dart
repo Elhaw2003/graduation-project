@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
+import 'package:smart_guide/feature/Tour/data/tours/tours_cubit.dart';
+import 'package:smart_guide/feature/Tour/data/tours/tours_repository.dart';
 import 'package:smart_guide/feature/home/presentation/widget/custom_drawer_widget.dart';
 import 'package:smart_guide/feature/home/presentation/widget/home_body.dart';
 
@@ -11,7 +14,10 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       drawer: const CustomDrawer(),
       backgroundColor: AppColors.backgroundColor,
-      body: const HomeBody(),
+      body: BlocProvider(
+        create: (context) => ToursCubit(ToursRepository())..getTours(),
+        child: const HomeBody(),
+      ),
     );
   }
 }

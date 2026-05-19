@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,9 @@ import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/all_guides/presentation/cubit/tour_guides_cubit.dart';
 import 'package:smart_guide/feature/all_guides/presentation/cubit/tour_guides_states.dart';
+import 'package:smart_guide/feature/book_now/data/booknow/book_now_service.dart';
+import 'package:smart_guide/feature/book_now/data/booknow/booknow_cubit.dart';
+import 'package:smart_guide/feature/book_now/presentation/view/book_now_screen.dart';
 import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_body.dart';
 
 class TourGuideProfileScreen extends StatelessWidget {
@@ -60,20 +64,36 @@ class TourGuideProfileScreen extends StatelessWidget {
           return const SizedBox.shrink();
         },
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(15),
-        child: CustomButtonWidget(
-          onPressed: () {
-            if (context.mounted) {
-              context.pushNamed(AppRoutes.bookNowScreen);
-            }
-          },
-          borderSideColor: AppColors.greenColor,
-          title: 'Book Now',
-          titleStyle: AppTextStyle.secondaryTextW400S17,
-          buttonColor: Colors.transparent,
-          buttonWidth: double.infinity,
-        ),
+      bottomNavigationBar: BlocBuilder<TourGuidesCubit, TourGuidesState>(
+        builder: (context, state) {
+          if (state is GuideDetailsSuccess) {
+            final guide = state.tourGuide;
+
+            return Padding(
+              padding: const EdgeInsets.all(15),
+              child: CustomButtonWidget(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BlocProvider(
+                        create: (_) => BookNowCubit(BookNowService(Dio())),
+                        child: BookNowScreen(guideId: guide.userId),
+                      ),
+                    ),
+                  );
+                },
+                borderSideColor: AppColors.greenColor,
+                title: 'Book Now',
+                titleStyle: AppTextStyle.secondaryTextW400S17,
+                buttonColor: Colors.transparent,
+                buttonWidth: double.infinity,
+              ),
+            );
+          }
+
+          return const SizedBox.shrink();
+        },
       ),
     );
   }
