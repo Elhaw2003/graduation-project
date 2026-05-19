@@ -214,13 +214,13 @@ class RoutingGenerationConfig {
         pageBuilder: (context, state) =>
             CustomSpringPage(child: const GuidesSavedScreen()),
       ),
-      GoRoute(
-        path: AppRoutes.bookNowScreen,
-        name: AppRoutes.bookNowScreen,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(child: BookNowScreen());
-        },
-      ),
+      // GoRoute(
+      //   path: AppRoutes.bookNowScreen,
+      //   name: AppRoutes.bookNowScreen,
+      //   pageBuilder: (context, state) {
+      //     return CustomSpringPage(child: BookNowScreen());
+      //   },
+      // ),
       GoRoute(
         path: AppRoutes.savedScreen,
         name: AppRoutes.savedScreen,
