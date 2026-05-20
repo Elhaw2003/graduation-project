@@ -29,4 +29,6 @@ class AppRoutes {
   static const String savedScreen = '/savedScreen';
   static const String allGuidesScreen = '/allGuidesScreen';
   static const String detailsScreen = '/detailsScreen';
+
+  static String get editTourScreen => '/editTourScreen';
 }

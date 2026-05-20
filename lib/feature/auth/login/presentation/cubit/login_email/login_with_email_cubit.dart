@@ -20,6 +20,9 @@ class LoginCubit extends Cubit<LoginStates> {
       await SecureStorageHelper.instance.saveUserData(
         userName: r.userName ?? '',
         profilePic: r.profilePictureUrl ?? '',
+        email: r.email ?? '',
+        whatsAppNumber: r.whatsAppNumber ?? '',
+        country: r.country ?? '',
       );
       emit(LoginSuccessStates(loginModel: r));
     });

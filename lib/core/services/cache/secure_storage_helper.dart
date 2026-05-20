@@ -3,54 +3,120 @@ import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 
 class SecureStorageHelper {
   // Singleton Pattern
-  static final SecureStorageHelper instance = SecureStorageHelper.internal();
+  static final SecureStorageHelper instance =
+      SecureStorageHelper.internal();
+
   factory SecureStorageHelper() => instance;
+
   SecureStorageHelper.internal();
 
   final storage = const FlutterSecureStorage();
 
+  // =========================
   // Keys
+  // =========================
+
   static const String accessTokenKey = 'token';
   static const String refreshTokenKey = 'refreshToken';
   static const String expiresAtKey = 'expiresOn';
-  static const String refreshTokenExpiresOnKey = 'refreshTokenExpiresOn';
+  static const String refreshTokenExpiresOnKey =
+      'refreshTokenExpiresOn';
+
   static const String userTypeKey = 'userType';
 
-  // Save tokens
+  static const String userNameKey = 'userName';
+  static const String profilePicKey = 'profilePic';
+
+  static const String emailKey = 'email';
+  static const String whatsAppKey = 'whatsAppNumber';
+  static const String countryKey = 'country';
+
+  // =========================
+  // Save Tokens
+  // =========================
+
   Future<void> saveTokens({
     required String accessToken,
     required String refreshToken,
     required String expiresAt,
     required String refreshTokenExpiresOn,
   }) async {
-    await storage.write(key: accessTokenKey, value: accessToken);
-    await storage.write(key: refreshTokenKey, value: refreshToken);
-    await storage.write(key: expiresAtKey, value: expiresAt);
+    await storage.write(
+      key: accessTokenKey,
+      value: accessToken,
+    );
+
+    await storage.write(
+      key: refreshTokenKey,
+      value: refreshToken,
+    );
+
+    await storage.write(
+      key: expiresAtKey,
+      value: expiresAt,
+    );
+
     await storage.write(
       key: refreshTokenExpiresOnKey,
       value: refreshTokenExpiresOn,
     );
   }
 
-  /// 🔥 NEW
+  // =========================
+  // Save User Type
+  // =========================
+
   Future<void> saveUserType(String userType) async {
-    await storage.write(key: userTypeKey, value: userType);
+    await storage.write(
+      key: userTypeKey,
+      value: userType,
+    );
   }
 
   Future<String?> getUserType() async {
     return await storage.read(key: userTypeKey);
   }
 
-  static const String userNameKey = 'userName';
-  static const String profilePicKey = 'profilePic';
+  // =========================
+  // Save User Data
+  // =========================
 
   Future<void> saveUserData({
     required String userName,
     required String profilePic,
+    required String email,
+    required String whatsAppNumber,
+    required String country,
   }) async {
-    await storage.write(key: userNameKey, value: userName);
-    await storage.write(key: profilePicKey, value: profilePic);
+    await storage.write(
+      key: userNameKey,
+      value: userName,
+    );
+
+    await storage.write(
+      key: profilePicKey,
+      value: profilePic,
+    );
+
+    await storage.write(
+      key: emailKey,
+      value: email,
+    );
+
+    await storage.write(
+      key: whatsAppKey,
+      value: whatsAppNumber,
+    );
+
+    await storage.write(
+      key: countryKey,
+      value: country,
+    );
   }
+
+  // =========================
+  // Get User Data
+  // =========================
 
   Future<String?> getUserName() async {
     return await storage.read(key: userNameKey);
@@ -60,7 +126,22 @@ class SecureStorageHelper {
     return await storage.read(key: profilePicKey);
   }
 
-  /// ✅ ROLE MAPPING (ADDED)
+  Future<String?> getEmail() async {
+    return await storage.read(key: emailKey);
+  }
+
+  Future<String?> getWhatsAppNumber() async {
+    return await storage.read(key: whatsAppKey);
+  }
+
+  Future<String?> getCountry() async {
+    return await storage.read(key: countryKey);
+  }
+
+  // =========================
+  // Role Mapping
+  // =========================
+
   Future<UserTypeEnum?> getUserTypeEnum() async {
     final value = await storage.read(key: userTypeKey);
 
@@ -73,38 +154,59 @@ class SecureStorageHelper {
     return UserTypeEnum.Tourist;
   }
 
-  // Get access token
+  // =========================
+  // Get Tokens
+  // =========================
+
   Future<String?> getAccessToken() async {
     return await storage.read(key: accessTokenKey);
   }
 
-  // Get refresh token
   Future<String?> getRefreshToken() async {
     return await storage.read(key: refreshTokenKey);
   }
 
-  // Get expires at
   Future<String?> getExpiresAt() async {
     return await storage.read(key: expiresAtKey);
   }
 
-  // Get refresh token expires at
   Future<String?> getRefreshTokenExpiresAt() async {
-    return await storage.read(key: refreshTokenExpiresOnKey);
+    return await storage.read(
+      key: refreshTokenExpiresOnKey,
+    );
   }
 
-  // Clear all tokens (Logout)
+  // =========================
+  // Logout
+  // =========================
+
   Future<void> clearTokens() async {
     await storage.delete(key: accessTokenKey);
     await storage.delete(key: refreshTokenKey);
+
     await storage.delete(key: expiresAtKey);
-    await storage.delete(key: refreshTokenExpiresOnKey);
+
+    await storage.delete(
+      key: refreshTokenExpiresOnKey,
+    );
+
     await storage.delete(key: userTypeKey);
+
+    await storage.delete(key: userNameKey);
+    await storage.delete(key: profilePicKey);
+
+    await storage.delete(key: emailKey);
+    await storage.delete(key: whatsAppKey);
+    await storage.delete(key: countryKey);
   }
 
-  // Check if user is logged in
+  // =========================
+  // Check Login
+  // =========================
+
   Future<bool> isLoggedIn() async {
     final token = await getAccessToken();
+
     return token != null && token.isNotEmpty;
   }
 }
