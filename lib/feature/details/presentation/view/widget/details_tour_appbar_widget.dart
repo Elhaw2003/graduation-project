@@ -43,7 +43,7 @@ class DetailsTourAppbarWidget extends StatelessWidget {
           stretch: true,
           elevation: 0,
           automaticallyImplyLeading: false,
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: AppColors.backgroundColor,
           surfaceTintColor: Colors.transparent,
 
           leading: DetailsTopButtonWidget(

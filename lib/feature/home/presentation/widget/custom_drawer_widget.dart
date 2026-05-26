@@ -12,7 +12,6 @@ import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/settings/data/repo/log_out/log_out_repo_imple.dart';
 import 'package:smart_guide/feature/settings/presentation/cubit/log_out/cubit/log_out_cubit.dart';
 import 'package:smart_guide/feature/settings/presentation/view/widget/log_out_dialog.dart';
-import 'package:smart_guide/generated/assets.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -155,8 +154,6 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 
-
-
   Widget _buildProfileSection() {
     return TweenAnimationBuilder(
       tween: Tween<double>(begin: 0, end: 1),
@@ -174,7 +171,12 @@ class CustomDrawer extends StatelessWidget {
               ),
               child: CircleAvatar(
                 radius: 45.r,
-                backgroundImage: AssetImage(Assets.imagesPngSphinx),
+                backgroundColor: Colors.white.withOpacity(0.15),
+                child: Icon(
+                  Icons.person_rounded,
+                  size: 40.sp,
+                  color: Colors.white.withOpacity(0.4),
+                ),
               ),
             ),
             CustomHeightSpacingWidget(height: 12.h),

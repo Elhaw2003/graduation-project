@@ -54,14 +54,17 @@ class CustomHomeAppBar extends StatelessWidget {
                           height: 44.r,
                           clipBehavior: Clip.antiAlias,
                           decoration: BoxDecoration(
-                            color: Colors.grey.shade300,
+                            color: Colors.white.withOpacity(0.15),
                             shape: BoxShape.circle,
                           ),
                         ),
-                        errorWidget: (context, url, error) => ClipOval(
-                          child: Image.asset(
-                            Assets.imagesPngSphinx,
-                            fit: BoxFit.cover,
+                        errorWidget: (context, url, error) => Container(
+                          width: 44.r,
+                          height: 44.r,
+                          clipBehavior: Clip.antiAlias,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.15),
+                            shape: BoxShape.circle,
                           ),
                         ),
                       ),

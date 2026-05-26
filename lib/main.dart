@@ -19,6 +19,8 @@ import 'package:smart_guide/feature/settings/data/repo/log_out/log_out_repo_impl
 import 'package:smart_guide/feature/settings/presentation/cubit/log_out/cubit/log_out_cubit.dart';
 import 'package:smart_guide/feature/tour_guide_profile/data/repo/save_guides/save_guides_repo_imple.dart';
 import 'package:smart_guide/feature/tour_guide_profile/presentation/cubit/save_guides/save_guides_cubit.dart';
+import 'package:smart_guide/feature/profile/data/repo/tourist_profile_repo_impl.dart';
+import 'package:smart_guide/feature/profile/presentation/cubit/tourist_profile_cubit.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 void main() async {
@@ -74,6 +76,13 @@ void main() async {
                 apiConsumer: DioConsumer(dio: Dio()),
               ),
             )..getSavedGuides(),
+          ),
+          BlocProvider(
+            create: (context) => TouristProfileCubit(
+              touristProfileRepo: TouristProfileRepoImpl(
+                apiConsumer: DioConsumer(dio: Dio()),
+              ),
+            ),
           ),
         ],
         child: SmartGuide(),

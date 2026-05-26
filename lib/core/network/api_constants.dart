@@ -25,6 +25,10 @@ class EndPoint {
   static const String savedGuides = "tourists/me/savedguides";
   static String deleteSavedGuide({required String guideId}) =>
       "tourists/me/savedguides/$guideId";
+
+  /// ================= TOURIST PROFILE =================
+  static String touristProfile({required String id}) =>
+      "tourists/$id/profile";
 }
 
 class ApiKey {
