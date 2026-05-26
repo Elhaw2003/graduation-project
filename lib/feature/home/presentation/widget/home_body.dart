@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
-import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
 import 'package:smart_guide/core/utils/image_url_extension.dart';
 import 'package:smart_guide/core/shared_widgets/custom_grid_view.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
@@ -17,6 +16,8 @@ import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_place
 import 'package:smart_guide/feature/home/presentation/search_screen.dart';
 import 'package:smart_guide/feature/home/presentation/widget/custom_home_app_bar.dart';
 import 'package:smart_guide/feature/home/presentation/widget/home_search_widget.dart';
+import 'package:smart_guide/feature/profile/presentation/cubit/tourist_profile_cubit.dart';
+import 'package:smart_guide/feature/profile/presentation/cubit/tourist_profile_states.dart';
 import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_cubit.dart';
 import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_states.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
@@ -29,30 +30,12 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
-  String _userName = '';
-  String? _profilePic;
-
   @override
   void initState() {
     super.initState();
-
-    _loadUserData();
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<PlacesCubit>().getPlaces();
-
       context.read<SavedPlacesCubit>().getSavedPlaces();
-    });
-  }
-
-  Future<void> _loadUserData() async {
-    final userName = await SecureStorageHelper.instance.getUserName();
-    final profilePic = await SecureStorageHelper.instance.getProfilePic();
-
-    if (!mounted) return;
-    setState(() {
-      _userName = userName ?? '';
-      _profilePic = profilePic;
     });
   }
 
@@ -104,13 +87,40 @@ class _HomeBodyState extends State<HomeBody> {
                     color: AppColors.backgroundColor,
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     alignment: Alignment.bottomCenter,
-                    child: CustomHomeAppBar(
-                      title: LocaleKeys.hello.tr(),
-                      subTitle: _userName.isNotEmpty
-                          ? _userName
-                          : LocaleKeys.cairoEgypt.tr(),
-                      imageUrl: _profilePic?.toHttps(),
-                    ),
+                    child:
+                        BlocBuilder<TouristProfileCubit, TouristProfileState>(
+                          builder: (context, profileState) {
+                            String? displayName;
+                            String? imageUrl;
+
+                            if (profileState is TouristProfileSuccess) {
+                              displayName =
+                                  profileState.profile.firstName.isNotEmpty
+                                  ? profileState.profile.firstName
+                                  : profileState.profile.userName;
+                              imageUrl =
+                                  profileState.profile.touristImage.isNotEmpty
+                                  ? profileState.profile.touristImage.toHttps()
+                                  : null;
+                            } else if (profileState
+                                is TouristProfileUpdateSuccess) {
+                              displayName =
+                                  profileState.profile.firstName.isNotEmpty
+                                  ? profileState.profile.firstName
+                                  : profileState.profile.userName;
+                              imageUrl =
+                                  profileState.profile.touristImage.isNotEmpty
+                                  ? profileState.profile.touristImage.toHttps()
+                                  : null;
+                            }
+
+                            return CustomHomeAppBar(
+                              title: LocaleKeys.hello.tr(),
+                              subTitle: displayName ?? "",
+                              imageUrl: imageUrl,
+                            );
+                          },
+                        ),
                   ),
                 ),
               ),
@@ -234,135 +244,144 @@ class _HomeBodyState extends State<HomeBody> {
                   return const SliverToBoxAdapter(child: SizedBox());
                 },
               ),
-       BlocBuilder<ToursCubit, ToursState>(
-  builder: (context, state) {
-    if (state is ToursLoading) {
-      return const SliverToBoxAdapter(
-        child: Center(child: CircularProgressIndicator()),
-      );
-    }
+              BlocBuilder<ToursCubit, ToursState>(
+                builder: (context, state) {
+                  if (state is ToursLoading) {
+                    return const SliverToBoxAdapter(
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
 
-    if (state is ToursFailure) {
-      return SliverToBoxAdapter(
-        child: Center(child: Text(state.errorMessage)),
-      );
-    }
+                  if (state is ToursFailure) {
+                    return SliverToBoxAdapter(
+                      child: Center(child: Text(state.errorMessage)),
+                    );
+                  }
 
-    if (state is ToursSuccess) {
-      final tours = state.tours;
+                  if (state is ToursSuccess) {
+                    final tours = state.tours;
 
-      return SliverPadding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
-        sliver: SliverToBoxAdapter(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomHeightSpacingWidget(height: 20.h),
+                    return SliverPadding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      sliver: SliverToBoxAdapter(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CustomHeightSpacingWidget(height: 20.h),
 
-              Text(
-                "Popular Tours",
-                style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+                            Text(
+                              "Popular Tours",
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
 
-              CustomHeightSpacingWidget(height: 12.h),
+                            CustomHeightSpacingWidget(height: 12.h),
 
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: tours.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 15.w,
-                  mainAxisSpacing: 15.h,
-                  mainAxisExtent: 230.h,
-                ),
-                itemBuilder: (context, index) {
-                  final tour = tours[index];
+                            GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: tours.length,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 15.w,
+                                    mainAxisSpacing: 15.h,
+                                    mainAxisExtent: 230.h,
+                                  ),
+                              itemBuilder: (context, index) {
+                                final tour = tours[index];
 
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => TourDetailsScreen(tour: tour),
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            TourDetailsScreen(tour: tour),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(20.r),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(20.r),
+                                          ),
+                                          child: Image.network(
+                                            tour.primaryImage,
+                                            height: 120.h,
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+
+                                        Padding(
+                                          padding: EdgeInsets.all(10.sp),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                tour.title,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: 15.sp,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+
+                                              SizedBox(height: 6.h),
+
+                                              Row(
+                                                children: [
+                                                  Icon(
+                                                    Icons.schedule,
+                                                    size: 16.sp,
+                                                  ),
+                                                  SizedBox(width: 4.w),
+                                                  Text(
+                                                    "${tour.durationHours}h",
+                                                  ),
+                                                ],
+                                              ),
+
+                                              SizedBox(height: 6.h),
+
+                                              Text(
+                                                "\$${tour.price}",
+                                                style: TextStyle(
+                                                  color: AppColors.primaryColor,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20.r),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(20.r),
-                            ),
-                            child: Image.network(
-                              tour.primaryImage,
-                              height: 120.h,
-                              width: double.infinity,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                    );
+                  }
 
-                          Padding(
-                            padding: EdgeInsets.all(10.sp),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  tour.title,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 15.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-
-                                SizedBox(height: 6.h),
-
-                                Row(
-                                  children: [
-                                    Icon(Icons.schedule, size: 16.sp),
-                                    SizedBox(width: 4.w),
-                                    Text("${tour.durationHours}h"),
-                                  ],
-                                ),
-
-                                SizedBox(height: 6.h),
-
-                                Text(
-                                  "\$${tour.price}",
-                                  style: TextStyle(
-                                    color: AppColors.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                  return const SliverToBoxAdapter(child: SizedBox());
                 },
               ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    return const SliverToBoxAdapter(child: SizedBox());
-  },
-),
             ],
           ),
         ),
