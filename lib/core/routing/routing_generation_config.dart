@@ -39,6 +39,13 @@ import 'package:smart_guide/feature/profile/presentation/view/profile_screen.dar
 import 'package:smart_guide/feature/saved/presentation/view/saved_screen.dart';
 import 'package:smart_guide/feature/settings/presentation/view/settings_screen.dart';
 import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart';
+import 'package:smart_guide/feature/guide_dashboard/data/repo/guide_dashboard_repo_impl.dart';
+import 'package:smart_guide/feature/guide_dashboard/presentation/cubit/guide_dashboard_cubit.dart';
+import 'package:smart_guide/feature/guide_dashboard/presentation/view/guide_dashboard_screen.dart';
+import 'package:smart_guide/feature/guide_dashboard/presentation/view/screens/financial_ledger_screen.dart';
+import 'package:smart_guide/feature/guide_dashboard/presentation/view/screens/identity_verification_screen.dart';
+import 'package:smart_guide/feature/guide_dashboard/presentation/view/screens/tours_management_screen.dart';
+import 'package:smart_guide/feature/guide_dashboard/presentation/view/screens/tour_detail_screen.dart';
 
 class RoutingGenerationConfig {
   static GoRouter routerGeneratorConfig = GoRouter(
@@ -255,6 +262,87 @@ class RoutingGenerationConfig {
                 ),
               )..getPlaceDetails(placeId: placeId),
               child: const TouristPlaceDetailsScreen(),
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.guideDashboardScreen,
+        name: AppRoutes.guideDashboardScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(
+            child: BlocProvider(
+              create: (context) => GuideDashboardCubit(
+                repository: GuideDashboardRepoImpl(
+                  apiConsumer: DioConsumer(dio: Dio()),
+                ),
+              ),
+              child: const GuideDashboardScreen(),
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.financialLedgerScreen,
+        name: AppRoutes.financialLedgerScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(
+            child: BlocProvider(
+              create: (context) => GuideDashboardCubit(
+                repository: GuideDashboardRepoImpl(
+                  apiConsumer: DioConsumer(dio: Dio()),
+                ),
+              ),
+              child: const FinancialLedgerScreen(),
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.identityVerificationScreen,
+        name: AppRoutes.identityVerificationScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(
+            child: BlocProvider(
+              create: (context) => GuideDashboardCubit(
+                repository: GuideDashboardRepoImpl(
+                  apiConsumer: DioConsumer(dio: Dio()),
+                ),
+              ),
+              child: const IdentityVerificationScreen(),
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.toursManagementScreen,
+        name: AppRoutes.toursManagementScreen,
+        pageBuilder: (context, state) {
+          return CustomSpringPage(
+            child: BlocProvider(
+              create: (context) => GuideDashboardCubit(
+                repository: GuideDashboardRepoImpl(
+                  apiConsumer: DioConsumer(dio: Dio()),
+                ),
+              ),
+              child: const ToursManagementScreen(),
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: '${AppRoutes.tourDetailScreen}/:tourId',
+        name: AppRoutes.tourDetailScreen,
+        pageBuilder: (context, state) {
+          final tourId = state.pathParameters['tourId'] ?? '';
+          return CustomSpringPage(
+            child: BlocProvider(
+              create: (context) => GuideDashboardCubit(
+                repository: GuideDashboardRepoImpl(
+                  apiConsumer: DioConsumer(dio: Dio()),
+                ),
+              ),
+              child: TourDetailScreen(tourId: tourId),
             ),
           );
         },

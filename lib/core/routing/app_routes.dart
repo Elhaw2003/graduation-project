@@ -30,5 +30,12 @@ class AppRoutes {
   static const String allGuidesScreen = '/allGuidesScreen';
   static const String detailsScreen = '/detailsScreen';
 
-  static String get editTourScreen => '/editTourScreen';
+  static const String guideDashboardScreen = '/guideDashboardScreen';
+  static const String financialLedgerScreen = '/financialLedgerScreen';
+  static const String identityVerificationScreen =
+      '/identityVerificationScreen';
+  static const String toursManagementScreen = '/toursManagementScreen';
+  static const String tourDetailScreen = '/tourDetailScreen';
+
+  static const String editTourScreen = '/editTourScreen';
 }

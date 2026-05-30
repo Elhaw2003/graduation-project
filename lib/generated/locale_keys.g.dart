@@ -201,4 +201,55 @@ abstract class  LocaleKeys {
   static const myArchives = 'myArchives';
   static const myGuides = 'myGuides';
 
+  // Guide Dashboard
+  static const guideDashboard = 'guideDashboard';
+  static const walletBalance = 'walletBalance';
+  static const totalEarnings = 'totalEarnings';
+  static const pendingEarnings = 'pendingEarnings';
+  static const totalTours = 'totalTours';
+  static const activeTours = 'activeTours';
+  static const inactiveTours = 'inactiveTours';
+  static const upcomingTours = 'upcomingTours';
+  static const cancelledTours = 'cancelledTours';
+  static const completedTours = 'completedTours';
+  static const totalTouristsServed = 'totalTouristsServed';
+  static const totalUniqueTourists = 'totalUniqueTourists';
+  static const monthlyRevenue = 'monthlyRevenue';
+  static const pendingWithdrawals = 'pendingWithdrawals';
+  static const verificationStatus = 'verificationStatus';
+  static const accountStatus = 'accountStatus';
+  static const averageRating = 'averageRating';
+  static const totalReviews = 'totalReviews';
+  static const monthlyEarningsChart = 'monthlyEarningsChart';
+  static const monthlyBookingsChart = 'monthlyBookingsChart';
+  static const mostPopularTours = 'mostPopularTours';
+  static const leastActiveTours = 'leastActiveTours';
+  static const recentActivities = 'recentActivities';
+  static const dashboardRevenue = 'dashboardRevenue';
+  static const occupancyRate = 'occupancyRate';
+  static const dashboardTotalBookings = 'dashboardTotalBookings';
+  static const confirmedBookings = 'confirmedBookings';
+  static const noChangesDetected = 'noChangesDetected';
+  static const tourPerformance = 'tourPerformance';
+  static const dashboardWallet = 'dashboardWallet';
+  static const dashboardTransactions = 'dashboardTransactions';
+  static const dashboardPayout = 'dashboardPayout';
+  static const dashboardCompleted = 'dashboardCompleted';
+  static const dashboardBooking = 'dashboardBooking';
+  static const newBookingReceived = 'newBookingReceived';
+  static const createTour = 'createTour';
+  static const createNewTour = 'createNewTour';
+  static const addNewAdventure = 'addNewAdventure';
+  static const toursLiveForBooking = 'toursLiveForBooking';
+  static const viewAllTours = 'viewAllTours';
+  static const dashboardDocuments = 'dashboardDocuments';
+  static const dashboardDuration = 'dashboardDuration';
+  static const dashboardMaxCapacity = 'dashboardMaxCapacity';
+  static const dashboardPeople = 'dashboardPeople';
+  static const dashboardHours = 'dashboardHours';
+  static const dashboardEarnings = 'dashboardEarnings';
+  static const dashboardNoActivities = 'dashboardNoActivities';
+  static const dashboardNoTours = 'dashboardNoTours';
+  static const profileUpdatedSuccessfully = 'profileUpdatedSuccessfully';
+
 }

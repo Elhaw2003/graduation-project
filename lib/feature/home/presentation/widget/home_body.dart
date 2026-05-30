@@ -118,6 +118,8 @@ class _HomeBodyState extends State<HomeBody> {
                               title: LocaleKeys.hello.tr(),
                               subTitle: displayName ?? "",
                               imageUrl: imageUrl,
+                              onTap: () =>
+                                  context.pushNamed(AppRoutes.profileScreen),
                             );
                           },
                         ),
