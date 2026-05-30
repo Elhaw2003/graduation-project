@@ -29,6 +29,28 @@ class EndPoint {
   /// ================= TOURIST PROFILE =================
   static String touristProfile({required String id}) =>
       "tourists/$id/profile";
+
+  /// ================= GUIDE DASHBOARD =================
+  static const String guideDashboard = "guide/dashboard";
+  static const String guideDashboardStatistics = "guide/dashboard/statistics";
+  static const String guideDashboardDocuments = "guide/dashboard/documents";
+  static const String guideDashboardEarnings = "guide/dashboard/earnings";
+  static const String guideDashboardBookings = "guide/dashboard/bookings";
+  static const String guideDashboardToursPerformance =
+      "guide/dashboard/tours/performance";
+  static const String guideDashboardWallet = "guide/dashboard/wallet";
+  static const String guideDashboardWalletTransactions =
+      "guide/dashboard/wallet/transactions";
+  static const String guideDashboardActivities = "guide/dashboard/activities";
+  static const String guideDashboardMyTours = "guide/dashboard/my-tours";
+  static String guideDashboardTour({required String id}) =>
+      "guide/dashboard/tour/$id";
+  static String guideDashboardTourByPlace({required String placeId}) =>
+      "guide/dashboard/tour/by-place/$placeId";
+  static const String guideDashboardTourCreate =
+      "guide/dashboard/tour/create";
+  static String guideDashboardTourEdit({required String id}) =>
+      "guide/dashboard/tour/edit/$id";
 }
 
 class ApiKey {

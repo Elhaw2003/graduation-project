@@ -14,11 +14,13 @@ class CustomHomeAppBar extends StatelessWidget {
     required this.title,
     required this.subTitle,
     this.imageUrl,
+    this.onTap,
   });
 
   final String title;
   final String subTitle;
   final String? imageUrl;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class CustomHomeAppBar extends StatelessWidget {
       children: [
         Expanded(
           child: InkWell(
-            onTap: () => context.pushNamed(AppRoutes.profileScreen),
+            onTap: onTap,
             borderRadius: BorderRadius.circular(12.r),
             child: Row(
               children: [

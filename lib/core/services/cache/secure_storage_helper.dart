@@ -26,7 +26,7 @@ class SecureStorageHelper {
 
   static const String userNameKey = 'userName';
   static const String profilePicKey = 'profilePic';
-
+  static const String userIdKey = 'userId';
   static const String emailKey = 'email';
   static const String whatsAppKey = 'whatsAppNumber';
   static const String countryKey = 'country';
@@ -84,6 +84,7 @@ class SecureStorageHelper {
   Future<void> saveUserData({
     required String userName,
     required String profilePic,
+    required String userId,
     required String email,
     required String whatsAppNumber,
     required String country,
@@ -96,6 +97,11 @@ class SecureStorageHelper {
     await storage.write(
       key: profilePicKey,
       value: profilePic,
+    );
+
+    await storage.write(
+      key: userIdKey,
+      value: userId,
     );
 
     await storage.write(
@@ -124,6 +130,10 @@ class SecureStorageHelper {
 
   Future<String?> getProfilePic() async {
     return await storage.read(key: profilePicKey);
+  }
+
+  Future<String?> getUserId() async {
+    return await storage.read(key: userIdKey);
   }
 
   Future<String?> getEmail() async {
@@ -194,7 +204,7 @@ class SecureStorageHelper {
 
     await storage.delete(key: userNameKey);
     await storage.delete(key: profilePicKey);
-
+    await storage.delete(key: userIdKey);
     await storage.delete(key: emailKey);
     await storage.delete(key: whatsAppKey);
     await storage.delete(key: countryKey);

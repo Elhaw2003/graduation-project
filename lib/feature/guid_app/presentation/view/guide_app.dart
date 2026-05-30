@@ -18,6 +18,7 @@ class GuideApp extends StatefulWidget {
 class _GuideAppState extends State<GuideApp> {
   String _userName = '';
   String? _profilePic;
+  String _userId = '';
 
   /// API DATA
   final List tours = [];
@@ -33,11 +34,14 @@ class _GuideAppState extends State<GuideApp> {
 
     final profilePic = await SecureStorageHelper.instance.getProfilePic();
 
+    final userId = await SecureStorageHelper.instance.getUserId();
+
     if (!mounted) return;
 
     setState(() {
       _userName = userName ?? '';
       _profilePic = profilePic;
+      _userId = userId ?? '';
     });
   }
 
@@ -66,6 +70,10 @@ class _GuideAppState extends State<GuideApp> {
                   title: "Welcome",
                   subTitle: _userName.isNotEmpty ? _userName : "Guide",
                   imageUrl: _profilePic?.toHttps(),
+                  onTap: () => context.pushNamed(
+                    AppRoutes.tourGuideProfileScreen,
+                    pathParameters: {'userId': _userId},
+                  ),
                 ),
 
                 SizedBox(height: 25.h),
