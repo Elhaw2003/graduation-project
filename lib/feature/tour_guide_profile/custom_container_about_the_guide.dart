@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
+import 'package:smart_guide/feature/chat/data/cubit/chat_cubit.dart';
+import 'package:smart_guide/feature/chat/data/cubit/chat_state.dart';
+import 'package:smart_guide/feature/chat/presentation/view/chat_screen.dart';
 
 class CustomContainerAboutTheGuide extends StatefulWidget {
   const CustomContainerAboutTheGuide({
     super.key,
     required this.name,
     required this.aboutGuide,
+    required this.guideId,
   });
   final String name;
   final String aboutGuide;
+  final String guideId;
 
   @override
   State<CustomContainerAboutTheGuide> createState() =>
@@ -107,6 +113,89 @@ class _CustomContainerAboutTheGuideState
                       ),
                     ],
                   ),
+                ),
+                SizedBox(height: 12.h),
+
+                BlocConsumer<ChatCubit, ChatState>(
+                  listener: (context, state) {
+                    if (state is CreateConversationSuccess) {
+                      debugPrint('Conversation ID: ${state.conversation.id}');
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => BlocProvider(
+                            create: (_) =>
+                                ChatCubit()..getMessages(state.conversation.id),
+                            child: ChatScreen(
+                              conversationId: state.conversation.id,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (state is CreateConversationError) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(state.message)));
+                    }
+                  },
+                  builder: (context, state) {
+                    return Container(
+                      width: double.infinity,
+                      height: 48.h,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(color: AppColors.primaryColor),
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(12.r),
+                          onTap: state is CreateConversationLoading
+                              ? null
+                              : () {
+                                  context.read<ChatCubit>().createConversation(
+                                    widget.guideId,
+                                  );
+
+                                  debugPrint('Guide ID: ${widget.guideId}');
+                                },
+                          child: Center(
+                            child: state is CreateConversationLoading
+                                ? SizedBox(
+                                    width: 20.w,
+                                    height: 20.h,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: AppColors.primaryColor,
+                                    ),
+                                  )
+                                : Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.chat_bubble_outline_rounded,
+                                        color: AppColors.primaryColor,
+                                        size: 20.sp,
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      Text(
+                                        'Contact Guide',
+                                        style: AppTextStyle.primaryW500S20
+                                            .copyWith(
+                                              color: AppColors.primaryColor,
+                                              fontSize: 15.sp,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

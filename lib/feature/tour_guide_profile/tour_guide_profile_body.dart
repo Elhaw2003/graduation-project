@@ -86,7 +86,10 @@ class TourGuideProfileBody extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomContainerAboutTheGuide(name: name, aboutGuide: aboutGuide),
+              CustomContainerAboutTheGuide(
+                
+                
+                name: name, aboutGuide: aboutGuide, guideId: guidedId ),
               CustomHeightSpacingWidget(height: 16.h),
               CustomContainerExpertiseAndSkills(languages: languages),
               if (gallery.isNotEmpty) ...[

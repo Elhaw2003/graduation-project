@@ -19,6 +19,7 @@ import 'package:smart_guide/feature/auth/reset_password/presentation/view/reset_
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
 import 'package:smart_guide/feature/auth/success_verification/presentation/view/success_verification_screen.dart';
 import 'package:smart_guide/feature/book_now/presentation/view/book_now_screen.dart';
+import 'package:smart_guide/feature/chat/data/cubit/chat_cubit.dart';
 import 'package:smart_guide/feature/details/presentation/view/details_screen.dart';
 import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_screen.dart';
 import 'package:smart_guide/feature/favorite/presentation/view/favorite_screen.dart';
@@ -156,13 +157,20 @@ class RoutingGenerationConfig {
         name: AppRoutes.tourGuideProfileScreen,
         pageBuilder: (context, state) {
           final userId = state.pathParameters['userId']!;
+
           return CustomSpringPage(
-            child: BlocProvider(
-              create: (context) => TourGuidesCubit(
-                repository: TourGuidesRepositoryImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => TourGuidesCubit(
+                    repository: TourGuidesRepositoryImpl(
+                      apiConsumer: DioConsumer(dio: Dio()),
+                    ),
+                  )..fetchTourGuideProfile(userId),
                 ),
-              )..fetchTourGuideProfile(userId),
+
+                BlocProvider(create: (context) => ChatCubit()),
+              ],
               child: const TourGuideProfileScreen(),
             ),
           );
