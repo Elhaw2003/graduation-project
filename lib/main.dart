@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:smart_guide/core/network/dio_consumer.dart';
 import 'package:smart_guide/core/routing/routing_generation_config.dart';
 import 'package:smart_guide/core/services/cache/cache_helper.dart';
@@ -31,6 +32,8 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   await CacheHelper.init();
   Bloc.observer = MyBlocObserver();
+  Stripe.publishableKey =
+      "pk_test_51TPlgXGrUV86TkojIvwPJU58rAvdmVNne6XNqvJUn8QvQ1GaTY21MwD8dX2yTWuRJBUkwV1qqE3lStKq1Bh67gQo00nxaPXmP6";
 
   /// hide status bar
   SystemChrome.setSystemUIOverlayStyle(

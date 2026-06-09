@@ -252,4 +252,40 @@ abstract class  LocaleKeys {
   static const dashboardNoTours = 'dashboardNoTours';
   static const profileUpdatedSuccessfully = 'profileUpdatedSuccessfully';
 
+  // Booking & Payment
+  static const selectSlot = 'selectSlot';
+  static const availableSlots = 'availableSlots';
+  static const noSlotsAvailable = 'noSlotsAvailable';
+  static const bookingSummary = 'bookingSummary';
+  static const tourName = 'tourName';
+  static const tourDate = 'tourDate';
+  static const timeSlot = 'timeSlot';
+  static const selectPaymentMethod = 'selectPaymentMethod';
+  static const creditDebitCard = 'creditDebitCard';
+  static const cashPayment = 'cashPayment';
+  static const confirmPayment = 'confirmPayment';
+  static const paymentDetails = 'paymentDetails';
+  static const bookingCreated = 'bookingCreated';
+  static const bookingFailed = 'bookingFailed';
+  static const paymentSuccessful = 'paymentSuccessful';
+  static const paymentFailed = 'paymentFailed';
+  static const paymentCancelled = 'paymentCancelled';
+  static const cancelBookingAction = 'cancelBookingAction';
+  static const cancelBookingConfirm = 'cancelBookingConfirm';
+  static const bookingCancelled = 'bookingCancelled';
+  static const statusPending = 'statusPending';
+  static const statusConfirmed = 'statusConfirmed';
+  static const statusCancelled = 'statusCancelled';
+  static const statusCompleted = 'statusCompleted';
+  static const totalPrice = 'totalPrice';
+  static const addOns = 'addOns';
+  static const noBookingsYet = 'noBookingsYet';
+  static const processingPayment = 'processingPayment';
+  static const chooseSchedule = 'chooseSchedule';
+  static const paymentLabel = 'paymentLabel';
+  static const bookingSuccessTitle = 'bookingSuccessTitle';
+  static const bookingSuccessMessage = 'bookingSuccessMessage';
+  static const goToMyTrips = 'goToMyTrips';
+  static const slotTime = 'slotTime';
+
 }

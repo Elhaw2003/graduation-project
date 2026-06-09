@@ -47,6 +47,8 @@ import 'package:smart_guide/feature/guide_dashboard/presentation/view/screens/fi
 import 'package:smart_guide/feature/guide_dashboard/presentation/view/screens/identity_verification_screen.dart';
 import 'package:smart_guide/feature/guide_dashboard/presentation/view/screens/tours_management_screen.dart';
 import 'package:smart_guide/feature/guide_dashboard/presentation/view/screens/tour_detail_screen.dart';
+import 'package:smart_guide/feature/booking_payment/data/repo/booking_payment_repo_impl.dart';
+import 'package:smart_guide/feature/booking_payment/presentation/cubit/booking_payment_cubit.dart';
 
 class RoutingGenerationConfig {
   static GoRouter routerGeneratorConfig = GoRouter(
@@ -220,7 +222,16 @@ class RoutingGenerationConfig {
             (e) => e.name == typeString,
             orElse: () => TripTypeEnum.upcoming,
           );
-          return CustomSpringPage(child: TripTypeScreen(tripType: tripType));
+          return CustomSpringPage(
+            child: BlocProvider(
+              create: (context) => BookingAndPaymentCubit(
+                bookingPaymentRepo: BookingPaymentRepoImpl(
+                  apiConsumer: DioConsumer(dio: Dio()),
+                ),
+              ),
+              child: TripTypeScreen(tripType: tripType),
+            ),
+          );
         },
       ),
       GoRoute(

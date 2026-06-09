@@ -15,6 +15,9 @@ import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:smart_guide/feature/book_now/data/booknow/book_now_service.dart';
 import 'package:smart_guide/feature/book_now/data/booknow/booknow_cubit.dart';
 import 'package:smart_guide/feature/book_now/presentation/view/book_now_screen.dart';
+import 'package:smart_guide/feature/booking_payment/data/repo/booking_payment_repo_impl.dart';
+import 'package:smart_guide/feature/booking_payment/presentation/cubit/booking_payment_cubit.dart';
+import 'package:smart_guide/core/network/dio_consumer.dart';
 import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_body.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
@@ -121,8 +124,21 @@ class _TourGuideProfileScreenState extends State<TourGuideProfileScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => BlocProvider(
-                            create: (_) => BookNowCubit(BookNowService(Dio())),
+                          builder: (context) => MultiBlocProvider(
+                            providers: [
+                              BlocProvider(
+                                create: (_) =>
+                                    BookNowCubit(BookNowService(Dio())),
+                              ),
+                              BlocProvider(
+                                create: (_) => BookingAndPaymentCubit(
+                                  bookingPaymentRepo:
+                                      BookingPaymentRepoImpl(
+                                    apiConsumer: DioConsumer(dio: Dio()),
+                                  ),
+                                ),
+                              ),
+                            ],
                             child: BookNowScreen(guideId: guide.userId),
                           ),
                         ),

@@ -76,8 +76,8 @@ class _BookNowScreenState extends State<BookNowScreen> {
                 context.watch<BookNowCubit>().currentStep == 1
                     ? LocaleKeys.whatKindOfTour.tr()
                     : context.watch<BookNowCubit>().currentStep == 2
-                    ? 'Choose Schedule'
-                    : 'Payment',
+                    ? LocaleKeys.chooseSchedule.tr()
+                    : LocaleKeys.paymentLabel.tr(),
 
                 textAlign: TextAlign.center,
 

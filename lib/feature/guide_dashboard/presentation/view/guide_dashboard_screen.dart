@@ -76,7 +76,6 @@ class _DashboardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // مأمنين الـ stats بـ Fallback لو الكائن كله جاء فارغاً
     final stats = dashboard.statistics;
 
     return RefreshIndicator(
@@ -110,7 +109,6 @@ class _DashboardContent extends StatelessWidget {
             ),
           ),
 
-          // عرض الشارتات الحقيقية التابعة للـ API مباشرة
           SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.fromLTRB(16.w, 20.h, 16.w, 0),
@@ -162,7 +160,6 @@ class _DashboardContent extends StatelessWidget {
             ),
           ],
 
-          // النشاطات الأخيرة الحقيقية من السيرفر
           SliverToBoxAdapter(
             child: _SectionHeader(title: LocaleKeys.recentActivities.tr()),
           ),

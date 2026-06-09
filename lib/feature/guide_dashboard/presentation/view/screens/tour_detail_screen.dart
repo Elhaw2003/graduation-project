@@ -1,8 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
-import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/guide_dashboard/data/model/guide_tour_detail_model.dart';
 import 'package:smart_guide/feature/guide_dashboard/presentation/cubit/guide_dashboard_cubit.dart';
 import 'package:smart_guide/feature/guide_dashboard/presentation/cubit/guide_dashboard_states.dart';
@@ -10,10 +10,7 @@ import 'package:smart_guide/feature/guide_dashboard/presentation/cubit/guide_das
 class TourDetailScreen extends StatefulWidget {
   final String tourId;
 
-  const TourDetailScreen({
-    super.key,
-    required this.tourId,
-  });
+  const TourDetailScreen({super.key, required this.tourId});
 
   @override
   State<TourDetailScreen> createState() => _TourDetailScreenState();
@@ -38,9 +35,7 @@ class _TourDetailScreenState extends State<TourDetailScreen> {
       body: BlocBuilder<GuideDashboardCubit, GuideDashboardState>(
         builder: (context, state) {
           if (state is GetTourDetailsLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (state is GetTourDetailsFailure) {
@@ -89,9 +84,7 @@ class _TourDetailContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomScrollView(
       slivers: [
-        SliverToBoxAdapter(
-          child: _TourImageGallery(images: tour.images),
-        ),
+        SliverToBoxAdapter(child: _TourImageGallery(images: tour.images)),
         SliverToBoxAdapter(
           child: Padding(
             padding: EdgeInsets.all(16.w),
@@ -243,10 +236,7 @@ class _TourDetailContent extends StatelessWidget {
                   ),
                   SizedBox(height: 12.h),
                   ...tour.addOns.map((addOn) {
-                    return _AddOnItem(
-                      title: addOn.title,
-                      price: addOn.price,
-                    );
+                    return _AddOnItem(title: addOn.title, price: addOn.price);
                   }),
                   SizedBox(height: 20.h),
                 ],
@@ -276,7 +266,9 @@ class _TourDetailContent extends StatelessWidget {
                 SizedBox(width: 12.w),
                 Expanded(
                   child: ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      _showDeleteConfirmationInDetails(context, tour.id);
+                    },
                     icon: const Icon(Icons.delete_outline),
                     label: const Text('Delete'),
                     style: ElevatedButton.styleFrom(
@@ -297,6 +289,31 @@ class _TourDetailContent extends StatelessWidget {
       ],
     );
   }
+}
+
+void _showDeleteConfirmationInDetails(BuildContext context, String tourId) {
+  showDialog(
+    context: context,
+    builder: (dialogContext) => AlertDialog(
+      title: const Text('Delete Tour'),
+      content: const Text(
+        'Are you sure you want to delete this tour? This action cannot be undone.',
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(dialogContext),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pop(dialogContext);
+            context.read<GuideDashboardCubit>().removeTour(id: tourId);
+          },
+          child: const Text('Delete', style: TextStyle(color: Colors.red)),
+        ),
+      ],
+    ),
+  );
 }
 
 class _TourImageGallery extends StatefulWidget {
@@ -353,51 +370,71 @@ class _TourImageGalleryState extends State<_TourImageGallery> {
       );
     }
 
-    return Stack(
-      children: [
-        PageView.builder(
-          controller: _pageController,
-          onPageChanged: (index) {
-            setState(() => _currentImageIndex = index);
-          },
-          itemCount: widget.images.length,
-          itemBuilder: (context, index) {
-            return Container(
-              height: 250.h,
-              color: AppColors.grey300Color.withOpacity(0.3),
-              child: Center(
-                child: Icon(
-                  Icons.image,
-                  size: 64.sp,
-                  color: AppColors.grey400Color,
+    return SizedBox(
+      height: 250.h,
+      child: Stack(
+        children: [
+          PageView.builder(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() => _currentImageIndex = index);
+            },
+            itemCount: widget.images.length,
+            itemBuilder: (context, index) {
+              return CachedNetworkImage(
+                imageUrl: widget.images[index],
+                fit: BoxFit.contain,
+                width: double.infinity,
+                height: 250.h,
+                placeholder: (context, url) => Container(
+                  color: AppColors.grey300Color.withOpacity(0.2),
+                  child: const Center(
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppColors.primaryColor,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            );
-          },
-        ),
-        Positioned(
-          bottom: 16.h,
-          left: 0,
-          right: 0,
-          child: Center(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(20.r),
-              ),
-              child: Text(
-                '${_currentImageIndex + 1}/${widget.images.length}',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w600,
+                // لو اللينك باظ أو السيرفر وقع بيعرض أيقونة صلبة بدون كراش
+                errorWidget: (context, url, error) => Container(
+                  color: AppColors.grey300Color.withOpacity(0.3),
+                  child: Center(
+                    child: Icon(
+                      Icons.broken_image_rounded,
+                      size: 48.sp,
+                      color: AppColors.grey400Color,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+          Positioned(
+            bottom: 16.h,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.5),
+                  borderRadius: BorderRadius.circular(20.r),
+                ),
+                child: Text(
+                  '${_currentImageIndex + 1}/${widget.images.length}',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -479,11 +516,7 @@ class _InclusionItem extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 8.h),
       child: Row(
         children: [
-          Icon(
-            Icons.check_circle,
-            size: 20.sp,
-            color: AppColors.greenColor,
-          ),
+          Icon(Icons.check_circle, size: 20.sp, color: AppColors.greenColor),
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
@@ -501,10 +534,7 @@ class _InclusionItem extends StatelessWidget {
 }
 
 class _AddOnItem extends StatelessWidget {
-  const _AddOnItem({
-    required this.title,
-    required this.price,
-  });
+  const _AddOnItem({required this.title, required this.price});
 
   final String title;
   final double price;
@@ -516,9 +546,7 @@ class _AddOnItem extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(12.w),
         decoration: BoxDecoration(
-          border: Border.all(
-            color: AppColors.primaryColor.withOpacity(0.2),
-          ),
+          border: Border.all(color: AppColors.primaryColor.withOpacity(0.2)),
           borderRadius: BorderRadius.circular(8.r),
         ),
         child: Row(
