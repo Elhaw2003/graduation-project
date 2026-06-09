@@ -60,13 +60,19 @@ class _HomeBodyState extends State<HomeBody> {
 
         if (state is RemovePlaceSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: AppColors.redAppColor,
+            ),
           );
         }
 
         if (state is SavedPlacesFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: AppColors.redAppColor,
+            ),
           );
         }
       },

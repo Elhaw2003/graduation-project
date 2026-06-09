@@ -51,6 +51,14 @@ class EndPoint {
       "guide/dashboard/tour/create";
   static String guideDashboardTourEdit({required String id}) =>
       "guide/dashboard/tour/edit/$id";
+
+  /// ================= BOOKING & PAYMENT =================
+  static String tourSlots({required String tourId}) => "tours/$tourId/slots";
+  static const String createBooking = "Bookings";
+  static const String paymentCreateIntent = "payments/create-intent";
+  static const String myBookings = "Bookings/my-bookings";
+  static String cancelBooking({required String bookingId}) =>
+      "Bookings/$bookingId";
 }
 
 class ApiKey {

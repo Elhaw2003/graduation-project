@@ -56,7 +56,12 @@ class _ToursManagementScreenState extends State<ToursManagementScreen> {
           ),
         ],
       ),
-      body: BlocBuilder<GuideDashboardCubit, GuideDashboardState>(
+      body: BlocConsumer<GuideDashboardCubit, GuideDashboardState>(
+        listener: (context, state) {
+          if (state is DeleteTourSuccess) {
+            context.read<GuideDashboardCubit>().fetchMyTours();
+          }
+        },
         builder: (context, state) {
           if (state is GetMyToursLoading) {
             return const Center(child: CircularProgressIndicator());
