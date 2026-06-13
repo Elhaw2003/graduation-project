@@ -1,6 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_guide/feature/profile/data/repo/tourist_profile_repo.dart';
 import 'package:smart_guide/feature/profile/presentation/cubit/tourist_profile_states.dart';
+import 'package:smart_guide/feature/profile/presentation/cubit/tourist_session/tourist_session_cubit.dart';
+import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class TouristProfileCubit extends Cubit<TouristProfileState> {
   final TouristProfileRepo touristProfileRepo;
@@ -13,9 +16,15 @@ class TouristProfileCubit extends Cubit<TouristProfileState> {
 
     final result = await touristProfileRepo.getTouristProfile(id: id);
 
-    result.fold(
-      (failure) => emit(TouristProfileFailure(failure.message)),
-      (profile) => emit(TouristProfileSuccess(profile)),
+    await result.fold(
+      (failure) async {
+        emit(TouristProfileFailure(failure.message));
+      },
+      (profile) async {
+        await TouristSessionCubit.notifyProfileUpdated(profile);
+        if (isClosed) return;
+        emit(TouristProfileSuccess(profile));
+      },
     );
   }
 
@@ -38,11 +47,20 @@ class TouristProfileCubit extends Cubit<TouristProfileState> {
       imagePath: imagePath,
     );
 
-    result.fold(
-      (failure) => emit(TouristProfileFailure(failure.message)),
-      (profile) => emit(
-        TouristProfileUpdateSuccess(profile, 'Profile updated successfully'),
-      ),
+    await result.fold(
+      (failure) async {
+        emit(TouristProfileFailure(failure.message));
+      },
+      (profile) async {
+        await TouristSessionCubit.notifyProfileUpdated(profile);
+        if (isClosed) return;
+        emit(
+          TouristProfileUpdateSuccess(
+            profile,
+            LocaleKeys.updateSuccess.tr(),
+          ),
+        );
+      },
     );
   }
 }

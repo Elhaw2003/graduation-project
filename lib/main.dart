@@ -11,9 +11,8 @@ import 'package:smart_guide/core/routing/routing_generation_config.dart';
 import 'package:smart_guide/core/services/cache/cache_helper.dart';
 import 'package:smart_guide/core/services/manage_cubit_servise.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
+import 'package:smart_guide/core/utils/app_constants.dart';
 import 'package:smart_guide/feature/auth/register/presentation/cubit/pick_image/pick_image_cubit.dart';
-import 'package:smart_guide/feature/guide_dashboard/data/repo/guide_dashboard_repo_impl.dart';
-import 'package:smart_guide/feature/guide_dashboard/presentation/cubit/guide_dashboard_cubit.dart';
 import 'package:smart_guide/feature/home/data/repo/get_places/get_places_repo_imple.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_cubit.dart';
 import 'package:smart_guide/feature/saved/data/repo/saved_places_repo_imple.dart';
@@ -32,8 +31,7 @@ void main() async {
   await EasyLocalization.ensureInitialized();
   await CacheHelper.init();
   Bloc.observer = MyBlocObserver();
-  Stripe.publishableKey =
-      "pk_test_51TPlgXGrUV86TkojIvwPJU58rAvdmVNne6XNqvJUn8QvQ1GaTY21MwD8dX2yTWuRJBUkwV1qqE3lStKq1Bh67gQo00nxaPXmP6";
+  Stripe.publishableKey = AppConstants.publishableKey;
 
   /// hide status bar
   SystemChrome.setSystemUIOverlayStyle(
@@ -89,13 +87,6 @@ void main() async {
               ),
             ),
           ),
-          // BlocProvider(
-          //   create: (context) => GuideDashboardCubit(
-          //     repository: GuideDashboardRepoImpl(
-          //       apiConsumer: DioConsumer(dio: Dio()),
-          //     ),
-          //   ),
-          // ),
         ],
         child: SmartGuide(),
       ),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,9 @@ import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
+import 'package:smart_guide/core/utils/image_url_extension.dart';
+import 'package:smart_guide/feature/profile/presentation/cubit/tourist_session/tourist_session_cubit.dart';
+import 'package:smart_guide/feature/profile/presentation/cubit/tourist_session/tourist_session_states.dart';
 import 'package:smart_guide/feature/settings/data/repo/log_out/log_out_repo_imple.dart';
 import 'package:smart_guide/feature/settings/presentation/cubit/log_out/cubit/log_out_cubit.dart';
 import 'package:smart_guide/feature/settings/presentation/view/widget/log_out_dialog.dart';
@@ -155,41 +159,82 @@ class CustomDrawer extends StatelessWidget {
   }
 
   Widget _buildProfileSection() {
-    return TweenAnimationBuilder(
-      tween: Tween<double>(begin: 0, end: 1),
-      duration: const Duration(milliseconds: 600),
-      builder: (context, value, child) =>
-          Transform.scale(scale: value, child: child),
-      child: Center(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(3.r),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.primaryColor, width: 2),
-              ),
-              child: CircleAvatar(
-                radius: 45.r,
-                backgroundColor: Colors.white.withOpacity(0.15),
-                child: Icon(
-                  Icons.person_rounded,
-                  size: 40.sp,
-                  color: Colors.white.withOpacity(0.4),
+    return BlocBuilder<TouristSessionCubit, TouristSessionState>(
+      builder: (context, sessionState) {
+        final session = sessionState is TouristSessionLoaded
+            ? sessionState
+            : const TouristSessionLoaded(
+                userName: '',
+                profilePic: null,
+                userId: '',
+              );
+
+        final displayName = session.userName.isNotEmpty
+            ? session.userName
+            : LocaleKeys.tourist.tr();
+
+        return TweenAnimationBuilder(
+          key: ValueKey('${session.userId}_${session.profilePic ?? displayName}'),
+          tween: Tween<double>(begin: 0, end: 1),
+          duration: const Duration(milliseconds: 600),
+          builder: (context, value, child) =>
+              Transform.scale(scale: value, child: child),
+          child: Center(
+            child: Column(
+              children: [
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 350),
+                  child: Container(
+                    key: ValueKey(session.profilePic ?? displayName),
+                    padding: EdgeInsets.all(3.r),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: AppColors.primaryColor,
+                        width: 2,
+                      ),
+                    ),
+                    child: CircleAvatar(
+                      radius: 45.r,
+                      backgroundColor: Colors.white.withOpacity(0.15),
+                      backgroundImage:
+                          session.profilePic != null &&
+                              session.profilePic!.isNotEmpty
+                          ? CachedNetworkImageProvider(
+                              session.profilePic!.toHttps(),
+                            )
+                          : null,
+                      child:
+                          session.profilePic == null ||
+                              session.profilePic!.isEmpty
+                          ? Icon(
+                              Icons.person_rounded,
+                              size: 40.sp,
+                              color: Colors.white.withOpacity(0.4),
+                            )
+                          : null,
+                    ),
+                  ),
                 ),
-              ),
+                CustomHeightSpacingWidget(height: 12.h),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: Text(
+                    displayName,
+                    key: ValueKey(displayName),
+                    style: AppTextStyle.thirdTextW900S20.copyWith(
+                      color: Colors.white,
+                      fontSize: 18.sp,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
             ),
-            CustomHeightSpacingWidget(height: 12.h),
-            Text(
-              'Mostafa Ahmed',
-              style: AppTextStyle.thirdTextW900S20.copyWith(
-                color: Colors.white,
-                fontSize: 18.sp,
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 

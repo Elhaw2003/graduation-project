@@ -30,7 +30,7 @@ class _TouristAppState extends State<TouristApp> {
     ),
     ExploreArSpotsScreen(),
 
-    // بدل More Menu Screen
+    // AI Chat Screen
     ProfileScreen(),
   ];
 
@@ -40,7 +40,7 @@ class _TouristAppState extends State<TouristApp> {
       extendBody: false,
       backgroundColor: AppColors.backgroundColor,
 
-      // يحافظ على حالة كل صفحة
+      // Preserves each page's state across tab switches
       body: IndexedStack(index: _bottomNavIndex, children: pages),
 
       bottomNavigationBar: CustomBottomNavBar(

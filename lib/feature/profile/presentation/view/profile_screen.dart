@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smart_guide/core/methods/custom_animated_snack_bar.dart';
 import 'package:smart_guide/core/services/cache/jwt_helper.dart';
 import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
-import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/profile/data/model/dash_board_model.dart';
 import 'package:smart_guide/feature/profile/data/model/tourist_profile_model.dart';
@@ -81,34 +81,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
         listener: (context, state) {
           if (state is TouristProfileUpdateSuccess) {
             _lastProfile = state.profile;
-            ScaffoldMessenger.of(context).clearSnackBars();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: AppColors.greenColor,
-                behavior: SnackBarBehavior.floating,
-                margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-              ),
+            CustomAnimatedShowSnackBar.successSnackBar(
+              context: context,
+              message: state.message,
             );
             setState(() {
               _isEditMode = false;
               _localImagePath = null;
             });
           } else if (state is TouristProfileFailure) {
-            ScaffoldMessenger.of(context).clearSnackBars();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage),
-                backgroundColor: AppColors.redAppColor,
-                behavior: SnackBarBehavior.floating,
-                margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-              ),
+            CustomAnimatedShowSnackBar.failureOrWarningSnackBar(
+              context: context,
+              message: state.errorMessage,
             );
           }
         },

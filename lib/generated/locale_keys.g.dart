@@ -287,5 +287,24 @@ abstract class  LocaleKeys {
   static const bookingSuccessMessage = 'bookingSuccessMessage';
   static const goToMyTrips = 'goToMyTrips';
   static const slotTime = 'slotTime';
+  static const whatsAppNum = 'whatsAppNum';
+  static const enterWhatsAppNum = 'enterWhatsAppNum';
+  static const bio = 'bio';
+  static const enterBio = 'enterBio';
+  static const pricePerDay = 'pricePerDay';
+  static const enterPricePerDay = 'enterPricePerDay';
+  static const selectCities = 'selectCities';
+  static const selectLanguages = 'selectLanguages';
+  static const updateSuccess = 'updateSuccess';
+  static const validationEmpty = 'validationEmpty';
+  static const saveChanges = 'saveChanges';
+  static const selectAtLeastOneCity = 'selectAtLeastOneCity';
+  static const selectAtLeastOneLanguage = 'selectAtLeastOneLanguage';
+  static const addGalleryPhotos = 'addGalleryPhotos';
+  static const editGuideProfileHint = 'editGuideProfileHint';
+  static const unauthorizedAccess = 'unauthorizedAccess';
+  static const priceRequired = 'priceRequired';
+  static const bioRequired = 'bioRequired';
+  static const priceInvalid = 'priceInvalid';
 
 }

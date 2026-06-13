@@ -20,6 +20,8 @@ class EndPoint {
   /// ================= TOUR GUIDES =================
 
   static const String tourGuides = "tour-guides";
+  static String tourGuideProfile({required String id}) =>
+      "tour-guides/$id/profile";
 
   /// ================= SAVED GUIDES (Favorites) =================
   static const String savedGuides = "tourists/me/savedguides";

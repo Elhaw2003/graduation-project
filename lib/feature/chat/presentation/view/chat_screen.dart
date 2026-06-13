@@ -81,9 +81,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 if (cubit.messages.isEmpty) {
                   return const ChatEmptyState();
                 }
-
-                // نستخدم المصفوفة كما هي (الأحدث في الآخر)
-                // reverse: true ستجعل العنصر الأخير يظهر في الأسفل تلقائياً
                 return ListView.builder(
                   controller: _scrollController,
                   reverse: true,
@@ -94,7 +91,6 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   itemCount: cubit.messages.length,
                   itemBuilder: (context, index) {
-                    // لعكس الترتيب مع reverse: true، نقرأ المصفوفة من الآخر للأول
                     final msg =
                         cubit.messages[cubit.messages.length - 1 - index];
                     final isMe = msg.senderUserId == _myUserId;

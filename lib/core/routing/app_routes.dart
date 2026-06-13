@@ -38,4 +38,5 @@ class AppRoutes {
   static const String tourDetailScreen = '/tourDetailScreen';
 
   static const String editTourScreen = '/editTourScreen';
+  static const String editGuideProfileScreen = '/editGuideProfileScreen';
 }

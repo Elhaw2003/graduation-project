@@ -16,8 +16,8 @@ import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_place
 import 'package:smart_guide/feature/home/presentation/search_screen.dart';
 import 'package:smart_guide/feature/home/presentation/widget/custom_home_app_bar.dart';
 import 'package:smart_guide/feature/home/presentation/widget/home_search_widget.dart';
-import 'package:smart_guide/feature/profile/presentation/cubit/tourist_profile_cubit.dart';
-import 'package:smart_guide/feature/profile/presentation/cubit/tourist_profile_states.dart';
+import 'package:smart_guide/feature/profile/presentation/cubit/tourist_session/tourist_session_cubit.dart';
+import 'package:smart_guide/feature/profile/presentation/cubit/tourist_session/tourist_session_states.dart';
 import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_cubit.dart';
 import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_states.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
@@ -93,42 +93,36 @@ class _HomeBodyState extends State<HomeBody> {
                     color: AppColors.backgroundColor,
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
                     alignment: Alignment.bottomCenter,
-                    child:
-                        BlocBuilder<TouristProfileCubit, TouristProfileState>(
-                          builder: (context, profileState) {
-                            String? displayName;
-                            String? imageUrl;
+                    child: BlocBuilder<TouristSessionCubit, TouristSessionState>(
+                      builder: (context, sessionState) {
+                        final session = sessionState is TouristSessionLoaded
+                            ? sessionState
+                            : const TouristSessionLoaded(
+                                userName: '',
+                                profilePic: null,
+                                userId: '',
+                              );
 
-                            if (profileState is TouristProfileSuccess) {
-                              displayName =
-                                  profileState.profile.firstName.isNotEmpty
-                                  ? profileState.profile.firstName
-                                  : profileState.profile.userName;
-                              imageUrl =
-                                  profileState.profile.touristImage.isNotEmpty
-                                  ? profileState.profile.touristImage.toHttps()
-                                  : null;
-                            } else if (profileState
-                                is TouristProfileUpdateSuccess) {
-                              displayName =
-                                  profileState.profile.firstName.isNotEmpty
-                                  ? profileState.profile.firstName
-                                  : profileState.profile.userName;
-                              imageUrl =
-                                  profileState.profile.touristImage.isNotEmpty
-                                  ? profileState.profile.touristImage.toHttps()
-                                  : null;
+                        return CustomHomeAppBar(
+                          key: ValueKey(
+                            '${session.userId}_${session.profilePic ?? session.userName}',
+                          ),
+                          title: LocaleKeys.hello.tr(),
+                          subTitle: session.userName.isNotEmpty
+                              ? session.userName
+                              : LocaleKeys.tourist.tr(),
+                          imageUrl: session.profilePic?.toHttps(),
+                          onTap: () async {
+                            await context.pushNamed(AppRoutes.profileScreen);
+                            if (context.mounted) {
+                              context
+                                  .read<TouristSessionCubit>()
+                                  .loadFromCache();
                             }
-
-                            return CustomHomeAppBar(
-                              title: LocaleKeys.hello.tr(),
-                              subTitle: displayName ?? "",
-                              imageUrl: imageUrl,
-                              onTap: () =>
-                                  context.pushNamed(AppRoutes.profileScreen),
-                            );
                           },
-                        ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

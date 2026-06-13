@@ -5,6 +5,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/core/utils/image_url_extension.dart';
+import 'package:smart_guide/feature/tour_guide_profile/data/guide_profile_options.dart';
 
 class TourGuideGalleryWidget extends StatelessWidget {
   const TourGuideGalleryWidget({super.key, required this.galleryUrls});
@@ -42,12 +43,13 @@ class TourGuideGalleryWidget extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 8.w,
-                mainAxisSpacing: 8.h,
-                childAspectRatio: 1,
+                crossAxisCount: 2,
+                crossAxisSpacing: 10.w,
+                mainAxisSpacing: 10.h,
+                childAspectRatio: 1.35,
               ),
-              itemCount: galleryUrls.length,
+              itemCount: galleryUrls.length
+                  .clamp(0, GuideProfileOptions.maxGalleryImages),
               itemBuilder: (context, index) {
                 return ClipRRect(
                   borderRadius: BorderRadius.circular(8.r),
