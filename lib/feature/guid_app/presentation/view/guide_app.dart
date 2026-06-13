@@ -1,259 +1,213 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
-import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/image_url_extension.dart';
+import 'package:smart_guide/feature/guid_app/presentation/cubit/guide_session/guide_session_cubit.dart';
+import 'package:smart_guide/feature/guid_app/presentation/cubit/guide_session/guide_session_states.dart';
 import 'package:smart_guide/feature/guid_app/presentation/view/edit_tour_screen.dart';
 import 'package:smart_guide/feature/home/presentation/widget/custom_home_app_bar.dart';
 
-class GuideApp extends StatefulWidget {
+class GuideApp extends StatelessWidget {
   const GuideApp({super.key});
 
-  @override
-  State<GuideApp> createState() => _GuideAppState();
-}
-
-class _GuideAppState extends State<GuideApp> {
-  String _userName = '';
-  String? _profilePic;
-  String _userId = '';
-
-  /// API DATA
-  final List tours = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserData();
-  }
-
-  Future<void> _loadUserData() async {
-    final userName = await SecureStorageHelper.instance.getUserName();
-
-    final profilePic = await SecureStorageHelper.instance.getProfilePic();
-
-    final userId = await SecureStorageHelper.instance.getUserId();
-
-    if (!mounted) return;
-
-    setState(() {
-      _userName = userName ?? '';
-      _profilePic = profilePic;
-      _userId = userId ?? '';
-    });
-  }
+  /// API DATA placeholder — kept for future tour list integration.
+  static const List tours = [];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xffF5F6FF),
+    return BlocBuilder<GuideSessionCubit, GuideSessionState>(
+      builder: (context, sessionState) {
+        final session = sessionState is GuideSessionLoaded
+            ? sessionState
+            : const GuideSessionLoaded(
+                userName: '',
+                profilePic: null,
+                userId: '',
+              );
 
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-
-              children: [
-                SizedBox(height: 20.h),
-
-                // =========================
-                // Header
-                // =========================
-                CustomHomeAppBar(
-                  title: "Welcome",
-                  subTitle: _userName.isNotEmpty ? _userName : "Guide",
-                  imageUrl: _profilePic?.toHttps(),
-                  onTap: () => context.pushNamed(
-                    AppRoutes.tourGuideProfileScreen,
-                    pathParameters: {'userId': _userId},
-                  ),
-                ),
-
-                SizedBox(height: 25.h),
-
-                // =========================
-                // Total Earnings
-                // =========================
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(vertical: 18.h),
-
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-
-                    borderRadius: BorderRadius.circular(18.r),
-
-                    border: Border.all(color: AppColors.primaryColor, width: 2),
-
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-
-                  child: Column(
-                    children: [
-                      Icon(
-                        Icons.account_balance_wallet_outlined,
-                        color: Colors.green,
-                        size: 24.sp,
-                      ),
-
-                      SizedBox(height: 8.h),
-
-                      Text(
-                        "Total Earnings",
-                        style: TextStyle(
-                          fontSize: 22.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-
-                      SizedBox(height: 5.h),
-
-                      Text(
-                        "0 EGP",
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                SizedBox(height: 18.h),
-
-                // =========================
-                // Stats Cards
-                // =========================
-                Row(
+        return Scaffold(
+          backgroundColor: const Color(0xffF5F6FF),
+          body: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: _buildStatCard(
-                        title: "Active Tours",
-                        value: "${tours.length} Tours",
-                        icon: Icons.menu_book_outlined,
-                        valueColor: Colors.orange,
+                    SizedBox(height: 20.h),
+                    CustomHomeAppBar(
+                      key: ValueKey(
+                        '${session.userId}_${session.profilePic ?? session.userName}',
                       ),
+                      title: 'Welcome',
+                      subTitle:
+                          session.userName.isNotEmpty ? session.userName : 'Guide',
+                      imageUrl: session.profilePic?.toHttps(),
+                      onTap: () async {
+                        if (session.userId.isEmpty) return;
+                        await context.pushNamed(
+                          AppRoutes.tourGuideProfileScreen,
+                          pathParameters: {'userId': session.userId},
+                        );
+                        if (context.mounted) {
+                          context.read<GuideSessionCubit>().loadFromCache();
+                        }
+                      },
                     ),
-
-                    SizedBox(width: 10.w),
-
-                    Expanded(
-                      child: _buildStatCard(
-                        title: "Total Tourists",
-                        value: "0 Tourist",
-                        icon: Icons.groups_2_outlined,
-                        valueColor: Colors.blue,
+                    SizedBox(height: 25.h),
+                    _buildEarningsCard(),
+                    SizedBox(height: 18.h),
+                    _buildStatsRow(),
+                    SizedBox(height: 25.h),
+                    if (tours.isEmpty) ...[
+                      _buildEmptyToursState(context),
+                    ] else ...[
+                      _buildActiveToursHeader(),
+                      SizedBox(height: 10.h),
+                      _buildTourCard(
+                        context: context,
+                        image: 'assets/images/png/pyramids.jpg',
+                        title: 'Giza Pyramids & Sphinx Tour',
                       ),
-                    ),
-
-                    SizedBox(width: 10.w),
-
-                    Expanded(
-                      child: _buildStatCard(
-                        title: "Inactive Tours",
-                        value: "0 Tours",
-                        icon: Icons.disabled_by_default,
-                        valueColor: Colors.red,
+                      SizedBox(height: 20.h),
+                      _buildTourCard(
+                        context: context,
+                        image: 'assets/images/png/pyramids.jpg',
+                        title: 'Luxor Hot Air Balloon Adventure',
                       ),
-                    ),
+                    ],
+                    SizedBox(height: 30.h),
                   ],
                 ),
-
-                SizedBox(height: 25.h),
-
-                // =========================
-                // Empty State / Tours
-                // =========================
-                if (tours.isEmpty) ...[
-                  _buildEmptyToursState(),
-                ] else ...[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-
-                        children: [
-                          Text(
-                            "Active Tours",
-                            style: TextStyle(
-                              fontSize: 22.sp,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-
-                          SizedBox(height: 4.h),
-
-                          Text(
-                            "Tours currently live for booking",
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 14.sp,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      TextButton(
-                        onPressed: () {},
-
-                        child: Text(
-                          "Show All",
-                          style: TextStyle(
-                            color: AppColors.primaryColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: 10.h),
-
-                  _buildTourCard(
-                    context: context,
-                    image: 'assets/images/png/pyramids.jpg',
-                    title: "Giza Pyramids & Sphinx Tour",
-                  ),
-
-                  SizedBox(height: 20.h),
-
-                  _buildTourCard(
-                    context: context,
-                    image: 'assets/images/png/pyramids.jpg',
-                    title: "Luxor Hot Air Balloon Adventure",
-                  ),
-                ],
-
-                SizedBox(height: 30.h),
-              ],
+              ),
             ),
           ),
-        ),
+        );
+      },
+    );
+  }
+
+  Widget _buildEarningsCard() {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 18.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18.r),
+        border: Border.all(color: AppColors.primaryColor, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Icon(
+            Icons.account_balance_wallet_outlined,
+            color: Colors.green,
+            size: 24.sp,
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            'Total Earnings',
+            style: TextStyle(
+              fontSize: 22.sp,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 5.h),
+          Text(
+            '0 EGP',
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.green,
+            ),
+          ),
+        ],
       ),
     );
   }
 
-  // =========================
-  // Empty State
-  // =========================
+  Widget _buildStatsRow() {
+    return Row(
+      children: [
+        Expanded(
+          child: _buildStatCard(
+            title: 'Active Tours',
+            value: '${tours.length} Tours',
+            icon: Icons.menu_book_outlined,
+            valueColor: Colors.orange,
+          ),
+        ),
+        SizedBox(width: 10.w),
+        Expanded(
+          child: _buildStatCard(
+            title: 'Total Tourists',
+            value: '0 Tourist',
+            icon: Icons.groups_2_outlined,
+            valueColor: Colors.blue,
+          ),
+        ),
+        SizedBox(width: 10.w),
+        Expanded(
+          child: _buildStatCard(
+            title: 'Inactive Tours',
+            value: '0 Tours',
+            icon: Icons.disabled_by_default,
+            valueColor: Colors.red,
+          ),
+        ),
+      ],
+    );
+  }
 
-  Widget _buildEmptyToursState() {
+  Widget _buildActiveToursHeader() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Active Tours',
+              style: TextStyle(
+                fontSize: 22.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 4.h),
+            Text(
+              'Tours currently live for booking',
+              style: TextStyle(
+                color: Colors.grey,
+                fontSize: 14.sp,
+              ),
+            ),
+          ],
+        ),
+        TextButton(
+          onPressed: () {},
+          child: Text(
+            'Show All',
+            style: TextStyle(
+              color: AppColors.primaryColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEmptyToursState(BuildContext context) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: 50.h),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
@@ -9,7 +10,7 @@ import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/core/utils/image_url_extension.dart';
 import 'package:smart_guide/feature/profile/data/model/tourist_profile_model.dart';
-import 'package:smart_guide/generated/assets.dart';
+import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class TouristProfileHeader extends StatelessWidget {
   const TouristProfileHeader({
@@ -57,13 +58,21 @@ class TouristProfileHeader extends StatelessWidget {
                 children: [
                   _buildAvatar(),
                   CustomHeightSpacingWidget(height: 16),
-                  Text(
-                    profile.fullName.isNotEmpty
-                        ? profile.fullName
-                        : profile.userName,
-                    style: AppTextStyle.whitePoppinsW500S24,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    child: Text(
+                      profile.fullName.isNotEmpty
+                          ? profile.fullName
+                          : profile.userName,
+                      key: ValueKey(
+                        profile.fullName.isNotEmpty
+                            ? profile.fullName
+                            : profile.userName,
+                      ),
+                      style: AppTextStyle.whitePoppinsW500S24,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                   CustomHeightSpacingWidget(height: 8),
                   CustomButtonWidget(
@@ -74,7 +83,9 @@ class TouristProfileHeader extends StatelessWidget {
                     borderSideColor: AppColors.whiteColor,
                     buttonWidth: 180.w,
                     borderRadiusButton: 12,
-                    title: isEditMode ? 'Cancel' : 'Edit Profile',
+                    title: isEditMode
+                        ? LocaleKeys.cancel.tr()
+                        : LocaleKeys.editProfile.tr(),
                     titleStyle: AppTextStyle.whitePoppinsW400S16,
                     prefixIcon: isEditMode ? Icons.close : Icons.edit_outlined,
                     prefixIconColor: AppColors.whiteColor,
@@ -91,6 +102,16 @@ class TouristProfileHeader extends StatelessWidget {
   }
 
   Widget _buildAvatar() {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 350),
+      child: KeyedSubtree(
+        key: ValueKey(localImagePath ?? profile.touristImage),
+        child: _buildAvatarContent(),
+      ),
+    );
+  }
+
+  Widget _buildAvatarContent() {
     if (localImagePath != null && localImagePath!.isNotEmpty) {
       return CircleAvatar(
         radius: 50.r,

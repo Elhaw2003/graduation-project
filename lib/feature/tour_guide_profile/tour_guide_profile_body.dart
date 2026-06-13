@@ -1,12 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
-import 'package:smart_guide/feature/tour_guide_profile/action_row_in_tour_guide_screen.dart';
+import 'package:smart_guide/core/utils/app_colors.dart';
+import 'package:smart_guide/core/utils/image_url_extension.dart';
+import 'package:smart_guide/feature/tour_guide_profile/custom_container_about_the_guide.dart';
+import 'package:smart_guide/feature/tour_guide_profile/custom_container_expertise_and_skills.dart';
 import 'package:smart_guide/feature/tour_guide_profile/tour_guide_gallery_widget.dart';
 import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_image.dart';
 import 'package:smart_guide/feature/tour_guide_profile/tour_guide_info.dart';
-import 'package:smart_guide/feature/tour_guide_profile/custom_container_about_the_guide.dart';
-import 'package:smart_guide/feature/tour_guide_profile/custom_container_expertise_and_skills.dart';
 import 'package:smart_guide/generated/assets.dart';
 
 class TourGuideProfileBody extends StatelessWidget {
@@ -34,6 +36,7 @@ class TourGuideProfileBody extends StatelessWidget {
   final List<String> languages;
   final List<String> gallery;
   final String guidedId;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -42,16 +45,41 @@ class TourGuideProfileBody extends StatelessWidget {
         Stack(
           clipBehavior: Clip.none,
           children: [
-            Container(
+            SizedBox(
               height: 260.h,
               width: double.infinity,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(Assets.imagesPngPyramids),
-                  fit: BoxFit.cover,
-                ),
+              child: Stack(
+                // fit: StackFit.,
+                children: [
+                  if (imageUrl.isNotEmpty)
+                    CachedNetworkImage(
+                      imageUrl: imageUrl.toHttps(),
+                      fit: BoxFit.cover,
+                      placeholder: (_, __) => Image.asset(
+                        Assets.imagesPngPyramids,
+                        fit: BoxFit.cover,
+                      ),
+                      errorWidget: (_, __, ___) => Image.asset(
+                        Assets.imagesPngPyramids,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  else
+                    Image.asset(Assets.imagesPngPyramids, fit: BoxFit.cover),
+                  Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Colors.black.withValues(alpha: 0.15),
+                          Colors.black.withValues(alpha: 0.55),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              child: ActionRowInTourGuideScreen(guideId: guidedId),
             ),
             Positioned(
               bottom: -45.h,
@@ -87,9 +115,10 @@ class TourGuideProfileBody extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomContainerAboutTheGuide(
-                
-                
-                name: name, aboutGuide: aboutGuide, guideId: guidedId ),
+                name: name,
+                aboutGuide: aboutGuide,
+                guideId: guidedId,
+              ),
               CustomHeightSpacingWidget(height: 16.h),
               CustomContainerExpertiseAndSkills(languages: languages),
               if (gallery.isNotEmpty) ...[
