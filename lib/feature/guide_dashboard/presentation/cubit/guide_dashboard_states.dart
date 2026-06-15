@@ -10,6 +10,7 @@ import 'package:smart_guide/feature/guide_dashboard/data/model/recent_activity_m
 import 'package:smart_guide/feature/guide_dashboard/data/model/tour_by_place_model.dart';
 import 'package:smart_guide/feature/guide_dashboard/data/model/tour_performance_model.dart';
 import 'package:smart_guide/feature/guide_dashboard/data/model/wallet_transaction_model.dart';
+import 'package:smart_guide/feature/guide_dashboard/data/model/guide_booking_model.dart';
 
 abstract class GuideDashboardState {
   const GuideDashboardState();
@@ -184,4 +185,43 @@ class DeleteTourSuccess extends GuideDashboardState {
 class DeleteTourFailure extends GuideDashboardState {
   final String errorMessage;
   const DeleteTourFailure({required this.errorMessage});
+}
+
+// --- 14. Guide Bookings Feed ---
+class GetGuideBookingsLoading extends GuideDashboardState {}
+
+class GetGuideBookingsSuccess extends GuideDashboardState {
+  final List<GuideBookingModel> guideBookingsList;
+  const GetGuideBookingsSuccess({required this.guideBookingsList});
+}
+
+class GetGuideBookingsFailure extends GuideDashboardState {
+  final String errorMessage;
+  const GetGuideBookingsFailure({required this.errorMessage});
+}
+
+// --- 15. Create Tour ---
+class CreateTourLoading extends GuideDashboardState {}
+
+class CreateTourSuccess extends GuideDashboardState {
+  final String message;
+  const CreateTourSuccess({required this.message});
+}
+
+class CreateTourFailure extends GuideDashboardState {
+  final String errorMessage;
+  const CreateTourFailure({required this.errorMessage});
+}
+
+// --- 16. Edit Tour ---
+class EditTourLoading extends GuideDashboardState {}
+
+class EditTourSuccess extends GuideDashboardState {
+  final String message;
+  const EditTourSuccess({required this.message});
+}
+
+class EditTourFailure extends GuideDashboardState {
+  final String errorMessage;
+  const EditTourFailure({required this.errorMessage});
 }

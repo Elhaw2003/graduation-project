@@ -8,6 +8,7 @@ import 'package:smart_guide/core/utils/image_url_extension.dart';
 import 'package:smart_guide/feature/guid_app/presentation/cubit/guide_session/guide_session_cubit.dart';
 import 'package:smart_guide/feature/guid_app/presentation/cubit/guide_session/guide_session_states.dart';
 import 'package:smart_guide/feature/guid_app/presentation/view/edit_tour_screen.dart';
+import 'package:smart_guide/feature/guid_app/presentation/view/widget/guide_bookings_live_feed.dart';
 import 'package:smart_guide/feature/home/presentation/widget/custom_home_app_bar.dart';
 
 class GuideApp extends StatelessWidget {
@@ -44,8 +45,9 @@ class GuideApp extends StatelessWidget {
                         '${session.userId}_${session.profilePic ?? session.userName}',
                       ),
                       title: 'Welcome',
-                      subTitle:
-                          session.userName.isNotEmpty ? session.userName : 'Guide',
+                      subTitle: session.userName.isNotEmpty
+                          ? session.userName
+                          : 'Guide',
                       imageUrl: session.profilePic?.toHttps(),
                       onTap: () async {
                         if (session.userId.isEmpty) return;
@@ -62,6 +64,8 @@ class GuideApp extends StatelessWidget {
                     _buildEarningsCard(),
                     SizedBox(height: 18.h),
                     _buildStatsRow(),
+                    SizedBox(height: 25.h),
+                    const GuideBookingsLiveFeed(),
                     SizedBox(height: 25.h),
                     if (tours.isEmpty) ...[
                       _buildEmptyToursState(context),
@@ -117,10 +121,7 @@ class GuideApp extends StatelessWidget {
           SizedBox(height: 8.h),
           Text(
             'Total Earnings',
-            style: TextStyle(
-              fontSize: 22.sp,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 5.h),
           Text(
@@ -178,18 +179,12 @@ class GuideApp extends StatelessWidget {
           children: [
             Text(
               'Active Tours',
-              style: TextStyle(
-                fontSize: 22.sp,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 4.h),
             Text(
               'Tours currently live for booking',
-              style: TextStyle(
-                color: Colors.grey,
-                fontSize: 14.sp,
-              ),
+              style: TextStyle(color: Colors.grey, fontSize: 14.sp),
             ),
           ],
         ),
@@ -277,7 +272,12 @@ class GuideApp extends StatelessWidget {
               ),
 
               onPressed: () {
-                context.pushNamed(AppRoutes.editTourScreen);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditTourScreen(),
+                  ),
+                );
               },
 
               child: Text(
@@ -393,7 +393,12 @@ class GuideApp extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        context.pushNamed(AppRoutes.editTourScreen);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EditTourScreen(),
+                          ),
+                        );
                       },
 
                       child: _smallActionButton(

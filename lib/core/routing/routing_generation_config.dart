@@ -25,6 +25,7 @@ import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_sc
 import 'package:smart_guide/feature/favorite/presentation/view/favorite_screen.dart';
 import 'package:smart_guide/feature/guid_app/presentation/cubit/guide_session/guide_session_cubit.dart';
 import 'package:smart_guide/feature/guid_app/presentation/view/guide_app.dart';
+import 'package:smart_guide/feature/guid_app/presentation/view/edit_tour_screen.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
 import 'package:smart_guide/feature/home/data/repo/get_places/get_places_repo_imple.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_cubit.dart';
@@ -68,7 +69,7 @@ class RoutingGenerationConfig {
     errorBuilder: (context, state) => errorBuilder(),
     routes: [
       // ================================================================
-      // PRE-AUTH ROUTES (No role-specific cubits)
+      // PRE-AUTH ROUTES
       // ================================================================
       GoRoute(
         path: AppRoutes.spalshScreen,
@@ -90,8 +91,6 @@ class RoutingGenerationConfig {
         name: AppRoutes.loginScreen,
         builder: (context, state) => const LoginScreen(),
       ),
-
-      // Register — scoped PickImageCubit (auth-only, not global)
       GoRoute(
         path: '${AppRoutes.registerScreen}/:userType',
         name: AppRoutes.registerScreen,
@@ -152,7 +151,7 @@ class RoutingGenerationConfig {
       ),
 
       // ================================================================
-      // SHARED ROUTES (Both roles)
+      // SHARED ROUTES
       // ================================================================
       GoRoute(
         path: AppRoutes.homeScreen,
@@ -168,8 +167,7 @@ class RoutingGenerationConfig {
       ),
 
       // ================================================================
-      // TOURIST APP SHELL — All Tourist cubits scoped here
-      // Created fresh on login, disposed on logout navigation
+      // TOURIST APP SHELL
       // ================================================================
       GoRoute(
         path: AppRoutes.touristApp,
@@ -219,19 +217,29 @@ class RoutingGenerationConfig {
       ),
 
       // ================================================================
-      // GUIDE APP SHELL — No global cubits needed
-      // Guide-specific cubits are already scoped per-route below
+      // GUIDE APP SHELL (Injected with Dashboard Cubit natively)
       // ================================================================
       GoRoute(
         path: AppRoutes.guideApp,
         name: AppRoutes.guideApp,
         pageBuilder: (context, state) => CustomSpringPage(
-          child: BlocProvider(
-            create: (_) {
-              final cubit = GuideSessionCubit();
-              GuideSessionCubit.register(cubit);
-              return cubit;
-            },
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (_) {
+                  final cubit = GuideSessionCubit();
+                  GuideSessionCubit.register(cubit);
+                  return cubit;
+                },
+              ),
+              BlocProvider(
+                create: (_) => GuideDashboardCubit(
+                  repository: GuideDashboardRepoImpl(
+                    apiConsumer: DioConsumer(dio: Dio()),
+                  ),
+                ),
+              ),
+            ],
             child: const GuideApp(),
           ),
         ),
@@ -239,16 +247,12 @@ class RoutingGenerationConfig {
 
       // ================================================================
       // TOURIST-SPECIFIC FEATURE ROUTES
-      // These are navigated TO from within the Tourist shell,
-      // so they inherit Tourist cubits from the ancestor TouristApp.
-      // Additional per-route cubits are injected as needed.
       // ================================================================
       GoRoute(
         path: '/tourGuideProfileScreen/:userId',
         name: AppRoutes.tourGuideProfileScreen,
         pageBuilder: (context, state) {
           final userId = state.pathParameters['userId']!;
-
           return CustomSpringPage(
             child: MultiBlocProvider(
               providers: [
@@ -448,8 +452,7 @@ class RoutingGenerationConfig {
       ),
 
       // ================================================================
-      // GUIDE-SPECIFIC FEATURE ROUTES (Already properly scoped)
-      // Each route creates its own GuideDashboardCubit instance
+      // GUIDE-SPECIFIC FEATURE ROUTES (Fixed Injection Mapping)
       // ================================================================
       GoRoute(
         path: '${AppRoutes.editGuideProfileScreen}/:guideId',
@@ -549,6 +552,26 @@ class RoutingGenerationConfig {
                 ),
               ),
               child: TourDetailScreen(tourId: tourId),
+            ),
+          );
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.editTourScreen,
+        name: AppRoutes.editTourScreen,
+        pageBuilder: (context, state) {
+          final tourData = state.extra as Map<String, dynamic>?;
+          final tourId = tourData?['tourId'] as String?;
+          final tourDetail = tourData?['tourDetail'] as dynamic;
+
+          return CustomSpringPage(
+            child: BlocProvider(
+              create: (context) => GuideDashboardCubit(
+                repository: GuideDashboardRepoImpl(
+                  apiConsumer: DioConsumer(dio: Dio()),
+                ),
+              ),
+              child: EditTourScreen(tourId: tourId, tourData: tourDetail),
             ),
           );
         },

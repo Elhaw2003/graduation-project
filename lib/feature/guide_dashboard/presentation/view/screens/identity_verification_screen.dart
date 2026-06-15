@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,10 +6,7 @@ import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/guide_dashboard/presentation/cubit/guide_dashboard_cubit.dart';
 import 'package:smart_guide/feature/guide_dashboard/presentation/cubit/guide_dashboard_states.dart';
-import 'package:smart_guide/generated/locale_keys.g.dart';
 
-/// Extension to ensure image URLs use HTTPS protocol.
-/// Fixes Android cleartext traffic restrictions and iOS ATS requirements.
 extension ImageUrlFix on String {
   String toHttps() {
     if (startsWith('http://')) {

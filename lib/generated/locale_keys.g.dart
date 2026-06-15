@@ -200,8 +200,6 @@ abstract class  LocaleKeys {
   static const map = 'map';
   static const myArchives = 'myArchives';
   static const myGuides = 'myGuides';
-
-  // Guide Dashboard
   static const guideDashboard = 'guideDashboard';
   static const walletBalance = 'walletBalance';
   static const totalEarnings = 'totalEarnings';
@@ -251,8 +249,6 @@ abstract class  LocaleKeys {
   static const dashboardNoActivities = 'dashboardNoActivities';
   static const dashboardNoTours = 'dashboardNoTours';
   static const profileUpdatedSuccessfully = 'profileUpdatedSuccessfully';
-
-  // Booking & Payment
   static const selectSlot = 'selectSlot';
   static const availableSlots = 'availableSlots';
   static const noSlotsAvailable = 'noSlotsAvailable';
@@ -306,5 +302,45 @@ abstract class  LocaleKeys {
   static const priceRequired = 'priceRequired';
   static const bioRequired = 'bioRequired';
   static const priceInvalid = 'priceInvalid';
+  static const myBookings = 'myBookings';
+  static const bookingStatus = 'bookingStatus';
+  static const date = 'date';
+  static const time = 'time';
+  static const noBookings = 'noBookings';
+  static const guideBookingsTitle = 'guideBookingsTitle';
+  static const guideBookingsSubtitle = 'guideBookingsSubtitle';
+  static const paymentMethodLabel = 'paymentMethodLabel';
+  static const bookedOn = 'bookedOn';
+  static const create_tour = 'create_tour';
+  static const edit_tour = 'edit_tour';
+  static const delete_tour = 'delete_tour';
+  static const tour_title = 'tour_title';
+  static const tour_desc = 'tour_desc';
+  static const duration_hours = 'duration_hours';
+  static const max_group_size = 'max_group_size';
+  static const stops = 'stops';
+  static const inclusions = 'inclusions';
+  static const addons = 'addons';
+  static const delete_confirm = 'delete_confirm';
+  static const tour_success = 'tour_success';
+  static const basic_info = 'basic_info';
+  static const pricing_capacity = 'pricing_capacity';
+  static const route_perks = 'route_perks';
+  static const media_upload = 'media_upload';
+  static const start_fresh_tour_form = 'start_fresh_tour_form';
+  static const price_per_person = 'price_per_person';
+  static const select_images = 'select_images';
+  static const upload_from_camera = 'upload_from_camera';
+  static const upload_from_gallery = 'upload_from_gallery';
+  static const tour_stop_title = 'tour_stop_title';
+  static const tour_stop_duration = 'tour_stop_duration';
+  static const add_stop = 'add_stop';
+  static const add_inclusion = 'add_inclusion';
+  static const add_addon = 'add_addon';
+  static const addon_price = 'addon_price';
+  static const select_tour_to_edit = 'select_tour_to_edit';
+  static const tour_created = 'tour_created';
+  static const tour_updated = 'tour_updated';
+  static const tour_deleted = 'tour_deleted';
 
 }

@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +8,7 @@ import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/guide_dashboard/presentation/cubit/guide_dashboard_cubit.dart';
 import 'package:smart_guide/feature/guide_dashboard/presentation/cubit/guide_dashboard_states.dart';
 import 'package:smart_guide/feature/guide_dashboard/presentation/view/widget/tour_list_item.dart';
-import 'package:smart_guide/generated/locale_keys.g.dart';
+import 'package:smart_guide/feature/guid_app/presentation/view/edit_tour_screen.dart';
 
 class ToursManagementScreen extends StatefulWidget {
   const ToursManagementScreen({super.key});
@@ -40,9 +39,10 @@ class _ToursManagementScreenState extends State<ToursManagementScreen> {
             child: Center(
               child: GestureDetector(
                 onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Create Tour feature coming soon'),
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EditTourScreen(),
                     ),
                   );
                 },
@@ -124,9 +124,10 @@ class _ToursManagementScreenState extends State<ToursManagementScreen> {
                     SizedBox(height: 24.h),
                     ElevatedButton.icon(
                       onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Create Tour feature coming soon'),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EditTourScreen(),
                           ),
                         );
                       },
@@ -164,9 +165,10 @@ class _ToursManagementScreenState extends State<ToursManagementScreen> {
                   },
                   onDelete: () => _showDeleteConfirmation(context, tour.id),
                   onEdit: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Edit Tour feature coming soon'),
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditTourScreen(tourId: tour.id),
                       ),
                     );
                   },
