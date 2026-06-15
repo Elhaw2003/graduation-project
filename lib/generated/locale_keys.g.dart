@@ -200,6 +200,11 @@ abstract class  LocaleKeys {
   static const map = 'map';
   static const myArchives = 'myArchives';
   static const myGuides = 'myGuides';
+  static const ask_something = 'ask_something';
+  static const ai_typing = 'ai_typing';
+  static const upload_image = 'upload_image';
+  static const recommendations = 'recommendations';
+  static const connection_lost = 'connection_lost';
 
   // Guide Dashboard
   static const guideDashboard = 'guideDashboard';
