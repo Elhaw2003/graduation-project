@@ -139,4 +139,34 @@ class GuideDashboardCubit extends Cubit<GuideDashboardState> {
       (successMessage) => emit(DeleteTourSuccess(message: successMessage)),
     );
   }
+
+  Future<void> fetchGuideBookings() async {
+    emit(GetGuideBookingsLoading());
+    final result = await repository.getGuideBookings();
+    result.fold(
+      (failure) => emit(GetGuideBookingsFailure(errorMessage: failure.message)),
+      (list) => emit(GetGuideBookingsSuccess(guideBookingsList: list)),
+    );
+  }
+
+  Future<void> createTour({required Map<String, dynamic> tourData}) async {
+    emit(CreateTourLoading());
+    final result = await repository.createTour(tourData: tourData);
+    result.fold(
+      (failure) => emit(CreateTourFailure(errorMessage: failure.message)),
+      (message) => emit(CreateTourSuccess(message: message)),
+    );
+  }
+
+  Future<void> editTour({
+    required String id,
+    required Map<String, dynamic> tourData,
+  }) async {
+    emit(EditTourLoading());
+    final result = await repository.editTour(id: id, tourData: tourData);
+    result.fold(
+      (failure) => emit(EditTourFailure(errorMessage: failure.message)),
+      (message) => emit(EditTourSuccess(message: message)),
+    );
+  }
 }

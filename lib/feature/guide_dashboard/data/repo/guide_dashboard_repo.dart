@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:smart_guide/core/errors/failures.dart';
+import 'package:smart_guide/feature/guide_dashboard/data/model/guide_booking_model.dart';
 import 'package:smart_guide/feature/guide_dashboard/data/model/guide_dashboard_model.dart';
 import 'package:smart_guide/feature/guide_dashboard/data/model/guide_documents_model.dart';
 import 'package:smart_guide/feature/guide_dashboard/data/model/guide_statistics_model.dart';
@@ -28,8 +29,7 @@ abstract class GuideDashboardRepo {
 
   Future<Either<Failure, GuideWalletModel>> getWallet();
 
-  Future<Either<Failure, List<WalletTransactionModel>>>
-      getWalletTransactions();
+  Future<Either<Failure, List<WalletTransactionModel>>> getWalletTransactions();
 
   Future<Either<Failure, List<RecentActivityModel>>> getActivities();
 
@@ -44,4 +44,15 @@ abstract class GuideDashboardRepo {
   });
 
   Future<Either<Failure, String>> deleteTour({required String id});
+
+  Future<Either<Failure, String>> createTour({
+    required Map<String, dynamic> tourData,
+  });
+
+  Future<Either<Failure, String>> editTour({
+    required String id,
+    required Map<String, dynamic> tourData,
+  });
+
+  Future<Either<Failure, List<GuideBookingModel>>> getGuideBookings();
 }

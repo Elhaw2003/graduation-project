@@ -61,6 +61,9 @@ class EndPoint {
   static const String myBookings = "Bookings/my-bookings";
   static String cancelBooking({required String bookingId}) =>
       "Bookings/$bookingId";
+
+  /// ================= GUIDE BOOKINGS FEED =================
+  static const String guideBookings = "Bookings/guide-bookings";
 }
 
 class ApiKey {
