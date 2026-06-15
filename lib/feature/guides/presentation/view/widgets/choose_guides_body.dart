@@ -34,14 +34,14 @@ class ChooseGuidesBody extends StatelessWidget {
         ),
         CustomHeightSpacingWidget(height: 30.h),
         // كارت AI Guide
-        GuideSelectionCard(
-          title: LocaleKeys.aiGuide.tr(),
-          iconPath: Assets.imagesSvgRobot,
-          isSvg: true,
-          onTap: () {
-            context.pushNamed(AppRoutes.aiGuideScreen);
-          },
-        ),
+        // GuideSelectionCard(
+        //   title: LocaleKeys.aiGuide.tr(),
+        //   iconPath: Assets.imagesSvgRobot,
+        //   isSvg: true,
+        //   onTap: () {
+        //     context.pushNamed(AppRoutes.aiGuideScreen);
+        //   },
+        // ),
       ],
     );
   }

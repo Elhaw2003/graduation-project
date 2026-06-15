@@ -195,7 +195,6 @@
     "map":"Map",
     "myArchives":"My Archives",
     "myGuides":"My Guides",
-
     "guideDashboard": "Guide Dashboard",
     "walletBalance": "Wallet Balance",
     "totalEarnings": "Total Earnings",
@@ -339,4 +338,9 @@
     "tour_created": "Tour created successfully!",
     "tour_updated": "Tour updated successfully!",
     "tour_deleted": "Tour deleted successfully!"
+    "ask_something":"Ask me anything about Egypt...",
+    "ai_typing":"AI is typing...",
+    "upload_image":"Upload Image",
+    "recommendations":"Recommended for You",
+    "connection_lost":"Connection lost. Reconnecting..."
 }

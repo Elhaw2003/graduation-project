@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:smart_guide/core/network/dio_consumer.dart';
 import 'package:smart_guide/core/routing/routing_generation_config.dart';
 import 'package:smart_guide/core/services/cache/cache_helper.dart';
@@ -24,12 +26,20 @@ import 'package:smart_guide/feature/tour_guide_profile/presentation/cubit/save_g
 import 'package:smart_guide/feature/profile/data/repo/tourist_profile_repo_impl.dart';
 import 'package:smart_guide/feature/profile/presentation/cubit/tourist_profile_cubit.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
   await CacheHelper.init();
+  HydratedBloc.storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorageDirectory.web
+        : HydratedStorageDirectory(
+            (await getApplicationDocumentsDirectory()).path,
+          ),
+  );
   Bloc.observer = MyBlocObserver();
   Stripe.publishableKey = AppConstants.publishableKey;
 

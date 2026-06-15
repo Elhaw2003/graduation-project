@@ -23,17 +23,14 @@ class CustomBottomNavBar extends StatelessWidget {
       Assets.imagesSvgGuidesIcon,
       Assets.imagesSvgRobot,
       Assets.imagesSvgExplorIcon,
-      Assets.imagesSvgMoreIcon,
     ];
 
-    final labelList = <String>["Home", "Guides", "Ai Chat", "Explore", "More"];
+    final labelList = <String>["Home", "Guides", "AI Guide", "Explore"];
 
     return SafeArea(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          // حساب العرض المتاح بدقة لمنع الـ Overflow في التابلت
-          double availableWidth =
-              constraints.maxWidth - 32.w; // 16 padding من كل جانب
+          double availableWidth = constraints.maxWidth - 32.w;
           double itemWidth = availableWidth / iconList.length;
           double circleRadius = 28.r;
 
@@ -67,14 +64,12 @@ class CustomBottomNavBar extends StatelessWidget {
                       splashColor: Colors.transparent,
                       tabBuilder: (int index, bool isActive) {
                         return Column(
-                          mainAxisSize: MainAxisSize.min, // منع الـ Overflow
+                          mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CustomHeightSpacingWidget(height: 15),
                             Opacity(
-                              opacity: isActive
-                                  ? 0
-                                  : 1, // إخفاء الأيقونة غير النشطة خلف الدائرة
+                              opacity: isActive ? 0 : 1,
                               child: SvgPicture.asset(
                                 iconList[index],
                                 width: 22.w,
@@ -107,9 +102,8 @@ class CustomBottomNavBar extends StatelessWidget {
                   AnimatedPositioned(
                     duration: const Duration(milliseconds: 350),
                     curve: Curves.easeInOutCubic,
-                    bottom: 25.h, // تحريك الدائرة للأعلى قليلاً
-                    left:
-                        (itemWidth * currentIndex) +
+                    bottom: 25.h,
+                    left: (itemWidth * currentIndex) +
                         (itemWidth / 2) -
                         circleRadius,
                     child: Column(
@@ -119,12 +113,17 @@ class CustomBottomNavBar extends StatelessWidget {
                           height: 56.r,
                           width: 56.r,
                           decoration: BoxDecoration(
-                            color: Colors.blueAccent,
+                            color: currentIndex == 2
+                                ? AppColors.primaryColor
+                                : Colors.blueAccent,
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.blueAccent.withOpacity(0.4),
-                                blurRadius: 12,
+                                color: (currentIndex == 2
+                                        ? AppColors.primaryColor
+                                        : Colors.blueAccent)
+                                    .withOpacity(0.45),
+                                blurRadius: 14,
                                 offset: const Offset(0, 6),
                               ),
                             ],
