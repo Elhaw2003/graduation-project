@@ -6,6 +6,8 @@ import 'package:smart_guide/app_main.dart';
 import 'package:smart_guide/core/network/dio_consumer.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spring_animation.dart';
+import 'package:smart_guide/core/services/ai_chat_service.dart';
+import 'package:smart_guide/feature/aiGuide/presentation/cubit/ai_guide_cubit.dart';
 import 'package:smart_guide/feature/aiGuide/presentation/view/ai_guide_screen.dart';
 import 'package:smart_guide/feature/all_guides/data/repo/tour_guides_repo_imple.dart';
 import 'package:smart_guide/feature/all_guides/presentation/cubit/tour_guides_cubit.dart';
@@ -293,7 +295,12 @@ class RoutingGenerationConfig {
         path: AppRoutes.aiGuideScreen,
         name: AppRoutes.aiGuideScreen,
         pageBuilder: (context, state) {
-          return CustomSpringPage(child: AiGuideScreen());
+          return CustomSpringPage(
+            child: BlocProvider(
+              create: (_) => AiGuideCubit(service: AiChatService()),
+              child: const AiGuideScreen(),
+            ),
+          );
         },
       ),
       GoRoute(

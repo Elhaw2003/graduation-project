@@ -195,7 +195,6 @@
     "map":"Map",
     "myArchives":"My Archives",
     "myGuides":"My Guides",
-
     "guideDashboard": "Guide Dashboard",
     "walletBalance": "Wallet Balance",
     "totalEarnings": "Total Earnings",
@@ -298,5 +297,10 @@
     "unauthorizedAccess": "You are not authorized to edit this profile",
     "priceRequired": "Daily price is required",
     "bioRequired": "Bio is required",
-    "priceInvalid": "Please enter a valid price"
+    "priceInvalid": "Please enter a valid price",
+    "ask_something":"Ask me anything about Egypt...",
+    "ai_typing":"AI is typing...",
+    "upload_image":"Upload Image",
+    "recommendations":"Recommended for You",
+    "connection_lost":"Connection lost. Reconnecting..."
 }
