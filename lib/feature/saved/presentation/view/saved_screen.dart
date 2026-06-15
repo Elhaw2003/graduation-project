@@ -63,7 +63,7 @@ class _SavedScreenState extends State<SavedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FabNewPlaceWidget(isFabVisible: _isFabVisible),
+      // floatingActionButton: FabNewPlaceWidget(isFabVisible: _isFabVisible),
       body: BlocListener<SavedPlacesCubit, SavedPlacesState>(
         listener: (context, state) {
           if (state is RemovePlaceSuccess) {

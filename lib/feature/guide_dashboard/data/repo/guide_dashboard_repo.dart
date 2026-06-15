@@ -45,6 +45,7 @@ abstract class GuideDashboardRepo {
 
   Future<Either<Failure, String>> deleteTour({required String id});
 
+  /// Returns the new tour's id on success.
   Future<Either<Failure, String>> createTour({
     required Map<String, dynamic> tourData,
   });
@@ -55,4 +56,12 @@ abstract class GuideDashboardRepo {
   });
 
   Future<Either<Failure, List<GuideBookingModel>>> getGuideBookings();
+
+  Future<Either<Failure, String>> createTourSlot({
+    required String tourId,
+    required String date,
+    required String startTime,
+    required String endTime,
+    required int capacity,
+  });
 }

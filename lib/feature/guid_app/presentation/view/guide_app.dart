@@ -61,14 +61,15 @@ class GuideApp extends StatelessWidget {
                       },
                     ),
                     SizedBox(height: 25.h),
-                    _buildEarningsCard(),
-                    SizedBox(height: 18.h),
-                    _buildStatsRow(),
-                    SizedBox(height: 25.h),
+                    // _buildEarningsCard(),
+                    // SizedBox(height: 18.h),
+                    // _buildStatsRow(),
+                    // SizedBox(height: 25.h),
                     const GuideBookingsLiveFeed(),
                     SizedBox(height: 25.h),
                     if (tours.isEmpty) ...[
-                      _buildEmptyToursState(context),
+                      // _buildEmptyToursState(context),
+                      SizedBox(height: 20.h),
                     ] else ...[
                       _buildActiveToursHeader(),
                       SizedBox(height: 10.h),
@@ -202,94 +203,94 @@ class GuideApp extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyToursState(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: 50.h),
+  // Widget _buildEmptyToursState(BuildContext context) {
+  //   return Container(
+  //     width: double.infinity,
+  //     padding: EdgeInsets.symmetric(vertical: 50.h),
 
-      child: Column(
-        children: [
-          Icon(
-            Icons.inventory_2_outlined,
-            size: 120.sp,
-            color: Colors.grey.shade300,
-          ),
+  //     child: Column(
+  //       children: [
+  //         Icon(
+  //           Icons.inventory_2_outlined,
+  //           size: 120.sp,
+  //           color: Colors.grey.shade300,
+  //         ),
 
-          SizedBox(height: 20.h),
+  //         SizedBox(height: 20.h),
 
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EditTourScreen()),
-              );
-            },
+  //         GestureDetector(
+  //           onTap: () {
+  //             Navigator.push(
+  //               context,
+  //               MaterialPageRoute(builder: (context) => EditTourScreen()),
+  //             );
+  //           },
 
-            child: Container(
-              width: 65.w,
-              height: 65.h,
+  //           child: Container(
+  //             width: 65.w,
+  //             height: 65.h,
 
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.primaryColor, width: 2),
-              ),
+  //             decoration: BoxDecoration(
+  //               shape: BoxShape.circle,
+  //               border: Border.all(color: AppColors.primaryColor, width: 2),
+  //             ),
 
-              child: Icon(
-                Icons.add,
-                color: AppColors.primaryColor,
-                size: 35.sp,
-              ),
-            ),
-          ),
+  //             child: Icon(
+  //               Icons.add,
+  //               color: AppColors.primaryColor,
+  //               size: 35.sp,
+  //             ),
+  //           ),
+  //         ),
 
-          SizedBox(height: 20.h),
+  //         SizedBox(height: 20.h),
 
-          Text(
-            "Create New Tour",
-            style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
-          ),
+  //         Text(
+  //           "Create New Tour",
+  //           style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
+  //         ),
 
-          SizedBox(height: 10.h),
+  //         SizedBox(height: 10.h),
 
-          Text(
-            "Add a new adventure to your list",
-            style: TextStyle(color: Colors.grey, fontSize: 16.sp),
-          ),
+  //         Text(
+  //           "Add a new adventure to your list",
+  //           style: TextStyle(color: Colors.grey, fontSize: 16.sp),
+  //         ),
 
-          SizedBox(height: 30.h),
+  //         SizedBox(height: 30.h),
 
-          SizedBox(
-            width: 220.w,
-            height: 52.h,
+  //         SizedBox(
+  //           width: 220.w,
+  //           height: 52.h,
 
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primaryColor,
+  //           child: ElevatedButton(
+  //             style: ElevatedButton.styleFrom(
+  //               backgroundColor: AppColors.primaryColor,
 
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14.r),
-                ),
-              ),
+  //               shape: RoundedRectangleBorder(
+  //                 borderRadius: BorderRadius.circular(14.r),
+  //               ),
+  //             ),
 
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EditTourScreen(),
-                  ),
-                );
-              },
+  //             onPressed: () {
+  //               Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                   builder: (context) => const EditTourScreen(),
+  //                 ),
+  //               );
+  //             },
 
-              child: Text(
-                "Create Tour",
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  //             child: Text(
+  //               "Create Tour",
+  //               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   // =========================
   // Stats Card

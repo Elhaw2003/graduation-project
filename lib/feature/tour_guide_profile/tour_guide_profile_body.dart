@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
-import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/image_url_extension.dart';
 import 'package:smart_guide/feature/tour_guide_profile/custom_container_about_the_guide.dart';
 import 'package:smart_guide/feature/tour_guide_profile/custom_container_expertise_and_skills.dart';
@@ -54,6 +53,7 @@ class TourGuideProfileBody extends StatelessWidget {
                   if (imageUrl.isNotEmpty)
                     CachedNetworkImage(
                       imageUrl: imageUrl.toHttps(),
+                      width: double.infinity,
                       fit: BoxFit.cover,
                       placeholder: (_, __) => Image.asset(
                         Assets.imagesPngPyramids,
@@ -66,18 +66,18 @@ class TourGuideProfileBody extends StatelessWidget {
                     )
                   else
                     Image.asset(Assets.imagesPngPyramids, fit: BoxFit.cover),
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.black.withValues(alpha: 0.15),
-                          Colors.black.withValues(alpha: 0.55),
-                        ],
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     gradient: LinearGradient(
+                  //       begin: Alignment.topCenter,
+                  //       end: Alignment.bottomCenter,
+                  //       colors: [
+                  //         Colors.black.withValues(alpha: 0.15),
+                  //         Colors.black.withValues(alpha: 0.55),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

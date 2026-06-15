@@ -118,43 +118,42 @@ class _ActionRowInTourGuideScreenState
                 ],
               ),
               border: Border(
-                bottom: BorderSide(
-                  color: Colors.white.withValues(alpha: 0.12),
-                ),
+                bottom: BorderSide(color: Colors.white.withValues(alpha: 0.12)),
               ),
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _GlassIconButton(
                   icon: Icons.arrow_back_rounded,
                   onTap: () => context.pop(),
                   tooltip: LocaleKeys.close.tr(),
                 ),
-                if (widget.showTitle) ...[
-                  SizedBox(width: 8.w),
-                  Expanded(
-                    child: Text(
-                      widget.guideProfile != null &&
-                              widget.guideProfile!.firstName.isNotEmpty
-                          ? '${widget.guideProfile!.firstName} ${widget.guideProfile!.lastName}'
-                              .trim()
-                          : LocaleKeys.guide.tr(),
-                      style: AppTextStyle.backgroundW500S17.copyWith(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                        shadows: [
-                          Shadow(
-                            color: Colors.black.withValues(alpha: 0.35),
-                            blurRadius: 8,
-                          ),
-                        ],
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ] else
-                  const Spacer(),
+                // if (widget.showTitle) ...[
+                //   SizedBox(width: 8.w),
+                //   Expanded(
+                //     child: Text(
+                //       widget.guideProfile != null &&
+                //               widget.guideProfile!.firstName.isNotEmpty
+                //           ? '${widget.guideProfile!.firstName} ${widget.guideProfile!.lastName}'
+                //               .trim()
+                //           : LocaleKeys.guide.tr(),
+                //       style: AppTextStyle.backgroundW500S17.copyWith(
+                //         fontSize: 16.sp,
+                //         fontWeight: FontWeight.w600,
+                //         shadows: [
+                //           Shadow(
+                //             color: Colors.black.withValues(alpha: 0.35),
+                //             blurRadius: 8,
+                //           ),
+                //         ],
+                //       ),
+                //       maxLines: 1,
+                //       overflow: TextOverflow.ellipsis,
+                //     ),
+                //   ),
+                // ] else
+                // const Spacer(),
                 if (_canEditProfile)
                   _GlassIconButton(
                     icon: Icons.edit_rounded,
@@ -177,12 +176,12 @@ class _ActionRowInTourGuideScreenState
                           onTap: () {
                             if (isSaved) {
                               context.read<SavedGuidesCubit>().removeGuide(
-                                    guideId: widget.guideId,
-                                  );
+                                guideId: widget.guideId,
+                              );
                             } else {
                               context.read<SavedGuidesCubit>().saveGuide(
-                                    guideId: widget.guideId,
-                                  );
+                                guideId: widget.guideId,
+                              );
                             }
                           },
                           tooltip: LocaleKeys.savedForLater.tr(),

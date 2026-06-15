@@ -19,12 +19,17 @@ class DashboardModel {
   });
 }
 
-List<DashboardModel> dashboards(BuildContext context) {
+List<DashboardModel> dashboards(
+  BuildContext context, {
+  int favoritesCount = 0,
+  int tripsCount = 0,
+  int placesCount = 0,
+}) {
   return [
     DashboardModel(
       title: "Favorites",
       subTitle: "Favorite Guides",
-      info: "12 Guides • 4 Cities",
+      info: '$favoritesCount Guides',
       icon: Assets.imagesSvgFavorite,
       onTap: () {
         if (context.mounted) context.pushNamed(AppRoutes.guidesSavedScreen);
@@ -32,24 +37,24 @@ List<DashboardModel> dashboards(BuildContext context) {
     ),
     DashboardModel(
       title: "Trips",
-      subTitle: "Upcoming Trips",
-      info: "2 Trips • 1 Country",
+      subTitle: "My Trips",
+      info: '$tripsCount Trips',
       icon: Assets.imagesSvgTrips,
       onTap: () {
         if (context.mounted) context.pushNamed(AppRoutes.myTripsScreen);
       },
     ),
+    // DashboardModel(
+    //   title: "Visited",
+    //   subTitle: "Places you visited",
+    //   info: "45 Spots • 12 Cities",
+    //   icon: Assets.imagesSvgVisited,
+    //   onTap: () {},
+    // ),
     DashboardModel(
-      title: "Visited",
-      subTitle: "Places you visited",
-      info: "45 Spots • 12 Cities",
-      icon: Assets.imagesSvgVisited,
-      onTap: () {},
-    ),
-    DashboardModel(
-      title: "Saved",
-      subTitle: "Saved for later",
-      info: "8 Spots • 2 Cities",
+      title: "Places",
+      subTitle: "Favorite Spots",
+      info: '$placesCount Places',
       icon: Assets.imagesSvgSaved,
       onTap: () {
         if (context.mounted) context.pushNamed(AppRoutes.savedScreen);

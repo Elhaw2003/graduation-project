@@ -321,11 +321,14 @@ class _CustomContainerInfoGuidesState extends State<CustomContainerInfoGuides>
                                     );
                                   },
                                   borderRadiusButton: 8.r,
-                                  buttonHeight: 25.h,
-                                  buttonWidth: 99.w,
+                                  buttonHeight: 30.h,
+                                  buttonWidth: 130.w,
                                   title: LocaleKeys.viewProfile.tr(),
-                                  titleStyle: AppTextStyle.whiteW600S20
-                                      .copyWith(fontSize: 12.sp),
+                                  titleStyle: AppTextStyle.whitePoppinsW400S16
+                                      .copyWith(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                 ),
                               ),
                             ],

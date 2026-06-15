@@ -182,12 +182,12 @@ class _TouristPlaceDetailsScreenState extends State<TouristPlaceDetailsScreen>
                   ],
                 ),
 
-                Positioned(
-                  bottom: 20.h,
-                  left: 40.w,
-                  right: 40.w,
-                  child: _buildBookButton(),
-                ),
+                // Positioned(
+                //   bottom: 20.h,
+                //   left: 40.w,
+                //   right: 40.w,
+                //   child: _buildBookButton(),
+                // ),
               ],
             ),
           );
