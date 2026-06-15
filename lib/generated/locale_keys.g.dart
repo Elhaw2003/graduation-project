@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const exploreEgyptHistory = 'exploreEgyptHistory';
   static const discoverAncientSecrets = 'discoverAncientSecrets';
   static const yourJourneyStartsHere = 'yourJourneyStartsHere';
@@ -99,7 +99,8 @@ abstract class  LocaleKeys {
   static const verifyEmail = 'verifyEmail';
   static const sentSixDigitCode = 'sentSixDigitCode';
   static const verifiedLocalGuides = 'verifiedLocalGuides';
-  static const exploreEgyptThroughTheEyesOfExpertsWhoKnowEveryStory = 'exploreEgyptThroughTheEyesOfExpertsWhoKnowEveryStory';
+  static const exploreEgyptThroughTheEyesOfExpertsWhoKnowEveryStory =
+      'exploreEgyptThroughTheEyesOfExpertsWhoKnowEveryStory';
   static const viewProfile = 'viewProfile';
   static const createNewPassword = 'createNewPassword';
   static const enterYourNewPasswordBelow = 'enterYourNewPasswordBelow';
@@ -349,5 +350,4 @@ abstract class  LocaleKeys {
   static const tour_created = 'tour_created';
   static const tour_updated = 'tour_updated';
   static const tour_deleted = 'tour_deleted';
-
 }

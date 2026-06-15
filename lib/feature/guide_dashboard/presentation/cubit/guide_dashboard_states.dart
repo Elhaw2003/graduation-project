@@ -204,13 +204,26 @@ class GetGuideBookingsFailure extends GuideDashboardState {
 class CreateTourLoading extends GuideDashboardState {}
 
 class CreateTourSuccess extends GuideDashboardState {
-  final String message;
-  const CreateTourSuccess({required this.message});
+  final String tourId;
+  const CreateTourSuccess({required this.tourId});
 }
 
 class CreateTourFailure extends GuideDashboardState {
   final String errorMessage;
   const CreateTourFailure({required this.errorMessage});
+}
+
+// --- 17. Create Tour Slot ---
+class CreateSlotLoading extends GuideDashboardState {}
+
+class CreateSlotSuccess extends GuideDashboardState {
+  final String message;
+  const CreateSlotSuccess({required this.message});
+}
+
+class CreateSlotFailure extends GuideDashboardState {
+  final String errorMessage;
+  const CreateSlotFailure({required this.errorMessage});
 }
 
 // --- 16. Edit Tour ---

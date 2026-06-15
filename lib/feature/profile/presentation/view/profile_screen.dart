@@ -6,6 +6,8 @@ import 'package:smart_guide/core/services/cache/jwt_helper.dart';
 import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
+import 'package:smart_guide/feature/booking_payment/presentation/cubit/booking_payment_cubit.dart';
+import 'package:smart_guide/feature/booking_payment/presentation/cubit/booking_payment_states.dart';
 import 'package:smart_guide/feature/profile/data/model/dash_board_model.dart';
 import 'package:smart_guide/feature/profile/data/model/tourist_profile_model.dart';
 import 'package:smart_guide/feature/profile/presentation/cubit/tourist_profile_cubit.dart';
@@ -15,6 +17,10 @@ import 'package:smart_guide/feature/profile/presentation/view/widget/tourist_pro
 import 'package:smart_guide/feature/profile/presentation/view/widget/tourist_profile_header.dart';
 import 'package:smart_guide/feature/profile/presentation/view/widget/tourist_profile_loading_skeleton.dart';
 import 'package:smart_guide/feature/profile/presentation/view/widget/tourist_profile_view.dart';
+import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_cubit.dart';
+import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_states.dart';
+import 'package:smart_guide/feature/tour_guide_profile/presentation/cubit/save_guides/save_guides_cubit.dart';
+import 'package:smart_guide/feature/tour_guide_profile/presentation/cubit/save_guides/save_guides_states.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -44,6 +50,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     _touristId = userId;
     context.read<TouristProfileCubit>().getTouristProfile(id: userId);
+    context.read<SavedGuidesCubit>().getSavedGuides();
+    context.read<SavedPlacesCubit>().getSavedPlaces();
+    context.read<BookingAndPaymentCubit>().fetchTouristActiveBookings();
   }
 
   void _toggleEditMode() {
@@ -157,19 +166,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
-                  SliverPadding(
-                    padding: EdgeInsets.symmetric(horizontal: 17.w),
-                    sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 16.h,
-                        crossAxisSpacing: 16.w,
-                        childAspectRatio: 0.8,
-                      ),
-                      delegate: SliverChildBuilderDelegate((context, index) {
-                        return DashboardCard(item: dashboards(context)[index]);
-                      }, childCount: dashboards(context).length),
-                    ),
+                  SliverToBoxAdapter(
+                    child: _DashboardGrid(),
                   ),
                   SliverToBoxAdapter(
                     child: CustomHeightSpacingWidget(height: 20),
@@ -180,6 +178,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
         ),
       ),
+    );
+  }
+}
+
+class _DashboardGrid extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SavedGuidesCubit, SavedGuidesState>(
+      builder: (context, guidesState) {
+        return BlocBuilder<SavedPlacesCubit, SavedPlacesState>(
+          builder: (context, placesState) {
+            return BlocBuilder<BookingAndPaymentCubit, BookingPaymentState>(
+              buildWhen: (_, curr) =>
+                  curr is MyBookingsLoading ||
+                  curr is MyBookingsSuccess ||
+                  curr is MyBookingsFailure,
+              builder: (context, bookingsState) {
+                final favCount = guidesState is SavedGuidesSuccess
+                    ? guidesState.guides.length
+                    : 0;
+                final placesCount = placesState is SavedPlacesSuccess
+                    ? placesState.places.length
+                    : 0;
+                final tripsCount = bookingsState is MyBookingsSuccess
+                    ? bookingsState.bookings.length
+                    : 0;
+
+                final items = dashboards(
+                  context,
+                  favoritesCount: favCount,
+                  tripsCount: tripsCount,
+                  placesCount: placesCount,
+                );
+
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 17.w),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 16.h,
+                      crossAxisSpacing: 16.w,
+                      childAspectRatio: 0.8,
+                    ),
+                    itemCount: items.length,
+                    itemBuilder: (context, index) =>
+                        DashboardCard(item: items[index]),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 }

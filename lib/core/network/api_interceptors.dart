@@ -10,7 +10,18 @@ class ApiInterceptor extends Interceptor {
     RequestOptions options,
     RequestInterceptorHandler handler,
   ) async {
-    options.headers['Content-Type'] = 'application/json';
+    if (options.data is FormData) {
+      // Explicitly write multipart/form-data with the FormData boundary.
+      // Relying on Dio to auto-inject the boundary is unreliable — the server
+      // ends up receiving title:null because it can't parse the body.
+      // We read the boundary directly from the FormData object so the header
+      // always matches the actual body delimiter.
+      final boundary = (options.data as FormData).boundary;
+      options.headers['content-type'] =
+          'multipart/form-data; boundary=$boundary';
+    } else {
+      options.headers['Content-Type'] = 'application/json';
+    }
 
     final token = await SecureStorageHelper.instance.getAccessToken();
     if (token != null) {

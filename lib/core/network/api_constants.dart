@@ -55,6 +55,7 @@ class EndPoint {
       "guide/dashboard/tour/edit/$id";
 
   /// ================= BOOKING & PAYMENT =================
+  static const String createTourSlot = "tours/slots";
   static String tourSlots({required String tourId}) => "tours/$tourId/slots";
   static const String createBooking = "Bookings";
   static const String paymentCreateIntent = "payments/create-intent";

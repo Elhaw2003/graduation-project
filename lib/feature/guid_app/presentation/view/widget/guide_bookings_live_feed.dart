@@ -56,31 +56,41 @@ class _GuideBookingsLiveFeedState extends State<GuideBookingsLiveFeed>
           curr is GetGuideBookingsSuccess ||
           curr is GetGuideBookingsFailure,
       builder: (context, state) {
+        final pendingCount = state is GetGuideBookingsSuccess
+            ? state.guideBookingsList
+                .where((b) => b.status.toLowerCase() == 'pending')
+                .length
+            : 0;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSectionHeader(),
+            _buildSectionHeader(pendingCount),
             CustomHeightSpacingWidget(height: 14),
             if (state is GetGuideBookingsLoading)
               _buildLoadingShimmer()
             else if (state is GetGuideBookingsFailure)
               _buildErrorCard(state.errorMessage)
             else if (state is GetGuideBookingsSuccess)
-              state.guideBookingsList.isEmpty
-                  ? _buildEmptyState()
-                  : FadeTransition(
-                      opacity: _fadeAnimation,
-                      child: Column(
-                        children: state.guideBookingsList
-                            .map(
-                              (booking) => Padding(
-                                padding: EdgeInsets.only(bottom: 14.h),
-                                child: _GuideBookingCard(booking: booking),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    )
+              Builder(builder: (context) {
+                final pendingBookings = state.guideBookingsList
+                    .where((b) => b.status.toLowerCase() == 'pending')
+                    .toList();
+                return pendingBookings.isEmpty
+                    ? _buildEmptyState()
+                    : FadeTransition(
+                        opacity: _fadeAnimation,
+                        child: Column(
+                          children: pendingBookings
+                              .map(
+                                (booking) => Padding(
+                                  padding: EdgeInsets.only(bottom: 18.h),
+                                  child: _GuideBookingCard(booking: booking),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      );
+              })
             else
               const SizedBox.shrink(),
           ],
@@ -89,20 +99,18 @@ class _GuideBookingsLiveFeedState extends State<GuideBookingsLiveFeed>
     );
   }
 
-  Widget _buildSectionHeader() {
+  Widget _buildSectionHeader(int pendingCount) {
     return Row(
       children: [
         Container(
           padding: EdgeInsets.all(10.sp),
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [AppColors.primaryColor, AppColors.secondaryColor],
-            ),
+            color: AppColors.orangeColor.withOpacity(0.12),
             borderRadius: BorderRadius.circular(12.r),
           ),
           child: Icon(
-            Icons.receipt_long_rounded,
-            color: Colors.white,
+            Icons.schedule_rounded,
+            color: AppColors.orangeColor,
             size: 22.sp,
           ),
         ),
@@ -111,13 +119,36 @@ class _GuideBookingsLiveFeedState extends State<GuideBookingsLiveFeed>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                LocaleKeys.guideBookingsTitle.tr(),
-                style: TextStyle(
-                  fontSize: 20.sp,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.primaryTextColor,
-                ),
+              Row(
+                children: [
+                  Text(
+                    LocaleKeys.guideBookingsTitle.tr(),
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.primaryTextColor,
+                    ),
+                  ),
+                  if (pendingCount > 0) ...[
+                    CustomWidthSpacingWidget(width: 8),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 8.w, vertical: 3.h),
+                      decoration: BoxDecoration(
+                        color: AppColors.orangeColor,
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                      child: Text(
+                        '$pendingCount',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
               ),
               Text(
                 LocaleKeys.guideBookingsSubtitle.tr(),
@@ -138,17 +169,17 @@ class _GuideBookingsLiveFeedState extends State<GuideBookingsLiveFeed>
       children: List.generate(
         2,
         (_) => Padding(
-          padding: EdgeInsets.only(bottom: 12.h),
+          padding: EdgeInsets.only(bottom: 18.h),
           child: Container(
-            height: 140.h,
+            height: 200.h,
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(18.r),
+              borderRadius: BorderRadius.circular(24.r),
             ),
             child: Center(
               child: SizedBox(
-                width: 24.sp,
-                height: 24.sp,
+                width: 28.sp,
+                height: 28.sp,
                 child: const CircularProgressIndicator(
                   strokeWidth: 2.5,
                   color: AppColors.primaryColor,
@@ -164,27 +195,84 @@ class _GuideBookingsLiveFeedState extends State<GuideBookingsLiveFeed>
   Widget _buildEmptyState() {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: 40.h),
+      padding: EdgeInsets.symmetric(vertical: 50.h, horizontal: 24.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18.r),
-        border: Border.all(color: AppColors.grey200Color),
+        borderRadius: BorderRadius.circular(28.r),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.orangeColor.withOpacity(0.07),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
+          ),
+        ],
       ),
       child: Column(
         children: [
-          Icon(
-            Icons.inbox_outlined,
-            size: 52.sp,
-            color: AppColors.grey300Color,
+          // Decorative icon container
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                width: 100.w,
+                height: 100.w,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.orangeColor.withOpacity(0.07),
+                ),
+              ),
+              Container(
+                width: 72.w,
+                height: 72.w,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.orangeColor.withOpacity(0.13),
+                ),
+              ),
+              Icon(
+                Icons.event_available_rounded,
+                size: 40.sp,
+                color: AppColors.orangeColor,
+              ),
+            ],
           ),
-          CustomHeightSpacingWidget(height: 12),
+          CustomHeightSpacingWidget(height: 20),
           Text(
             LocaleKeys.noBookings.tr(),
+            textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w500,
-              color: AppColors.grey400Color,
+              fontSize: 17.sp,
+              fontWeight: FontWeight.w700,
+              color: AppColors.primaryTextColor,
             ),
+          ),
+          CustomHeightSpacingWidget(height: 8),
+          Text(
+            'New booking requests will appear here',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 13.sp,
+              color: AppColors.secondaryTextColor,
+              height: 1.5,
+            ),
+          ),
+          CustomHeightSpacingWidget(height: 24),
+          // Decorative dots row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(4, (i) {
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: 4.w),
+                width: i == 0 ? 20.w : 8.w,
+                height: 6.h,
+                decoration: BoxDecoration(
+                  color: i == 0
+                      ? AppColors.orangeColor
+                      : AppColors.orangeColor.withOpacity(0.25),
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+              );
+            }),
           ),
         ],
       ),
@@ -221,42 +309,26 @@ class _GuideBookingCard extends StatelessWidget {
 
   const _GuideBookingCard({required this.booking});
 
-  Color _statusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'confirmed':
-        return const Color(0xFF10B981);
-      case 'pending':
-        return AppColors.orangeColor;
-      case 'cancelled':
-        return AppColors.redAppColor;
-      case 'completed':
-        return AppColors.primaryColor;
-      default:
-        return AppColors.grey400Color;
-    }
-  }
-
-  IconData _statusIcon(String status) {
-    switch (status.toLowerCase()) {
-      case 'confirmed':
-        return Icons.check_circle_rounded;
-      case 'pending':
-        return Icons.schedule_rounded;
-      case 'cancelled':
-        return Icons.cancel_rounded;
-      case 'completed':
-        return Icons.task_alt_rounded;
-      default:
-        return Icons.info_outline_rounded;
-    }
-  }
-
-  String _formatCreatedAt(String raw) {
+  String _formatDate(String raw) {
     try {
       final dt = DateTime.parse(raw);
-      return '${dt.day.toString().padLeft(2, '0')}/'
-          '${dt.month.toString().padLeft(2, '0')}/'
+      return '${dt.day.toString().padLeft(2, '0')} / '
+          '${dt.month.toString().padLeft(2, '0')} / '
           '${dt.year}';
+    } catch (_) {
+      return raw;
+    }
+  }
+
+  String _formatTime(String raw) {
+    try {
+      final parts = raw.split(':');
+      if (parts.length < 2) return raw;
+      final h = int.parse(parts[0]);
+      final m = parts[1].padLeft(2, '0');
+      final period = h >= 12 ? 'PM' : 'AM';
+      final hour = h % 12 == 0 ? 12 : h % 12;
+      return '$hour:$m $period';
     } catch (_) {
       return raw;
     }
@@ -264,155 +336,227 @@ class _GuideBookingCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final statusClr = _statusColor(booking.status);
+    const pendingColor = Color(0xFFF97316);
 
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20.r),
+        borderRadius: BorderRadius.circular(24.r),
         boxShadow: [
           BoxShadow(
-            color: statusClr.withOpacity(0.08),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
+            color: pendingColor.withOpacity(0.12),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
           ),
         ],
-        border: Border.all(color: statusClr.withOpacity(0.25), width: 1.2),
       ),
       child: Column(
         children: [
-          // Top gradient header with status
+          // ── Hero banner ──────────────────────────────────────────────
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            width: double.infinity,
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  statusClr.withOpacity(0.08),
-                  statusClr.withOpacity(0.02),
-                ],
+              gradient: const LinearGradient(
+                colors: [Color(0xFFFFF7ED), Color(0xFFFFEDD5)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
             ),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(
-                  _statusIcon(booking.status),
-                  color: statusClr,
-                  size: 20.sp,
-                ),
-                CustomWidthSpacingWidget(width: 8),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.w,
-                    vertical: 5.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: statusClr.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(20.r),
-                  ),
-                  child: Text(
-                    booking.status.toUpperCase(),
-                    style: TextStyle(
-                      color: statusClr,
-                      fontSize: 11.sp,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.6,
+                // Left: icon + status badge
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(12.sp),
+                      decoration: BoxDecoration(
+                        color: pendingColor.withOpacity(0.14),
+                        borderRadius: BorderRadius.circular(16.r),
+                      ),
+                      child: Icon(
+                        Icons.pending_actions_rounded,
+                        color: pendingColor,
+                        size: 28.sp,
+                      ),
                     ),
-                  ),
+                    SizedBox(height: 12.h),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 12.w, vertical: 6.h),
+                      decoration: BoxDecoration(
+                        color: pendingColor,
+                        borderRadius: BorderRadius.circular(20.r),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.schedule_rounded,
+                              color: Colors.white, size: 13.sp),
+                          SizedBox(width: 5.w),
+                          Text(
+                            'PENDING',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 11.sp,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0.8,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 const Spacer(),
-                Text(
-                  '${booking.totalPrice.toStringAsFixed(0)} EGP',
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w800,
-                    color: AppColors.primaryTextColor,
-                  ),
+                // Right: price
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'Total Price',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: AppColors.grey400Color,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      '${booking.totalPrice.toStringAsFixed(0)}',
+                      style: TextStyle(
+                        fontSize: 32.sp,
+                        fontWeight: FontWeight.w900,
+                        color: pendingColor,
+                        height: 1,
+                      ),
+                    ),
+                    Text(
+                      'EGP',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w700,
+                        color: pendingColor.withOpacity(0.7),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
 
-          // Body
+          // ── Divider with icon ─────────────────────────────────────────
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              const Divider(height: 1, color: Color(0xFFF3F4F6)),
+              Container(
+                padding:
+                    EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20.r),
+                  border: Border.all(color: const Color(0xFFF3F4F6)),
+                ),
+                child: Icon(Icons.more_horiz_rounded,
+                    size: 16.sp, color: AppColors.grey300Color),
+              ),
+            ],
+          ),
+
+          // ── Details body ──────────────────────────────────────────────
           Padding(
-            padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 14.h),
+            padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 20.h),
             child: Column(
               children: [
-                // Date & Time row
+                // Slot info
                 if (booking.slot != null) ...[
-                  Row(
-                    children: [
-                      _InfoChip(
-                        icon: Icons.calendar_today_rounded,
-                        label: booking.slot!.date,
-                        color: AppColors.primaryColor,
-                      ),
-                      CustomWidthSpacingWidget(width: 10),
-                      _InfoChip(
-                        icon: Icons.access_time_rounded,
-                        label:
-                            '${booking.slot!.startTime} — ${booking.slot!.endTime}',
-                        color: AppColors.secondaryColor,
-                      ),
-                    ],
+                  _DetailRow(
+                    icon: Icons.calendar_month_rounded,
+                    iconBg: const Color(0xFFEEF2FF),
+                    iconColor: AppColors.primaryColor,
+                    label: 'Tour Date',
+                    value: _formatDate(booking.slot!.date),
                   ),
-                  CustomHeightSpacingWidget(height: 10),
+                  SizedBox(height: 12.h),
+                  _DetailRow(
+                    icon: Icons.access_time_filled_rounded,
+                    iconBg: const Color(0xFFECFDF5),
+                    iconColor: AppColors.greenColor,
+                    label: 'Time Slot',
+                    value:
+                        '${_formatTime(booking.slot!.startTime)}  →  ${_formatTime(booking.slot!.endTime)}',
+                  ),
+                  SizedBox(height: 12.h),
                 ],
 
-                // Payment + Created At row
-                Row(
-                  children: [
-                    _InfoChip(
-                      icon: Icons.payment_rounded,
-                      label: booking.paymentMethod,
-                      color: AppColors.greenColor,
-                    ),
-                    const Spacer(),
-                    Icon(
-                      Icons.history_rounded,
-                      size: 14.sp,
-                      color: AppColors.grey400Color,
-                    ),
-                    CustomWidthSpacingWidget(width: 4),
-                    Text(
-                      _formatCreatedAt(booking.createdAtUtc),
-                      style: TextStyle(
-                        fontSize: 11.sp,
-                        color: AppColors.grey400Color,
-                      ),
-                    ),
-                  ],
+                // Payment method
+                _DetailRow(
+                  icon: Icons.credit_card_rounded,
+                  iconBg: const Color(0xFFFFF7ED),
+                  iconColor: pendingColor,
+                  label: 'Payment',
+                  value: booking.paymentMethod,
+                ),
+
+                // Booked on
+                SizedBox(height: 12.h),
+                _DetailRow(
+                  icon: Icons.history_rounded,
+                  iconBg: const Color(0xFFF9FAFB),
+                  iconColor: AppColors.grey400Color,
+                  label: 'Booked On',
+                  value: _formatDate(booking.createdAtUtc),
                 ),
 
                 // Add-ons
                 if (booking.selectedAddOns.isNotEmpty) ...[
-                  CustomHeightSpacingWidget(height: 10),
+                  SizedBox(height: 16.h),
                   Align(
                     alignment: AlignmentDirectional.centerStart,
-                    child: Wrap(
-                      spacing: 6.w,
-                      runSpacing: 6.h,
-                      children: booking.selectedAddOns.map((addon) {
-                        return Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 10.w,
-                            vertical: 4.h,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.contanerColore,
-                            borderRadius: BorderRadius.circular(8.r),
-                          ),
-                          child: Text(
-                            '${addon.title} (+${addon.price.toStringAsFixed(0)})',
-                            style: TextStyle(
-                              fontSize: 11.sp,
-                              fontWeight: FontWeight.w500,
-                              color: AppColors.secondaryColor,
-                            ),
-                          ),
-                        );
-                      }).toList(),
+                    child: Text(
+                      'Add-ons',
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primaryTextColor,
+                      ),
                     ),
+                  ),
+                  SizedBox(height: 8.h),
+                  Wrap(
+                    spacing: 8.w,
+                    runSpacing: 8.h,
+                    children: booking.selectedAddOns.map((addon) {
+                      return Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 12.w, vertical: 6.h),
+                        decoration: BoxDecoration(
+                          color: AppColors.contanerColore,
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.add_circle_outline_rounded,
+                                size: 13.sp,
+                                color: AppColors.secondaryColor),
+                            SizedBox(width: 5.w),
+                            Text(
+                              '${addon.title}  +${addon.price.toStringAsFixed(0)} EGP',
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.secondaryColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ],
               ],
@@ -424,31 +568,55 @@ class _GuideBookingCard extends StatelessWidget {
   }
 }
 
-class _InfoChip extends StatelessWidget {
+class _DetailRow extends StatelessWidget {
   final IconData icon;
+  final Color iconBg;
+  final Color iconColor;
   final String label;
-  final Color color;
+  final String value;
 
-  const _InfoChip({
+  const _DetailRow({
     required this.icon,
+    required this.iconBg,
+    required this.iconColor,
     required this.label,
-    required this.color,
+    required this.value,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 15.sp, color: color),
-        CustomWidthSpacingWidget(width: 5),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12.sp,
-            fontWeight: FontWeight.w600,
-            color: AppColors.primaryText400Color,
+        Container(
+          padding: EdgeInsets.all(9.sp),
+          decoration: BoxDecoration(
+            color: iconBg,
+            borderRadius: BorderRadius.circular(12.r),
           ),
+          child: Icon(icon, size: 18.sp, color: iconColor),
+        ),
+        SizedBox(width: 12.w),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11.sp,
+                color: AppColors.grey400Color,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(height: 2.h),
+            Text(
+              value,
+              style: TextStyle(
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w700,
+                color: AppColors.primaryTextColor,
+              ),
+            ),
+          ],
         ),
       ],
     );

@@ -107,7 +107,7 @@ class CustomContainerExpertiseAndSkills extends StatelessWidget {
                         title: specialties[index],
                         borderRadiusButton: 8.r,
                         titleStyle: AppTextStyle.whiteW500S17.copyWith(
-                          fontSize: 12.sp,
+                          fontSize: 8.sp,
                           fontWeight: FontWeight.w500,
                         ),
                       );

@@ -24,7 +24,7 @@ class AllGuidesAppbar extends StatelessWidget {
       collapsedHeight: 200.h,
       toolbarHeight: 60.h,
       automaticallyImplyLeading: false,
-      leading: CustomArrowBackButton(iconColor: AppColors.arrowBackColor),
+      // leading: CustomArrowBackButton(iconColor: AppColors.arrowBackColor),
       backgroundColor: AppColors.backgroundColor,
       elevation: 0,
       flexibleSpace: FlexibleSpaceBar(

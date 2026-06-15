@@ -102,6 +102,9 @@ class DioConsumer extends ApiConsumer {
         path,
         data: isFromData ? FormData.fromMap(data) : data,
         queryParameters: queryParameters,
+        // Explicitly declare PUT so Dio never coerces the method when
+        // FormData is detected alongside an existing Content-Type header.
+        options: Options(method: 'PUT'),
       );
       return response.data;
     } on DioException catch (e) {

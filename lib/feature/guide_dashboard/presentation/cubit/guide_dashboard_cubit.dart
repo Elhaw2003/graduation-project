@@ -154,7 +154,28 @@ class GuideDashboardCubit extends Cubit<GuideDashboardState> {
     final result = await repository.createTour(tourData: tourData);
     result.fold(
       (failure) => emit(CreateTourFailure(errorMessage: failure.message)),
-      (message) => emit(CreateTourSuccess(message: message)),
+      (tourId) => emit(CreateTourSuccess(tourId: tourId)),
+    );
+  }
+
+  Future<void> createSlot({
+    required String tourId,
+    required String date,
+    required String startTime,
+    required String endTime,
+    required int capacity,
+  }) async {
+    emit(CreateSlotLoading());
+    final result = await repository.createTourSlot(
+      tourId: tourId,
+      date: date,
+      startTime: startTime,
+      endTime: endTime,
+      capacity: capacity,
+    );
+    result.fold(
+      (failure) => emit(CreateSlotFailure(errorMessage: failure.message)),
+      (message) => emit(CreateSlotSuccess(message: message)),
     );
   }
 

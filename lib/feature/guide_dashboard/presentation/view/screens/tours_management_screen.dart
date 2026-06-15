@@ -24,6 +24,36 @@ class _ToursManagementScreenState extends State<ToursManagementScreen> {
     context.read<GuideDashboardCubit>().fetchMyTours();
   }
 
+  void _openCreateTour() {
+    final cubit = context.read<GuideDashboardCubit>();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: cubit,
+          child: const EditTourScreen(),
+        ),
+      ),
+    ).then((_) {
+      if (mounted) cubit.fetchMyTours();
+    });
+  }
+
+  void _openEditTour(String tourId) {
+    final cubit = context.read<GuideDashboardCubit>();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => BlocProvider.value(
+          value: cubit,
+          child: EditTourScreen(tourId: tourId),
+        ),
+      ),
+    ).then((_) {
+      if (mounted) cubit.fetchMyTours();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,22 +66,9 @@ class _ToursManagementScreenState extends State<ToursManagementScreen> {
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 16.w),
-            child: Center(
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const EditTourScreen(),
-                    ),
-                  );
-                },
-                child: Icon(
-                  Icons.add_circle_outline,
-                  size: 24.sp,
-                  color: Colors.white,
-                ),
-              ),
+            child: GestureDetector(
+              onTap: _openCreateTour,
+              child: Icon(Icons.add_circle_outline, size: 24.sp, color: Colors.white),
             ),
           ),
         ],
@@ -59,11 +76,24 @@ class _ToursManagementScreenState extends State<ToursManagementScreen> {
       body: BlocConsumer<GuideDashboardCubit, GuideDashboardState>(
         listener: (context, state) {
           if (state is DeleteTourSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Tour deleted successfully'),
+                backgroundColor: Colors.green,
+              ),
+            );
             context.read<GuideDashboardCubit>().fetchMyTours();
+          } else if (state is DeleteTourFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage),
+                backgroundColor: Colors.red,
+              ),
+            );
           }
         },
         builder: (context, state) {
-          if (state is GetMyToursLoading) {
+          if (state is GetMyToursLoading || state is DeleteTourLoading) {
             return const Center(child: CircularProgressIndicator());
           }
 
@@ -72,11 +102,7 @@ class _ToursManagementScreenState extends State<ToursManagementScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 48.sp,
-                    color: AppColors.redAppColor,
-                  ),
+                  Icon(Icons.error_outline, size: 48.sp, color: AppColors.redAppColor),
                   SizedBox(height: 16.h),
                   Text(state.errorMessage),
                   SizedBox(height: 24.h),
@@ -99,11 +125,7 @@ class _ToursManagementScreenState extends State<ToursManagementScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(
-                      Icons.tour_outlined,
-                      size: 64.sp,
-                      color: AppColors.grey300Color,
-                    ),
+                    Icon(Icons.tour_outlined, size: 64.sp, color: AppColors.grey300Color),
                     SizedBox(height: 16.h),
                     Text(
                       'No tours yet',
@@ -116,21 +138,11 @@ class _ToursManagementScreenState extends State<ToursManagementScreen> {
                     SizedBox(height: 8.h),
                     Text(
                       'Create your first tour to get started',
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        color: AppColors.grey400Color,
-                      ),
+                      style: TextStyle(fontSize: 14.sp, color: AppColors.grey400Color),
                     ),
                     SizedBox(height: 24.h),
                     ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const EditTourScreen(),
-                          ),
-                        );
-                      },
+                      onPressed: _openCreateTour,
                       icon: const Icon(Icons.add),
                       label: const Text('Create Tour'),
                       style: ElevatedButton.styleFrom(
@@ -157,21 +169,17 @@ class _ToursManagementScreenState extends State<ToursManagementScreen> {
                 final tour = tours[index];
                 return TourListItem(
                   tour: tour,
-                  onTap: () {
-                    context.pushNamed(
+                  onTap: () async {
+                    await context.pushNamed(
                       AppRoutes.tourDetailScreen,
                       pathParameters: {'tourId': tour.id},
                     );
+                    if (mounted) {
+                      context.read<GuideDashboardCubit>().fetchMyTours();
+                    }
                   },
                   onDelete: () => _showDeleteConfirmation(context, tour.id),
-                  onEdit: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditTourScreen(tourId: tour.id),
-                      ),
-                    );
-                  },
+                  onEdit: () => _openEditTour(tour.id),
                 );
               },
             );
@@ -200,12 +208,6 @@ class _ToursManagementScreenState extends State<ToursManagementScreen> {
             onPressed: () {
               Navigator.pop(dialogContext);
               context.read<GuideDashboardCubit>().removeTour(id: tourId);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Tour deleted successfully'),
-                  backgroundColor: Colors.green,
-                ),
-              );
             },
             child: const Text('Delete', style: TextStyle(color: Colors.red)),
           ),

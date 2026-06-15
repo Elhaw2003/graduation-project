@@ -328,12 +328,37 @@ class RoutingGenerationConfig {
         name: AppRoutes.profileScreen,
         pageBuilder: (context, state) {
           return CustomSpringPage(
-            child: BlocProvider(
-              create: (_) => TouristProfileCubit(
-                touristProfileRepo: TouristProfileRepoImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (_) => TouristProfileCubit(
+                    touristProfileRepo: TouristProfileRepoImpl(
+                      apiConsumer: DioConsumer(dio: Dio()),
+                    ),
+                  ),
                 ),
-              ),
+                BlocProvider(
+                  create: (_) => SavedGuidesCubit(
+                    savedGuidesRepository: SavedGuidesRepositoryImpl(
+                      apiConsumer: DioConsumer(dio: Dio()),
+                    ),
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => SavedPlacesCubit(
+                    savedPlacesRepo: SavedPlacesRepoImpl(
+                      apiConsumer: DioConsumer(dio: Dio()),
+                    ),
+                  ),
+                ),
+                BlocProvider(
+                  create: (_) => BookingAndPaymentCubit(
+                    bookingPaymentRepo: BookingPaymentRepoImpl(
+                      apiConsumer: DioConsumer(dio: Dio()),
+                    ),
+                  ),
+                ),
+              ],
               child: ProfileScreen(),
             ),
           );
