@@ -6,6 +6,7 @@ import 'package:smart_guide/feature/profile/presentation/cubit/tourist_session/t
 
 class TouristSessionCubit extends Cubit<TouristSessionState> {
   TouristSessionCubit() : super(const TouristSessionInitial()) {
+    register(this);
     loadFromCache();
   }
 
@@ -24,15 +25,17 @@ class TouristSessionCubit extends Cubit<TouristSessionState> {
   }
 
   Future<void> loadFromCache() async {
-    final userName = await SecureStorageHelper.instance.getUserName();
-    final profilePic = await SecureStorageHelper.instance.getProfilePic();
-    final userId = await SecureStorageHelper.instance.getUserId();
+    final results = await Future.wait([
+      SecureStorageHelper.instance.getUserName(),
+      SecureStorageHelper.instance.getProfilePic(),
+      SecureStorageHelper.instance.getUserId(),
+    ]);
 
     emit(
       TouristSessionLoaded(
-        userName: userName ?? '',
-        profilePic: profilePic,
-        userId: userId ?? '',
+        userName: (results[0] as String?) ?? '',
+        profilePic: results[1] as String?,
+        userId: (results[2] as String?) ?? '',
       ),
     );
   }

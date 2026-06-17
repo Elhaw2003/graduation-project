@@ -20,6 +20,7 @@ class CustomGridView extends StatelessWidget {
     this.city,
     this.type,
     this.period,
+    this.heroImageUrl,
   });
 
   final String title;
@@ -30,17 +31,19 @@ class CustomGridView extends StatelessWidget {
   final bool isSaved;
   final VoidCallback onSaveTap;
 
-
-
   final String? city;
   final String? type;
   final String? period;
+  final String? heroImageUrl;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.push('${AppRoutes.detailsScreen}/$placeId');
+        context.push(
+          '${AppRoutes.detailsScreen}/$placeId',
+          extra: heroImageUrl ?? imageUrl,
+        );
       },
       child: Container(
         clipBehavior: Clip.antiAlias,
@@ -83,10 +86,7 @@ class CustomGridView extends StatelessWidget {
                           )
                         : Container(
                             color: Colors.grey.shade200,
-                            child: Icon(
-                              Icons.image_not_supported,
-                              size: 35.sp,
-                            ),
+                            child: Icon(Icons.image_not_supported, size: 35.sp),
                           ),
                   ),
 
@@ -166,26 +166,26 @@ class CustomGridView extends StatelessWidget {
 
                   /// ================= BOOKMARK =================
                   Positioned(
-                      top: 12.h,
-                      right: 12.w,
-                      child: GestureDetector(
-                        onTap: onSaveTap,
-                        child: Container(
-                          padding: EdgeInsets.all(8.r),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.4),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            isSaved ? Icons.bookmark : Icons.bookmark_border,
-                            color: isSaved
-                                ? AppColors.primaryColor
-                                : Colors.white,
-                            size: 20.sp,
-                          ),
+                    top: 12.h,
+                    right: 12.w,
+                    child: GestureDetector(
+                      onTap: onSaveTap,
+                      child: Container(
+                        padding: EdgeInsets.all(8.r),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.4),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          isSaved ? Icons.bookmark : Icons.bookmark_border,
+                          color: isSaved
+                              ? AppColors.primaryColor
+                              : Colors.white,
+                          size: 20.sp,
                         ),
                       ),
                     ),
+                  ),
                 ],
               ),
             ),

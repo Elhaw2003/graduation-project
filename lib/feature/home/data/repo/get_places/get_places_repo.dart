@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:smart_guide/core/errors/failures.dart';
-import 'package:smart_guide/feature/home/model/places_model.dart';
+import 'package:smart_guide/feature/home/data/model/places_model.dart';
 
 abstract class GetPlacesRepo {
   Future<Either<Failure, PlacesPaginationModel>> getPlaces({

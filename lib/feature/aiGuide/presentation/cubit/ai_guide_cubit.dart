@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smart_guide/core/services/ai_chat_service.dart';
@@ -27,6 +26,8 @@ class AiGuideCubit extends HydratedCubit<AiGuideState> {
       _messages.addAll(
         messagesJson
             .map((msg) => ChatMessage.fromJson(msg as Map<String, dynamic>))
+            // Clear any streaming state that was persisted when app was closed
+            .map((m) => m.isStreaming ? m.copyWith(isStreaming: false) : m)
             .toList(),
       );
       return AiGuideReady(messages: List.unmodifiable(_messages));
@@ -38,7 +39,10 @@ class AiGuideCubit extends HydratedCubit<AiGuideState> {
   @override
   Map<String, dynamic>? toJson(AiGuideState state) {
     if (state is AiGuideReady) {
-      return {'messages': _messages.map((msg) => msg.toJson()).toList()};
+      final serializable = _messages
+          .map((m) => m.isStreaming ? m.copyWith(isStreaming: false) : m)
+          .toList();
+      return {'messages': serializable.map((msg) => msg.toJson()).toList()};
     }
     return null;
   }
@@ -95,14 +99,11 @@ class AiGuideCubit extends HydratedCubit<AiGuideState> {
 
   void sendMessage(String text) {
     if (text.trim().isEmpty) return;
-    if (!_service.isConnected) {
-      reconnect();
-      return;
-    }
 
+    final trimmed = text.trim();
     final userMsg = ChatMessage(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
-      text: text.trim(),
+      text: trimmed,
       isUser: true,
     );
     _messages.add(userMsg);
@@ -119,7 +120,15 @@ class AiGuideCubit extends HydratedCubit<AiGuideState> {
     emit(
       AiGuideReady(messages: List.unmodifiable(_messages), isStreaming: true),
     );
-    _service.sendMessage(text.trim());
+
+    if (!_service.isConnected) {
+      // Reconnect then send — message is preserved in the bubble
+      reconnect().then((_) {
+        if (_service.isConnected) _service.sendMessage(trimmed);
+      });
+      return;
+    }
+    _service.sendMessage(trimmed);
   }
 
   Future<void> uploadImage(XFile image) async {

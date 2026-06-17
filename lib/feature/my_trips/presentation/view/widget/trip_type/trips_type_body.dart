@@ -33,11 +33,19 @@ class _TripsTypeBodyState extends State<TripsTypeBody> {
     context.read<BookingAndPaymentCubit>().fetchTouristActiveBookings();
   }
 
+  Future<void> _refresh() async {
+    context.read<BookingAndPaymentCubit>().fetchTouristActiveBookings();
+    await Future.delayed(const Duration(milliseconds: 600));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        const MyTripAppbar(),
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      color: AppColors.primaryColor,
+      child: CustomScrollView(
+        slivers: [
+          const MyTripAppbar(),
 
         // Tab Switcher
         SliverToBoxAdapter(
@@ -172,6 +180,7 @@ class _TripsTypeBodyState extends State<TripsTypeBody> {
 
         SliverToBoxAdapter(child: CustomHeightSpacingWidget(height: 30)),
       ],
+      ),
     );
   }
 

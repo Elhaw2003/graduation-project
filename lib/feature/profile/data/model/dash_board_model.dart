@@ -24,6 +24,8 @@ List<DashboardModel> dashboards(
   int favoritesCount = 0,
   int tripsCount = 0,
   int placesCount = 0,
+  VoidCallback? onReturnFromFavorites,
+  VoidCallback? onReturnFromPlaces,
 }) {
   return [
     DashboardModel(
@@ -31,8 +33,9 @@ List<DashboardModel> dashboards(
       subTitle: "Favorite Guides",
       info: '$favoritesCount Guides',
       icon: Assets.imagesSvgFavorite,
-      onTap: () {
-        if (context.mounted) context.pushNamed(AppRoutes.guidesSavedScreen);
+      onTap: () async {
+        if (context.mounted) await context.pushNamed(AppRoutes.guidesSavedScreen);
+        onReturnFromFavorites?.call();
       },
     ),
     DashboardModel(
@@ -56,8 +59,9 @@ List<DashboardModel> dashboards(
       subTitle: "Favorite Spots",
       info: '$placesCount Places',
       icon: Assets.imagesSvgSaved,
-      onTap: () {
-        if (context.mounted) context.pushNamed(AppRoutes.savedScreen);
+      onTap: () async {
+        if (context.mounted) await context.pushNamed(AppRoutes.savedScreen);
+        onReturnFromPlaces?.call();
       },
     ),
   ];

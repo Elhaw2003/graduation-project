@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_guide/feature/home/data/repo/get_places/get_places_repo.dart';
-import 'package:smart_guide/feature/home/model/place_model.dart';
+import 'package:smart_guide/feature/home/data/model/place_model.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/search_places/search_places_state.dart';
 
 /// A dedicated cubit for the SearchPlacesScreen that is completely
@@ -9,7 +9,7 @@ import 'package:smart_guide/feature/home/presentation/cubit/search_places/search
 /// into the main list state.
 class SearchPlacesCubit extends Cubit<SearchPlacesState> {
   SearchPlacesCubit({required this.getPlacesRepo})
-      : super(SearchPlacesInitial());
+    : super(SearchPlacesInitial());
 
   final GetPlacesRepo getPlacesRepo;
 
