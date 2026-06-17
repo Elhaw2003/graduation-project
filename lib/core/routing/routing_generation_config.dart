@@ -199,6 +199,7 @@ class RoutingGenerationConfig {
                 )..getSavedGuides(),
               ),
               BlocProvider(
+                lazy: false,
                 create: (_) {
                   final cubit = TouristSessionCubit();
                   TouristSessionCubit.register(cubit);
@@ -228,6 +229,7 @@ class RoutingGenerationConfig {
           child: MultiBlocProvider(
             providers: [
               BlocProvider(
+                lazy: false,
                 create: (_) {
                   final cubit = GuideSessionCubit();
                   GuideSessionCubit.register(cubit);

@@ -210,6 +210,12 @@ class _DashboardGrid extends StatelessWidget {
                   favoritesCount: favCount,
                   tripsCount: tripsCount,
                   placesCount: placesCount,
+                  onReturnFromFavorites: () {
+                    context.read<SavedGuidesCubit>().getSavedGuides();
+                  },
+                  onReturnFromPlaces: () {
+                    context.read<SavedPlacesCubit>().getSavedPlaces();
+                  },
                 );
 
                 return Padding(

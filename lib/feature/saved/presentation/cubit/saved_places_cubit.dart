@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_guide/core/services/cache/cache_helper.dart';
-import 'package:smart_guide/feature/home/model/place_model.dart';
+import 'package:smart_guide/feature/home/data/model/place_model.dart';
 import 'package:smart_guide/feature/saved/data/repo/saved_places_repo.dart';
 import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_states.dart';
 

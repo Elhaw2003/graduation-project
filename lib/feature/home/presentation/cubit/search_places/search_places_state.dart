@@ -1,4 +1,4 @@
-import 'package:smart_guide/feature/home/model/place_model.dart';
+import 'package:smart_guide/feature/home/data/model/place_model.dart';
 
 abstract class SearchPlacesState {}
 

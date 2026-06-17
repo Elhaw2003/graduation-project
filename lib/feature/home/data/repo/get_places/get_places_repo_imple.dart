@@ -5,7 +5,7 @@ import 'package:smart_guide/core/network/api_constants.dart';
 import 'package:smart_guide/core/network/api_consumer.dart';
 import 'package:smart_guide/core/network/connectivity_guard.dart';
 import 'package:smart_guide/feature/home/data/repo/get_places/get_places_repo.dart';
-import 'package:smart_guide/feature/home/model/places_model.dart';
+import 'package:smart_guide/feature/home/data/model/places_model.dart';
 
 class GetPlacesRepoImple implements GetPlacesRepo {
   final ApiConsumer apiConsumer;

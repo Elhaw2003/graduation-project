@@ -1,4 +1,4 @@
-import 'package:smart_guide/feature/home/model/place_model.dart';
+import 'package:smart_guide/feature/home/data/model/place_model.dart';
 
 abstract class GetPlaceDetailsState {}
 
@@ -16,4 +16,16 @@ class GetPlaceDetailsFailure extends GetPlaceDetailsState {
   final String errorMessage;
 
   GetPlaceDetailsFailure({required this.errorMessage});
+}
+
+class RatePlaceLoading extends GetPlaceDetailsState {}
+
+class RatePlaceSuccess extends GetPlaceDetailsState {
+  final String message;
+  RatePlaceSuccess({required this.message});
+}
+
+class RatePlaceFailure extends GetPlaceDetailsState {
+  final String errorMessage;
+  RatePlaceFailure({required this.errorMessage});
 }

@@ -5,12 +5,34 @@ import 'package:smart_guide/core/network/api_constants.dart';
 import 'package:smart_guide/core/network/api_consumer.dart';
 import 'package:smart_guide/core/network/connectivity_guard.dart';
 import 'package:smart_guide/feature/home/data/repo/get_place_detail/get_place_datail_repo.dart';
-import 'package:smart_guide/feature/home/model/place_model.dart';
+import 'package:smart_guide/feature/home/data/model/place_model.dart';
 
 class GetPlaceDetailRepoImple implements GetPlaceDatailRepo {
   final ApiConsumer apiConsumer;
 
   GetPlaceDetailRepoImple({required this.apiConsumer});
+
+  @override
+  Future<Either<Failure, String>> ratePlace({
+    required String placeId,
+    required int rating,
+    String? review,
+  }) async {
+    try {
+      final response = await apiConsumer.post(
+        EndPoint.ratePlace(placeId: placeId),
+        data: {'rating': rating, 'review': review ?? ''},
+      );
+      final message = (response is Map)
+          ? (response['message'] ?? 'Rated successfully').toString()
+          : 'Rated successfully';
+      return Right(message);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.errModel.errorMessage));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 
   @override
   Future<Either<Failure, PlaceModel>> getPlaceDetails({

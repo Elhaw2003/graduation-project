@@ -3,7 +3,7 @@ import 'package:smart_guide/core/errors/exceptions.dart';
 import 'package:smart_guide/core/errors/failures.dart';
 import 'package:smart_guide/core/network/api_constants.dart';
 import 'package:smart_guide/core/network/api_consumer.dart';
-import 'package:smart_guide/feature/home/model/place_model.dart';
+import 'package:smart_guide/feature/home/data/model/place_model.dart';
 import 'package:smart_guide/feature/saved/data/repo/saved_places_repo.dart';
 
 class SavedPlacesRepoImpl implements SavedPlacesRepo {

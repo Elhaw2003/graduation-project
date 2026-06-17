@@ -12,6 +12,7 @@ class EndPoint {
   static String logout = "Auth/logout";
   static String getPlaces = "places";
   static String getPlaceDetails({required String id}) => "places/$id";
+  static String ratePlace({required String placeId}) => "Places/$placeId/rate";
 
   /// ================= SAVED PLACES =================
 

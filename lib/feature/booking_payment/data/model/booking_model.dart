@@ -22,9 +22,7 @@ class BookingModel {
       id: json['id'] as String? ?? '',
       status: json['status'] as String? ?? '',
       totalPrice: (json['totalPrice'] as num?)?.toDouble() ?? 0.0,
-      paymentMethod: json['paymentMethod'] != null
-          ? json['paymentMethod'].toString()
-          : '1',
+      paymentMethod: json['paymentMethod'] as String? ?? 'cash',
       createdAtUtc: json['createdAtUtc'] as String? ?? '',
       slot: json['slot'] != null
           ? BookingSlotModel.fromJson(json['slot'] as Map<String, dynamic>)
@@ -53,7 +51,8 @@ class BookingModel {
       status.toLowerCase() == 'completed' ||
       status.toLowerCase() == 'cancelled';
 
-  String get paymentMethodLabel => paymentMethod == 2 ? 'Online' : 'Cash';
+  String get paymentMethodLabel =>
+      paymentMethod.toLowerCase() == 'online' ? 'Online' : 'Cash';
 }
 
 class BookingSlotModel {

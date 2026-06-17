@@ -57,6 +57,9 @@ class AiChatService {
         },
         onDone: () {
           _socket = null;
+          if (!_errorController.isClosed) {
+            _errorController.add('Connection closed by server');
+          }
         },
       );
     } catch (e) {
