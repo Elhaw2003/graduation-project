@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
-import 'package:smart_guide/feature/chat/data/model/chat_message.dart';
+import 'package:smart_guide/feature/chat/data/model/chat_message_model.dart';
 import 'package:smart_guide/feature/chat/data/repo/chat_repo.dart';
 import 'package:smart_guide/feature/chat/presentation/cubit/chat_room/chat_room_states.dart';
 
@@ -14,8 +14,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
     final userId = await SecureStorageHelper.instance.getUserId();
 
-    final convResult =
-        await chatRepo.getConversation(conversationId: conversationId);
+    final convResult = await chatRepo.getConversation(
+      conversationId: conversationId,
+    );
 
     if (convResult.isLeft()) {
       final failure = convResult.fold((l) => l, (_) => null)!;
@@ -25,8 +26,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
 
     final conversation = convResult.fold((_) => null, (r) => r)!;
 
-    final msgsResult =
-        await chatRepo.getMessages(conversationId: conversationId);
+    final msgsResult = await chatRepo.getMessages(
+      conversationId: conversationId,
+    );
     final messages = msgsResult.fold<List<ChatMessageModel>>(
       (_) => <ChatMessageModel>[],
       (r) => r,
@@ -35,11 +37,13 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     // Mark as read concurrently — don't block UI.
     chatRepo.markAsRead(conversationId: conversationId);
 
-    emit(ChatRoomLoaded(
-      conversation: conversation,
-      messages: messages,
-      currentUserId: userId ?? '',
-    ));
+    emit(
+      ChatRoomLoaded(
+        conversation: conversation,
+        messages: messages,
+        currentUserId: userId ?? '',
+      ),
+    );
   }
 
   Future<void> sendMessage({
@@ -56,13 +60,12 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       content: content,
     );
 
-    result.fold(
-      (failure) => emit(loaded.copyWith(isSending: false)),
-      (message) {
-        final updated = [message, ...loaded.messages];
-        emit(loaded.copyWith(messages: updated, isSending: false));
-      },
-    );
+    result.fold((failure) => emit(loaded.copyWith(isSending: false)), (
+      message,
+    ) {
+      final updated = [message, ...loaded.messages];
+      emit(loaded.copyWith(messages: updated, isSending: false));
+    });
   }
 
   void startEditing(ChatMessageModel message) {
@@ -89,19 +92,18 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       content: content,
     );
 
-    result.fold(
-      (_) => emit(loaded.copyWith(clearEditing: true)),
-      (updated) {
-        final msgs = loaded.messages
-            .map((m) => m.id == updated.id ? updated : m)
-            .toList();
-        emit(loaded.copyWith(
+    result.fold((_) => emit(loaded.copyWith(clearEditing: true)), (updated) {
+      final msgs = loaded.messages
+          .map((m) => m.id == updated.id ? updated : m)
+          .toList();
+      emit(
+        loaded.copyWith(
           messages: msgs,
           clearEditing: true,
           snackBarMessage: 'Message edited successfully',
-        ));
-      },
-    );
+        ),
+      );
+    });
   }
 
   Future<void> deleteMessage({required String messageId}) async {
@@ -131,33 +133,34 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     final loaded = _currentLoaded;
     if (loaded == null) return;
 
-    final result = await chatRepo.blockConversation(conversationId: conversationId);
-    result.fold(
-      (_) {},
-      (_) {
-        emit(loaded.copyWith(
+    final result = await chatRepo.blockConversation(
+      conversationId: conversationId,
+    );
+    result.fold((_) {}, (_) {
+      emit(
+        loaded.copyWith(
           conversation: loaded.conversation.copyWith(isMessagingBlocked: true),
           snackBarMessage: 'User blocked',
-        ));
-      },
-    );
+        ),
+      );
+    });
   }
 
   Future<void> unblockConversation({required String conversationId}) async {
     final loaded = _currentLoaded;
     if (loaded == null) return;
 
-    final result =
-        await chatRepo.unblockConversation(conversationId: conversationId);
-    result.fold(
-      (_) {},
-      (_) {
-        emit(loaded.copyWith(
+    final result = await chatRepo.unblockConversation(
+      conversationId: conversationId,
+    );
+    result.fold((_) {}, (_) {
+      emit(
+        loaded.copyWith(
           conversation: loaded.conversation.copyWith(isMessagingBlocked: false),
           snackBarMessage: 'User unblocked',
-        ));
-      },
-    );
+        ),
+      );
+    });
   }
 
   void clearSnackBar() {

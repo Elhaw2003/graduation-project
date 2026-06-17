@@ -7,7 +7,7 @@ import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/core/utils/image_url_extension.dart';
 import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
-import 'package:smart_guide/feature/chat/data/model/chat_message.dart';
+import 'package:smart_guide/feature/chat/data/model/chat_message_model.dart';
 import 'package:smart_guide/feature/chat/data/model/conversation_model.dart';
 import 'package:smart_guide/feature/chat/presentation/cubit/chat_room/chat_room_cubit.dart';
 import 'package:smart_guide/feature/chat/presentation/cubit/chat_room/chat_room_states.dart';
@@ -40,8 +40,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     _checkRole();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ChatRoomCubit>().loadRoom(
-            conversationId: widget.conversationId,
-          );
+        conversationId: widget.conversationId,
+      );
     });
   }
 
@@ -130,15 +130,15 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
     if (loaded.editingMessage != null) {
       _textController.clear();
       context.read<ChatRoomCubit>().submitEdit(
-            messageId: loaded.editingMessage!.id,
-            content: text,
-          );
+        messageId: loaded.editingMessage!.id,
+        content: text,
+      );
     } else {
       _textController.clear();
       context.read<ChatRoomCubit>().sendMessage(
-            conversationId: widget.conversationId,
-            content: text,
-          );
+        conversationId: widget.conversationId,
+        content: text,
+      );
       _scrollToBottom();
     }
   }
@@ -171,8 +171,11 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 ),
                 if (message.canEdit)
                   ListTile(
-                    leading: Icon(Icons.edit_rounded,
-                        color: AppColors.primaryColor, size: 22.sp),
+                    leading: Icon(
+                      Icons.edit_rounded,
+                      color: AppColors.primaryColor,
+                      size: 22.sp,
+                    ),
                     title: Text(
                       'Edit Message',
                       style: TextStyle(
@@ -190,8 +193,11 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     },
                   ),
                 ListTile(
-                  leading: Icon(Icons.delete_outline_rounded,
-                      color: AppColors.redAppColor, size: 22.sp),
+                  leading: Icon(
+                    Icons.delete_outline_rounded,
+                    color: AppColors.redAppColor,
+                    size: 22.sp,
+                  ),
                   title: Text(
                     'Delete Message',
                     style: TextStyle(
@@ -218,7 +224,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
       builder: (dialogContext) {
         return Dialog(
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.r)),
+            borderRadius: BorderRadius.circular(20.r),
+          ),
           child: Padding(
             padding: EdgeInsets.all(24.w),
             child: Column(
@@ -231,8 +238,11 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     color: AppColors.redAppColor.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(Icons.delete_forever_rounded,
-                      color: AppColors.redAppColor, size: 32.sp),
+                  child: Icon(
+                    Icons.delete_forever_rounded,
+                    color: AppColors.redAppColor,
+                    size: 32.sp,
+                  ),
                 ),
                 SizedBox(height: 16.h),
                 Text(
@@ -261,14 +271,18 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                         onPressed: () => Navigator.pop(dialogContext),
                         style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.r)),
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
                           side: BorderSide(color: AppColors.grey200Color),
                           padding: EdgeInsets.symmetric(vertical: 12.h),
                         ),
-                        child: Text('Cancel',
-                            style: TextStyle(
-                                color: AppColors.grey400Color,
-                                fontSize: 14.sp)),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(
+                            color: AppColors.grey400Color,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(width: 12.w),
@@ -276,22 +290,26 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.pop(dialogContext);
-                          rootContext
-                              .read<ChatRoomCubit>()
-                              .deleteMessage(messageId: messageId);
+                          rootContext.read<ChatRoomCubit>().deleteMessage(
+                            messageId: messageId,
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.redAppColor,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.r)),
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
                           padding: EdgeInsets.symmetric(vertical: 12.h),
                           elevation: 0,
                         ),
-                        child: Text('Delete',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w600)),
+                        child: Text(
+                          'Delete',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
                     ),
                   ],
@@ -305,14 +323,18 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   }
 
   void _showBlockConfirmation(
-      BuildContext rootContext, String conversationId, bool isCurrentlyBlocked) {
+    BuildContext rootContext,
+    String conversationId,
+    bool isCurrentlyBlocked,
+  ) {
     final isBlocking = !isCurrentlyBlocked;
     showDialog(
       context: rootContext,
       builder: (dialogContext) {
         return Dialog(
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20.r)),
+            borderRadius: BorderRadius.circular(20.r),
+          ),
           child: Padding(
             padding: EdgeInsets.all(24.w),
             child: Column(
@@ -328,9 +350,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
-                    isBlocking
-                        ? Icons.block_rounded
-                        : Icons.lock_open_rounded,
+                    isBlocking ? Icons.block_rounded : Icons.lock_open_rounded,
                     color: isBlocking
                         ? AppColors.redAppColor
                         : AppColors.greenColor,
@@ -366,14 +386,18 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                         onPressed: () => Navigator.pop(dialogContext),
                         style: OutlinedButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.r)),
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
                           side: BorderSide(color: AppColors.grey200Color),
                           padding: EdgeInsets.symmetric(vertical: 12.h),
                         ),
-                        child: Text('Cancel',
-                            style: TextStyle(
-                                color: AppColors.grey400Color,
-                                fontSize: 14.sp)),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(
+                            color: AppColors.grey400Color,
+                            fontSize: 14.sp,
+                          ),
+                        ),
                       ),
                     ),
                     SizedBox(width: 12.w),
@@ -382,15 +406,15 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                         onPressed: () {
                           Navigator.pop(dialogContext);
                           if (isBlocking) {
-                            rootContext
-                                .read<ChatRoomCubit>()
-                                .blockConversation(
-                                    conversationId: conversationId);
+                            rootContext.read<ChatRoomCubit>().blockConversation(
+                              conversationId: conversationId,
+                            );
                           } else {
                             rootContext
                                 .read<ChatRoomCubit>()
                                 .unblockConversation(
-                                    conversationId: conversationId);
+                                  conversationId: conversationId,
+                                );
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -398,16 +422,18 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                               ? AppColors.redAppColor
                               : AppColors.greenColor,
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.r)),
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
                           padding: EdgeInsets.symmetric(vertical: 12.h),
                           elevation: 0,
                         ),
                         child: Text(
                           isBlocking ? 'Block' : 'Unblock',
                           style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600),
+                            color: Colors.white,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
@@ -434,8 +460,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               final msg = state.snackBarMessage!;
               final isDelete = msg.toLowerCase().contains('delet');
               final isUnblock = msg.toLowerCase().contains('unblock');
-              final isBlock =
-                  msg.toLowerCase().contains('block') && !isUnblock;
+              final isBlock = msg.toLowerCase().contains('block') && !isUnblock;
               _showCreativeSnackBar(
                 context,
                 msg,
@@ -443,10 +468,10 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                 icon: isDelete
                     ? Icons.delete_sweep_rounded
                     : isUnblock
-                        ? Icons.lock_open_rounded
-                        : isBlock
-                            ? Icons.block_rounded
-                            : Icons.check_circle_rounded,
+                    ? Icons.lock_open_rounded
+                    : isBlock
+                    ? Icons.block_rounded
+                    : Icons.check_circle_rounded,
               );
               context.read<ChatRoomCubit>().clearSnackBar();
             }
@@ -464,12 +489,19 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.error_outline_rounded,
-                      size: 48.sp, color: AppColors.grey300Color),
+                  Icon(
+                    Icons.error_outline_rounded,
+                    size: 48.sp,
+                    color: AppColors.grey300Color,
+                  ),
                   SizedBox(height: 12.h),
-                  Text(state.message,
-                      style: TextStyle(
-                          color: AppColors.grey400Color, fontSize: 14.sp)),
+                  Text(
+                    state.message,
+                    style: TextStyle(
+                      color: AppColors.grey400Color,
+                      fontSize: 14.sp,
+                    ),
+                  ),
                 ],
               ),
             );
@@ -542,8 +574,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 
           final displayName =
               conversation?.otherPartyDisplayName?.isNotEmpty == true
-                  ? conversation!.otherPartyDisplayName!
-                  : (conversation?.fullName ?? '');
+              ? conversation!.otherPartyDisplayName!
+              : (conversation?.fullName ?? '');
 
           return Row(
             children: [
@@ -582,7 +614,10 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
           _GuidePopupMenu(
             conversationId: widget.conversationId,
             onBlockTap: (isCurrentlyBlocked) => _showBlockConfirmation(
-                context, widget.conversationId, isCurrentlyBlocked),
+              context,
+              widget.conversationId,
+              isCurrentlyBlocked,
+            ),
           ),
         SizedBox(width: 4.w),
       ],

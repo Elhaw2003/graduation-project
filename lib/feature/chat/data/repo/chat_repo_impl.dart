@@ -3,7 +3,7 @@ import 'package:smart_guide/core/errors/exceptions.dart';
 import 'package:smart_guide/core/errors/failures.dart';
 import 'package:smart_guide/core/network/api_constants.dart';
 import 'package:smart_guide/core/network/api_consumer.dart';
-import 'package:smart_guide/feature/chat/data/model/chat_message.dart';
+import 'package:smart_guide/feature/chat/data/model/chat_message_model.dart';
 import 'package:smart_guide/feature/chat/data/model/conversation_model.dart';
 import 'package:smart_guide/feature/chat/data/repo/chat_repo.dart';
 
@@ -83,10 +83,11 @@ class ChatRepoImpl implements ChatRepo {
           beforeSentAtUtc: beforeSentAtUtc,
         ),
       );
-      final items = (response['items'] as List? ?? [])
-          .map((e) => ChatMessageModel.fromJson(e as Map<String, dynamic>))
-          .toList()
-        ..sort((a, b) => b.sentAtUtc.compareTo(a.sentAtUtc));
+      final items =
+          (response['items'] as List? ?? [])
+              .map((e) => ChatMessageModel.fromJson(e as Map<String, dynamic>))
+              .toList()
+            ..sort((a, b) => b.sentAtUtc.compareTo(a.sentAtUtc));
       return Right(items);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.errModel.errorMessage));
@@ -105,9 +106,7 @@ class ChatRepoImpl implements ChatRepo {
         EndPoint.chatSendMessage(conversationId: conversationId),
         data: {'content': content},
       );
-      return Right(
-        ChatMessageModel.fromJson(response as Map<String, dynamic>),
-      );
+      return Right(ChatMessageModel.fromJson(response as Map<String, dynamic>));
     } on ServerException catch (e) {
       return Left(ServerFailure(e.errModel.errorMessage));
     } catch (_) {
@@ -125,9 +124,7 @@ class ChatRepoImpl implements ChatRepo {
         EndPoint.chatEditMessage(messageId: messageId),
         data: {'content': content},
       );
-      return Right(
-        ChatMessageModel.fromJson(response as Map<String, dynamic>),
-      );
+      return Right(ChatMessageModel.fromJson(response as Map<String, dynamic>));
     } on ServerException catch (e) {
       return Left(ServerFailure(e.errModel.errorMessage));
     } catch (_) {

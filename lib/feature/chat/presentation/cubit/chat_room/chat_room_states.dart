@@ -1,4 +1,4 @@
-import 'package:smart_guide/feature/chat/data/model/chat_message.dart';
+import 'package:smart_guide/feature/chat/data/model/chat_message_model.dart';
 import 'package:smart_guide/feature/chat/data/model/conversation_model.dart';
 
 abstract class ChatRoomState {
@@ -48,8 +48,12 @@ class ChatRoomLoaded extends ChatRoomState {
       currentUserId: currentUserId,
       isSending: isSending ?? this.isSending,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
-      editingMessage: clearEditing ? null : (editingMessage ?? this.editingMessage),
-      snackBarMessage: clearSnackBar ? null : (snackBarMessage ?? this.snackBarMessage),
+      editingMessage: clearEditing
+          ? null
+          : (editingMessage ?? this.editingMessage),
+      snackBarMessage: clearSnackBar
+          ? null
+          : (snackBarMessage ?? this.snackBarMessage),
     );
   }
 }

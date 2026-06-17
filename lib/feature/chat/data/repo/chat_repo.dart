@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:smart_guide/core/errors/failures.dart';
-import 'package:smart_guide/feature/chat/data/model/chat_message.dart';
+import 'package:smart_guide/feature/chat/data/model/chat_message_model.dart';
 import 'package:smart_guide/feature/chat/data/model/conversation_model.dart';
 
 abstract class ChatRepo {

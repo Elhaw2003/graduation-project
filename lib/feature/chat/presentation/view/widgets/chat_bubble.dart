@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
-import 'package:smart_guide/feature/chat/data/model/chat_message.dart';
+import 'package:smart_guide/feature/chat/data/model/chat_message_model.dart';
 
 class ChatBubble extends StatelessWidget {
   final ChatMessageModel message;
@@ -26,16 +26,16 @@ class ChatBubble extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 3.h),
         child: Row(
-          mainAxisAlignment:
-              isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
+          mainAxisAlignment: isMine
+              ? MainAxisAlignment.end
+              : MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             if (!isMine) SizedBox(width: 4.w),
             Flexible(
               child: Container(
                 constraints: BoxConstraints(maxWidth: 0.72.sw),
-                padding:
-                    EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
                 decoration: BoxDecoration(
                   gradient: isMine
                       ? const LinearGradient(
@@ -48,10 +48,12 @@ class ChatBubble extends StatelessWidget {
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(18.r),
                     topRight: Radius.circular(18.r),
-                    bottomLeft:
-                        isMine ? Radius.circular(18.r) : Radius.circular(4.r),
-                    bottomRight:
-                        isMine ? Radius.circular(4.r) : Radius.circular(18.r),
+                    bottomLeft: isMine
+                        ? Radius.circular(18.r)
+                        : Radius.circular(4.r),
+                    bottomRight: isMine
+                        ? Radius.circular(4.r)
+                        : Radius.circular(18.r),
                   ),
                   boxShadow: [
                     BoxShadow(
@@ -71,7 +73,9 @@ class ChatBubble extends StatelessWidget {
                     Text(
                       message.displayContent ?? message.content,
                       style: TextStyle(
-                        color: isMine ? Colors.white : AppColors.primaryTextColor,
+                        color: isMine
+                            ? Colors.white
+                            : AppColors.primaryTextColor,
                         fontSize: 14.sp,
                         height: 1.4,
                       ),
@@ -130,8 +134,9 @@ class _DeletedBubble extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 3.h),
       child: Row(
-        mainAxisAlignment:
-            isMine ? MainAxisAlignment.end : MainAxisAlignment.start,
+        mainAxisAlignment: isMine
+            ? MainAxisAlignment.end
+            : MainAxisAlignment.start,
         children: [
           Container(
             padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),

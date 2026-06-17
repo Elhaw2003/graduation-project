@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
-import 'package:smart_guide/feature/chat/data/model/chat_message.dart';
+import 'package:smart_guide/feature/chat/data/model/chat_message_model.dart';
 
 class MessageInputBar extends StatefulWidget {
   final TextEditingController controller;
@@ -135,7 +135,9 @@ class _MessageInputBarState extends State<MessageInputBar> {
                               widget.editingMessage != null
                                   ? Icons.check_rounded
                                   : Icons.send_rounded,
-                              color: _hasText ? Colors.white : AppColors.grey400Color,
+                              color: _hasText
+                                  ? Colors.white
+                                  : AppColors.grey400Color,
                               size: 20.sp,
                             ),
                             onPressed: _hasText ? widget.onSend : null,
@@ -161,17 +163,18 @@ class _MessageInputBarState extends State<MessageInputBar> {
           Expanded(
             child: Text(
               'Editing: ${widget.editingMessage!.content}',
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: AppColors.primaryColor,
-              ),
+              style: TextStyle(fontSize: 12.sp, color: AppColors.primaryColor),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
           ),
           GestureDetector(
             onTap: widget.onCancelEdit,
-            child: Icon(Icons.close, size: 18.sp, color: AppColors.grey400Color),
+            child: Icon(
+              Icons.close,
+              size: 18.sp,
+              color: AppColors.grey400Color,
+            ),
           ),
         ],
       ),
