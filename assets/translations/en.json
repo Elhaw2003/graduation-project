@@ -341,5 +341,21 @@
   "ai_typing": "AI is typing...",
   "upload_image": "Upload Image",
   "recommendations": "Recommended for You",
-  "connection_lost": "Connection lost. Reconnecting..."
+  "connection_lost": "Connection lost. Reconnecting...",
+  "chatMessages": "Messages",
+  "chatConversations": "Conversations",
+  "chatNoConversations": "No Conversations Yet",
+  "chatNoConversationsHint": "Visit a guide profile and tap \"Chat\" to start a conversation.",
+  "chatTypeMessage": "Type a message...",
+  "chatEditMessage": "Edit message...",
+  "chatEditing": "Editing",
+  "chatMessageDeleted": "Message deleted",
+  "chatBlocked": "This conversation is blocked.",
+  "chatBlock": "Block User",
+  "chatUnblock": "Unblock User",
+  "chatSayHello": "Say hello!",
+  "chatSayHelloHint": "Send your first message to start the conversation.",
+  "chatConnect": "Chat",
+  "chatConnecting": "Connecting...",
+  "chatRetry": "Retry"
 }

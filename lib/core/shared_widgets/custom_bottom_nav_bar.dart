@@ -22,10 +22,10 @@ class CustomBottomNavBar extends StatelessWidget {
       Assets.imagesSvgHomeIcon,
       Assets.imagesSvgGuidesIcon,
       Assets.imagesSvgRobot,
-      Assets.imagesSvgExplorIcon,
+      Assets.imagesSvgArrowSend,
     ];
 
-    final labelList = <String>["Home", "Guides", "AI Guide", "Explore"];
+    final labelList = <String>["Home", "Guides", "AI Guide", "Chat"];
 
     return SafeArea(
       child: LayoutBuilder(

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
-import 'package:smart_guide/feature/chat/data/cubit/chat_cubit.dart';
-import 'package:smart_guide/feature/chat/data/cubit/chat_state.dart';
-import 'package:smart_guide/feature/chat/presentation/view/chat_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:smart_guide/core/routing/app_routes.dart';
+import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
+import 'package:smart_guide/feature/chat/presentation/cubit/chat_inbox/chat_inbox_cubit.dart';
+import 'package:smart_guide/feature/chat/presentation/cubit/chat_inbox/chat_inbox_states.dart';
 
 class CustomContainerAboutTheGuide extends StatefulWidget {
   const CustomContainerAboutTheGuide({
@@ -26,6 +29,18 @@ class CustomContainerAboutTheGuide extends StatefulWidget {
 class _CustomContainerAboutTheGuideState
     extends State<CustomContainerAboutTheGuide> {
   bool _isExpanded = false;
+  bool _isTourist = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkRole();
+  }
+
+  Future<void> _checkRole() async {
+    final type = await SecureStorageHelper.instance.getUserTypeEnum();
+    if (mounted) setState(() => _isTourist = type == UserTypeEnum.Tourist);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,32 +131,23 @@ class _CustomContainerAboutTheGuideState
                 ),
                 SizedBox(height: 12.h),
 
-                BlocConsumer<ChatCubit, ChatState>(
+                if (_isTourist)
+                BlocConsumer<ChatInboxCubit, ChatInboxState>(
                   listener: (context, state) {
-                    if (state is CreateConversationSuccess) {
-                      debugPrint('Conversation ID: ${state.conversation.id}');
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => BlocProvider(
-                            create: (_) =>
-                                ChatCubit()..getMessages(state.conversation.id),
-                            child: ChatScreen(
-                              conversationId: state.conversation.id,
-                            ),
-                          ),
-                        ),
+                    if (state is ChatConversationStarted) {
+                      context.pushNamed(
+                        AppRoutes.chatRoomScreen,
+                        pathParameters: {'conversationId': state.conversation.id},
+                        extra: state.conversation,
                       );
-                    }
-
-                    if (state is CreateConversationError) {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text(state.message)));
+                    } else if (state is ChatStartConversationFailure) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(state.message)),
+                      );
                     }
                   },
                   builder: (context, state) {
+                    final isLoading = state is ChatStartingConversation;
                     return Container(
                       width: double.infinity,
                       height: 48.h,
@@ -153,17 +159,17 @@ class _CustomContainerAboutTheGuideState
                         color: Colors.transparent,
                         child: InkWell(
                           borderRadius: BorderRadius.circular(12.r),
-                          onTap: state is CreateConversationLoading
+                          onTap: isLoading
                               ? null
                               : () {
-                                  context.read<ChatCubit>().createConversation(
-                                    widget.guideId,
-                                  );
-
-                                  debugPrint('Guide ID: ${widget.guideId}');
+                                  context
+                                      .read<ChatInboxCubit>()
+                                      .startConversation(
+                                        otherPartyUserId: widget.guideId,
+                                      );
                                 },
                           child: Center(
-                            child: state is CreateConversationLoading
+                            child: isLoading
                                 ? SizedBox(
                                     width: 20.w,
                                     height: 20.h,

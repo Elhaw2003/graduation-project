@@ -21,7 +21,12 @@ import 'package:smart_guide/feature/auth/register/presentation/view/register_scr
 import 'package:smart_guide/feature/auth/reset_password/presentation/view/reset_password_screen.dart';
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
 import 'package:smart_guide/feature/auth/success_verification/presentation/view/success_verification_screen.dart';
-import 'package:smart_guide/feature/chat/data/cubit/chat_cubit.dart';
+import 'package:smart_guide/feature/chat/data/model/conversation_model.dart';
+import 'package:smart_guide/feature/chat/data/repo/chat_repo_impl.dart';
+import 'package:smart_guide/feature/chat/presentation/cubit/chat_inbox/chat_inbox_cubit.dart';
+import 'package:smart_guide/feature/chat/presentation/cubit/chat_room/chat_room_cubit.dart';
+import 'package:smart_guide/feature/chat/presentation/view/screens/chat_inbox_screen.dart';
+import 'package:smart_guide/feature/chat/presentation/view/screens/chat_room_screen.dart';
 import 'package:smart_guide/feature/details/presentation/view/details_screen.dart';
 import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_screen.dart';
 import 'package:smart_guide/feature/favorite/presentation/view/favorite_screen.dart';
@@ -274,7 +279,13 @@ class RoutingGenerationConfig {
                     ),
                   )..getSavedGuides(),
                 ),
-                BlocProvider(create: (context) => ChatCubit()),
+                BlocProvider(
+                  create: (_) => ChatInboxCubit(
+                    chatRepo: ChatRepoImpl(
+                      apiConsumer: DioConsumer(dio: Dio()),
+                    ),
+                  ),
+                ),
               ],
               child: const TourGuideProfileScreen(),
             ),
@@ -590,6 +601,41 @@ class RoutingGenerationConfig {
           );
         },
       ),
+      // ================================================================
+      // CHAT ROUTES
+      // ================================================================
+      GoRoute(
+        path: AppRoutes.chatInboxScreen,
+        name: AppRoutes.chatInboxScreen,
+        pageBuilder: (context, state) => CustomSpringPage(
+          child: BlocProvider(
+            create: (_) => ChatInboxCubit(
+              chatRepo: ChatRepoImpl(apiConsumer: DioConsumer(dio: Dio())),
+            ),
+            child: const ChatInboxScreen(),
+          ),
+        ),
+      ),
+      GoRoute(
+        path: '${AppRoutes.chatRoomScreen}/:conversationId',
+        name: AppRoutes.chatRoomScreen,
+        pageBuilder: (context, state) {
+          final conversationId = state.pathParameters['conversationId']!;
+          final initialConversation = state.extra as ConversationModel?;
+          return CustomSpringPage(
+            child: BlocProvider(
+              create: (_) => ChatRoomCubit(
+                chatRepo: ChatRepoImpl(apiConsumer: DioConsumer(dio: Dio())),
+              ),
+              child: ChatRoomScreen(
+                conversationId: conversationId,
+                initialConversation: initialConversation,
+              ),
+            ),
+          );
+        },
+      ),
+
       GoRoute(
         path: AppRoutes.editTourScreen,
         name: AppRoutes.editTourScreen,
