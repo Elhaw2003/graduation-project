@@ -33,9 +33,9 @@ class TouristSessionCubit extends Cubit<TouristSessionState> {
 
     emit(
       TouristSessionLoaded(
-        userName: (results[0] as String?) ?? '',
-        profilePic: results[1] as String?,
-        userId: (results[2] as String?) ?? '',
+        userName: results[0] ?? '',
+        profilePic: results[1],
+        userId: results[2] ?? '',
       ),
     );
   }

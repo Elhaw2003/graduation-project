@@ -1,20 +1,31 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:smart_guide/core/network/dio_consumer.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/image_url_extension.dart';
+import 'package:smart_guide/feature/chat/data/repo/chat_repo_impl.dart';
+import 'package:smart_guide/feature/chat/presentation/cubit/chat_inbox/chat_inbox_cubit.dart';
+import 'package:smart_guide/feature/chat/presentation/view/screens/chat_inbox_screen.dart';
 import 'package:smart_guide/feature/guid_app/presentation/cubit/guide_session/guide_session_cubit.dart';
 import 'package:smart_guide/feature/guid_app/presentation/cubit/guide_session/guide_session_states.dart';
 import 'package:smart_guide/feature/guid_app/presentation/view/edit_tour_screen.dart';
 import 'package:smart_guide/feature/guid_app/presentation/view/widget/guide_bookings_live_feed.dart';
 import 'package:smart_guide/feature/home/presentation/widget/custom_home_app_bar.dart';
 
-class GuideApp extends StatelessWidget {
+class GuideApp extends StatefulWidget {
   const GuideApp({super.key});
 
-  /// API DATA placeholder — kept for future tour list integration.
+  @override
+  State<GuideApp> createState() => _GuideAppState();
+}
+
+class _GuideAppState extends State<GuideApp> {
+  int _selectedTab = 0;
+
   static const List tours = [];
 
   @override
@@ -31,143 +42,190 @@ class GuideApp extends StatelessWidget {
 
         return Scaffold(
           backgroundColor: const Color(0xffF5F6FF),
-          body: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 20.h),
-                    CustomHomeAppBar(
-                      key: ValueKey(
-                        '${session.userId}_${session.profilePic ?? session.userName}',
-                      ),
-                      title: 'Welcome',
-                      subTitle: session.userName.isNotEmpty
-                          ? session.userName
-                          : 'Guide',
-                      imageUrl: session.profilePic?.toHttps(),
-                      onTap: () async {
-                        if (session.userId.isEmpty) return;
-                        await context.pushNamed(
-                          AppRoutes.tourGuideProfileScreen,
-                          pathParameters: {'userId': session.userId},
-                        );
-                        if (context.mounted) {
-                          context.read<GuideSessionCubit>().loadFromCache();
-                        }
-                      },
-                    ),
-                    SizedBox(height: 25.h),
-                    // _buildEarningsCard(),
-                    // SizedBox(height: 18.h),
-                    // _buildStatsRow(),
-                    // SizedBox(height: 25.h),
-                    const GuideBookingsLiveFeed(),
-                    SizedBox(height: 25.h),
-                    if (tours.isEmpty) ...[
-                      // _buildEmptyToursState(context),
-                      SizedBox(height: 20.h),
-                    ] else ...[
-                      _buildActiveToursHeader(),
-                      SizedBox(height: 10.h),
-                      _buildTourCard(
-                        context: context,
-                        image: 'assets/images/png/pyramids.jpg',
-                        title: 'Giza Pyramids & Sphinx Tour',
-                      ),
-                      SizedBox(height: 20.h),
-                      _buildTourCard(
-                        context: context,
-                        image: 'assets/images/png/pyramids.jpg',
-                        title: 'Luxor Hot Air Balloon Adventure',
-                      ),
-                    ],
-                    SizedBox(height: 30.h),
-                  ],
-                ),
+          body: IndexedStack(
+            index: _selectedTab,
+            children: [
+              _BookingsTab(session: session, tours: tours),
+              BlocProvider(
+                create: (_) => ChatInboxCubit(
+                  chatRepo: ChatRepoImpl(
+                    apiConsumer: DioConsumer(dio: Dio()),
+                  ),
+                )..loadInbox(),
+                child: const ChatInboxScreen(),
               ),
-            ),
+            ],
+          ),
+          bottomNavigationBar: _GuideBottomNav(
+            currentIndex: _selectedTab,
+            onTap: (i) => setState(() => _selectedTab = i),
           ),
         );
       },
     );
   }
+}
 
-  Widget _buildEarningsCard() {
+class _GuideBottomNav extends StatelessWidget {
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+
+  const _GuideBottomNav({required this.currentIndex, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: 18.h),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18.r),
-        border: Border.all(color: AppColors.primaryColor, width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
+            color: Colors.black.withOpacity(0.08),
+            blurRadius: 16,
+            offset: const Offset(0, -2),
           ),
         ],
       ),
-      child: Column(
-        children: [
-          Icon(
-            Icons.account_balance_wallet_outlined,
-            color: Colors.green,
-            size: 24.sp,
+      child: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 4.h),
+          child: Row(
+            children: [
+              _NavItem(
+                icon: Icons.calendar_today_rounded,
+                activeIcon: Icons.calendar_today_rounded,
+                label: 'Bookings',
+                isActive: currentIndex == 0,
+                onTap: () => onTap(0),
+              ),
+              _NavItem(
+                icon: Icons.chat_bubble_outline_rounded,
+                activeIcon: Icons.chat_bubble_rounded,
+                label: 'Chats',
+                isActive: currentIndex == 1,
+                onTap: () => onTap(1),
+              ),
+            ],
           ),
-          SizedBox(height: 8.h),
-          Text(
-            'Total Earnings',
-            style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 5.h),
-          Text(
-            '0 EGP',
-            style: TextStyle(
-              fontSize: 18.sp,
-              fontWeight: FontWeight.bold,
-              color: Colors.green,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
+}
 
-  Widget _buildStatsRow() {
-    return Row(
-      children: [
-        Expanded(
-          child: _buildStatCard(
-            title: 'Active Tours',
-            value: '${tours.length} Tours',
-            icon: Icons.menu_book_outlined,
-            valueColor: Colors.orange,
+class _NavItem extends StatelessWidget {
+  final IconData icon;
+  final IconData activeIcon;
+  final String label;
+  final bool isActive;
+  final VoidCallback onTap;
+
+  const _NavItem({
+    required this.icon,
+    required this.activeIcon,
+    required this.label,
+    required this.isActive,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 6.h),
+              decoration: BoxDecoration(
+                color: isActive
+                    ? AppColors.primaryColor.withOpacity(0.12)
+                    : Colors.transparent,
+                borderRadius: BorderRadius.circular(20.r),
+              ),
+              child: Icon(
+                isActive ? activeIcon : icon,
+                color: isActive ? AppColors.primaryColor : AppColors.grey400Color,
+                size: 22.sp,
+              ),
+            ),
+            SizedBox(height: 2.h),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 11.sp,
+                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
+                color: isActive ? AppColors.primaryColor : AppColors.grey400Color,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BookingsTab extends StatelessWidget {
+  final GuideSessionLoaded session;
+  final List tours;
+
+  const _BookingsTab({required this.session, required this.tours});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 20.h),
+              CustomHomeAppBar(
+                key: ValueKey(
+                  '${session.userId}_${session.profilePic ?? session.userName}',
+                ),
+                title: 'Welcome',
+                subTitle:
+                    session.userName.isNotEmpty ? session.userName : 'Guide',
+                imageUrl: session.profilePic?.toHttps(),
+                onTap: () async {
+                  if (session.userId.isEmpty) return;
+                  await context.pushNamed(
+                    AppRoutes.tourGuideProfileScreen,
+                    pathParameters: {'userId': session.userId},
+                  );
+                  if (context.mounted) {
+                    context.read<GuideSessionCubit>().loadFromCache();
+                  }
+                },
+              ),
+              SizedBox(height: 25.h),
+              const GuideBookingsLiveFeed(),
+              SizedBox(height: 25.h),
+              if (tours.isNotEmpty) ...[
+                _buildActiveToursHeader(),
+                SizedBox(height: 10.h),
+                _buildTourCard(
+                  context: context,
+                  image: 'assets/images/png/pyramids.jpg',
+                  title: 'Giza Pyramids & Sphinx Tour',
+                ),
+                SizedBox(height: 20.h),
+                _buildTourCard(
+                  context: context,
+                  image: 'assets/images/png/pyramids.jpg',
+                  title: 'Luxor Hot Air Balloon Adventure',
+                ),
+              ],
+              SizedBox(height: 30.h),
+            ],
           ),
         ),
-        SizedBox(width: 10.w),
-        Expanded(
-          child: _buildStatCard(
-            title: 'Total Tourists',
-            value: '0 Tourist',
-            icon: Icons.groups_2_outlined,
-            valueColor: Colors.blue,
-          ),
-        ),
-        SizedBox(width: 10.w),
-        Expanded(
-          child: _buildStatCard(
-            title: 'Inactive Tours',
-            value: '0 Tours',
-            icon: Icons.disabled_by_default,
-            valueColor: Colors.red,
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -203,155 +261,6 @@ class GuideApp extends StatelessWidget {
     );
   }
 
-  // Widget _buildEmptyToursState(BuildContext context) {
-  //   return Container(
-  //     width: double.infinity,
-  //     padding: EdgeInsets.symmetric(vertical: 50.h),
-
-  //     child: Column(
-  //       children: [
-  //         Icon(
-  //           Icons.inventory_2_outlined,
-  //           size: 120.sp,
-  //           color: Colors.grey.shade300,
-  //         ),
-
-  //         SizedBox(height: 20.h),
-
-  //         GestureDetector(
-  //           onTap: () {
-  //             Navigator.push(
-  //               context,
-  //               MaterialPageRoute(builder: (context) => EditTourScreen()),
-  //             );
-  //           },
-
-  //           child: Container(
-  //             width: 65.w,
-  //             height: 65.h,
-
-  //             decoration: BoxDecoration(
-  //               shape: BoxShape.circle,
-  //               border: Border.all(color: AppColors.primaryColor, width: 2),
-  //             ),
-
-  //             child: Icon(
-  //               Icons.add,
-  //               color: AppColors.primaryColor,
-  //               size: 35.sp,
-  //             ),
-  //           ),
-  //         ),
-
-  //         SizedBox(height: 20.h),
-
-  //         Text(
-  //           "Create New Tour",
-  //           style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
-  //         ),
-
-  //         SizedBox(height: 10.h),
-
-  //         Text(
-  //           "Add a new adventure to your list",
-  //           style: TextStyle(color: Colors.grey, fontSize: 16.sp),
-  //         ),
-
-  //         SizedBox(height: 30.h),
-
-  //         SizedBox(
-  //           width: 220.w,
-  //           height: 52.h,
-
-  //           child: ElevatedButton(
-  //             style: ElevatedButton.styleFrom(
-  //               backgroundColor: AppColors.primaryColor,
-
-  //               shape: RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.circular(14.r),
-  //               ),
-  //             ),
-
-  //             onPressed: () {
-  //               Navigator.push(
-  //                 context,
-  //                 MaterialPageRoute(
-  //                   builder: (context) => const EditTourScreen(),
-  //                 ),
-  //               );
-  //             },
-
-  //             child: Text(
-  //               "Create Tour",
-  //               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // =========================
-  // Stats Card
-  // =========================
-
-  Widget _buildStatCard({
-    required String title,
-    required String value,
-    required IconData icon,
-    required Color valueColor,
-  }) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 14.h),
-
-      decoration: BoxDecoration(
-        color: Colors.white,
-
-        borderRadius: BorderRadius.circular(16.r),
-
-        border: Border.all(color: AppColors.primaryColor),
-
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-
-      child: Column(
-        children: [
-          Icon(icon, color: valueColor, size: 20.sp),
-
-          SizedBox(height: 8.h),
-
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
-          ),
-
-          SizedBox(height: 6.h),
-
-          Text(
-            value,
-            style: TextStyle(
-              color: valueColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 14.sp,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // =========================
-  // Tour Card
-  // =========================
-
   Widget _buildTourCard({
     required BuildContext context,
     required String image,
@@ -361,7 +270,6 @@ class GuideApp extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18.r),
-
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
@@ -370,14 +278,12 @@ class GuideApp extends StatelessWidget {
           ),
         ],
       ),
-
       child: Column(
         children: [
           Stack(
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(18.r)),
-
                 child: Image.asset(
                   image,
                   width: double.infinity,
@@ -385,11 +291,9 @@ class GuideApp extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-
               Positioned(
                 top: 10.h,
                 right: 10.w,
-
                 child: Row(
                   children: [
                     GestureDetector(
@@ -401,34 +305,21 @@ class GuideApp extends StatelessWidget {
                           ),
                         );
                       },
-
-                      child: _smallActionButton(
-                        title: "Edit",
-                        color: Colors.orange,
-                      ),
+                      child: _smallActionButton(title: "Edit", color: Colors.orange),
                     ),
-
                     SizedBox(width: 6.w),
-
                     GestureDetector(
                       onTap: () {},
-
-                      child: _smallActionButton(
-                        title: "Delete",
-                        color: Colors.red,
-                      ),
+                      child: _smallActionButton(title: "Delete", color: Colors.red),
                     ),
                   ],
                 ),
               ),
-
               Positioned.fill(
                 child: Container(
                   alignment: Alignment.center,
-
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20.w),
-
                     child: Text(
                       title,
                       textAlign: TextAlign.center,
@@ -443,101 +334,40 @@ class GuideApp extends StatelessWidget {
               ),
             ],
           ),
-
           Padding(
             padding: EdgeInsets.all(14.sp),
-
             child: Column(
               children: [
                 Row(
                   children: [
-                    Icon(
-                      Icons.price_change_outlined,
-                      color: Colors.green,
-                      size: 18.sp,
-                    ),
-
+                    Icon(Icons.price_change_outlined,
+                        color: Colors.green, size: 18.sp),
                     SizedBox(width: 6.w),
-
-                    Text(
-                      "Price : ",
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-
-                    Text(
-                      "1500 EGP",
-                      style: TextStyle(
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-
+                    Text("Price : ",
+                        style: TextStyle(fontWeight: FontWeight.w600)),
+                    Text("1500 EGP",
+                        style: TextStyle(
+                            color: Colors.green, fontWeight: FontWeight.bold)),
                     const Spacer(),
-
                     Icon(Icons.timer_outlined, color: Colors.blue, size: 18.sp),
-
                     SizedBox(width: 6.w),
-
-                    Text(
-                      "Duration : ",
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-
-                    Text(
-                      "4 Hours",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    Text("Duration : ",
+                        style: TextStyle(fontWeight: FontWeight.w600)),
+                    Text("4 Hours",
+                        style: TextStyle(
+                            color: Colors.blue, fontWeight: FontWeight.bold)),
                   ],
                 ),
-
-                SizedBox(height: 12.h),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-
-                  children: [
-                    Icon(
-                      Icons.groups_outlined,
-                      color: Colors.orange,
-                      size: 18.sp,
-                    ),
-
-                    SizedBox(width: 6.w),
-
-                    Text(
-                      "Max Capacity : ",
-                      style: TextStyle(fontWeight: FontWeight.w600),
-                    ),
-
-                    Text(
-                      "12 People",
-                      style: TextStyle(
-                        color: Colors.orange,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-
                 SizedBox(height: 16.h),
-
                 SizedBox(
                   width: double.infinity,
-
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryColor,
-
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
+                          borderRadius: BorderRadius.circular(12.r)),
                     ),
-
                     onPressed: () {},
-
                     child: const Text("View Details"),
                   ),
                 ),
@@ -549,26 +379,17 @@ class GuideApp extends StatelessWidget {
     );
   }
 
-  // =========================
-  // Small Action Button
-  // =========================
-
   Widget _smallActionButton({required String title, required Color color}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(8.r),
       ),
-
       child: Text(
         title,
         style: TextStyle(
-          color: Colors.white,
-          fontSize: 12.sp,
-          fontWeight: FontWeight.bold,
-        ),
+            color: Colors.white, fontSize: 12.sp, fontWeight: FontWeight.bold),
       ),
     );
   }

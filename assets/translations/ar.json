@@ -342,5 +342,21 @@
     "ai_typing": "الذكاء الاصطناعي يكتب...",
     "upload_image": "رفع صورة",
     "recommendations": "موصى به لك",
-    "connection_lost": "انقطع الاتصال. جاري إعادة الاتصال..."
+    "connection_lost": "انقطع الاتصال. جاري إعادة الاتصال...",
+    "chatMessages": "الرسائل",
+    "chatConversations": "المحادثات",
+    "chatNoConversations": "لا توجد محادثات بعد",
+    "chatNoConversationsHint": "زر ملف مرشد واضغط «محادثة» لبدء محادثة.",
+    "chatTypeMessage": "اكتب رسالة...",
+    "chatEditMessage": "تعديل الرسالة...",
+    "chatEditing": "تعديل",
+    "chatMessageDeleted": "تم حذف الرسالة",
+    "chatBlocked": "هذه المحادثة محظورة.",
+    "chatBlock": "حظر المستخدم",
+    "chatUnblock": "رفع الحظر",
+    "chatSayHello": "قل مرحبًا!",
+    "chatSayHelloHint": "أرسل أول رسالة لبدء المحادثة.",
+    "chatConnect": "محادثة",
+    "chatConnecting": "جارٍ الاتصال...",
+    "chatRetry": "إعادة المحاولة"
 }

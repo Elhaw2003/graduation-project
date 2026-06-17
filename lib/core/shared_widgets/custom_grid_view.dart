@@ -20,7 +20,6 @@ class CustomGridView extends StatelessWidget {
     this.city,
     this.type,
     this.period,
-    this.heroImageUrl,
   });
 
   final String title;
@@ -34,16 +33,12 @@ class CustomGridView extends StatelessWidget {
   final String? city;
   final String? type;
   final String? period;
-  final String? heroImageUrl;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.push(
-          '${AppRoutes.detailsScreen}/$placeId',
-          extra: heroImageUrl ?? imageUrl,
-        );
+        context.push('${AppRoutes.detailsScreen}/$placeId');
       },
       child: Container(
         clipBehavior: Clip.antiAlias,

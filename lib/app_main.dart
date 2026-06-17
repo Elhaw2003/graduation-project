@@ -10,7 +10,9 @@ import 'package:smart_guide/feature/aiGuide/presentation/view/ai_guide_screen.da
 import 'package:smart_guide/feature/all_guides/data/repo/tour_guides_repo_imple.dart';
 import 'package:smart_guide/feature/all_guides/presentation/cubit/tour_guides_cubit.dart';
 import 'package:smart_guide/feature/all_guides/presentation/view/all_guides_screen.dart';
-import 'package:smart_guide/feature/explor/presentation/view/explore_ar_spots_screen.dart';
+import 'package:smart_guide/feature/chat/data/repo/chat_repo_impl.dart';
+import 'package:smart_guide/feature/chat/presentation/cubit/chat_inbox/chat_inbox_cubit.dart';
+import 'package:smart_guide/feature/chat/presentation/view/screens/chat_inbox_screen.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
 import 'package:smart_guide/feature/tour_guide_profile/data/repo/save_guides/save_guides_repo_imple.dart';
 import 'package:smart_guide/feature/tour_guide_profile/presentation/cubit/save_guides/save_guides_cubit.dart';
@@ -34,7 +36,6 @@ class _TouristAppState extends State<TouristApp> {
         index: _bottomNavIndex,
         children: [
           const HomeScreen(),
-          // const ChooseGuidesScreen(),
           MultiBlocProvider(
             providers: [
               BlocProvider(
@@ -58,7 +59,12 @@ class _TouristAppState extends State<TouristApp> {
             create: (_) => AiGuideCubit(service: AiChatService()),
             child: const AiGuideScreen(),
           ),
-          const ExploreArSpotsScreen(),
+          BlocProvider(
+            create: (_) => ChatInboxCubit(
+              chatRepo: ChatRepoImpl(apiConsumer: DioConsumer(dio: Dio())),
+            ),
+            child: const ChatInboxScreen(),
+          ),
         ],
       ),
       bottomNavigationBar: CustomBottomNavBar(

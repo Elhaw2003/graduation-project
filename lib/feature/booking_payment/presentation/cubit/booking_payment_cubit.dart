@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:smart_guide/feature/booking_payment/data/model/tour_slot_model.dart';
 import 'package:smart_guide/feature/booking_payment/data/repo/booking_payment_repo.dart';
 import 'package:smart_guide/feature/booking_payment/presentation/cubit/booking_payment_states.dart';
+import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class BookingAndPaymentCubit extends Cubit<BookingPaymentState> {
   final BookingPaymentRepo bookingPaymentRepo;
@@ -128,7 +130,7 @@ class BookingAndPaymentCubit extends Cubit<BookingPaymentState> {
           await Stripe.instance.initPaymentSheet(
             paymentSheetParameters: SetupPaymentSheetParameters(
               paymentIntentClientSecret: intentResponse.clientSecret,
-              merchantDisplayName: 'Smart Guide',
+              merchantDisplayName: LocaleKeys.appName.tr(),
               style: ThemeMode.system,
             ),
           );

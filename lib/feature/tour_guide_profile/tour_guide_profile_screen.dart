@@ -21,6 +21,10 @@ import 'package:smart_guide/feature/booking_payment/presentation/cubit/booking_p
 import 'package:smart_guide/core/network/dio_consumer.dart';
 import 'package:smart_guide/feature/tour_guide_profile/action_row_in_tour_guide_screen.dart';
 import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_body.dart';
+import 'package:smart_guide/feature/chat/data/model/conversation_model.dart';
+import 'package:smart_guide/feature/chat/data/repo/chat_repo_impl.dart';
+import 'package:smart_guide/feature/chat/presentation/cubit/chat_inbox/chat_inbox_cubit.dart';
+import 'package:smart_guide/feature/chat/presentation/cubit/chat_inbox/chat_inbox_states.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class TourGuideProfileScreen extends StatefulWidget {
@@ -206,7 +210,57 @@ class _TourGuideProfileScreenState extends State<TourGuideProfileScreen> {
                     ),
                     SizedBox(height: 10.h),
                   ],
-                  if (!_isGuide)
+                  if (!_isGuide) ...[
+                    BlocProvider(
+                      create: (_) => ChatInboxCubit(
+                        chatRepo:
+                            ChatRepoImpl(apiConsumer: DioConsumer(dio: Dio())),
+                      ),
+                      child: BlocConsumer<ChatInboxCubit, ChatInboxState>(
+                        listener: (context, state) {
+                          if (state is ChatConversationStarted) {
+                            context.pushNamed(
+                              AppRoutes.chatRoomScreen,
+                              pathParameters: {
+                                'conversationId': state.conversation.id,
+                              },
+                              extra: state.conversation,
+                            );
+                          } else if (state is ChatStartConversationFailure) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(state.message),
+                                backgroundColor: AppColors.redAppColor,
+                              ),
+                            );
+                          }
+                        },
+                        builder: (context, state) {
+                          final isLoading =
+                              state is ChatStartingConversation;
+                          return CustomButtonWidget(
+                            onPressed: isLoading
+                                ? null
+                                : () {
+                                    context
+                                        .read<ChatInboxCubit>()
+                                        .startConversation(
+                                          otherPartyUserId: guide.userId,
+                                        );
+                                  },
+                            prefixIcon: isLoading
+                                ? null
+                                : Icons.chat_bubble_outline_rounded,
+                            prefixIconColor: Colors.white,
+                            title: isLoading ? 'Connecting...' : 'Chat',
+                            titleStyle: AppTextStyle.backgroundW500S17,
+                            buttonColor: AppColors.primaryColor,
+                            buttonWidth: double.infinity,
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
                     CustomButtonWidget(
                       onPressed: () {
                         Navigator.push(
@@ -220,8 +274,7 @@ class _TourGuideProfileScreenState extends State<TourGuideProfileScreen> {
                                 ),
                                 BlocProvider(
                                   create: (_) => BookingAndPaymentCubit(
-                                    bookingPaymentRepo:
-                                        BookingPaymentRepoImpl(
+                                    bookingPaymentRepo: BookingPaymentRepoImpl(
                                       apiConsumer: DioConsumer(dio: Dio()),
                                     ),
                                   ),
@@ -238,6 +291,7 @@ class _TourGuideProfileScreenState extends State<TourGuideProfileScreen> {
                       buttonColor: Colors.transparent,
                       buttonWidth: double.infinity,
                     ),
+                  ],
                 ],
               ),
             );

@@ -66,6 +66,36 @@ class EndPoint {
 
   /// ================= GUIDE BOOKINGS FEED =================
   static const String guideBookings = "Bookings/guide-bookings";
+
+  /// ================= CHAT =================
+  static String chatConversations({int page = 1, int pageSize = 30}) =>
+      "chat/conversations?page=$page&pageSize=$pageSize";
+  static const String chatStartConversation = "chat/conversations";
+  static String chatGetConversation({required String conversationId}) =>
+      "chat/conversations/$conversationId";
+  static String chatMessages({
+    required String conversationId,
+    int pageSize = 30,
+    String? beforeSentAtUtc,
+  }) {
+    var url =
+        "chat/conversations/$conversationId/messages?pageSize=$pageSize";
+    if (beforeSentAtUtc != null) url += "&beforeSentAtUtc=$beforeSentAtUtc";
+    return url;
+  }
+
+  static String chatSendMessage({required String conversationId}) =>
+      "chat/conversations/$conversationId/messages";
+  static String chatEditMessage({required String messageId}) =>
+      "chat/messages/$messageId";
+  static String chatDeleteMessage({required String messageId}) =>
+      "chat/messages/$messageId";
+  static String chatMarkAsRead({required String conversationId}) =>
+      "chat/conversations/$conversationId/read";
+  static String chatBlockConversation({required String conversationId}) =>
+      "chat/conversations/$conversationId/block";
+  static String chatUnblockConversation({required String conversationId}) =>
+      "chat/conversations/$conversationId/unblock";
 }
 
 class ApiKey {

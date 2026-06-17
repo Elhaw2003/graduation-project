@@ -23,9 +23,7 @@ class SearchPlacesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => SearchPlacesCubit(
-        getPlacesRepo: GetPlacesRepoImple(
-          apiConsumer: DioConsumer(dio: Dio()),
-        ),
+        getPlacesRepo: GetPlacesRepoImple(apiConsumer: DioConsumer(dio: Dio())),
       ),
       child: const _SearchPlacesBody(),
     );
@@ -173,17 +171,15 @@ class _SearchPlacesBodyState extends State<_SearchPlacesBody> {
 
                     final isSaved = savedIds.contains(place.id);
 
-                    final resolvedImage = resolvePlaceImage(place.imageUrl, index);
                     return CustomGridView(
                       title: place.name,
-                      imageUrl: resolvedImage,
+                      imageUrl: place.imageUrl,
                       rating: place.rating,
                       placeId: place.id.toString(),
                       city: place.city,
                       type: place.type,
                       period: place.period,
                       isSaved: isSaved,
-                      heroImageUrl: resolvedImage,
                       onSaveTap: () {
                         final savedCubit = context.read<SavedPlacesCubit>();
 

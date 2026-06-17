@@ -39,4 +39,7 @@ class AppRoutes {
 
   static const String editTourScreen = '/editTourScreen';
   static const String editGuideProfileScreen = '/editGuideProfileScreen';
+
+  static const String chatInboxScreen = '/chatInboxScreen';
+  static const String chatRoomScreen = '/chatRoomScreen';
 }
