@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
@@ -208,6 +209,30 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                   onTap: () {
                     Navigator.pop(context);
                     _showDeleteConfirmation(context, message.id);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.copy_rounded,
+                    color: AppColors.primaryColor,
+                    size: 22.sp,
+                  ),
+                  title: Text(
+                    'Copy Message',
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: AppColors.primaryColor,
+                    ),
+                  ),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    await Clipboard.setData(
+                      ClipboardData(text: message.content),
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Message copied')),
+                    );
                   },
                 ),
               ],
@@ -525,6 +550,8 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                             return ChatBubble(
                               message: message,
                               isMine: isMine,
+                              isConversationRead:
+                                  state.conversation.unreadCount == 0,
                               onLongPress: () =>
                                   _showMessageMenu(context, message, state),
                             );

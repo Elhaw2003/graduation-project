@@ -9,6 +9,11 @@ import 'package:smart_guide/feature/guide_dashboard/presentation/cubit/guide_das
 import 'package:smart_guide/feature/guide_dashboard/presentation/cubit/guide_dashboard_states.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
+// Tracks which booking IDs are currently being confirmed (loading state).
+final _confirmingIds = <String>{};
+// Tracks booking IDs that were successfully confirmed this session.
+final _confirmedIds = <String>{};
+
 class GuideBookingsLiveFeed extends StatefulWidget {
   const GuideBookingsLiveFeed({super.key});
 
@@ -45,21 +50,50 @@ class _GuideBookingsLiveFeedState extends State<GuideBookingsLiveFeed>
   Widget build(BuildContext context) {
     return BlocConsumer<GuideDashboardCubit, GuideDashboardState>(
       listenWhen: (prev, curr) =>
-          curr is GetGuideBookingsSuccess || curr is GetGuideBookingsFailure,
+          curr is GetGuideBookingsSuccess ||
+          curr is GetGuideBookingsFailure ||
+          curr is ConfirmBookingSuccess ||
+          curr is ConfirmBookingFailure,
       listener: (context, state) {
         if (state is GetGuideBookingsSuccess) {
           _fadeController.forward(from: 0.0);
+        }
+        if (state is ConfirmBookingSuccess) {
+          _confirmingIds.remove(state.bookingId);
+          _confirmedIds.add(state.bookingId);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('Booking confirmed successfully!'),
+              backgroundColor: AppColors.greenColor,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
+          // Refresh the feed so the confirmed booking is removed
+          context.read<GuideDashboardCubit>().fetchGuideBookings();
+        }
+        if (state is ConfirmBookingFailure) {
+          _confirmingIds.remove(state.bookingId);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+              backgroundColor: AppColors.redAppColor,
+              behavior: SnackBarBehavior.floating,
+            ),
+          );
         }
       },
       buildWhen: (prev, curr) =>
           curr is GetGuideBookingsLoading ||
           curr is GetGuideBookingsSuccess ||
-          curr is GetGuideBookingsFailure,
+          curr is GetGuideBookingsFailure ||
+          curr is ConfirmBookingLoading ||
+          curr is ConfirmBookingSuccess ||
+          curr is ConfirmBookingFailure,
       builder: (context, state) {
         final pendingCount = state is GetGuideBookingsSuccess
             ? state.guideBookingsList
-                .where((b) => b.status.toLowerCase() == 'pending')
-                .length
+                  .where((b) => b.status.toLowerCase() == 'pending')
+                  .length
             : 0;
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,26 +105,28 @@ class _GuideBookingsLiveFeedState extends State<GuideBookingsLiveFeed>
             else if (state is GetGuideBookingsFailure)
               _buildErrorCard(state.errorMessage)
             else if (state is GetGuideBookingsSuccess)
-              Builder(builder: (context) {
-                final pendingBookings = state.guideBookingsList
-                    .where((b) => b.status.toLowerCase() == 'pending')
-                    .toList();
-                return pendingBookings.isEmpty
-                    ? _buildEmptyState()
-                    : FadeTransition(
-                        opacity: _fadeAnimation,
-                        child: Column(
-                          children: pendingBookings
-                              .map(
-                                (booking) => Padding(
-                                  padding: EdgeInsets.only(bottom: 18.h),
-                                  child: _GuideBookingCard(booking: booking),
-                                ),
-                              )
-                              .toList(),
-                        ),
-                      );
-              })
+              Builder(
+                builder: (context) {
+                  final pendingBookings = state.guideBookingsList
+                      .where((b) => b.status.toLowerCase() == 'pending')
+                      .toList();
+                  return pendingBookings.isEmpty
+                      ? _buildEmptyState()
+                      : FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: Column(
+                            children: pendingBookings
+                                .map(
+                                  (booking) => Padding(
+                                    padding: EdgeInsets.only(bottom: 18.h),
+                                    child: _GuideBookingCard(booking: booking),
+                                  ),
+                                )
+                                .toList(),
+                          ),
+                        );
+                },
+              )
             else
               const SizedBox.shrink(),
           ],
@@ -133,7 +169,9 @@ class _GuideBookingsLiveFeedState extends State<GuideBookingsLiveFeed>
                     CustomWidthSpacingWidget(width: 8),
                     Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: 8.w, vertical: 3.h),
+                        horizontal: 8.w,
+                        vertical: 3.h,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.orangeColor,
                         borderRadius: BorderRadius.circular(20.r),
@@ -304,10 +342,24 @@ class _GuideBookingsLiveFeedState extends State<GuideBookingsLiveFeed>
   }
 }
 
-class _GuideBookingCard extends StatelessWidget {
+class _GuideBookingCard extends StatefulWidget {
   final GuideBookingModel booking;
 
   const _GuideBookingCard({required this.booking});
+
+  @override
+  State<_GuideBookingCard> createState() => _GuideBookingCardState();
+}
+
+class _GuideBookingCardState extends State<_GuideBookingCard> {
+  GuideBookingModel get booking => widget.booking;
+
+  bool get _isConfirming => _confirmingIds.contains(booking.id);
+
+  void _onConfirm() {
+    setState(() => _confirmingIds.add(booking.id));
+    context.read<GuideDashboardCubit>().confirmBooking(bookingId: booking.id);
+  }
 
   String _formatDate(String raw) {
     try {
@@ -386,7 +438,9 @@ class _GuideBookingCard extends StatelessWidget {
                     SizedBox(height: 12.h),
                     Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: 12.w, vertical: 6.h),
+                        horizontal: 12.w,
+                        vertical: 6.h,
+                      ),
                       decoration: BoxDecoration(
                         color: pendingColor,
                         borderRadius: BorderRadius.circular(20.r),
@@ -394,8 +448,11 @@ class _GuideBookingCard extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.schedule_rounded,
-                              color: Colors.white, size: 13.sp),
+                          Icon(
+                            Icons.schedule_rounded,
+                            color: Colors.white,
+                            size: 13.sp,
+                          ),
                           SizedBox(width: 5.w),
                           Text(
                             'PENDING',
@@ -454,15 +511,17 @@ class _GuideBookingCard extends StatelessWidget {
             children: [
               const Divider(height: 1, color: Color(0xFFF3F4F6)),
               Container(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20.r),
                   border: Border.all(color: const Color(0xFFF3F4F6)),
                 ),
-                child: Icon(Icons.more_horiz_rounded,
-                    size: 16.sp, color: AppColors.grey300Color),
+                child: Icon(
+                  Icons.more_horiz_rounded,
+                  size: 16.sp,
+                  color: AppColors.grey300Color,
+                ),
               ),
             ],
           ),
@@ -533,7 +592,9 @@ class _GuideBookingCard extends StatelessWidget {
                     children: booking.selectedAddOns.map((addon) {
                       return Container(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 12.w, vertical: 6.h),
+                          horizontal: 12.w,
+                          vertical: 6.h,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.contanerColore,
                           borderRadius: BorderRadius.circular(10.r),
@@ -541,9 +602,11 @@ class _GuideBookingCard extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.add_circle_outline_rounded,
-                                size: 13.sp,
-                                color: AppColors.secondaryColor),
+                            Icon(
+                              Icons.add_circle_outline_rounded,
+                              size: 13.sp,
+                              color: AppColors.secondaryColor,
+                            ),
                             SizedBox(width: 5.w),
                             Text(
                               '${addon.title}  +${addon.price.toStringAsFixed(0)} EGP',
@@ -559,6 +622,54 @@ class _GuideBookingCard extends StatelessWidget {
                     }).toList(),
                   ),
                 ],
+
+                // ── Confirm button ────────────────────────────────────────
+                SizedBox(height: 20.h),
+                if (booking.paymentMethod == "Cash")
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50.h,
+                    child: ElevatedButton(
+                      onPressed: _isConfirming ? null : _onConfirm,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.greenColor,
+                        disabledBackgroundColor: AppColors.greenColor
+                            .withOpacity(0.5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: _isConfirming
+                          ? SizedBox(
+                              width: 22.sp,
+                              height: 22.sp,
+                              child: const CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.check_circle_outline_rounded,
+                                  color: Colors.white,
+                                  size: 20.sp,
+                                ),
+                                SizedBox(width: 8.w),
+                                Text(
+                                  'Confirm Booking',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
               ],
             ),
           ),

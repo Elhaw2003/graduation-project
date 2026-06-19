@@ -1,9 +1,9 @@
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:smart_guide/core/di.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
 import 'package:smart_guide/core/shared_widgets/custom_button_widget.dart';
@@ -13,16 +13,11 @@ import 'package:smart_guide/feature/all_guides/data/model/tour_guide_model.dart'
 import 'package:smart_guide/feature/all_guides/presentation/cubit/tour_guides_cubit.dart';
 import 'package:smart_guide/feature/all_guides/presentation/cubit/tour_guides_states.dart';
 import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
-import 'package:smart_guide/feature/book_now/data/booknow/book_now_service.dart';
 import 'package:smart_guide/feature/book_now/data/booknow/booknow_cubit.dart';
 import 'package:smart_guide/feature/book_now/presentation/view/book_now_screen.dart';
-import 'package:smart_guide/feature/booking_payment/data/repo/booking_payment_repo_impl.dart';
 import 'package:smart_guide/feature/booking_payment/presentation/cubit/booking_payment_cubit.dart';
-import 'package:smart_guide/core/network/dio_consumer.dart';
 import 'package:smart_guide/feature/tour_guide_profile/action_row_in_tour_guide_screen.dart';
 import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_body.dart';
-import 'package:smart_guide/feature/chat/data/model/conversation_model.dart';
-import 'package:smart_guide/feature/chat/data/repo/chat_repo_impl.dart';
 import 'package:smart_guide/feature/chat/presentation/cubit/chat_inbox/chat_inbox_cubit.dart';
 import 'package:smart_guide/feature/chat/presentation/cubit/chat_inbox/chat_inbox_states.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
@@ -159,6 +154,7 @@ class _TourGuideProfileScreenState extends State<TourGuideProfileScreen> {
                     languages: guide.languages,
                     gallery: guide.gallery,
                     guidedId: guide.userId,
+                    whatsAppNumber: guide.whatsAppNumber,
                   ),
                 ),
                 _pinnedActionBar(
@@ -212,10 +208,7 @@ class _TourGuideProfileScreenState extends State<TourGuideProfileScreen> {
                   ],
                   if (!_isGuide) ...[
                     BlocProvider(
-                      create: (_) => ChatInboxCubit(
-                        chatRepo:
-                            ChatRepoImpl(apiConsumer: DioConsumer(dio: Dio())),
-                      ),
+                      create: (_) => sl<ChatInboxCubit>(),
                       child: BlocConsumer<ChatInboxCubit, ChatInboxState>(
                         listener: (context, state) {
                           if (state is ChatConversationStarted) {
@@ -236,8 +229,7 @@ class _TourGuideProfileScreenState extends State<TourGuideProfileScreen> {
                           }
                         },
                         builder: (context, state) {
-                          final isLoading =
-                              state is ChatStartingConversation;
+                          final isLoading = state is ChatStartingConversation;
                           return CustomButtonWidget(
                             onPressed: isLoading
                                 ? null
@@ -269,15 +261,11 @@ class _TourGuideProfileScreenState extends State<TourGuideProfileScreen> {
                             builder: (context) => MultiBlocProvider(
                               providers: [
                                 BlocProvider(
-                                  create: (_) =>
-                                      BookNowCubit(BookNowService(Dio())),
+                                  create: (_) => sl<BookNowCubit>(),
                                 ),
                                 BlocProvider(
-                                  create: (_) => BookingAndPaymentCubit(
-                                    bookingPaymentRepo: BookingPaymentRepoImpl(
-                                      apiConsumer: DioConsumer(dio: Dio()),
-                                    ),
-                                  ),
+                                  create: (_) =>
+                                      sl<BookingAndPaymentCubit>(),
                                 ),
                               ],
                               child: BookNowScreen(guideId: guide.userId),

@@ -238,3 +238,24 @@ class EditTourFailure extends GuideDashboardState {
   final String errorMessage;
   const EditTourFailure({required this.errorMessage});
 }
+
+// --- 18. Confirm Booking ---
+class ConfirmBookingLoading extends GuideDashboardState {
+  final String bookingId;
+  const ConfirmBookingLoading({required this.bookingId});
+}
+
+class ConfirmBookingSuccess extends GuideDashboardState {
+  final String bookingId;
+  final String message;
+  const ConfirmBookingSuccess({required this.bookingId, required this.message});
+}
+
+class ConfirmBookingFailure extends GuideDashboardState {
+  final String bookingId;
+  final String errorMessage;
+  const ConfirmBookingFailure({
+    required this.bookingId,
+    required this.errorMessage,
+  });
+}

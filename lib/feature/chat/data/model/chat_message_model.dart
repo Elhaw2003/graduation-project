@@ -12,6 +12,8 @@ class ChatMessageModel {
   final DateTime? editedAtUtc;
   final bool isDeleted;
   final DateTime? deletedAtUtc;
+  // Transient — true only for optimistic messages not yet confirmed by server
+  final bool isSending;
 
   const ChatMessageModel({
     required this.id,
@@ -27,11 +29,27 @@ class ChatMessageModel {
     this.editedAtUtc,
     required this.isDeleted,
     this.deletedAtUtc,
+    this.isSending = false,
   });
 
   bool get canEdit =>
       !isDeleted &&
       DateTime.now().difference(sentAtUtc).inMinutes < 5;
+
+  // Dart supports max 6 fractional second digits; server may send 7+.
+  // Also ensures the result is always UTC so .toLocal() works correctly.
+  static DateTime _parseUtc(String? s) {
+    if (s == null || s.isEmpty) return DateTime.now().toUtc();
+    final fixed = s.replaceFirstMapped(
+      RegExp(r'(\.\d{6})\d+'),
+      (m) => m.group(1)!,
+    );
+    final dt = DateTime.tryParse(fixed);
+    if (dt == null) return DateTime.now().toUtc();
+    return dt.isUtc ? dt : DateTime.utc(
+      dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, dt.millisecond,
+    );
+  }
 
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
     return ChatMessageModel(
@@ -40,13 +58,12 @@ class ChatMessageModel {
       senderUserId: json['senderUserId'] as String? ?? '',
       content: json['content'] as String? ?? '',
       displayContent: json['displayContent'] as String?,
-      sentAtUtc:
-          DateTime.tryParse(json['sentAtUtc'] as String? ?? '') ?? DateTime.now(),
+      sentAtUtc: _parseUtc(json['sentAtUtc'] as String?),
       deliveredAtUtc: json['deliveredAtUtc'] != null
-          ? DateTime.tryParse(json['deliveredAtUtc'] as String)
+          ? _parseUtc(json['deliveredAtUtc'] as String?)
           : null,
       seenAtUtc: json['seenAtUtc'] != null
-          ? DateTime.tryParse(json['seenAtUtc'] as String)
+          ? _parseUtc(json['seenAtUtc'] as String?)
           : null,
       status: json['status'] as int? ?? 0,
       isEdited: json['isEdited'] as bool? ?? false,

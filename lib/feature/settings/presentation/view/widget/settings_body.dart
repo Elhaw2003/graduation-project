@@ -1,14 +1,12 @@
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_guide/core/network/dio_consumer.dart';
+import 'package:smart_guide/core/di.dart';
 import 'package:smart_guide/core/shared_widgets/custom_arrow_forward.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/shared_widgets/custom_switch_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
-import 'package:smart_guide/feature/settings/data/repo/log_out/log_out_repo_imple.dart';
 import 'package:smart_guide/feature/settings/presentation/cubit/log_out/cubit/log_out_cubit.dart';
 import 'package:smart_guide/feature/settings/presentation/view/widget/log_out_dialog.dart';
 import 'package:smart_guide/feature/settings/presentation/view/widget/settings_card_widget.dart';
@@ -122,12 +120,8 @@ class SettingsBody extends StatelessWidget {
                     showDialog(
                       context: context,
                       builder: (context) {
-                        return BlocProvider.value(
-                          value: LogOutCubit(
-                            logOutRepo: LogOutRepoImple(
-                              apiConsumer: DioConsumer(dio: Dio()),
-                            ),
-                          ),
+                        return BlocProvider(
+                          create: (_) => sl<LogOutCubit>(),
                           child: const LogOutDialog(),
                         );
                       },

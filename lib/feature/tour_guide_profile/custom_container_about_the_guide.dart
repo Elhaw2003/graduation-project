@@ -9,6 +9,7 @@ import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:smart_guide/feature/chat/presentation/cubit/chat_inbox/chat_inbox_cubit.dart';
 import 'package:smart_guide/feature/chat/presentation/cubit/chat_inbox/chat_inbox_states.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomContainerAboutTheGuide extends StatefulWidget {
   const CustomContainerAboutTheGuide({
@@ -16,11 +17,12 @@ class CustomContainerAboutTheGuide extends StatefulWidget {
     required this.name,
     required this.aboutGuide,
     required this.guideId,
+    required this.whatsAppNumber,
   });
   final String name;
   final String aboutGuide;
   final String guideId;
-
+  final String whatsAppNumber;
   @override
   State<CustomContainerAboutTheGuide> createState() =>
       _CustomContainerAboutTheGuideState();
@@ -40,6 +42,18 @@ class _CustomContainerAboutTheGuideState
   Future<void> _checkRole() async {
     final type = await SecureStorageHelper.instance.getUserTypeEnum();
     if (mounted) setState(() => _isTourist = type == UserTypeEnum.Tourist);
+  }
+
+  Future<void> _launchUrl() async {
+    final Uri url = Uri.parse(
+      // whatsapp link format: https://wa.me/<number> (number should be in international format without + or leading zeros)
+      // 'https://wa.me/${widget.whatsAppNumber.replaceAll(RegExp(r'\D'), '')}',
+      // telephone link format: tel:<number>
+      'tel:${widget.whatsAppNumber.replaceAll(RegExp(r'\D'), '')}',
+    );
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   @override
@@ -95,6 +109,14 @@ class _CustomContainerAboutTheGuideState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
+                  "Bio",
+                  style: AppTextStyle.primaryTextW500S21.copyWith(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                Text(
                   parsedBio,
                   style: AppTextStyle.primaryTextW400S16.copyWith(
                     fontSize: 14.sp,
@@ -105,6 +127,33 @@ class _CustomContainerAboutTheGuideState
                       ? TextOverflow.visible
                       : TextOverflow.ellipsis,
                 ),
+                SizedBox(height: 8.h),
+                _isTourist
+                    ? Row(
+                        children: [
+                          Icon(
+                            Icons.call,
+                            color: AppColors.primaryColor,
+                            size: 20.sp,
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              _launchUrl();
+                            },
+                            child: Text(
+                              widget.whatsAppNumber,
+                              style: TextStyle(
+                                color: AppColors.primaryColor,
+                                fontSize: 14.sp,
+                                decoration: TextDecoration.underline,
+                                decorationColor: AppColors.primaryColor,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : SizedBox.shrink(),
                 SizedBox(height: 8.h),
                 GestureDetector(
                   onTap: () {
@@ -132,77 +181,80 @@ class _CustomContainerAboutTheGuideState
                 SizedBox(height: 12.h),
 
                 if (_isTourist)
-                BlocConsumer<ChatInboxCubit, ChatInboxState>(
-                  listener: (context, state) {
-                    if (state is ChatConversationStarted) {
-                      context.pushNamed(
-                        AppRoutes.chatRoomScreen,
-                        pathParameters: {'conversationId': state.conversation.id},
-                        extra: state.conversation,
-                      );
-                    } else if (state is ChatStartConversationFailure) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.message)),
-                      );
-                    }
-                  },
-                  builder: (context, state) {
-                    final isLoading = state is ChatStartingConversation;
-                    return Container(
-                      width: double.infinity,
-                      height: 48.h,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.r),
-                        border: Border.all(color: AppColors.primaryColor),
-                      ),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: InkWell(
+                  BlocConsumer<ChatInboxCubit, ChatInboxState>(
+                    listener: (context, state) {
+                      if (state is ChatConversationStarted) {
+                        context.pushNamed(
+                          AppRoutes.chatRoomScreen,
+                          pathParameters: {
+                            'conversationId': state.conversation.id,
+                          },
+                          extra: state.conversation,
+                        );
+                      } else if (state is ChatStartConversationFailure) {
+                        ScaffoldMessenger.of(
+                          context,
+                        ).showSnackBar(SnackBar(content: Text(state.message)));
+                      }
+                    },
+                    builder: (context, state) {
+                      final isLoading = state is ChatStartingConversation;
+                      return Container(
+                        width: double.infinity,
+                        height: 48.h,
+                        decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12.r),
-                          onTap: isLoading
-                              ? null
-                              : () {
-                                  context
-                                      .read<ChatInboxCubit>()
-                                      .startConversation(
-                                        otherPartyUserId: widget.guideId,
-                                      );
-                                },
-                          child: Center(
-                            child: isLoading
-                                ? SizedBox(
-                                    width: 20.w,
-                                    height: 20.h,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: AppColors.primaryColor,
-                                    ),
-                                  )
-                                : Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.chat_bubble_outline_rounded,
+                          border: Border.all(color: AppColors.primaryColor),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(12.r),
+                            onTap: isLoading
+                                ? null
+                                : () {
+                                    context
+                                        .read<ChatInboxCubit>()
+                                        .startConversation(
+                                          otherPartyUserId: widget.guideId,
+                                        );
+                                  },
+                            child: Center(
+                              child: isLoading
+                                  ? SizedBox(
+                                      width: 20.w,
+                                      height: 20.h,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
                                         color: AppColors.primaryColor,
-                                        size: 20.sp,
                                       ),
-                                      SizedBox(width: 8.w),
-                                      Text(
-                                        'Contact Guide',
-                                        style: AppTextStyle.primaryW500S20
-                                            .copyWith(
-                                              color: AppColors.primaryColor,
-                                              fontSize: 15.sp,
-                                            ),
-                                      ),
-                                    ],
-                                  ),
+                                    )
+                                  : Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.chat_bubble_outline_rounded,
+                                          color: AppColors.primaryColor,
+                                          size: 20.sp,
+                                        ),
+                                        SizedBox(width: 8.w),
+                                        Text(
+                                          'Contact Guide',
+                                          style: AppTextStyle.primaryW500S20
+                                              .copyWith(
+                                                color: AppColors.primaryColor,
+                                                fontSize: 15.sp,
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    },
+                  ),
               ],
             ),
           ),

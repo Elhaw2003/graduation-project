@@ -148,137 +148,206 @@ class _ChatInputBarState extends State<ChatInputBar> {
   Widget build(BuildContext context) {
     return BlocBuilder<AiGuideCubit, AiGuideState>(
       builder: (context, state) {
+        final isStreaming = state is AiGuideReady && state.isStreaming;
+        final isUploading = state is AiGuideReady && state.isImageUploading;
         final isDisabled =
             state is AiGuideConnecting ||
             state is AiGuideInitial ||
-            (state is AiGuideReady && state.isImageUploading);
-        final isStreaming = state is AiGuideReady && state.isStreaming;
+            isStreaming ||
+            isUploading;
 
-        return Container(
-          padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 20.h),
-          decoration: const BoxDecoration(color: AppColors.backgroundColor),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 4.h),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24.r),
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.primaryColor.withOpacity(0.08),
-                  blurRadius: 12,
-                  offset: const Offset(0, 2),
+        // Hint text changes to show the user WHY the bar is locked
+        final String hintText = isStreaming
+            ? 'Waiting for response...'
+            : isUploading
+                ? 'Analyzing image...'
+                : LocaleKeys.ask_something.tr();
+
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // ── Locked banner — only shown while AI is busy ───────────
+            AnimatedSize(
+              duration: const Duration(milliseconds: 200),
+              child: isDisabled
+                  ? Container(
+                      width: double.infinity,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20.w, vertical: 6.h),
+                      color: AppColors.primaryColor.withOpacity(0.06),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 10.r,
+                            height: 10.r,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 1.5,
+                              color: AppColors.primaryColor,
+                            ),
+                          ),
+                          SizedBox(width: 8.w),
+                          Text(
+                            isUploading
+                                ? 'Analyzing your image...'
+                                : 'AI is responding...',
+                            style: TextStyle(
+                              fontSize: 12.sp,
+                              color: AppColors.primaryColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+            ),
+
+            // ── Input row ─────────────────────────────────────────────
+            Container(
+              padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 20.h),
+              decoration: const BoxDecoration(color: AppColors.backgroundColor),
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 200),
+                opacity: isDisabled ? 0.45 : 1.0,
+                child: Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 14.w, vertical: 4.h),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24.r),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primaryColor.withOpacity(0.08),
+                        blurRadius: 12,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                    border: Border.all(
+                      color: isDisabled
+                          ? Colors.grey.shade300
+                          : Colors.transparent,
+                      width: 1.5,
+                    ),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      // Image picker button
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 10.h),
+                        child: GestureDetector(
+                          onTap: isDisabled
+                              ? null
+                              : () => _showImageSourcePicker(context),
+                          child: Container(
+                            width: 34.r,
+                            height: 34.r,
+                            decoration: BoxDecoration(
+                              color: isDisabled
+                                  ? Colors.grey[200]
+                                  : AppColors.primaryColor.withOpacity(0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.image_outlined,
+                              size: 18.sp,
+                              color: isDisabled
+                                  ? Colors.grey[400]
+                                  : AppColors.primaryColor,
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10.w),
+                      // Text field
+                      Expanded(
+                        child: Theme(
+                          data: ThemeData(
+                            textSelectionTheme: TextSelectionThemeData(
+                              selectionColor:
+                                  AppColors.primaryColor.withOpacity(0.3),
+                              selectionHandleColor: AppColors.primaryColor,
+                            ),
+                          ),
+                          child: TextFormField(
+                            controller: _controller,
+                            enabled: !isDisabled,
+                            cursorColor: AppColors.primaryColor,
+                            maxLines: null,
+                            minLines: 1,
+                            keyboardType: TextInputType.multiline,
+                            textInputAction: TextInputAction.newline,
+                            decoration: InputDecoration(
+                              hintText: hintText,
+                              hintStyle: TextStyle(
+                                color: isDisabled
+                                    ? Colors.grey[400]
+                                    : Colors.grey[400],
+                                fontSize: 14.sp,
+                                fontStyle: isDisabled
+                                    ? FontStyle.italic
+                                    : FontStyle.normal,
+                              ),
+                              border: InputBorder.none,
+                              contentPadding:
+                                  EdgeInsets.symmetric(vertical: 10.h),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 8.w),
+                      // Send button
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 8.h),
+                        child: GestureDetector(
+                          onTap: (isDisabled || !_hasText) ? null : _send,
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            width: 38.r,
+                            height: 38.r,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: (_hasText && !isDisabled)
+                                  ? const LinearGradient(
+                                      colors: [
+                                        Color(0xFF3B82F6),
+                                        Color(0xFF1E3A8A)
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    )
+                                  : null,
+                              color: (!_hasText || isDisabled)
+                                  ? Colors.grey[200]
+                                  : null,
+                              boxShadow: (_hasText && !isDisabled)
+                                  ? [
+                                      BoxShadow(
+                                        color: AppColors.primaryColor
+                                            .withOpacity(0.4),
+                                        blurRadius: 8,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ]
+                                  : null,
+                            ),
+                            child: Icon(
+                              Icons.send_rounded,
+                              size: 18.sp,
+                              color: (_hasText && !isDisabled)
+                                  ? Colors.white
+                                  : Colors.grey[400],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-              border: Border.all(
-                color: isStreaming
-                    ? AppColors.primaryColor.withOpacity(0.3)
-                    : Colors.transparent,
-                width: 1.5,
               ),
             ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(bottom: 10.h),
-                  child: GestureDetector(
-                    onTap: isDisabled
-                        ? null
-                        : () => _showImageSourcePicker(context),
-                    child: Container(
-                      width: 34.r,
-                      height: 34.r,
-                      decoration: BoxDecoration(
-                        color: isDisabled
-                            ? Colors.grey[200]
-                            : AppColors.primaryColor.withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.image_outlined,
-                        size: 18.sp,
-                        color: isDisabled
-                            ? Colors.grey
-                            : AppColors.primaryColor,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 10.w),
-                Expanded(
-                  child: Theme(
-                    data: ThemeData(
-                      textSelectionTheme: TextSelectionThemeData(
-                        selectionColor: AppColors.primaryColor.withOpacity(0.3),
-                        selectionHandleColor: AppColors.primaryColor,
-                      ),
-                    ),
-                    child: TextFormField(
-                      controller: _controller,
-                      enabled: !isDisabled,
-                      cursorColor: AppColors.primaryColor,
-                      maxLines: null,
-                      minLines: 1,
-                      keyboardType: TextInputType.multiline,
-                      textInputAction: TextInputAction.newline,
-                      decoration: InputDecoration(
-                        hintText: LocaleKeys.ask_something.tr(),
-                        hintStyle: TextStyle(
-                          color: Colors.grey[400],
-                          fontSize: 14.sp,
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(vertical: 10.h),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(width: 8.w),
-                Padding(
-                  padding: EdgeInsets.only(bottom: 8.h),
-                  child: GestureDetector(
-                    onTap: (isDisabled || !_hasText) ? null : _send,
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      width: 38.r,
-                      height: 38.r,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: (_hasText && !isDisabled)
-                            ? const LinearGradient(
-                                colors: [Color(0xFF3B82F6), Color(0xFF1E3A8A)],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              )
-                            : null,
-                        color: (!_hasText || isDisabled)
-                            ? Colors.grey[200]
-                            : null,
-                        boxShadow: (_hasText && !isDisabled)
-                            ? [
-                                BoxShadow(
-                                  color: AppColors.primaryColor.withOpacity(
-                                    0.4,
-                                  ),
-                                  blurRadius: 8,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ]
-                            : null,
-                      ),
-                      child: Icon(
-                        Icons.send_rounded,
-                        size: 18.sp,
-                        color: (_hasText && !isDisabled)
-                            ? Colors.white
-                            : Colors.grey[400],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          ],
         );
       },
     );

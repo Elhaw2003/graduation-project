@@ -1,20 +1,15 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:smart_guide/core/network/dio_consumer.dart';
-import 'package:smart_guide/core/services/ai_chat_service.dart';
+import 'package:smart_guide/core/di.dart';
 import 'package:smart_guide/core/shared_widgets/custom_bottom_nav_bar.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/feature/aiGuide/presentation/cubit/ai_guide_cubit.dart';
 import 'package:smart_guide/feature/aiGuide/presentation/view/ai_guide_screen.dart';
-import 'package:smart_guide/feature/all_guides/data/repo/tour_guides_repo_imple.dart';
 import 'package:smart_guide/feature/all_guides/presentation/cubit/tour_guides_cubit.dart';
 import 'package:smart_guide/feature/all_guides/presentation/view/all_guides_screen.dart';
-import 'package:smart_guide/feature/chat/data/repo/chat_repo_impl.dart';
 import 'package:smart_guide/feature/chat/presentation/cubit/chat_inbox/chat_inbox_cubit.dart';
 import 'package:smart_guide/feature/chat/presentation/view/screens/chat_inbox_screen.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
-import 'package:smart_guide/feature/tour_guide_profile/data/repo/save_guides/save_guides_repo_imple.dart';
 import 'package:smart_guide/feature/tour_guide_profile/presentation/cubit/save_guides/save_guides_cubit.dart';
 
 class TouristApp extends StatefulWidget {
@@ -38,31 +33,19 @@ class _TouristAppState extends State<TouristApp> {
           const HomeScreen(),
           MultiBlocProvider(
             providers: [
+              BlocProvider(create: (_) => sl<TourGuidesCubit>()),
               BlocProvider(
-                create: (context) => TourGuidesCubit(
-                  repository: TourGuidesRepositoryImpl(
-                    apiConsumer: DioConsumer(dio: Dio()),
-                  ),
-                ),
-              ),
-              BlocProvider(
-                create: (_) => SavedGuidesCubit(
-                  savedGuidesRepository: SavedGuidesRepositoryImpl(
-                    apiConsumer: DioConsumer(dio: Dio()),
-                  ),
-                )..getSavedGuides(),
+                create: (_) => sl<SavedGuidesCubit>()..getSavedGuides(),
               ),
             ],
             child: const AllGuidesScreen(),
           ),
           BlocProvider(
-            create: (_) => AiGuideCubit(service: AiChatService()),
+            create: (_) => sl<AiGuideCubit>(),
             child: const AiGuideScreen(),
           ),
           BlocProvider(
-            create: (_) => ChatInboxCubit(
-              chatRepo: ChatRepoImpl(apiConsumer: DioConsumer(dio: Dio())),
-            ),
+            create: (_) => sl<ChatInboxCubit>(),
             child: const ChatInboxScreen(),
           ),
         ],

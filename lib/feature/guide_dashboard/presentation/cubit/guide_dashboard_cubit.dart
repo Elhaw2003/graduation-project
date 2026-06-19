@@ -190,4 +190,20 @@ class GuideDashboardCubit extends Cubit<GuideDashboardState> {
       (message) => emit(EditTourSuccess(message: message)),
     );
   }
+
+  Future<void> confirmBooking({required String bookingId}) async {
+    emit(ConfirmBookingLoading(bookingId: bookingId));
+    final result = await repository.confirmBooking(bookingId: bookingId);
+    result.fold(
+      (failure) => emit(
+        ConfirmBookingFailure(
+          bookingId: bookingId,
+          errorMessage: failure.message,
+        ),
+      ),
+      (message) => emit(
+        ConfirmBookingSuccess(bookingId: bookingId, message: message),
+      ),
+    );
+  }
 }

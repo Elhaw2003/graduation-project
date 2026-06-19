@@ -64,4 +64,6 @@ abstract class GuideDashboardRepo {
     required String endTime,
     required int capacity,
   });
+
+  Future<Either<Failure, String>> confirmBooking({required String bookingId});
 }

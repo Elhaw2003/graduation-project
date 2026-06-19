@@ -31,20 +31,31 @@ class ConversationModel {
     this.otherPartyProfilePictureUrl,
   });
 
+  static DateTime _parseUtc(String? s) {
+    if (s == null || s.isEmpty) return DateTime.now().toUtc();
+    final fixed = s.replaceFirstMapped(
+      RegExp(r'(\.\d{6})\d+'),
+      (m) => m.group(1)!,
+    );
+    final dt = DateTime.tryParse(fixed);
+    if (dt == null) return DateTime.now().toUtc();
+    return dt.isUtc ? dt : DateTime.utc(
+      dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, dt.millisecond,
+    );
+  }
+
   factory ConversationModel.fromJson(Map<String, dynamic> json) {
     return ConversationModel(
       id: json['id'] as String? ?? '',
       touristUserId: json['touristUserId'] as String? ?? '',
       guideUserId: json['guideUserId'] as String? ?? '',
-      createdAtUtc: DateTime.tryParse(json['createdAtUtc'] as String? ?? '') ??
-          DateTime.now(),
-      updatedAtUtc: DateTime.tryParse(json['updatedAtUtc'] as String? ?? '') ??
-          DateTime.now(),
+      createdAtUtc: _parseUtc(json['createdAtUtc'] as String?),
+      updatedAtUtc: _parseUtc(json['updatedAtUtc'] as String?),
       profilePictureUrl: json['profilePictureUrl'] as String?,
       fullName: json['fullName'] as String? ?? '',
       lastMessagePreview: json['lastMessagePreview'] as String?,
       lastMessageSentAtUtc: json['lastMessageSentAtUtc'] != null
-          ? DateTime.tryParse(json['lastMessageSentAtUtc'] as String)
+          ? _parseUtc(json['lastMessageSentAtUtc'] as String?)
           : null,
       unreadCount: json['unreadCount'] as int? ?? 0,
       isMessagingBlocked: json['isMessagingBlocked'] as bool? ?? false,

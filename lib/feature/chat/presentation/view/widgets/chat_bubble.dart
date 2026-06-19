@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/feature/chat/data/model/chat_message_model.dart';
 
@@ -8,11 +10,16 @@ class ChatBubble extends StatelessWidget {
   final bool isMine;
   final VoidCallback? onLongPress;
 
+  /// Whether the other party has read the conversation (from unreadCount == 0).
+  /// Used as fallback when seenAtUtc is not populated by the server.
+  final bool isConversationRead;
+
   const ChatBubble({
     super.key,
     required this.message,
     required this.isMine,
     this.onLongPress,
+    this.isConversationRead = false,
   });
 
   @override
@@ -22,7 +29,54 @@ class ChatBubble extends StatelessWidget {
     }
 
     return GestureDetector(
-      onLongPress: isMine ? onLongPress : null,
+      onLongPress: isMine
+          ? onLongPress
+          : () {
+              showModalBottomSheet(
+                context: context,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(16.r),
+                  ),
+                ),
+                builder: (context) {
+                  return SafeArea(
+                    child: SizedBox(
+                      height: 100.h,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          CustomHeightSpacingWidget(height: 20),
+                          ListTile(
+                            leading: const Icon(
+                              Icons.copy_rounded,
+                              color: AppColors.primaryColor,
+                            ),
+                            title: const Text(
+                              'Copy',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: AppColors.primaryColor,
+                              ),
+                            ),
+                            onTap: () async {
+                              Navigator.pop(context);
+                              await Clipboard.setData(
+                                ClipboardData(text: message.content),
+                              );
+                              // ignore: use_build_context_synchronously
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Message copied')),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 3.h),
         child: Row(
@@ -105,6 +159,13 @@ class ChatBubble extends StatelessWidget {
                                 : AppColors.grey300Color,
                           ),
                         ),
+                        if (isMine) ...[
+                          SizedBox(width: 4.w),
+                          _MessageTicks(
+                            message: message,
+                            isConversationRead: isConversationRead,
+                          ),
+                        ],
                       ],
                     ),
                   ],
@@ -114,6 +175,44 @@ class ChatBubble extends StatelessWidget {
             if (isMine) SizedBox(width: 4.w),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _MessageTicks extends StatelessWidget {
+  final ChatMessageModel message;
+  final bool isConversationRead;
+  const _MessageTicks({required this.message, this.isConversationRead = false});
+
+  @override
+  Widget build(BuildContext context) {
+    // Single grey tick — sending (no internet / not yet confirmed)
+    if (message.isSending) {
+      return Icon(Icons.check_rounded, size: 13.sp, color: Colors.white54);
+    }
+
+    // Double ticks — colored if seenAtUtc is set OR conversation has no unread messages
+    final isRead = message.seenAtUtc != null || isConversationRead;
+    final color = isRead ? const Color(0xFF60CDFF) : Colors.white54;
+
+    return SizedBox(
+      width: 18.w,
+      height: 13.sp,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Positioned(
+            left: 0,
+            top: 0,
+            child: Icon(Icons.check_rounded, size: 13.sp, color: color),
+          ),
+          Positioned(
+            left: 5.w,
+            top: 0,
+            child: Icon(Icons.check_rounded, size: 13.sp, color: color),
+          ),
+        ],
       ),
     );
   }

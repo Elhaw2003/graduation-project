@@ -23,6 +23,7 @@ class TourGuideProfileBody extends StatelessWidget {
     required this.languages,
     required this.gallery,
     required this.guidedId,
+    required this.whatsAppNumber,
   });
 
   final String name;
@@ -35,6 +36,7 @@ class TourGuideProfileBody extends StatelessWidget {
   final List<String> languages;
   final List<String> gallery;
   final String guidedId;
+  final String whatsAppNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +120,7 @@ class TourGuideProfileBody extends StatelessWidget {
                 name: name,
                 aboutGuide: aboutGuide,
                 guideId: guidedId,
+                whatsAppNumber: whatsAppNumber,
               ),
               CustomHeightSpacingWidget(height: 16.h),
               CustomContainerExpertiseAndSkills(languages: languages),

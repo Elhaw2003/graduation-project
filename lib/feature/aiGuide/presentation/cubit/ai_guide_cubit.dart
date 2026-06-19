@@ -132,6 +132,7 @@ class AiGuideCubit extends HydratedCubit<AiGuideState> {
   }
 
   Future<void> uploadImage(XFile image) async {
+    // 1. Add user image bubble
     final userImageMsg = ChatMessage(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       text: '',
@@ -139,6 +140,17 @@ class AiGuideCubit extends HydratedCubit<AiGuideState> {
       imageLocalPath: image.path,
     );
     _messages.add(userImageMsg);
+
+    // 2. Add AI "thinking" placeholder — shows animated dots immediately
+    final thinkingId = '${DateTime.now().millisecondsSinceEpoch}_thinking';
+    final thinkingMsg = ChatMessage(
+      id: thinkingId,
+      text: '',
+      isUser: false,
+      isStreaming: true,
+    );
+    _messages.add(thinkingMsg);
+
     emit(
       AiGuideReady(
         messages: List.unmodifiable(_messages),
@@ -149,12 +161,19 @@ class AiGuideCubit extends HydratedCubit<AiGuideState> {
     try {
       final analysis = await _service.analyzeImage(image);
 
+      // 3. Replace thinking placeholder with the real response
+      final idx = _messages.indexWhere((m) => m.id == thinkingId);
       final aiResponseMsg = ChatMessage(
         id: '${DateTime.now().millisecondsSinceEpoch}_ai',
         text: analysis,
         isUser: false,
+        isStreaming: false,
       );
-      _messages.add(aiResponseMsg);
+      if (idx != -1) {
+        _messages[idx] = aiResponseMsg;
+      } else {
+        _messages.add(aiResponseMsg);
+      }
 
       emit(
         AiGuideReady(
@@ -163,13 +182,20 @@ class AiGuideCubit extends HydratedCubit<AiGuideState> {
         ),
       );
     } catch (e) {
-      final aiResponseMsg = ChatMessage(
+      // Replace thinking placeholder with error message
+      final idx = _messages.indexWhere((m) => m.id == thinkingId);
+      final errorMsg = ChatMessage(
         id: '${DateTime.now().millisecondsSinceEpoch}_ai',
-        text:
-            'Sorry, I couldn\'t process this image layout. Please ensure it\'s a valid historic place.',
+        text: 'Sorry, I couldn\'t process this image. Please ensure it\'s a valid historic place.',
         isUser: false,
+        isStreaming: false,
       );
-      _messages.add(aiResponseMsg);
+      if (idx != -1) {
+        _messages[idx] = errorMsg;
+      } else {
+        _messages.add(errorMsg);
+      }
+
       emit(
         AiGuideReady(
           messages: List.unmodifiable(_messages),

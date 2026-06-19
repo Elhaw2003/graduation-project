@@ -1,11 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:smart_guide/core/network/dio_consumer.dart';
+import 'package:smart_guide/core/di.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spacing_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
@@ -13,7 +12,6 @@ import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/core/utils/image_url_extension.dart';
 import 'package:smart_guide/feature/profile/presentation/cubit/tourist_session/tourist_session_cubit.dart';
 import 'package:smart_guide/feature/profile/presentation/cubit/tourist_session/tourist_session_states.dart';
-import 'package:smart_guide/feature/settings/data/repo/log_out/log_out_repo_imple.dart';
 import 'package:smart_guide/feature/settings/presentation/cubit/log_out/cubit/log_out_cubit.dart';
 import 'package:smart_guide/feature/settings/presentation/view/widget/log_out_dialog.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
@@ -50,29 +48,29 @@ class CustomDrawer extends StatelessWidget {
                         title: LocaleKeys.popularPlaces.tr(),
                         index: 1,
                       ),
-                      _buildDrawerItem(
-                        onTap: () =>
-                            context.pushNamed(AppRoutes.exploreArSpotsScreen),
-                        icon: Icons.view_in_ar_outlined,
-                        title: LocaleKeys.arSpots.tr(),
-                        index: 2,
-                      ),
-                      _buildDrawerItem(
-                        icon: Icons.map_outlined,
-                        title: LocaleKeys.map.tr(),
-                        index: 3,
-                      ),
-                      CustomHeightSpacingWidget(height: 20.h),
-                      _buildDrawerItem(
-                        icon: Icons.folder_outlined,
-                        title: LocaleKeys.myArchives.tr(),
-                        index: 4,
-                      ),
-                      _buildDrawerItem(
-                        icon: Icons.person_outline,
-                        title: LocaleKeys.myGuides.tr(),
-                        index: 5,
-                      ),
+                      // _buildDrawerItem(
+                      //   onTap: () =>
+                      //       context.pushNamed(AppRoutes.exploreArSpotsScreen),
+                      //   icon: Icons.view_in_ar_outlined,
+                      //   title: LocaleKeys.arSpots.tr(),
+                      //   index: 2,
+                      // ),
+                      // _buildDrawerItem(
+                      //   icon: Icons.map_outlined,
+                      //   title: LocaleKeys.map.tr(),
+                      //   index: 3,
+                      // ),
+                      // CustomHeightSpacingWidget(height: 20.h),
+                      // _buildDrawerItem(
+                      //   icon: Icons.folder_outlined,
+                      //   title: LocaleKeys.myArchives.tr(),
+                      //   index: 4,
+                      // ),
+                      // _buildDrawerItem(
+                      //   icon: Icons.person_outline,
+                      //   title: LocaleKeys.myGuides.tr(),
+                      //   index: 5,
+                      // ),
                       CustomHeightSpacingWidget(height: 20.h),
                       _buildDrawerItem(
                         onTap: () =>
@@ -101,12 +99,8 @@ class CustomDrawer extends StatelessWidget {
                         onTap: () {
                           showDialog(
                             context: context,
-                            builder: (context) => BlocProvider.value(
-                              value: LogOutCubit(
-                                logOutRepo: LogOutRepoImple(
-                                  apiConsumer: DioConsumer(dio: Dio()),
-                                ),
-                              ),
+                            builder: (context) => BlocProvider(
+                              create: (_) => sl<LogOutCubit>(),
                               child: const LogOutDialog(),
                             ),
                           );
@@ -174,7 +168,9 @@ class CustomDrawer extends StatelessWidget {
             : LocaleKeys.tourist.tr();
 
         return TweenAnimationBuilder(
-          key: ValueKey('${session.userId}_${session.profilePic ?? displayName}'),
+          key: ValueKey(
+            '${session.userId}_${session.profilePic ?? displayName}',
+          ),
           tween: Tween<double>(begin: 0, end: 1),
           duration: const Duration(milliseconds: 600),
           builder: (context, value, child) =>

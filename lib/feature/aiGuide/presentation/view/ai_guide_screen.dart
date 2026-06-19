@@ -210,6 +210,9 @@ class _AiGuideHeader extends StatelessWidget {
                     } else if (state is AiGuideConnectionLost) {
                       status = LocaleKeys.connection_lost.tr();
                       dotColor = AppColors.redAppColor;
+                    } else if (state is AiGuideReady && state.isImageUploading) {
+                      status = 'Analyzing image...';
+                      dotColor = Colors.orangeAccent;
                     } else if (state is AiGuideReady && state.isStreaming) {
                       status = LocaleKeys.ai_typing.tr();
                       dotColor = Colors.greenAccent;
