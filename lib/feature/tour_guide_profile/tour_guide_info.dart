@@ -26,7 +26,9 @@ class TourGuideInfoDetiles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Dynamic calculation of text for covered cities or falling back to default
-    final String locationText = cities.isNotEmpty ? cities.join(' / ') : 'Cairo / Giza';
+    final String locationText = cities.isNotEmpty
+        ? cities.join(' / ')
+        : 'Cairo / Giza';
 
     return SizedBox(
       width: double.infinity,
@@ -57,21 +59,21 @@ class TourGuideInfoDetiles extends StatelessWidget {
           SizedBox(height: 6.h),
           Row(
             children: [
-              Text(
-                'Trips +150',
-                style: AppTextStyle.primaryTextW400S14.copyWith(
-                  color: AppColors.secondaryColor,
-                  fontSize: 12.sp,
-                ),
-              ),
-              SizedBox(width: 8.w),
-              Text(
-                '•',
-                style: AppTextStyle.primaryTextW400S14.copyWith(
-                  color: AppColors.secondaryColor,
-                  fontSize: 12.sp,
-                ),
-              ),
+              // Text(
+              //   'Trips +150',
+              //   style: AppTextStyle.primaryTextW400S14.copyWith(
+              //     color: AppColors.secondaryColor,
+              //     fontSize: 12.sp,
+              //   ),
+              // ),
+              // SizedBox(width: 8.w),
+              // Text(
+              //   '•',
+              //   style: AppTextStyle.primaryTextW400S14.copyWith(
+              //     color: AppColors.secondaryColor,
+              //     fontSize: 12.sp,
+              //   ),
+              // ),
               SizedBox(width: 8.w),
               SvgPicture.asset(
                 Assets.imagesSvgLocationIcon,

@@ -38,7 +38,7 @@ class LoginModel extends Equatable {
     return LoginModel(
       id: json['id'],
       message: json['message'],
-      isAuthanticated: json['isAuthenticated'], // 🔥 fixed spelling
+      isAuthanticated: json['isAuthanticated'],
       userName: json['userName'],
       email: json['email'],
       country: json['country'],

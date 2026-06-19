@@ -66,6 +66,11 @@ class EndPoint {
 
   /// ================= GUIDE BOOKINGS FEED =================
   static const String guideBookings = "Bookings/guide-bookings";
+  static String confirmBooking({required String bookingId}) =>
+      "Bookings/$bookingId/confirm";
+
+  /// ================= SIGNALR HUBS =================
+  static const String chatHubUrl = 'https://smartguide.runasp.net/hubs/chat';
 
   /// ================= CHAT =================
   static String chatConversations({int page = 1, int pageSize = 30}) =>

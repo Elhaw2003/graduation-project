@@ -356,7 +356,20 @@ class GuideDashboardRepoImpl implements GuideDashboardRepo {
         data: formData,
       );
       // Response: { isSucceeded, message, id, title, price }
-      final tourId = (response is Map) ? response['id'] as String? ?? '' : '';
+      debugPrint('══ createTour response ══ $response');
+      String tourId = '';
+      if (response is Map) {
+        // Try top-level 'id'
+        tourId = response['id']?.toString() ?? '';
+        // Some backends nest it under 'data'
+        if (tourId.isEmpty && response['data'] is Map) {
+          tourId = (response['data'] as Map)['id']?.toString() ?? '';
+        }
+      }
+      debugPrint('══ parsed tourId: "$tourId"');
+      if (tourId.isEmpty) {
+        return const Left(ServerFailure('Tour created but server returned no ID — cannot create slots'));
+      }
       return Right(tourId);
     } on ServerException catch (e) {
       return Left(ServerFailure(e.errModel.errorMessage));
@@ -389,6 +402,25 @@ class GuideDashboardRepoImpl implements GuideDashboardRepo {
       return Left(ServerFailure(e.errModel.errorMessage));
     } catch (e) {
       return Left(ServerFailure('Create slot failed: $e'));
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> confirmBooking({
+    required String bookingId,
+  }) async {
+    try {
+      final response = await apiConsumer.patch(
+        EndPoint.confirmBooking(bookingId: bookingId),
+      );
+      final message = (response is Map)
+          ? response['message'] as String? ?? 'Booking confirmed'
+          : 'Booking confirmed';
+      return Right(message);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.errModel.errorMessage));
+    } catch (e) {
+      return Left(ServerFailure('Something went wrong'));
     }
   }
 

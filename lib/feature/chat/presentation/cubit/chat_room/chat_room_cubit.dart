@@ -53,19 +53,44 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     final loaded = _currentLoaded;
     if (loaded == null) return;
 
-    emit(loaded.copyWith(isSending: true));
+    // Optimistic: show message immediately with isSending=true
+    final tempId = '_sending_${DateTime.now().millisecondsSinceEpoch}';
+    final optimistic = ChatMessageModel(
+      id: tempId,
+      conversationId: conversationId,
+      senderUserId: loaded.currentUserId,
+      content: content,
+      sentAtUtc: DateTime.now().toUtc(),
+      status: 0,
+      isEdited: false,
+      isDeleted: false,
+      isSending: true,
+    );
+    emit(loaded.copyWith(
+      messages: [optimistic, ...loaded.messages],
+      isSending: true,
+    ));
 
     final result = await chatRepo.sendMessage(
       conversationId: conversationId,
       content: content,
     );
 
-    result.fold((failure) => emit(loaded.copyWith(isSending: false)), (
-      message,
-    ) {
-      final updated = [message, ...loaded.messages];
-      emit(loaded.copyWith(messages: updated, isSending: false));
-    });
+    final current = _currentLoaded;
+    if (current == null) return;
+
+    result.fold(
+      (_) {
+        final reverted =
+            current.messages.where((m) => m.id != tempId).toList();
+        emit(current.copyWith(messages: reverted, isSending: false));
+      },
+      (message) {
+        final updated =
+            current.messages.map((m) => m.id == tempId ? message : m).toList();
+        emit(current.copyWith(messages: updated, isSending: false));
+      },
+    );
   }
 
   void startEditing(ChatMessageModel message) {

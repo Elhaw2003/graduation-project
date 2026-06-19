@@ -9,7 +9,7 @@ import 'package:smart_guide/core/network/api_consumer.dart';
 import 'package:smart_guide/feature/auth/register/data/model/register_request_model.dart';
 import 'package:smart_guide/feature/auth/register/data/model/register_response_model.dart';
 import 'package:smart_guide/feature/auth/register/data/repo/register_repo.dart';
-import 'package:smart_guide/generated/locale_keys.g.dart'; // مهم جداً عشان الـ FormData و MultipartFile
+import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class RegisterRemoteImpleRepo implements RegisterRepo {
   final ApiConsumer apiConsumer;
@@ -24,9 +24,6 @@ class RegisterRemoteImpleRepo implements RegisterRepo {
       if (!await ConnectivityGuard.hasInternet()) {
         return Left(NetworkFailure(LocaleKeys.noInternetConnection.tr()));
       }
-
-      // 1. تحويل الداتا العادية لـ Map (تأكد أن المسميات في الموديل تطابق الصورة)
-      // ملاحظة: الـ API بيبدأ بحروف كبيرة حسب الصورة (FirstName, LastName, etc.)
       Map<String, dynamic> data = {
         "FirstName": registerRequestModel.firstName,
         "LastName": registerRequestModel.lastName,
@@ -74,7 +71,7 @@ class RegisterRemoteImpleRepo implements RegisterRepo {
             registerRequestModel.nationalIdImage!.isNotEmpty) {
           formData.files.add(
             MapEntry(
-              "NationalIdImage", // تعديل الـ D لتصبح سمول بناءً على الصورة
+              "NationalIdImage",
               await MultipartFile.fromFile(
                 registerRequestModel.nationalIdImage!,
                 filename: registerRequestModel.nationalIdImage!.split('/').last,
@@ -83,8 +80,6 @@ class RegisterRemoteImpleRepo implements RegisterRepo {
           );
         }
       }
-
-      // 4. إرسال الـ formData بدلاً من الـ Json
       final response = await apiConsumer.post(
         EndPoint.register,
         data: formData,

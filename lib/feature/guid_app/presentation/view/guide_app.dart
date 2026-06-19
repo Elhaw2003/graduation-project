@@ -1,13 +1,11 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:smart_guide/core/network/dio_consumer.dart';
+import 'package:smart_guide/core/di.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/image_url_extension.dart';
-import 'package:smart_guide/feature/chat/data/repo/chat_repo_impl.dart';
 import 'package:smart_guide/feature/chat/presentation/cubit/chat_inbox/chat_inbox_cubit.dart';
 import 'package:smart_guide/feature/chat/presentation/view/screens/chat_inbox_screen.dart';
 import 'package:smart_guide/feature/guid_app/presentation/cubit/guide_session/guide_session_cubit.dart';
@@ -47,11 +45,7 @@ class _GuideAppState extends State<GuideApp> {
             children: [
               _BookingsTab(session: session, tours: tours),
               BlocProvider(
-                create: (_) => ChatInboxCubit(
-                  chatRepo: ChatRepoImpl(
-                    apiConsumer: DioConsumer(dio: Dio()),
-                  ),
-                )..loadInbox(),
+                create: (_) => sl<ChatInboxCubit>(),
                 child: const ChatInboxScreen(),
               ),
             ],

@@ -1,15 +1,12 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_guide/app_main.dart';
-import 'package:smart_guide/core/network/dio_consumer.dart';
+import 'package:smart_guide/core/di.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/shared_widgets/custom_spring_animation.dart';
-import 'package:smart_guide/core/services/ai_chat_service.dart';
 import 'package:smart_guide/feature/aiGuide/presentation/cubit/ai_guide_cubit.dart';
 import 'package:smart_guide/feature/aiGuide/presentation/view/ai_guide_screen.dart';
-import 'package:smart_guide/feature/all_guides/data/repo/tour_guides_repo_imple.dart';
 import 'package:smart_guide/feature/all_guides/presentation/cubit/tour_guides_cubit.dart';
 import 'package:smart_guide/feature/all_guides/presentation/view/all_guides_screen.dart';
 import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
@@ -22,7 +19,6 @@ import 'package:smart_guide/feature/auth/reset_password/presentation/view/reset_
 import 'package:smart_guide/feature/auth/select_role/presentation/view/select_role_screen.dart';
 import 'package:smart_guide/feature/auth/success_verification/presentation/view/success_verification_screen.dart';
 import 'package:smart_guide/feature/chat/data/model/conversation_model.dart';
-import 'package:smart_guide/feature/chat/data/repo/chat_repo_impl.dart';
 import 'package:smart_guide/feature/chat/presentation/cubit/chat_inbox/chat_inbox_cubit.dart';
 import 'package:smart_guide/feature/chat/presentation/cubit/chat_room/chat_room_cubit.dart';
 import 'package:smart_guide/feature/chat/presentation/view/screens/chat_inbox_screen.dart';
@@ -34,21 +30,14 @@ import 'package:smart_guide/feature/guid_app/presentation/cubit/guide_session/gu
 import 'package:smart_guide/feature/guid_app/presentation/view/guide_app.dart';
 import 'package:smart_guide/feature/guid_app/presentation/view/edit_tour_screen.dart';
 import 'package:smart_guide/feature/home/presentation/home_screen.dart';
-import 'package:smart_guide/feature/home/data/repo/get_places/get_places_repo_imple.dart';
-import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_cubit.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_place_details/get_place_details_cubit.dart';
-import 'package:smart_guide/feature/home/data/repo/get_place_detail/get_place_datil_repo_imple.dart';
-import 'package:smart_guide/feature/profile/data/repo/tourist_profile_repo_impl.dart';
 import 'package:smart_guide/feature/profile/presentation/cubit/tourist_session/tourist_session_cubit.dart';
 import 'package:smart_guide/feature/profile/presentation/cubit/tourist_profile_cubit.dart';
 import 'package:smart_guide/feature/profile/presentation/view/profile_screen.dart';
-import 'package:smart_guide/feature/saved/data/repo/saved_places_repo_imple.dart';
 import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_cubit.dart';
 import 'package:smart_guide/feature/saved/presentation/view/saved_screen.dart';
-import 'package:smart_guide/feature/tour_guide_profile/data/repo/edit_guide_profile/edit_guide_profile_repo_impl.dart';
 import 'package:smart_guide/feature/tour_guide_profile/presentation/cubit/edit_guide_profile/edit_guide_profile_cubit.dart';
 import 'package:smart_guide/feature/tour_guide_profile/presentation/view/edit_guide_profile_screen.dart';
-import 'package:smart_guide/feature/tour_guide_profile/data/repo/save_guides/save_guides_repo_imple.dart';
 import 'package:smart_guide/feature/tour_guide_profile/presentation/cubit/save_guides/save_guides_cubit.dart';
 import 'package:smart_guide/feature/tour_guide_profile/tour_guide_profile_screen.dart';
 import 'package:smart_guide/feature/auth/verify_otp/presentation/view/verify_otp_screen.dart';
@@ -59,16 +48,15 @@ import 'package:smart_guide/feature/onboarding/presentation/view/onboarding_scre
 import 'package:smart_guide/feature/popular_places/presentation/view/popular_places_screen.dart';
 import 'package:smart_guide/feature/settings/presentation/view/settings_screen.dart';
 import 'package:smart_guide/feature/splash/presentation/view/splash_screen.dart';
-import 'package:smart_guide/feature/guide_dashboard/data/repo/guide_dashboard_repo_impl.dart';
 import 'package:smart_guide/feature/guide_dashboard/presentation/cubit/guide_dashboard_cubit.dart';
 import 'package:smart_guide/feature/guide_dashboard/presentation/view/guide_dashboard_screen.dart';
 import 'package:smart_guide/feature/guide_dashboard/presentation/view/screens/financial_ledger_screen.dart';
 import 'package:smart_guide/feature/guide_dashboard/presentation/view/screens/identity_verification_screen.dart';
 import 'package:smart_guide/feature/guide_dashboard/presentation/view/screens/tours_management_screen.dart';
 import 'package:smart_guide/feature/guide_dashboard/presentation/view/screens/tour_detail_screen.dart';
-import 'package:smart_guide/feature/booking_payment/data/repo/booking_payment_repo_impl.dart';
 import 'package:smart_guide/feature/booking_payment/presentation/cubit/booking_payment_cubit.dart';
 import 'package:smart_guide/feature/all_guides/data/model/tour_guide_model.dart';
+import 'package:smart_guide/feature/guide_dashboard/data/model/guide_tour_detail_model.dart';
 
 class RoutingGenerationConfig {
   static GoRouter routerGeneratorConfig = GoRouter(
@@ -109,7 +97,7 @@ class RoutingGenerationConfig {
           );
           return CustomSpringPage(
             child: BlocProvider(
-              create: (_) => PickImageCubit(),
+              create: (_) => sl<PickImageCubit>(),
               child: RegisterScreen(userTypeEnum: userType),
             ),
           );
@@ -183,40 +171,21 @@ class RoutingGenerationConfig {
           child: MultiBlocProvider(
             providers: [
               BlocProvider(
-                create: (_) => PlacesCubit(
-                  getPlacesRepo: GetPlacesRepoImple(
-                    apiConsumer: DioConsumer(dio: Dio()),
-                  ),
-                )..getPlaces(),
+                create: (_) => sl<SavedPlacesCubit>()..getSavedPlaces(),
               ),
               BlocProvider(
-                create: (_) => SavedPlacesCubit(
-                  savedPlacesRepo: SavedPlacesRepoImpl(
-                    apiConsumer: DioConsumer(dio: Dio()),
-                  ),
-                )..getSavedPlaces(),
-              ),
-              BlocProvider(
-                create: (_) => SavedGuidesCubit(
-                  savedGuidesRepository: SavedGuidesRepositoryImpl(
-                    apiConsumer: DioConsumer(dio: Dio()),
-                  ),
-                )..getSavedGuides(),
+                create: (_) => sl<SavedGuidesCubit>()..getSavedGuides(),
               ),
               BlocProvider(
                 lazy: false,
                 create: (_) {
-                  final cubit = TouristSessionCubit();
+                  final cubit = sl<TouristSessionCubit>();
                   TouristSessionCubit.register(cubit);
                   return cubit;
                 },
               ),
               BlocProvider(
-                create: (_) => TouristProfileCubit(
-                  touristProfileRepo: TouristProfileRepoImpl(
-                    apiConsumer: DioConsumer(dio: Dio()),
-                  ),
-                ),
+                create: (_) => sl<TouristProfileCubit>(),
               ),
             ],
             child: const TouristApp(),
@@ -225,7 +194,7 @@ class RoutingGenerationConfig {
       ),
 
       // ================================================================
-      // GUIDE APP SHELL (Injected with Dashboard Cubit natively)
+      // GUIDE APP SHELL
       // ================================================================
       GoRoute(
         path: AppRoutes.guideApp,
@@ -236,17 +205,13 @@ class RoutingGenerationConfig {
               BlocProvider(
                 lazy: false,
                 create: (_) {
-                  final cubit = GuideSessionCubit();
+                  final cubit = sl<GuideSessionCubit>();
                   GuideSessionCubit.register(cubit);
                   return cubit;
                 },
               ),
               BlocProvider(
-                create: (_) => GuideDashboardCubit(
-                  repository: GuideDashboardRepoImpl(
-                    apiConsumer: DioConsumer(dio: Dio()),
-                  ),
-                ),
+                create: (_) => sl<GuideDashboardCubit>(),
               ),
             ],
             child: const GuideApp(),
@@ -266,25 +231,14 @@ class RoutingGenerationConfig {
             child: MultiBlocProvider(
               providers: [
                 BlocProvider(
-                  create: (context) => TourGuidesCubit(
-                    repository: TourGuidesRepositoryImpl(
-                      apiConsumer: DioConsumer(dio: Dio()),
-                    ),
-                  )..fetchTourGuideProfile(userId),
+                  create: (_) =>
+                      sl<TourGuidesCubit>()..fetchTourGuideProfile(userId),
                 ),
                 BlocProvider(
-                  create: (context) => SavedGuidesCubit(
-                    savedGuidesRepository: SavedGuidesRepositoryImpl(
-                      apiConsumer: DioConsumer(dio: Dio()),
-                    ),
-                  )..getSavedGuides(),
+                  create: (_) => sl<SavedGuidesCubit>()..getSavedGuides(),
                 ),
                 BlocProvider(
-                  create: (_) => ChatInboxCubit(
-                    chatRepo: ChatRepoImpl(
-                      apiConsumer: DioConsumer(dio: Dio()),
-                    ),
-                  ),
+                  create: (_) => sl<ChatInboxCubit>(),
                 ),
               ],
               child: const TourGuideProfileScreen(),
@@ -295,103 +249,57 @@ class RoutingGenerationConfig {
       GoRoute(
         path: AppRoutes.exploreArSpotsScreen,
         name: AppRoutes.exploreArSpotsScreen,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(
-            child: BlocProvider(
-              create: (_) => SavedPlacesCubit(
-                savedPlacesRepo: SavedPlacesRepoImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
-                ),
-              )..getSavedPlaces(),
-              child: ExploreArSpotsScreen(),
-            ),
-          );
-        },
+        pageBuilder: (context, state) => CustomSpringPage(
+          child: BlocProvider(
+            create: (_) => sl<SavedPlacesCubit>()..getSavedPlaces(),
+            child: ExploreArSpotsScreen(),
+          ),
+        ),
       ),
       GoRoute(
         path: AppRoutes.aiGuideScreen,
         name: AppRoutes.aiGuideScreen,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(
-            child: BlocProvider(
-              create: (_) => AiGuideCubit(service: AiChatService()),
-              child: const AiGuideScreen(),
-            ),
-          );
-        },
+        pageBuilder: (context, state) => CustomSpringPage(
+          child: BlocProvider(
+            create: (_) => sl<AiGuideCubit>(),
+            child: const AiGuideScreen(),
+          ),
+        ),
       ),
       GoRoute(
         path: AppRoutes.popularPlacesScreen,
         name: AppRoutes.popularPlacesScreen,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(
-            child: BlocProvider(
-              create: (_) => SavedPlacesCubit(
-                savedPlacesRepo: SavedPlacesRepoImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
-                ),
-              )..getSavedPlaces(),
-              child: PopularPlacesScreen(),
-            ),
-          );
-        },
+        pageBuilder: (context, state) => CustomSpringPage(
+          child: BlocProvider(
+            create: (_) => sl<SavedPlacesCubit>()..getSavedPlaces(),
+            child: PopularPlacesScreen(),
+          ),
+        ),
       ),
       GoRoute(
         path: AppRoutes.profileScreen,
         name: AppRoutes.profileScreen,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (_) => TouristProfileCubit(
-                    touristProfileRepo: TouristProfileRepoImpl(
-                      apiConsumer: DioConsumer(dio: Dio()),
-                    ),
-                  ),
-                ),
-                BlocProvider(
-                  create: (_) => SavedGuidesCubit(
-                    savedGuidesRepository: SavedGuidesRepositoryImpl(
-                      apiConsumer: DioConsumer(dio: Dio()),
-                    ),
-                  ),
-                ),
-                BlocProvider(
-                  create: (_) => SavedPlacesCubit(
-                    savedPlacesRepo: SavedPlacesRepoImpl(
-                      apiConsumer: DioConsumer(dio: Dio()),
-                    ),
-                  ),
-                ),
-                BlocProvider(
-                  create: (_) => BookingAndPaymentCubit(
-                    bookingPaymentRepo: BookingPaymentRepoImpl(
-                      apiConsumer: DioConsumer(dio: Dio()),
-                    ),
-                  ),
-                ),
-              ],
-              child: ProfileScreen(),
-            ),
-          );
-        },
+        pageBuilder: (context, state) => CustomSpringPage(
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(create: (_) => sl<TouristProfileCubit>()),
+              BlocProvider(create: (_) => sl<SavedGuidesCubit>()),
+              BlocProvider(create: (_) => sl<SavedPlacesCubit>()),
+              BlocProvider(create: (_) => sl<BookingAndPaymentCubit>()),
+            ],
+            child: ProfileScreen(),
+          ),
+        ),
       ),
       GoRoute(
         path: AppRoutes.myTripsScreen,
         name: AppRoutes.myTripsScreen,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(
-            child: BlocProvider(
-              create: (_) => SavedGuidesCubit(
-                savedGuidesRepository: SavedGuidesRepositoryImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
-                ),
-              )..getSavedGuides(),
-              child: MyTripsScreen(),
-            ),
-          );
-        },
+        pageBuilder: (context, state) => CustomSpringPage(
+          child: BlocProvider(
+            create: (_) => sl<SavedGuidesCubit>()..getSavedGuides(),
+            child: MyTripsScreen(),
+          ),
+        ),
       ),
       GoRoute(
         path: '${AppRoutes.tripsTypeScreen}/:tripType',
@@ -404,11 +312,7 @@ class RoutingGenerationConfig {
           );
           return CustomSpringPage(
             child: BlocProvider(
-              create: (context) => BookingAndPaymentCubit(
-                bookingPaymentRepo: BookingPaymentRepoImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
-                ),
-              ),
+              create: (_) => sl<BookingAndPaymentCubit>(),
               child: TripTypeScreen(tripType: tripType),
             ),
           );
@@ -419,11 +323,7 @@ class RoutingGenerationConfig {
         name: AppRoutes.guidesSavedScreen,
         pageBuilder: (context, state) => CustomSpringPage(
           child: BlocProvider(
-            create: (_) => SavedGuidesCubit(
-              savedGuidesRepository: SavedGuidesRepositoryImpl(
-                apiConsumer: DioConsumer(dio: Dio()),
-              ),
-            )..getSavedGuides(),
+            create: (_) => sl<SavedGuidesCubit>()..getSavedGuides(),
             child: const GuidesSavedScreen(),
           ),
         ),
@@ -431,37 +331,21 @@ class RoutingGenerationConfig {
       GoRoute(
         path: AppRoutes.savedScreen,
         name: AppRoutes.savedScreen,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(
-            child: BlocProvider(
-              create: (_) => SavedPlacesCubit(
-                savedPlacesRepo: SavedPlacesRepoImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
-                ),
-              )..getSavedPlaces(),
-              child: const SavedScreen(),
-            ),
-          );
-        },
+        pageBuilder: (context, state) => CustomSpringPage(
+          child: BlocProvider(
+            create: (_) => sl<SavedPlacesCubit>()..getSavedPlaces(),
+            child: const SavedScreen(),
+          ),
+        ),
       ),
       GoRoute(
         path: AppRoutes.allGuidesScreen,
         name: AppRoutes.allGuidesScreen,
         builder: (context, state) => MultiBlocProvider(
           providers: [
+            BlocProvider(create: (_) => sl<TourGuidesCubit>()),
             BlocProvider(
-              create: (context) => TourGuidesCubit(
-                repository: TourGuidesRepositoryImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
-                ),
-              ),
-            ),
-            BlocProvider(
-              create: (_) => SavedGuidesCubit(
-                savedGuidesRepository: SavedGuidesRepositoryImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
-                ),
-              )..getSavedGuides(),
+              create: (_) => sl<SavedGuidesCubit>()..getSavedGuides(),
             ),
           ],
           child: const AllGuidesScreen(),
@@ -476,18 +360,11 @@ class RoutingGenerationConfig {
             child: MultiBlocProvider(
               providers: [
                 BlocProvider(
-                  create: (context) => GetPlaceDetailsCubit(
-                    getPlaceDetailsRepo: GetPlaceDetailRepoImple(
-                      apiConsumer: DioConsumer(dio: Dio()),
-                    ),
-                  )..getPlaceDetails(placeId: placeId),
+                  create: (_) => sl<GetPlaceDetailsCubit>()
+                    ..getPlaceDetails(placeId: placeId),
                 ),
                 BlocProvider(
-                  create: (_) => SavedPlacesCubit(
-                    savedPlacesRepo: SavedPlacesRepoImpl(
-                      apiConsumer: DioConsumer(dio: Dio()),
-                    ),
-                  )..getSavedPlaces(),
+                  create: (_) => sl<SavedPlacesCubit>()..getSavedPlaces(),
                 ),
               ],
               child: const TouristPlaceDetailsScreen(),
@@ -497,7 +374,7 @@ class RoutingGenerationConfig {
       ),
 
       // ================================================================
-      // GUIDE-SPECIFIC FEATURE ROUTES (Fixed Injection Mapping)
+      // GUIDE-SPECIFIC FEATURE ROUTES
       // ================================================================
       GoRoute(
         path: '${AppRoutes.editGuideProfileScreen}/:guideId',
@@ -507,11 +384,7 @@ class RoutingGenerationConfig {
           final profile = state.extra as TourGuideModel?;
           return CustomSpringPage(
             child: BlocProvider(
-              create: (_) => EditGuideProfileCubit(
-                repository: EditGuideProfileRepoImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
-                ),
-              ),
+              create: (_) => sl<EditGuideProfileCubit>(),
               child: EditGuideProfileScreen(
                 guideId: guideId,
                 initialProfile: profile,
@@ -523,66 +396,42 @@ class RoutingGenerationConfig {
       GoRoute(
         path: AppRoutes.guideDashboardScreen,
         name: AppRoutes.guideDashboardScreen,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(
-            child: BlocProvider(
-              create: (context) => GuideDashboardCubit(
-                repository: GuideDashboardRepoImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
-                ),
-              ),
-              child: const GuideDashboardScreen(),
-            ),
-          );
-        },
+        pageBuilder: (context, state) => CustomSpringPage(
+          child: BlocProvider(
+            create: (_) => sl<GuideDashboardCubit>(),
+            child: const GuideDashboardScreen(),
+          ),
+        ),
       ),
       GoRoute(
         path: AppRoutes.financialLedgerScreen,
         name: AppRoutes.financialLedgerScreen,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(
-            child: BlocProvider(
-              create: (context) => GuideDashboardCubit(
-                repository: GuideDashboardRepoImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
-                ),
-              ),
-              child: const FinancialLedgerScreen(),
-            ),
-          );
-        },
+        pageBuilder: (context, state) => CustomSpringPage(
+          child: BlocProvider(
+            create: (_) => sl<GuideDashboardCubit>(),
+            child: const FinancialLedgerScreen(),
+          ),
+        ),
       ),
       GoRoute(
         path: AppRoutes.identityVerificationScreen,
         name: AppRoutes.identityVerificationScreen,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(
-            child: BlocProvider(
-              create: (context) => GuideDashboardCubit(
-                repository: GuideDashboardRepoImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
-                ),
-              ),
-              child: const IdentityVerificationScreen(),
-            ),
-          );
-        },
+        pageBuilder: (context, state) => CustomSpringPage(
+          child: BlocProvider(
+            create: (_) => sl<GuideDashboardCubit>(),
+            child: const IdentityVerificationScreen(),
+          ),
+        ),
       ),
       GoRoute(
         path: AppRoutes.toursManagementScreen,
         name: AppRoutes.toursManagementScreen,
-        pageBuilder: (context, state) {
-          return CustomSpringPage(
-            child: BlocProvider(
-              create: (context) => GuideDashboardCubit(
-                repository: GuideDashboardRepoImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
-                ),
-              ),
-              child: const ToursManagementScreen(),
-            ),
-          );
-        },
+        pageBuilder: (context, state) => CustomSpringPage(
+          child: BlocProvider(
+            create: (_) => sl<GuideDashboardCubit>(),
+            child: const ToursManagementScreen(),
+          ),
+        ),
       ),
       GoRoute(
         path: '${AppRoutes.tourDetailScreen}/:tourId',
@@ -591,16 +440,13 @@ class RoutingGenerationConfig {
           final tourId = state.pathParameters['tourId'] ?? '';
           return CustomSpringPage(
             child: BlocProvider(
-              create: (context) => GuideDashboardCubit(
-                repository: GuideDashboardRepoImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
-                ),
-              ),
+              create: (_) => sl<GuideDashboardCubit>(),
               child: TourDetailScreen(tourId: tourId),
             ),
           );
         },
       ),
+
       // ================================================================
       // CHAT ROUTES
       // ================================================================
@@ -609,9 +455,7 @@ class RoutingGenerationConfig {
         name: AppRoutes.chatInboxScreen,
         pageBuilder: (context, state) => CustomSpringPage(
           child: BlocProvider(
-            create: (_) => ChatInboxCubit(
-              chatRepo: ChatRepoImpl(apiConsumer: DioConsumer(dio: Dio())),
-            ),
+            create: (_) => sl<ChatInboxCubit>(),
             child: const ChatInboxScreen(),
           ),
         ),
@@ -624,9 +468,7 @@ class RoutingGenerationConfig {
           final initialConversation = state.extra as ConversationModel?;
           return CustomSpringPage(
             child: BlocProvider(
-              create: (_) => ChatRoomCubit(
-                chatRepo: ChatRepoImpl(apiConsumer: DioConsumer(dio: Dio())),
-              ),
+              create: (_) => sl<ChatRoomCubit>(),
               child: ChatRoomScreen(
                 conversationId: conversationId,
                 initialConversation: initialConversation,
@@ -635,22 +477,16 @@ class RoutingGenerationConfig {
           );
         },
       ),
-
       GoRoute(
         path: AppRoutes.editTourScreen,
         name: AppRoutes.editTourScreen,
         pageBuilder: (context, state) {
           final tourData = state.extra as Map<String, dynamic>?;
           final tourId = tourData?['tourId'] as String?;
-          final tourDetail = tourData?['tourDetail'] as dynamic;
-
+          final tourDetail = tourData?['tourDetail'] as GuideTourDetailModel?;
           return CustomSpringPage(
             child: BlocProvider(
-              create: (context) => GuideDashboardCubit(
-                repository: GuideDashboardRepoImpl(
-                  apiConsumer: DioConsumer(dio: Dio()),
-                ),
-              ),
+              create: (_) => sl<GuideDashboardCubit>(),
               child: EditTourScreen(tourId: tourId, tourData: tourDetail),
             ),
           );

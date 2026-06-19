@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 class RegisterResponseModel extends Equatable {
   final String id;
   final String message;
-  final bool isAuthanticated;
+  final bool isAuthenticated;
   final String userName;
   final String email;
   final String country;
@@ -18,7 +18,7 @@ class RegisterResponseModel extends Equatable {
   const RegisterResponseModel({
     required this.id,
     required this.message,
-    required this.isAuthanticated,
+    required this.isAuthenticated,
     required this.userName,
     required this.email,
     required this.country,
@@ -33,19 +33,19 @@ class RegisterResponseModel extends Equatable {
 
   factory RegisterResponseModel.fromJson(Map<String, dynamic> json) {
     return RegisterResponseModel(
-      id: json['id'],
-      message: json['message'],
-      isAuthanticated: json['isAuthanticated'],
-      userName: json['userName'],
-      email: json['email'],
-      country: json['country'],
-      whatsAppNumber: json['whatsAppNumber'],
-      token: json['token'],
-      refreshToken: json['refreshToken'],
-      expiresOn: json['expiresOn'],
-      refreshTokenExpiresOn: json['refreshTokenExpiresOn'],
-      roles: List<String>.from(json['roles']),
-      isGuideVerified: json['isGuideVerified'],
+      id: json['id'] ?? '',
+      message: json['message'] ?? '',
+      isAuthenticated: json['isAuthenticated'] ?? false,
+      userName: json['userName'] ?? '',
+      email: json['email'] ?? '',
+      country: json['country'] ?? '',
+      whatsAppNumber: json['whatsAppNumber'] ?? '',
+      token: json['token'] ?? '',
+      refreshToken: json['refreshToken'] ?? '',
+      expiresOn: json['expiresOn'] ?? '',
+      refreshTokenExpiresOn: json['refreshTokenExpiresOn'] ?? '',
+      roles: List<String>.from(json['roles'] ?? []),
+      isGuideVerified: json['isGuideVerified'] ?? false,
     );
   }
 
@@ -53,7 +53,7 @@ class RegisterResponseModel extends Equatable {
   List<Object?> get props => [
     id,
     message,
-    isAuthanticated,
+    isAuthenticated,
     userName,
     email,
     country,

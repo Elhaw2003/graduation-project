@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/feature/aiGuide/presentation/cubit/ai_guide_states.dart';
@@ -24,7 +25,7 @@ class ChatBubble extends StatelessWidget {
           Flexible(
             child: message.isUser
                 ? _UserBubble(message: message)
-                : _AiBubble(message: message),
+                : _AiBubble(message: message, context: context),
           ),
           if (message.isUser) SizedBox(width: 8.w),
         ],
@@ -121,50 +122,101 @@ class _UserBubble extends StatelessWidget {
 
 class _AiBubble extends StatelessWidget {
   final ChatMessage message;
+  final BuildContext context;
 
-  const _AiBubble({required this.message});
+  const _AiBubble({required this.message, required this.context});
+
+  void _copyText() {
+    if (message.text.isEmpty) return;
+    Clipboard.setData(ClipboardData(text: message.text));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.check_circle_outline, color: Colors.white, size: 16),
+            SizedBox(width: 8.w),
+            const Text('Copied to clipboard'),
+          ],
+        ),
+        backgroundColor: AppColors.primaryColor,
+        behavior: SnackBarBehavior.floating,
+        duration: const Duration(seconds: 2),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.r),
+        ),
+      ),
+    );
+  }
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      constraints: BoxConstraints(maxWidth: 0.72.sw),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(4.r),
-          topRight: Radius.circular(18.r),
-          bottomLeft: Radius.circular(18.r),
-          bottomRight: Radius.circular(18.r),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.07),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
+  Widget build(BuildContext _) {
+    final canCopy = !message.isStreaming && message.text.isNotEmpty;
+
+    return GestureDetector(
+      onLongPress: canCopy ? _copyText : null,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        constraints: BoxConstraints(maxWidth: 0.72.sw),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(4.r),
+            topRight: Radius.circular(18.r),
+            bottomLeft: Radius.circular(18.r),
+            bottomRight: Radius.circular(18.r),
           ),
-        ],
-      ),
-      child: message.isStreaming && message.text.isEmpty
-          ? _TypingDots()
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  message.text,
-                  style: TextStyle(
-                    color: AppColors.primaryTextColor,
-                    fontSize: 14.sp,
-                    height: 1.5,
-                  ),
-                ),
-                if (message.isStreaming) ...[
-                  SizedBox(height: 6.h),
-                  _CursorBlink(),
-                ],
-              ],
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.07),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
             ),
+          ],
+        ),
+        child: message.isStreaming && message.text.isEmpty
+            ? _TypingDots()
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    message.text,
+                    style: TextStyle(
+                      color: AppColors.primaryTextColor,
+                      fontSize: 14.sp,
+                      height: 1.5,
+                    ),
+                  ),
+                  if (message.isStreaming) ...[
+                    SizedBox(height: 6.h),
+                    _CursorBlink(),
+                  ],
+                  // Copy hint — shown only on finished messages
+                  if (canCopy) ...[
+                    SizedBox(height: 6.h),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.copy_rounded,
+                          size: 11.sp,
+                          color: Colors.grey[400],
+                        ),
+                        SizedBox(width: 3.w),
+                        Text(
+                          'Hold to copy',
+                          style: TextStyle(
+                            fontSize: 10.sp,
+                            color: Colors.grey[400],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ],
+              ),
+      ),
     );
   }
 }

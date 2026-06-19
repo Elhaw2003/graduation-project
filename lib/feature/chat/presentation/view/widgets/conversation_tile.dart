@@ -124,6 +124,10 @@ class ConversationTile extends StatelessWidget {
                   SizedBox(height: 4.h),
                   Row(
                     children: [
+                      if (lastMsg != null) ...[
+                        _InboxTicks(isRead: !hasUnread),
+                        SizedBox(width: 4.w),
+                      ],
                       Expanded(
                         child: Text(
                           lastMsg ?? '',
@@ -175,13 +179,14 @@ class ConversationTile extends StatelessWidget {
   }
 
   String _formatTime(DateTime time) {
+    final local = time.toLocal();
     final now = DateTime.now();
-    final diff = now.difference(time);
+    final diff = now.difference(local);
     if (diff.inSeconds < 60) return 'now';
     if (diff.inMinutes < 60) return '${diff.inMinutes}m';
     if (diff.inHours < 24) return '${diff.inHours}h';
     if (diff.inDays < 7) return '${diff.inDays}d';
-    return '${time.day}/${time.month}';
+    return '${local.day}/${local.month}';
   }
 
   Widget _initialsAvatar(String name) {
@@ -194,6 +199,32 @@ class ConversationTile extends StatelessWidget {
         color: AppColors.primaryColor,
         fontWeight: FontWeight.bold,
         fontSize: 15.sp,
+      ),
+    );
+  }
+}
+
+class _InboxTicks extends StatelessWidget {
+  final bool isRead;
+  const _InboxTicks({required this.isRead});
+
+  @override
+  Widget build(BuildContext context) {
+    final color = isRead ? const Color(0xFF3B82F6) : AppColors.grey300Color;
+    return SizedBox(
+      width: 16.w,
+      height: 14.h,
+      child: Stack(
+        children: [
+          Positioned(
+            left: 0,
+            child: Icon(Icons.check_rounded, size: 12.sp, color: color),
+          ),
+          Positioned(
+            left: 5.w,
+            child: Icon(Icons.check_rounded, size: 12.sp, color: color),
+          ),
+        ],
       ),
     );
   }

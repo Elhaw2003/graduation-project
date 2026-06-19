@@ -129,17 +129,15 @@ class Validators {
     return null;
   }
 
-  static String? validatePhoneNumber(String? value) {
+  static String? validatePhoneNumber(String? value, {bool isGuide = false}) {
     if (value == null || value.isEmpty) {
       return LocaleKeys.phoneRequired.tr();
     }
 
-    final phoneRegex = RegExp(r'^\+?[0-9]{10,15}$');
-
-    if (!phoneRegex.hasMatch(value)) {
+    final phoneRegex = RegExp(r'^01[0125][0-9]{8}$');
+    if (isGuide && !phoneRegex.hasMatch(value)) {
       return LocaleKeys.phoneInvalid.tr();
     }
-
     return null;
   }
 

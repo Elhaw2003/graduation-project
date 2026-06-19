@@ -45,6 +45,9 @@ dependencies:
   bloc: ^9.2.1
   hydrated_bloc: ^11.0.0
   path_provider: ^2.1.5
+  signalr_netcore: ^1.4.4
+  url_launcher: ^6.3.2
+  get_it: ^9.2.1
 
 dev_dependencies:
   build_runner: ^2.11.1

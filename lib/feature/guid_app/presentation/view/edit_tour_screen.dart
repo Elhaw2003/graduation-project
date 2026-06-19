@@ -375,8 +375,15 @@ class _EditTourScreenState extends State<EditTourScreen> {
   }
 
   void _createNextSlot(BuildContext context) {
-    if (_pendingTourId == null || _pendingSlotIndex >= _slots.length) return;
+    if (_pendingTourId == null ||
+        _pendingTourId!.isEmpty ||
+        _pendingSlotIndex >= _slots.length) return;
     final slot = _slots[_pendingSlotIndex];
+    debugPrint(
+      '══ createSlot [$_pendingSlotIndex/${_slots.length}] '
+      'tourId="$_pendingTourId" date="${slot['date']}" '
+      'start="${slot['startTime']}" end="${slot['endTime']}" cap="${slot['capacity']}"',
+    );
     context.read<GuideDashboardCubit>().createSlot(
           tourId: _pendingTourId!,
           date: slot['date'] as String,
@@ -631,14 +638,46 @@ class _EditTourScreenState extends State<EditTourScreen> {
             return;
           }
           if (state is CreateSlotFailure) {
-            // Slot failed but tour was created — still navigate back
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Tour created, but slot failed: ${state.errorMessage}'),
-                backgroundColor: Colors.orange,
+            setState(() => _isLoading = false);
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (ctx) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.r)),
+                title: Row(
+                  children: [
+                    Icon(Icons.warning_amber_rounded,
+                        color: Colors.orange, size: 22.sp),
+                    SizedBox(width: 8.w),
+                    const Text('Slot Creation Failed'),
+                  ],
+                ),
+                content: Text(
+                  'Tour was created, but slot #${_pendingSlotIndex + 1} failed:\n\n${state.errorMessage}',
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(ctx); // close dialog
+                      Navigator.pop(context, true); // go back
+                    },
+                    child: const Text('Close'),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.primaryColor,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(ctx);
+                      _createNextSlot(context); // retry same slot
+                    },
+                    child: const Text('Retry',
+                        style: TextStyle(color: Colors.white)),
+                  ),
+                ],
               ),
             );
-            Navigator.pop(context, true);
             return;
           }
           if (state is CreateTourFailure) _showError(state.errorMessage);
