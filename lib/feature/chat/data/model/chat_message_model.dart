@@ -33,11 +33,12 @@ class ChatMessageModel {
   });
 
   bool get canEdit =>
-      !isDeleted &&
-      DateTime.now().difference(sentAtUtc).inMinutes < 5;
+      !isDeleted && DateTime.now().difference(sentAtUtc).inMinutes < 5;
+
+  bool get canDelete =>
+      !isDeleted && DateTime.now().difference(sentAtUtc).inMinutes < 5;
 
   // Dart supports max 6 fractional second digits; server may send 7+.
-  // Also ensures the result is always UTC so .toLocal() works correctly.
   static DateTime _parseUtc(String? s) {
     if (s == null || s.isEmpty) return DateTime.now().toUtc();
     final fixed = s.replaceFirstMapped(
@@ -46,9 +47,12 @@ class ChatMessageModel {
     );
     final dt = DateTime.tryParse(fixed);
     if (dt == null) return DateTime.now().toUtc();
-    return dt.isUtc ? dt : DateTime.utc(
-      dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, dt.millisecond,
-    );
+    return dt.isUtc
+        ? dt
+        : DateTime.utc(
+            dt.year, dt.month, dt.day,
+            dt.hour, dt.minute, dt.second, dt.millisecond,
+          );
   }
 
   factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
@@ -68,36 +72,45 @@ class ChatMessageModel {
       status: json['status'] as int? ?? 0,
       isEdited: json['isEdited'] as bool? ?? false,
       editedAtUtc: json['editedAtUtc'] != null
-          ? DateTime.tryParse(json['editedAtUtc'] as String)
+          ? _parseUtc(json['editedAtUtc'] as String?)
           : null,
       isDeleted: json['isDeleted'] as bool? ?? false,
       deletedAtUtc: json['deletedAtUtc'] != null
-          ? DateTime.tryParse(json['deletedAtUtc'] as String)
+          ? _parseUtc(json['deletedAtUtc'] as String?)
           : null,
     );
   }
 
   ChatMessageModel copyWith({
     String? content,
+    String? displayContent,
+    bool clearDisplayContent = false,
+    int? status,
     bool? isEdited,
     DateTime? editedAtUtc,
     bool? isDeleted,
     DateTime? deletedAtUtc,
+    DateTime? seenAtUtc,
+    DateTime? deliveredAtUtc,
+    bool? isSending,
   }) {
     return ChatMessageModel(
       id: id,
       conversationId: conversationId,
       senderUserId: senderUserId,
       content: content ?? this.content,
-      displayContent: displayContent,
+      displayContent: clearDisplayContent
+          ? null
+          : (displayContent ?? this.displayContent),
       sentAtUtc: sentAtUtc,
-      deliveredAtUtc: deliveredAtUtc,
-      seenAtUtc: seenAtUtc,
-      status: status,
+      deliveredAtUtc: deliveredAtUtc ?? this.deliveredAtUtc,
+      seenAtUtc: seenAtUtc ?? this.seenAtUtc,
+      status: status ?? this.status,
       isEdited: isEdited ?? this.isEdited,
       editedAtUtc: editedAtUtc ?? this.editedAtUtc,
       isDeleted: isDeleted ?? this.isDeleted,
       deletedAtUtc: deletedAtUtc ?? this.deletedAtUtc,
+      isSending: isSending ?? this.isSending,
     );
   }
 }

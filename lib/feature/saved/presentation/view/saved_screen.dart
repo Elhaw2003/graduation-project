@@ -8,9 +8,7 @@ import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_cubit.dart';
 import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_states.dart';
-import 'package:smart_guide/feature/saved/presentation/view/widget/fab_new_place_widget.dart';
 import 'package:smart_guide/feature/saved/presentation/view/widget/save_placed_card_list.dart';
-import 'package:smart_guide/feature/saved/presentation/view/widget/save_placed_category.dart';
 import 'package:smart_guide/feature/saved/data/model/save_placed_card_model.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 

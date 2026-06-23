@@ -3,14 +3,14 @@ import 'package:smart_guide/feature/home/data/model/place_model.dart';
 
 class SavedPlaceedCardModel {
   const SavedPlaceedCardModel({
-    required this.tag,
+    required this.rating,
     required this.title,
     required this.subtitle,
     required this.imageUrl,
     required this.placeId,
   });
 
-  final String tag;
+  final num rating;
   final String title;
   final String subtitle;
   final String imageUrl;
@@ -18,7 +18,7 @@ class SavedPlaceedCardModel {
 
   factory SavedPlaceedCardModel.fromPlaceModel(PlaceModel place) {
     return SavedPlaceedCardModel(
-      tag: place.type,
+      rating: place.rating,
       title: place.name,
       subtitle: place.description,
       imageUrl: place.imageUrl,

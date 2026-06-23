@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
+import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_cubit.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_state.dart';
 import 'package:smart_guide/feature/popular_places/presentation/view/widget/popular_places_card.dart';
@@ -40,45 +41,73 @@ class PopularPlacesCards extends StatelessWidget {
             ? savedState.savedIds
             : {};
 
-        return SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (context, index) {
-              if (index >= places.length) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20.h),
-                  child: const Center(child: CircularProgressIndicator()),
-                );
-              }
-
-              final place = places[index];
-
-              final isSaved = savedIds.contains(place.id);
-
-              return PopularPlaceCard(
-                title: place.name,
-                rating: place.rating.toString(),
-                category: place.type,
-                imageUrl: place.imageUrl,
-                isSaved: isSaved,
-
-                onSaveTap: () {
-                  final savedCubit = context.read<SavedPlacesCubit>();
-
-                  if (isSaved) {
-                    savedCubit.removePlace(placeId: place.id);
-                  } else {
-                    savedCubit.savePlace(placeId: place.id);
-                  }
-                },
-
-                onPressed: () {
-                  context.push('${AppRoutes.detailsScreen}/${place.id}');
-                },
+        return BlocListener<SavedPlacesCubit, SavedPlacesState>(
+          listener: (context, state) {
+            if (state is SavePlaceSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: AppColors.greenColor,
+                ),
               );
-            },
-            childCount: state is PlacesPaginationLoading
-                ? places.length + 1
-                : places.length,
+            }
+            if (state is RemovePlaceSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: AppColors.redAppColor,
+                ),
+              );
+            }
+            if (state is SavedPlacesFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: AppColors.redAppColor,
+                ),
+              );
+            }
+          },
+          child: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                if (index >= places.length) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20.h),
+                    child: const Center(child: CircularProgressIndicator()),
+                  );
+                }
+
+                final place = places[index];
+
+                final isSaved = savedIds.contains(place.id);
+
+                return PopularPlaceCard(
+                  title: place.name,
+                  rating: place.rating.toString(),
+                  category: place.type,
+                  imageUrl: place.imageUrl,
+                  isSaved: isSaved,
+
+                  onSaveTap: () {
+                    final savedCubit = context.read<SavedPlacesCubit>();
+
+                    if (isSaved) {
+                      savedCubit.removePlace(placeId: place.id);
+                    } else {
+                      savedCubit.savePlace(placeId: place.id);
+                    }
+                  },
+
+                  onPressed: () {
+                    context.push('${AppRoutes.detailsScreen}/${place.id}');
+                  },
+                );
+              },
+              childCount: state is PlacesPaginationLoading
+                  ? places.length + 1
+                  : places.length,
+            ),
           ),
         );
       },

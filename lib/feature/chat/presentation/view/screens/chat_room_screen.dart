@@ -193,24 +193,25 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       context.read<ChatRoomCubit>().startEditing(message);
                     },
                   ),
-                ListTile(
-                  leading: Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppColors.redAppColor,
-                    size: 22.sp,
-                  ),
-                  title: Text(
-                    'Delete Message',
-                    style: TextStyle(
-                      fontSize: 14.sp,
+                if (message.canDelete)
+                  ListTile(
+                    leading: Icon(
+                      Icons.delete_outline_rounded,
                       color: AppColors.redAppColor,
+                      size: 22.sp,
                     ),
+                    title: Text(
+                      'Delete Message',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: AppColors.redAppColor,
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      _showDeleteConfirmation(context, message.id);
+                    },
                   ),
-                  onTap: () {
-                    Navigator.pop(context);
-                    _showDeleteConfirmation(context, message.id);
-                  },
-                ),
                 ListTile(
                   leading: Icon(
                     Icons.copy_rounded,
@@ -550,8 +551,6 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                             return ChatBubble(
                               message: message,
                               isMine: isMine,
-                              isConversationRead:
-                                  state.conversation.unreadCount == 0,
                               onLongPress: () =>
                                   _showMessageMenu(context, message, state),
                             );
@@ -604,32 +603,69 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               ? conversation!.otherPartyDisplayName!
               : (conversation?.fullName ?? '');
 
+          final isOnline = state is ChatRoomLoaded && state.isOtherPartyOnline;
+
           return Row(
             children: [
-              CircleAvatar(
-                radius: 18.r,
-                backgroundColor: AppColors.contanerColore,
-                child: avatarUrl != null
-                    ? ClipOval(
-                        child: CachedNetworkImage(
-                          imageUrl: avatarUrl,
-                          width: 36.r,
-                          height: 36.r,
-                          fit: BoxFit.cover,
-                          errorWidget: (_, __, ___) =>
-                              _initialsWidget(displayName),
+              Stack(
+                children: [
+                  CircleAvatar(
+                    radius: 18.r,
+                    backgroundColor: AppColors.contanerColore,
+                    child: avatarUrl != null
+                        ? ClipOval(
+                            child: CachedNetworkImage(
+                              imageUrl: avatarUrl,
+                              width: 36.r,
+                              height: 36.r,
+                              fit: BoxFit.cover,
+                              errorWidget: (_, __, ___) =>
+                                  _initialsWidget(displayName),
+                            ),
+                          )
+                        : _initialsWidget(displayName),
+                  ),
+                  if (isOnline)
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: Container(
+                        width: 10.r,
+                        height: 10.r,
+                        decoration: BoxDecoration(
+                          color: Colors.greenAccent,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: AppColors.secondaryColor,
+                            width: 1.5,
+                          ),
                         ),
-                      )
-                    : _initialsWidget(displayName),
+                      ),
+                    ),
+                ],
               ),
               SizedBox(width: 10.w),
               Flexible(
-                child: Text(
-                  displayName,
-                  style: AppTextStyle.whitePoppinsW500S24.copyWith(
-                    fontSize: 15.sp,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      displayName,
+                      style: AppTextStyle.whitePoppinsW500S24.copyWith(
+                        fontSize: 15.sp,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    if (isOnline)
+                      Text(
+                        'Online',
+                        style: TextStyle(
+                          fontSize: 11.sp,
+                          color: Colors.greenAccent,
+                        ),
+                      ),
+                  ],
                 ),
               ),
             ],

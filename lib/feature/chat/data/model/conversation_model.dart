@@ -13,6 +13,7 @@ class ConversationModel {
   final String? otherPartyUserId;
   final String? otherPartyDisplayName;
   final String? otherPartyProfilePictureUrl;
+  final bool isOtherPartyOnline;
 
   const ConversationModel({
     required this.id,
@@ -29,6 +30,7 @@ class ConversationModel {
     this.otherPartyUserId,
     this.otherPartyDisplayName,
     this.otherPartyProfilePictureUrl,
+    this.isOtherPartyOnline = false,
   });
 
   static DateTime _parseUtc(String? s) {
@@ -39,9 +41,12 @@ class ConversationModel {
     );
     final dt = DateTime.tryParse(fixed);
     if (dt == null) return DateTime.now().toUtc();
-    return dt.isUtc ? dt : DateTime.utc(
-      dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second, dt.millisecond,
-    );
+    return dt.isUtc
+        ? dt
+        : DateTime.utc(
+            dt.year, dt.month, dt.day,
+            dt.hour, dt.minute, dt.second, dt.millisecond,
+          );
   }
 
   factory ConversationModel.fromJson(Map<String, dynamic> json) {
@@ -71,6 +76,7 @@ class ConversationModel {
     String? lastMessagePreview,
     DateTime? lastMessageSentAtUtc,
     int? unreadCount,
+    bool? isOtherPartyOnline,
   }) {
     return ConversationModel(
       id: id,
@@ -87,6 +93,7 @@ class ConversationModel {
       otherPartyUserId: otherPartyUserId,
       otherPartyDisplayName: otherPartyDisplayName,
       otherPartyProfilePictureUrl: otherPartyProfilePictureUrl,
+      isOtherPartyOnline: isOtherPartyOnline ?? this.isOtherPartyOnline,
     );
   }
 }

@@ -22,9 +22,7 @@ class PopularPlacesSearchFilter extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                    builder: (_) => const SearchPlacesScreen(),
-                  ),
+                  MaterialPageRoute(builder: (_) => const SearchPlacesScreen()),
                 );
               },
               child: AbsorbPointer(
@@ -39,33 +37,33 @@ class PopularPlacesSearchFilter extends StatelessWidget {
 
           CustomWidthSpacingWidget(width: 8.w),
 
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: AppColors.grey200Color),
-              borderRadius: BorderRadius.circular(8.r),
-            ),
-            child: IconButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  context: context,
-                  backgroundColor: AppColors.whiteColor,
-                  isScrollControlled: true,
-                  useSafeArea: true,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20.r),
-                    ),
-                  ),
-                  builder: (context) => const FilterBottomSheet(),
-                );
-              },
-              icon: Icon(
-                Icons.tune,
-                color: AppColors.primaryColor,
-                size: 24.sp,
-              ),
-            ),
-          ),
+          // Container(
+          //   decoration: BoxDecoration(
+          //     border: Border.all(color: AppColors.grey200Color),
+          //     borderRadius: BorderRadius.circular(8.r),
+          //   ),
+          //   child: IconButton(
+          //     onPressed: () {
+          //       showModalBottomSheet(
+          //         context: context,
+          //         backgroundColor: AppColors.whiteColor,
+          //         isScrollControlled: true,
+          //         useSafeArea: true,
+          //         shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.vertical(
+          //             top: Radius.circular(20.r),
+          //           ),
+          //         ),
+          //         builder: (context) => const FilterBottomSheet(),
+          //       );
+          //     },
+          //     icon: Icon(
+          //       Icons.tune,
+          //       color: AppColors.primaryColor,
+          //       size: 24.sp,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

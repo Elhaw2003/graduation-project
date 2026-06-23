@@ -10,6 +10,7 @@ class ChatInboxCubit extends Cubit<ChatInboxState> {
   final ChatRepo chatRepo;
 
   StreamSubscription<ConversationSummaryUpdate>? _summarySubscription;
+  StreamSubscription<Map<String, dynamic>>? _presenceSubscription;
 
   ChatInboxCubit({required this.chatRepo}) : super(const ChatInboxInitial()) {
     _connectHub();
@@ -19,8 +20,12 @@ class ChatInboxCubit extends Cubit<ChatInboxState> {
 
   Future<void> _connectHub() async {
     await ChatHubService.instance.connect();
+
     _summarySubscription = ChatHubService.instance.summaryUpdates
         .listen(_onConversationSummaryUpdated);
+
+    _presenceSubscription = ChatHubService.instance.presenceChanges
+        .listen(_onUserPresenceChanged);
   }
 
   void _onConversationSummaryUpdated(ConversationSummaryUpdate update) {
@@ -28,19 +33,32 @@ class ChatInboxCubit extends Cubit<ChatInboxState> {
     if (current is! ChatInboxLoaded) return;
 
     final conversations = List.of(current.conversations);
-
     final idx = conversations.indexWhere((c) => c.id == update.conversationId);
-    if (idx == -1) return; // unknown conversation — ignore
+    if (idx == -1) return;
 
-    // Update the matching conversation's preview fields.
     final updated = conversations[idx].copyWith(
       lastMessagePreview: update.lastMessagePreview,
       lastMessageSentAtUtc: update.lastMessageSentAtUtc,
+      unreadCount: update.unreadCount,
     );
 
-    // Remove it from its current position and insert at the top.
     conversations.removeAt(idx);
     conversations.insert(0, updated);
+
+    emit(ChatInboxLoaded(conversations));
+  }
+
+  void _onUserPresenceChanged(Map<String, dynamic> data) {
+    final current = state;
+    if (current is! ChatInboxLoaded) return;
+
+    final userId = data['userId'] as String? ?? '';
+    final isOnline = data['isOnline'] as bool? ?? false;
+
+    final conversations = current.conversations.map((c) {
+      if (c.otherPartyUserId != userId) return c;
+      return c.copyWith(isOtherPartyOnline: isOnline);
+    }).toList();
 
     emit(ChatInboxLoaded(conversations));
   }
@@ -72,6 +90,7 @@ class ChatInboxCubit extends Cubit<ChatInboxState> {
   @override
   Future<void> close() async {
     await _summarySubscription?.cancel();
+    await _presenceSubscription?.cancel();
     await ChatHubService.instance.disconnect();
     return super.close();
   }

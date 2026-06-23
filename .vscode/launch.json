@@ -1,0 +1,31 @@
+// {
+//     "version": "0.2.0",
+//     "configurations": [
+//         {
+//             "name": "Development",
+//             "request": "launch",
+//             "type": "dart",
+//             "flutterMode": "debug",
+//             "args": [
+//                 "--flavor",
+//                 "Development",
+//                 "-t",
+//                 "lib/main.dart"
+//             ]
+//         },
+//         {
+//             "name": "Production",
+//             "request": "launch",
+//             "type": "dart",
+//             "flutterMode": "debug",
+//             "args": [
+//                 "--flavor",
+//                 "Production",
+//                 "-t",
+//                 "lib/main.dart"
+//             ]
+//         }
+//     ]
+// }
+// // لما نعمل الكلام دا نروح نغير ال screen util in main
+// // await ScreenUtil.ensure (release) 
