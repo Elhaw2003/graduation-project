@@ -11,7 +11,7 @@ import 'package:smart_guide/feature/home/presentation/cubit/get_place_details/ge
 import 'package:smart_guide/feature/home/presentation/cubit/get_place_details/get_place_details_state.dart';
 
 class TouristPlaceDetailsScreen extends StatefulWidget {
-  const TouristPlaceDetailsScreen({super.key, });
+  const TouristPlaceDetailsScreen({super.key});
 
   @override
   State<TouristPlaceDetailsScreen> createState() =>
@@ -323,6 +323,7 @@ class _TouristPlaceDetailsScreenState extends State<TouristPlaceDetailsScreen>
                   title: place.name,
                   rating: place.averageRating,
                   placeId: place.id,
+                  imageUrl: place.imageUrl,
                 ),
 
                 SliverToBoxAdapter(

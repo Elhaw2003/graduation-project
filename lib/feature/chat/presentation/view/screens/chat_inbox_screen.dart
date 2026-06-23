@@ -37,7 +37,7 @@ class _ChatInboxScreenState extends State<ChatInboxScreen> {
       pathParameters: {'conversationId': conversation.id},
       extra: conversation,
     );
-    if (mounted) context.read<ChatInboxCubit>().loadInbox();
+    // No reload needed — SignalR keeps inbox state up-to-date in real time.
   }
 
   @override

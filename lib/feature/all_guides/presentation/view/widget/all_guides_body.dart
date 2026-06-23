@@ -10,6 +10,8 @@ import 'package:smart_guide/feature/all_guides/presentation/cubit/tour_guides_cu
 import 'package:smart_guide/feature/all_guides/presentation/cubit/tour_guides_states.dart';
 import 'package:smart_guide/feature/all_guides/presentation/view/widget/all_guides_appbar_widget.dart';
 import 'package:smart_guide/feature/all_guides/presentation/view/widget/custom_container_info_guides.dart';
+import 'package:smart_guide/feature/tour_guide_profile/presentation/cubit/save_guides/save_guides_cubit.dart';
+import 'package:smart_guide/feature/tour_guide_profile/presentation/cubit/save_guides/save_guides_states.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class AllGuidesBody extends StatefulWidget {
@@ -204,39 +206,60 @@ class _AllGuidesBodyState extends State<AllGuidesBody> {
 
               return SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
-                sliver: SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                    final guide = filteredGuides[index];
-                    final animationIndex = index % 10;
+                sliver: BlocListener<SavedGuidesCubit, SavedGuidesState>(
+                  listener: (context, state) {
+                    if (state is SaveGuideSuccess) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(state.message),
+                          backgroundColor: AppColors.greenColor,
+                          duration: const Duration(milliseconds: 1500),
+                        ),
+                      );
+                    } else if (state is RemoveGuideSuccess) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(state.message),
+                          backgroundColor: AppColors.redAppColor,
+                          duration: const Duration(milliseconds: 1500),
+                        ),
+                      );
+                    }
+                  },
+                  child: SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      final guide = filteredGuides[index];
+                      final animationIndex = index % 10;
 
-                    return FadeTransition(
-                      opacity:
-                          _fadeAnimations.isNotEmpty &&
-                              animationIndex < _fadeAnimations.length
-                          ? _fadeAnimations[animationIndex]
-                          : const AlwaysStoppedAnimation(1.0),
-                      child: SlideTransition(
-                        position:
-                            _slideAnimations.isNotEmpty &&
-                                animationIndex < _slideAnimations.length
-                            ? _slideAnimations[animationIndex]
-                            : const AlwaysStoppedAnimation(Offset.zero),
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: 16.h),
-                          child: CustomContainerInfoGuides(
-                            userID: guide.userId,
-                            firstName: guide.firstName,
-                            lastName: guide.lastName,
-                            imageUrl: guide.profilePicture.isNotEmpty
-                                ? guide.profilePicture
-                                : "https://via.placeholder.com/150",
-                            rating: guide.rating,
-                            price: guide.pricePerDay.toInt(),
+                      return FadeTransition(
+                        opacity:
+                            _fadeAnimations.isNotEmpty &&
+                                animationIndex < _fadeAnimations.length
+                            ? _fadeAnimations[animationIndex]
+                            : const AlwaysStoppedAnimation(1.0),
+                        child: SlideTransition(
+                          position:
+                              _slideAnimations.isNotEmpty &&
+                                  animationIndex < _slideAnimations.length
+                              ? _slideAnimations[animationIndex]
+                              : const AlwaysStoppedAnimation(Offset.zero),
+                          child: Padding(
+                            padding: EdgeInsets.only(bottom: 16.h),
+                            child: CustomContainerInfoGuides(
+                              userID: guide.userId,
+                              firstName: guide.firstName,
+                              lastName: guide.lastName,
+                              imageUrl: guide.profilePicture.isNotEmpty
+                                  ? guide.profilePicture
+                                  : "https://via.placeholder.com/150",
+                              rating: guide.rating,
+                              price: guide.pricePerDay.toInt(),
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  }, childCount: filteredGuides.length),
+                      );
+                    }, childCount: filteredGuides.length),
+                  ),
                 ),
               );
             }

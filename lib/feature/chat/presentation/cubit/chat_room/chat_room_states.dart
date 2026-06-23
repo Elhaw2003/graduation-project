@@ -19,6 +19,7 @@ class ChatRoomLoaded extends ChatRoomState {
   final String currentUserId;
   final bool isSending;
   final bool isLoadingMore;
+  final bool isOtherPartyOnline;
   final ChatMessageModel? editingMessage;
   final String? snackBarMessage;
 
@@ -28,6 +29,7 @@ class ChatRoomLoaded extends ChatRoomState {
     required this.currentUserId,
     this.isSending = false,
     this.isLoadingMore = false,
+    this.isOtherPartyOnline = false,
     this.editingMessage,
     this.snackBarMessage,
   });
@@ -37,6 +39,7 @@ class ChatRoomLoaded extends ChatRoomState {
     List<ChatMessageModel>? messages,
     bool? isSending,
     bool? isLoadingMore,
+    bool? isOtherPartyOnline,
     ChatMessageModel? editingMessage,
     bool clearEditing = false,
     String? snackBarMessage,
@@ -48,6 +51,7 @@ class ChatRoomLoaded extends ChatRoomState {
       currentUserId: currentUserId,
       isSending: isSending ?? this.isSending,
       isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      isOtherPartyOnline: isOtherPartyOnline ?? this.isOtherPartyOnline,
       editingMessage: clearEditing
           ? null
           : (editingMessage ?? this.editingMessage),

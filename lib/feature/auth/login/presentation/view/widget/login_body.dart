@@ -179,33 +179,33 @@ class _LoginBodyState extends State<LoginBody> {
                       formKey: formKey,
                     ),
                     CustomHeightSpacingWidget(height: 20),
-                    BlocConsumer<LoginWithGoogleCubit, LoginWithGoogleStates>(
-                      listener: (context, state) {
-                        if (state is LoginWithGoogleFailureStates) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            CustomAnimatedShowSnackBar.failureOrWarningSnackBar(
-                              context: context,
-                              message: state.message,
-                            );
-                          });
-                        } else if (state is LoginWithGoogleSuccessStates) {
-                          WidgetsBinding.instance.addPostFrameCallback((_) {
-                            CustomAnimatedShowSnackBar.successSnackBar(
-                              context: context,
-                              message: LocaleKeys.loginSuccessfully.tr(),
-                            );
-                          });
-                        }
-                      },
-                      builder: (context, state) {
-                        return GoogleSignInButton(
-                          onPressed: () => context
-                              .read<LoginWithGoogleCubit>()
-                              .loginWithGoogle(),
-                          isLoading: state is LoginWithGoogleLoadingStates,
-                        );
-                      },
-                    ),
+                    // BlocConsumer<LoginWithGoogleCubit, LoginWithGoogleStates>(
+                    //   listener: (context, state) {
+                    //     if (state is LoginWithGoogleFailureStates) {
+                    //       WidgetsBinding.instance.addPostFrameCallback((_) {
+                    //         CustomAnimatedShowSnackBar.failureOrWarningSnackBar(
+                    //           context: context,
+                    //           message: state.message,
+                    //         );
+                    //       });
+                    //     } else if (state is LoginWithGoogleSuccessStates) {
+                    //       WidgetsBinding.instance.addPostFrameCallback((_) {
+                    //         CustomAnimatedShowSnackBar.successSnackBar(
+                    //           context: context,
+                    //           message: LocaleKeys.loginSuccessfully.tr(),
+                    //         );
+                    //       });
+                    //     }
+                    //   },
+                    //   builder: (context, state) {
+                    //     return GoogleSignInButton(
+                    //       onPressed: () => context
+                    //           .read<LoginWithGoogleCubit>()
+                    //           .loginWithGoogle(),
+                    //       isLoading: state is LoginWithGoogleLoadingStates,
+                    //     );
+                    //   },
+                    // ),
                     CustomHeightSpacingWidget(height: 10),
                     Center(
                       child: CustomRichTextWidget(

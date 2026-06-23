@@ -38,6 +38,24 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+    // flavorDimensions += "default"
+    // productFlavors {
+    //     create("development") {
+    //         dimension = "default"
+    //         resValue(
+    //             type = "string",
+    //             name = "app_name",
+    //             value = "Smart Guide Dev")
+    //         applicationIdSuffix = ".dev"
+    //     }
+    //     create("production") {
+    //         dimension = "default"
+    //         resValue(
+    //             type = "string",
+    //             name = "app_name",
+    //             value = "Smart Guide Production")
+    // //          applicationIdSuffix = ".production"
+    //     }
 }
 
 flutter {
@@ -56,3 +74,4 @@ dependencies {
   // Add the dependencies for any other desired Firebase products
   // https://firebase.google.com/docs/android/setup#available-libraries
 }
+

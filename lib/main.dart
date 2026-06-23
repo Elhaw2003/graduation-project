@@ -61,9 +61,7 @@ void main() async {
           BlocProvider(create: (_) => sl<LogOutCubit>()),
           BlocProvider(create: (_) => sl<PlacesCubit>()..getPlaces()),
           BlocProvider(create: (_) => sl<SavedPlacesCubit>()..getSavedPlaces()),
-          BlocProvider(
-            create: (_) => sl<SavedGuidesCubit>()..getSavedGuides(),
-          ),
+          BlocProvider(create: (_) => sl<SavedGuidesCubit>()..getSavedGuides()),
           BlocProvider(create: (_) => sl<TouristProfileCubit>()),
         ],
         child: SmartGuide(),

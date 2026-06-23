@@ -10,16 +10,11 @@ class ChatBubble extends StatelessWidget {
   final bool isMine;
   final VoidCallback? onLongPress;
 
-  /// Whether the other party has read the conversation (from unreadCount == 0).
-  /// Used as fallback when seenAtUtc is not populated by the server.
-  final bool isConversationRead;
-
   const ChatBubble({
     super.key,
     required this.message,
     required this.isMine,
     this.onLongPress,
-    this.isConversationRead = false,
   });
 
   @override
@@ -151,7 +146,13 @@ class ChatBubble extends StatelessWidget {
                           ),
                         if (message.isEdited) SizedBox(width: 4.w),
                         Text(
-                          _fmtTime(message.sentAtUtc.toLocal()),
+                          // Show editedAtUtc when edited, otherwise sentAtUtc
+                          _fmtTime(
+                            (message.isEdited && message.editedAtUtc != null
+                                    ? message.editedAtUtc!
+                                    : message.sentAtUtc)
+                                .toLocal(),
+                          ),
                           style: TextStyle(
                             fontSize: 10.sp,
                             color: isMine
@@ -161,10 +162,7 @@ class ChatBubble extends StatelessWidget {
                         ),
                         if (isMine) ...[
                           SizedBox(width: 4.w),
-                          _MessageTicks(
-                            message: message,
-                            isConversationRead: isConversationRead,
-                          ),
+                          _MessageTicks(message: message),
                         ],
                       ],
                     ),
@@ -180,21 +178,25 @@ class ChatBubble extends StatelessWidget {
   }
 }
 
+/// 3-state ticks driven by [ChatMessageModel.status]:
+///   isSending / status == 0 (Sent)      → ✓  grey   (single)
+///   status == 1 (Delivered)             → ✓✓ grey   (double)
+///   status == 2 (Seen)                  → ✓✓ blue   (double)
 class _MessageTicks extends StatelessWidget {
   final ChatMessageModel message;
-  final bool isConversationRead;
-  const _MessageTicks({required this.message, this.isConversationRead = false});
+  const _MessageTicks({required this.message});
 
   @override
   Widget build(BuildContext context) {
-    // Single grey tick — sending (no internet / not yet confirmed)
-    if (message.isSending) {
+    // Still sending optimistically OR server says Sent (0) → single grey tick
+    if (message.isSending || message.status == 0) {
       return Icon(Icons.check_rounded, size: 13.sp, color: Colors.white54);
     }
 
-    // Double ticks — colored if seenAtUtc is set OR conversation has no unread messages
-    final isRead = message.seenAtUtc != null || isConversationRead;
-    final color = isRead ? const Color(0xFF60CDFF) : Colors.white54;
+    // status 1 = Delivered (double grey), status 2 = Seen (double blue)
+    final color = message.status == 2
+        ? const Color(0xFF60CDFF)
+        : Colors.white54;
 
     return SizedBox(
       width: 18.w,

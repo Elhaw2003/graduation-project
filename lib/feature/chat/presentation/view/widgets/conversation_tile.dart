@@ -83,6 +83,20 @@ class ConversationTile extends StatelessWidget {
                       ),
                       child: Icon(Icons.block, size: 8.sp, color: Colors.white),
                     ),
+                  )
+                else if (conversation.isOtherPartyOnline)
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      width: 13.r,
+                      height: 13.r,
+                      decoration: BoxDecoration(
+                        color: Colors.greenAccent,
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                    ),
                   ),
               ],
             ),

@@ -20,7 +20,7 @@ class DetailsTopButtonWidget extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       child: IconButton(
         onPressed: onTap,
-        icon: Icon(icon, color: color ?? AppColors.whiteColor, size: 25.sp),
+        icon: Icon(icon, color: color ?? AppColors.primaryColor, size: 25.sp),
       ),
     );
   }

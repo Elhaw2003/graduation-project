@@ -457,29 +457,29 @@ class _PlaceCard extends StatelessWidget {
               ),
 
               // ── Type chip top-left ──────────────────────────────────────────
-              if (place.type.isNotEmpty)
-                Positioned(
-                  top: 12.h,
-                  left: 12.w,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 10.w,
-                      vertical: 5.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.92),
-                      borderRadius: BorderRadius.circular(20.r),
-                    ),
-                    child: Text(
-                      place.type,
-                      style: TextStyle(
-                        fontSize: 9.sp,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                  ),
-                ),
+              // if (place.type.isNotEmpty)
+              //   Positioned(
+              //     top: 12.h,
+              //     left: 12.w,
+              //     child: Container(
+              //       padding: EdgeInsets.symmetric(
+              //         horizontal: 10.w,
+              //         vertical: 5.h,
+              //       ),
+              //       decoration: BoxDecoration(
+              //         color: Colors.white.withOpacity(0.92),
+              //         borderRadius: BorderRadius.circular(20.r),
+              //       ),
+              //       child: Text(
+              //         place.type,
+              //         style: TextStyle(
+              //           fontSize: 9.sp,
+              //           fontWeight: FontWeight.w700,
+              //           color: AppColors.primaryColor,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
 
               // ── Bookmark top-right ──────────────────────────────────────────
               Positioned(

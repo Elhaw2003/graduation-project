@@ -377,30 +377,7 @@ class _CustomContainerInfoGuidesState extends State<CustomContainerInfoGuides>
                     Positioned(
                       top: 0,
                       right: 0,
-                      child: BlocListener<SavedGuidesCubit, SavedGuidesState>(
-                        listener: (context, state) {
-                          if (state is SaveGuideSuccess &&
-                              state.savedIds.contains(widget.userID)) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(state.message),
-                                backgroundColor: AppColors.primaryColor,
-                                duration: const Duration(milliseconds: 1500),
-                              ),
-                            );
-                          } else if (state is RemoveGuideSuccess &&
-                              !state.savedIds.contains(widget.userID)) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(state.message),
-                                backgroundColor: Colors.redAccent,
-                                duration: const Duration(milliseconds: 1500),
-                              ),
-                            );
-                          }
-                        },
-                        child: const SizedBox.shrink(),
-                      ),
+                      child: const SizedBox.shrink(),
                     ),
                   ],
                 ),

@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
+import 'package:smart_guide/core/services/chat_hub_service.dart';
 import 'package:smart_guide/feature/chat/data/model/chat_message_model.dart';
 import 'package:smart_guide/feature/chat/data/repo/chat_repo.dart';
 import 'package:smart_guide/feature/chat/presentation/cubit/chat_room/chat_room_states.dart';
@@ -7,9 +10,21 @@ import 'package:smart_guide/feature/chat/presentation/cubit/chat_room/chat_room_
 class ChatRoomCubit extends Cubit<ChatRoomState> {
   final ChatRepo chatRepo;
 
+  StreamSubscription<Map<String, dynamic>>? _newMessageSub;
+  StreamSubscription<Map<String, dynamic>>? _editedSub;
+  StreamSubscription<Map<String, dynamic>>? _deletedSub;
+  StreamSubscription<Map<String, dynamic>>? _statusSub;
+  StreamSubscription<Map<String, dynamic>>? _readReceiptSub;
+  StreamSubscription<Map<String, dynamic>>? _presenceSub;
+
+  String? _conversationId;
+
   ChatRoomCubit({required this.chatRepo}) : super(const ChatRoomInitial());
 
+  // ─── Load ─────────────────────────────────────────────────────────────────
+
   Future<void> loadRoom({required String conversationId}) async {
+    _conversationId = conversationId;
     emit(const ChatRoomLoading());
 
     final userId = await SecureStorageHelper.instance.getUserId();
@@ -44,7 +59,142 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         currentUserId: userId ?? '',
       ),
     );
+
+    _subscribeToHub(conversationId);
   }
+
+  // ─── SignalR subscriptions ─────────────────────────────────────────────────
+
+  void _subscribeToHub(String conversationId) {
+    _cancelHubSubs();
+
+    // ReceiveChatMessage — new message from the other party
+    _newMessageSub = ChatHubService.instance.newMessages.listen((data) {
+      final msgConvId = data['conversationId'] as String? ?? '';
+      if (msgConvId != conversationId) return;
+
+      final loaded = _currentLoaded;
+      if (loaded == null) return;
+
+      final msg = ChatMessageModel.fromJson(data);
+
+      // Ignore if we already have this message (could be our own confirmed msg)
+      if (loaded.messages.any((m) => m.id == msg.id)) return;
+
+      // Ignore if it's our own message — handled optimistically via sendMessage
+      if (msg.senderUserId == loaded.currentUserId) return;
+
+      emit(loaded.copyWith(messages: [msg, ...loaded.messages]));
+
+      // Mark the new incoming message as read immediately
+      chatRepo.markAsRead(conversationId: conversationId);
+    });
+
+    // ChatMessageEdited — someone edited a message
+    _editedSub = ChatHubService.instance.messageEdits.listen((data) {
+      final loaded = _currentLoaded;
+      if (loaded == null) return;
+
+      final msgId = _extractId(data);
+      if (msgId.isEmpty) return;
+
+      final editedAtStr = data['editedAtUtc'] as String?;
+
+      final msgs = loaded.messages.map((m) {
+        if (m.id != msgId) return m;
+        return m.copyWith(
+          content: data['content'] as String? ?? m.content,
+          displayContent: data['displayContent'] as String?,
+          isEdited: true,
+          editedAtUtc: editedAtStr != null ? _parseUtc(editedAtStr) : m.editedAtUtc,
+        );
+      }).toList();
+
+      emit(loaded.copyWith(messages: msgs));
+    });
+
+    // ChatMessageDeleted — someone deleted a message
+    _deletedSub = ChatHubService.instance.messageDeletes.listen((data) {
+      final loaded = _currentLoaded;
+      if (loaded == null) return;
+
+      final msgId = _extractId(data);
+      if (msgId.isEmpty) return;
+
+      final msgs = loaded.messages.map((m) {
+        if (m.id != msgId) return m;
+        return m.copyWith(isDeleted: true);
+      }).toList();
+
+      emit(loaded.copyWith(messages: msgs));
+    });
+
+    // ChatMessageStatusUpdated — status changed: Sent(0) → Delivered(1) → Seen(2)
+    _statusSub = ChatHubService.instance.statusUpdates.listen((data) {
+      final loaded = _currentLoaded;
+      if (loaded == null) return;
+
+      final msgId = data['messageId'] as String? ?? _extractId(data);
+      if (msgId.isEmpty) return;
+
+      final newStatus = data['status'] as int? ?? 0;
+      final seenAtStr = data['seenAtUtc'] as String?;
+
+      final msgs = loaded.messages.map((m) {
+        if (m.id != msgId) return m;
+        return m.copyWith(
+          status: newStatus,
+          seenAtUtc: seenAtStr != null ? _parseUtc(seenAtStr) : m.seenAtUtc,
+        );
+      }).toList();
+
+      emit(loaded.copyWith(messages: msgs));
+    });
+
+    // ConversationReadReceipt — other party opened and read the conversation
+    _readReceiptSub = ChatHubService.instance.readReceipts.listen((data) {
+      final convId = data['conversationId'] as String? ?? '';
+      if (convId != conversationId) return;
+
+      final loaded = _currentLoaded;
+      if (loaded == null) return;
+
+      final seenAtStr = data['seenAtUtc'] as String?;
+      final seenAt = seenAtStr != null ? _parseUtc(seenAtStr) : DateTime.now().toUtc();
+
+      // Mark all MY outgoing messages that aren't already Seen
+      final msgs = loaded.messages.map((m) {
+        if (m.senderUserId != loaded.currentUserId) return m;
+        if (m.status == 2) return m;
+        return m.copyWith(status: 2, seenAtUtc: seenAt);
+      }).toList();
+
+      emit(loaded.copyWith(messages: msgs));
+    });
+
+    // UserPresenceChanged — online/offline indicator update
+    _presenceSub = ChatHubService.instance.presenceChanges.listen((data) {
+      final loaded = _currentLoaded;
+      if (loaded == null) return;
+
+      final userId = data['userId'] as String? ?? '';
+      if (userId != loaded.conversation.otherPartyUserId) return;
+
+      final isOnline = data['isOnline'] as bool? ?? false;
+      emit(loaded.copyWith(isOtherPartyOnline: isOnline));
+    });
+  }
+
+  void _cancelHubSubs() {
+    _newMessageSub?.cancel();
+    _editedSub?.cancel();
+    _deletedSub?.cancel();
+    _statusSub?.cancel();
+    _readReceiptSub?.cancel();
+    _presenceSub?.cancel();
+  }
+
+  // ─── Message actions ───────────────────────────────────────────────────────
 
   Future<void> sendMessage({
     required String conversationId,
@@ -53,7 +203,7 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     final loaded = _currentLoaded;
     if (loaded == null) return;
 
-    // Optimistic: show message immediately with isSending=true
+    // Optimistic: show message immediately with isSending=true, status=0 (Sent)
     final tempId = '_sending_${DateTime.now().millisecondsSinceEpoch}';
     final optimistic = ChatMessageModel(
       id: tempId,
@@ -66,10 +216,12 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       isDeleted: false,
       isSending: true,
     );
-    emit(loaded.copyWith(
-      messages: [optimistic, ...loaded.messages],
-      isSending: true,
-    ));
+    emit(
+      loaded.copyWith(
+        messages: [optimistic, ...loaded.messages],
+        isSending: true,
+      ),
+    );
 
     final result = await chatRepo.sendMessage(
       conversationId: conversationId,
@@ -86,8 +238,9 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
         emit(current.copyWith(messages: reverted, isSending: false));
       },
       (message) {
-        final updated =
-            current.messages.map((m) => m.id == tempId ? message : m).toList();
+        final updated = current.messages
+            .map((m) => m.id == tempId ? message : m)
+            .toList();
         emit(current.copyWith(messages: updated, isSending: false));
       },
     );
@@ -117,18 +270,20 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
       content: content,
     );
 
-    result.fold((_) => emit(loaded.copyWith(clearEditing: true)), (updated) {
-      final msgs = loaded.messages
-          .map((m) => m.id == updated.id ? updated : m)
-          .toList();
-      emit(
-        loaded.copyWith(
-          messages: msgs,
-          clearEditing: true,
-          snackBarMessage: 'Message edited successfully',
-        ),
-      );
-    });
+    result.fold(
+      (_) => emit(loaded.copyWith(clearEditing: true)),
+      (updated) {
+        final msgs =
+            loaded.messages.map((m) => m.id == updated.id ? updated : m).toList();
+        emit(
+          loaded.copyWith(
+            messages: msgs,
+            clearEditing: true,
+            snackBarMessage: 'Message edited successfully',
+          ),
+        );
+      },
+    );
   }
 
   Future<void> deleteMessage({required String messageId}) async {
@@ -136,14 +291,17 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     if (loaded == null) return;
 
     // Optimistic removal
-    final optimistic = loaded.messages.where((m) => m.id != messageId).toList();
+    final optimistic =
+        loaded.messages.where((m) => m.id != messageId).toList();
     emit(loaded.copyWith(messages: optimistic));
 
     final result = await chatRepo.deleteMessage(messageId: messageId);
     result.fold(
       (_) {
         // Revert on failure by reloading
-        loadRoom(conversationId: loaded.conversation.id);
+        if (_conversationId != null) {
+          loadRoom(conversationId: _conversationId!);
+        }
       },
       (_) {
         final current = _currentLoaded;
@@ -181,7 +339,8 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     result.fold((_) {}, (_) {
       emit(
         loaded.copyWith(
-          conversation: loaded.conversation.copyWith(isMessagingBlocked: false),
+          conversation:
+              loaded.conversation.copyWith(isMessagingBlocked: false),
           snackBarMessage: 'User unblocked',
         ),
       );
@@ -194,8 +353,34 @@ class ChatRoomCubit extends Cubit<ChatRoomState> {
     emit(loaded.copyWith(clearSnackBar: true));
   }
 
+  // ─── Helpers ──────────────────────────────────────────────────────────────
+
   ChatRoomLoaded? get _currentLoaded {
     final s = state;
     return s is ChatRoomLoaded ? s : null;
+  }
+
+  String _extractId(Map<String, dynamic> data) =>
+      data['id'] as String? ?? data['messageId'] as String? ?? '';
+
+  static DateTime _parseUtc(String s) {
+    final fixed = s.replaceFirstMapped(
+      RegExp(r'(\.\d{6})\d+'),
+      (m) => m.group(1)!,
+    );
+    final dt = DateTime.tryParse(fixed);
+    if (dt == null) return DateTime.now().toUtc();
+    return dt.isUtc
+        ? dt
+        : DateTime.utc(
+            dt.year, dt.month, dt.day,
+            dt.hour, dt.minute, dt.second, dt.millisecond,
+          );
+  }
+
+  @override
+  Future<void> close() async {
+    _cancelHubSubs();
+    return super.close();
   }
 }
