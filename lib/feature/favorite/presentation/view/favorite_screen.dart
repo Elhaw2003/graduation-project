@@ -6,6 +6,7 @@ import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/favorite/presentation/view/widget/favorite_places_appbar.dart';
 import 'package:smart_guide/feature/favorite/presentation/view/widget/saved_guided_card_widget.dart';
+import 'package:smart_guide/core/methods/save_place_feedback.dart';
 import 'package:smart_guide/feature/tour_guide_profile/presentation/cubit/save_guides/save_guides_cubit.dart';
 import 'package:smart_guide/feature/favorite/data/model/saved_guided_model.dart';
 import 'package:smart_guide/feature/tour_guide_profile/presentation/cubit/save_guides/save_guides_states.dart';
@@ -21,7 +22,7 @@ class _GuidesSavedScreenState extends State<GuidesSavedScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     // Fetch saved guides after frame is rendered for proper context access
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<SavedGuidesCubit>().getSavedGuides();
@@ -35,13 +36,7 @@ class _GuidesSavedScreenState extends State<GuidesSavedScreen> {
       body: BlocListener<SavedGuidesCubit, SavedGuidesState>(
         listener: (context, state) {
           if (state is RemoveGuideSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.message),
-                backgroundColor: Colors.red,
-                duration: const Duration(seconds: 2),
-              ),
-            );
+            SaveFeedback.removedGuide(context);
           }
         },
         child: BlocBuilder<SavedGuidesCubit, SavedGuidesState>(
@@ -50,10 +45,7 @@ class _GuidesSavedScreenState extends State<GuidesSavedScreen> {
             if (state is SavedGuidesLoading) {
               return CustomScrollView(
                 physics: const NeverScrollableScrollPhysics(),
-                slivers: [
-                  const FavoriteSliverAppBar(),
-                  _buildListShimmer(),
-                ],
+                slivers: [const FavoriteSliverAppBar(), _buildListShimmer()],
               );
             }
 
@@ -61,7 +53,8 @@ class _GuidesSavedScreenState extends State<GuidesSavedScreen> {
             List<SavedGuideModel> savedGuidesList = [];
             if (state is SavedGuidesSuccess) {
               savedGuidesList = state.guides;
-            } else if (state is SaveGuideSuccess || state is RemoveGuideSuccess) {
+            } else if (state is SaveGuideSuccess ||
+                state is RemoveGuideSuccess) {
               // After success actions, try to preserve guides from current cubit state
               savedGuidesList = const [];
             }
@@ -104,11 +97,16 @@ class _GuidesSavedScreenState extends State<GuidesSavedScreen> {
               physics: const BouncingScrollPhysics(),
               slivers: [
                 const FavoriteSliverAppBar(),
-                
+
                 /// Section title for saved guides
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 20.h, bottom: 8.h),
+                    padding: EdgeInsets.only(
+                      left: 16.w,
+                      right: 16.w,
+                      top: 20.h,
+                      bottom: 8.h,
+                    ),
                     child: Text(
                       "Saved Tour Guides",
                       style: AppTextStyle.primaryTextW600S22.copyWith(
@@ -120,19 +118,19 @@ class _GuidesSavedScreenState extends State<GuidesSavedScreen> {
 
                 /// Vertical list of saved guide cards
                 SliverPadding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 12.h,
+                  ),
                   sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: 12.h),
-                          child: SavedGuideCardWidget(
-                            guide: savedGuidesList[index],
-                          ),
-                        );
-                      },
-                      childCount: savedGuidesList.length,
-                    ),
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 12.h),
+                        child: SavedGuideCardWidget(
+                          guide: savedGuidesList[index],
+                        ),
+                      );
+                    }, childCount: savedGuidesList.length),
                   ),
                 ),
               ],

@@ -4,7 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
-import 'package:smart_guide/core/utils/app_colors.dart';
+import 'package:smart_guide/core/methods/custom_animated_snack_bar.dart';
+import 'package:smart_guide/core/methods/save_place_feedback.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_cubit.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_places/get_places_state.dart';
 import 'package:smart_guide/feature/popular_places/presentation/view/widget/popular_places_card.dart';
@@ -44,27 +45,15 @@ class PopularPlacesCards extends StatelessWidget {
         return BlocListener<SavedPlacesCubit, SavedPlacesState>(
           listener: (context, state) {
             if (state is SavePlaceSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: AppColors.greenColor,
-                ),
-              );
+              SaveFeedback.saved(context);
             }
             if (state is RemovePlaceSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: AppColors.redAppColor,
-                ),
-              );
+              SaveFeedback.removed(context);
             }
             if (state is SavedPlacesFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: AppColors.redAppColor,
-                ),
+              CustomAnimatedShowSnackBar.failureSnackBar(
+                context: context,
+                message: state.message,
               );
             }
           },

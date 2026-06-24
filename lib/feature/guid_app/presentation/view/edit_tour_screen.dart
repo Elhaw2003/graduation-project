@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smart_guide/core/shared_widgets/custom_text_field_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/guide_dashboard/data/model/guide_tour_detail_model.dart';
@@ -11,9 +12,6 @@ import 'package:smart_guide/feature/guide_dashboard/presentation/cubit/guide_das
 import 'package:smart_guide/feature/guide_dashboard/presentation/cubit/guide_dashboard_states.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
-/// Pass [tourData] for instant pre-fill (e.g. from detail screen).
-/// Pass only [tourId] to fetch from API first (e.g. from tours list).
-/// Pass nothing for create flow.
 class EditTourScreen extends StatefulWidget {
   final GuideTourDetailModel? tourData;
   final String? tourId;
@@ -58,9 +56,9 @@ class _EditTourScreenState extends State<EditTourScreen> {
   @override
   void initState() {
     super.initState();
-    _titleCtrl    = TextEditingController();
-    _descCtrl     = TextEditingController();
-    _priceCtrl    = TextEditingController();
+    _titleCtrl = TextEditingController();
+    _descCtrl = TextEditingController();
+    _priceCtrl = TextEditingController();
     _durationCtrl = TextEditingController();
     _maxGroupCtrl = TextEditingController();
 
@@ -79,9 +77,9 @@ class _EditTourScreenState extends State<EditTourScreen> {
   }
 
   void _fillFromModel(GuideTourDetailModel m) {
-    _titleCtrl.text    = m.title;
-    _descCtrl.text     = m.description;
-    _priceCtrl.text    = m.price > 0 ? m.price.toStringAsFixed(0) : '';
+    _titleCtrl.text = m.title;
+    _descCtrl.text = m.description;
+    _priceCtrl.text = m.price > 0 ? m.price.toStringAsFixed(0) : '';
     _durationCtrl.text = m.durationHours > 0 ? m.durationHours.toString() : '';
     _maxGroupCtrl.text = '';
     // Use backend-matching shapes for all sub-lists
@@ -89,12 +87,14 @@ class _EditTourScreenState extends State<EditTourScreen> {
         .map((e) => {'Description': e.description, 'Type': e.type})
         .toList();
     _stops = m.stops
-        .map((s) => {
-              'Title':       s.title,
-              'Description': s.description,
-              'orderIndex':  s.orderIndex,
-              'PlaceId':     s.placeId,
-            })
+        .map(
+          (s) => {
+            'Title': s.title,
+            'Description': s.description,
+            'orderIndex': s.orderIndex,
+            'PlaceId': s.placeId,
+          },
+        )
         .toList();
     _addOns = m.addOns
         .map((a) => {'Title': a.title, 'Price': a.price})
@@ -119,14 +119,16 @@ class _EditTourScreenState extends State<EditTourScreen> {
       if (source == ImageSource.gallery) {
         final files = await picker.pickMultiImage();
         if (files.isNotEmpty) {
-          setState(() => _selectedImages.addAll(files.map((f) => File(f.path))));
+          setState(
+            () => _selectedImages.addAll(files.map((f) => File(f.path))),
+          );
         }
       } else {
         final file = await picker.pickImage(source: source);
         if (file != null) setState(() => _selectedImages.add(File(file.path)));
       }
     } catch (e) {
-      _showError('Could not pick image: $e');
+      _showGradientSnack('Could not pick image: $e', isSuccess: false);
     }
   }
 
@@ -145,15 +147,15 @@ class _EditTourScreenState extends State<EditTourScreen> {
         .toList();
 
     return {
-      'Title':         _titleCtrl.text.trim(),
-      'Description':   _descCtrl.text.trim(),
-      'Price':         double.tryParse(_priceCtrl.text.trim()) ?? 0.0,
+      'Title': _titleCtrl.text.trim(),
+      'Description': _descCtrl.text.trim(),
+      'Price': double.tryParse(_priceCtrl.text.trim()) ?? 0.0,
       'DurationHours': int.tryParse(_durationCtrl.text.trim()) ?? 0,
-      'MaxGroupSize':  int.tryParse(_maxGroupCtrl.text.trim()) ?? 0,
-      'Inclusions':    cleanInclusions,   // [{Description, Type}]
-      'StopsJson':     cleanStops,        // [{Title, Description, orderIndex, PlaceId}]
-      'AddOnsJson':    cleanAddOns,       // [{Title, Price}]
-      'Images':        _selectedImages.map((f) => f.path).toList(),
+      'MaxGroupSize': int.tryParse(_maxGroupCtrl.text.trim()) ?? 0,
+      'Inclusions': cleanInclusions, // [{Description, Type}]
+      'StopsJson': cleanStops, // [{Title, Description, orderIndex, PlaceId}]
+      'AddOnsJson': cleanAddOns, // [{Title, Price}]
+      'Images': _selectedImages.map((f) => f.path).toList(),
     };
   }
 
@@ -162,9 +164,9 @@ class _EditTourScreenState extends State<EditTourScreen> {
     final payload = _buildPayload();
     if (_isEditMode && widget.tourId != null) {
       context.read<GuideDashboardCubit>().editTour(
-            id: widget.tourId!,
-            tourData: payload,
-          );
+        id: widget.tourId!,
+        tourData: payload,
+      );
     } else {
       context.read<GuideDashboardCubit>().createTour(tourData: payload);
     }
@@ -180,15 +182,24 @@ class _EditTourScreenState extends State<EditTourScreen> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setD) => AlertDialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-          title: Text('Add Inclusion', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+          backgroundColor: AppColors.backgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          title: Text(
+            'Add Inclusion',
+            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _DialogTextField(ctrl: descCtrl, hint: 'e.g. Lunch included'),
               SizedBox(height: 12.h),
-              Text('Type', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600)),
+              Text(
+                'Type',
+                style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
+              ),
               SizedBox(height: 6.h),
               Row(
                 children: ['Included', 'Excluded'].map((t) {
@@ -196,11 +207,15 @@ class _EditTourScreenState extends State<EditTourScreen> {
                     child: GestureDetector(
                       onTap: () => setD(() => selectedType = t),
                       child: Container(
-                        margin: EdgeInsets.only(right: t == 'Included' ? 6.w : 0),
+                        margin: EdgeInsets.only(
+                          right: t == 'Included' ? 6.w : 0,
+                        ),
                         padding: EdgeInsets.symmetric(vertical: 10.h),
                         decoration: BoxDecoration(
                           color: selectedType == t
-                              ? (t == 'Included' ? AppColors.primaryColor : AppColors.redAppColor)
+                              ? (t == 'Included'
+                                    ? AppColors.primaryColor
+                                    : AppColors.redAppColor)
                               : Colors.grey.shade100,
                           borderRadius: BorderRadius.circular(8.r),
                           border: Border.all(
@@ -214,7 +229,9 @@ class _EditTourScreenState extends State<EditTourScreen> {
                             t,
                             style: TextStyle(
                               fontSize: 13.sp,
-                              color: selectedType == t ? Colors.white : Colors.black54,
+                              color: selectedType == t
+                                  ? Colors.white
+                                  : Colors.black54,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -227,18 +244,25 @@ class _EditTourScreenState extends State<EditTourScreen> {
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
+            TextButton(
+              onPressed: () => Navigator.pop(ctx),
+              child: const Text('Cancel'),
+            ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryColor,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
               ),
               onPressed: () {
                 if (descCtrl.text.trim().isNotEmpty) {
-                  setState(() => _inclusions.add({
-                        'Description': descCtrl.text.trim(),
-                        'Type': selectedType,
-                      }));
+                  setState(
+                    () => _inclusions.add({
+                      'Description': descCtrl.text.trim(),
+                      'Type': selectedType,
+                    }),
+                  );
                   Navigator.pop(ctx);
                 }
               },
@@ -252,23 +276,30 @@ class _EditTourScreenState extends State<EditTourScreen> {
 
   // Stop: {Title, Description, orderIndex (auto), PlaceId (required, >= 1)}
   void _showStopDialog() {
-    final nameCtrl    = TextEditingController();
-    final descCtrl    = TextEditingController();
+    final nameCtrl = TextEditingController();
+    final descCtrl = TextEditingController();
     final placeIdCtrl = TextEditingController();
 
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-        title: Text('Add Tour Stop',
-            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+        backgroundColor: AppColors.backgroundColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        title: Text(
+          'Add Tour Stop',
+          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             _DialogTextField(ctrl: nameCtrl, hint: 'Stop name (e.g. Sphinx)'),
             SizedBox(height: 10.h),
             _DialogTextField(
-                ctrl: descCtrl, hint: 'Short description (optional)'),
+              ctrl: descCtrl,
+              hint: 'Short description (optional)',
+            ),
             SizedBox(height: 10.h),
             _DialogTextField(
               ctrl: placeIdCtrl,
@@ -279,33 +310,35 @@ class _EditTourScreenState extends State<EditTourScreen> {
         ),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel')),
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primaryColor,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.r)),
+                borderRadius: BorderRadius.circular(8.r),
+              ),
             ),
             onPressed: () {
               final name = nameCtrl.text.trim();
               final placeId = int.tryParse(placeIdCtrl.text.trim()) ?? 0;
               if (name.isEmpty) return;
               if (placeId < 1) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Place ID must be a valid number (≥ 1)'),
-                    backgroundColor: Colors.orange,
-                  ),
+                _showGradientSnack(
+                  'Place ID must be a valid number (≥ 1)',
+                  isSuccess: false,
                 );
                 return;
               }
-              setState(() => _stops.add({
-                    'Title':       name,
-                    'Description': descCtrl.text.trim(),
-                    'orderIndex':  _stops.length + 1,
-                    'PlaceId':     placeId,
-                  }));
+              setState(
+                () => _stops.add({
+                  'Title': name,
+                  'Description': descCtrl.text.trim(),
+                  'orderIndex': _stops.length + 1,
+                  'PlaceId': placeId,
+                }),
+              );
               Navigator.pop(ctx);
             },
             child: const Text('Add', style: TextStyle(color: Colors.white)),
@@ -326,15 +359,21 @@ class _EditTourScreenState extends State<EditTourScreen> {
         children: [
           _DialogTextField(ctrl: titleCtrl, hint: 'e.g. Photography Session'),
           SizedBox(height: 10.h),
-          _DialogTextField(ctrl: priceCtrl, hint: 'Price (EGP)', isNumber: true),
+          _DialogTextField(
+            ctrl: priceCtrl,
+            hint: 'Price (EGP)',
+            isNumber: true,
+          ),
         ],
       ),
       onConfirm: () {
         if (titleCtrl.text.trim().isNotEmpty) {
-          setState(() => _addOns.add({
-                'Title': titleCtrl.text.trim(),
-                'Price': double.tryParse(priceCtrl.text.trim()) ?? 0.0,
-              }));
+          setState(
+            () => _addOns.add({
+              'Title': titleCtrl.text.trim(),
+              'Price': double.tryParse(priceCtrl.text.trim()) ?? 0.0,
+            }),
+          );
         }
       },
     );
@@ -348,9 +387,14 @@ class _EditTourScreenState extends State<EditTourScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-        title: Text(title, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+        backgroundColor: AppColors.backgroundColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        title: Text(
+          title,
+          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+        ),
         content: content,
         actions: [
           TextButton(
@@ -361,7 +405,8 @@ class _EditTourScreenState extends State<EditTourScreen> {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primaryColor,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.r)),
+                borderRadius: BorderRadius.circular(8.r),
+              ),
             ),
             onPressed: () {
               onConfirm();
@@ -377,7 +422,8 @@ class _EditTourScreenState extends State<EditTourScreen> {
   void _createNextSlot(BuildContext context) {
     if (_pendingTourId == null ||
         _pendingTourId!.isEmpty ||
-        _pendingSlotIndex >= _slots.length) return;
+        _pendingSlotIndex >= _slots.length)
+      return;
     final slot = _slots[_pendingSlotIndex];
     debugPrint(
       '══ createSlot [$_pendingSlotIndex/${_slots.length}] '
@@ -385,12 +431,12 @@ class _EditTourScreenState extends State<EditTourScreen> {
       'start="${slot['startTime']}" end="${slot['endTime']}" cap="${slot['capacity']}"',
     );
     context.read<GuideDashboardCubit>().createSlot(
-          tourId: _pendingTourId!,
-          date: slot['date'] as String,
-          startTime: slot['startTime'] as String,
-          endTime: slot['endTime'] as String,
-          capacity: slot['capacity'] as int,
-        );
+      tourId: _pendingTourId!,
+      date: slot['date'] as String,
+      startTime: slot['startTime'] as String,
+      endTime: slot['endTime'] as String,
+      capacity: slot['capacity'] as int,
+    );
   }
 
   Future<void> _showSlotDialog() async {
@@ -403,118 +449,134 @@ class _EditTourScreenState extends State<EditTourScreen> {
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-          title:
-              Text('Add Booking Slot', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+          backgroundColor: AppColors.backgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+          title: Text(
+            'Add Booking Slot',
+            style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+          ),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Date
-                Text('Date', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600)),
+                Text(
+                  'Date',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 SizedBox(height: 6.h),
-                GestureDetector(
+                _PickerField(
+                  label: pickedDate != null
+                      ? '${pickedDate!.year}-${pickedDate!.month.toString().padLeft(2, '0')}-${pickedDate!.day.toString().padLeft(2, '0')}'
+                      : 'Select date...',
+                  hasValue: pickedDate != null,
+                  icon: Icons.calendar_today_rounded,
                   onTap: () async {
                     final d = await showDatePicker(
                       context: ctx,
                       initialDate: DateTime.now().add(const Duration(days: 1)),
                       firstDate: DateTime.now(),
                       lastDate: DateTime.now().add(const Duration(days: 365)),
+                      builder: (c, child) => Theme(
+                        data: Theme.of(c).copyWith(
+                          colorScheme: const ColorScheme.light(
+                            primary: AppColors.primaryColor,
+                            onPrimary: Colors.white,
+                            onSurface: Colors.black87,
+                          ),
+                        ),
+                        child: child!,
+                      ),
                     );
                     if (d != null) setDialogState(() => pickedDate = d);
                   },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    child: Text(
-                      pickedDate != null
-                          ? '${pickedDate!.year}-${pickedDate!.month.toString().padLeft(2, '0')}-${pickedDate!.day.toString().padLeft(2, '0')}'
-                          : 'Select date...',
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        color: pickedDate != null ? Colors.black87 : Colors.grey,
-                      ),
-                    ),
-                  ),
                 ),
                 SizedBox(height: 12.h),
                 // Start Time
-                Text('Start Time', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600)),
+                Text(
+                  'Start Time',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 SizedBox(height: 6.h),
-                GestureDetector(
+                _PickerField(
+                  label: startTime != null
+                      ? '${startTime!.hour.toString().padLeft(2, '0')}:${startTime!.minute.toString().padLeft(2, '0')}:00'
+                      : 'Select start time...',
+                  hasValue: startTime != null,
+                  icon: Icons.access_time_rounded,
                   onTap: () async {
                     final t = await showTimePicker(
                       context: ctx,
                       initialTime: const TimeOfDay(hour: 9, minute: 0),
+                      builder: (c, child) => Theme(
+                        data: Theme.of(c).copyWith(
+                          colorScheme: const ColorScheme.light(
+                            primary: AppColors.primaryColor,
+                            onPrimary: Colors.white,
+                          ),
+                        ),
+                        child: child!,
+                      ),
                     );
                     if (t != null) setDialogState(() => startTime = t);
                   },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    child: Text(
-                      startTime != null
-                          ? '${startTime!.hour.toString().padLeft(2, '0')}:${startTime!.minute.toString().padLeft(2, '0')}:00'
-                          : 'Select start time...',
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        color: startTime != null ? Colors.black87 : Colors.grey,
-                      ),
-                    ),
-                  ),
                 ),
                 SizedBox(height: 12.h),
                 // End Time
-                Text('End Time', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600)),
+                Text(
+                  'End Time',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 SizedBox(height: 6.h),
-                GestureDetector(
+                _PickerField(
+                  label: endTime != null
+                      ? '${endTime!.hour.toString().padLeft(2, '0')}:${endTime!.minute.toString().padLeft(2, '0')}:00'
+                      : 'Select end time...',
+                  hasValue: endTime != null,
+                  icon: Icons.access_time_filled_rounded,
                   onTap: () async {
                     final t = await showTimePicker(
                       context: ctx,
                       initialTime: const TimeOfDay(hour: 17, minute: 0),
+                      builder: (c, child) => Theme(
+                        data: Theme.of(c).copyWith(
+                          colorScheme: const ColorScheme.light(
+                            primary: AppColors.primaryColor,
+                            onPrimary: Colors.white,
+                          ),
+                        ),
+                        child: child!,
+                      ),
                     );
                     if (t != null) setDialogState(() => endTime = t);
                   },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    child: Text(
-                      endTime != null
-                          ? '${endTime!.hour.toString().padLeft(2, '0')}:${endTime!.minute.toString().padLeft(2, '0')}:00'
-                          : 'Select end time...',
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        color: endTime != null ? Colors.black87 : Colors.grey,
-                      ),
-                    ),
-                  ),
                 ),
                 SizedBox(height: 12.h),
-                // Capacity
-                Text('Capacity', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600)),
+                // Capacity (max 50)
+                Text(
+                  'Capacity (max 50)',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
                 SizedBox(height: 6.h),
-                TextField(
+                CustomTextFieldWidget(
                   controller: capacityCtrl,
                   keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    hintText: 'e.g. 30',
-                    hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13.sp),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
-                  ),
+                  hintText: 'e.g. 30',
                 ),
               ],
             ),
@@ -522,22 +584,31 @@ class _EditTourScreenState extends State<EditTourScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel'),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: AppColors.redAppColor),
+              ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primaryColor,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.r)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.r),
+                ),
               ),
               onPressed: () {
-                if (pickedDate == null || startTime == null || endTime == null) return;
+                if (pickedDate == null || startTime == null || endTime == null)
+                  return;
                 final cap = int.tryParse(capacityCtrl.text.trim()) ?? 0;
-                if (cap <= 0) return;
+                if (cap <= 0 || cap > 50) return;
                 setState(() {
                   _slots.add({
-                    'date': '${pickedDate!.year}-${pickedDate!.month.toString().padLeft(2, '0')}-${pickedDate!.day.toString().padLeft(2, '0')}',
-                    'startTime': '${startTime!.hour.toString().padLeft(2, '0')}:${startTime!.minute.toString().padLeft(2, '0')}:00',
-                    'endTime': '${endTime!.hour.toString().padLeft(2, '0')}:${endTime!.minute.toString().padLeft(2, '0')}:00',
+                    'date':
+                        '${pickedDate!.year}-${pickedDate!.month.toString().padLeft(2, '0')}-${pickedDate!.day.toString().padLeft(2, '0')}',
+                    'startTime':
+                        '${startTime!.hour.toString().padLeft(2, '0')}:${startTime!.minute.toString().padLeft(2, '0')}:00',
+                    'endTime':
+                        '${endTime!.hour.toString().padLeft(2, '0')}:${endTime!.minute.toString().padLeft(2, '0')}:00',
                     'capacity': cap,
                   });
                 });
@@ -551,10 +622,67 @@ class _EditTourScreenState extends State<EditTourScreen> {
     );
   }
 
-  void _showError(String msg) {
+  void _showGradientSnack(
+    String msg, {
+    bool isSuccess = true,
+    bool isDelete = false,
+  }) {
     if (!mounted) return;
+    final List<Color> colors = isDelete
+        ? [const Color(0xFFEF4444), const Color(0xFFF59E0B)]
+        : isSuccess
+        ? [const Color(0xFF1E4DB7), const Color(0xFF10B981)]
+        : [const Color(0xFFDC2626), const Color(0xFFEA580C)];
+    final icon = isDelete
+        ? Icons.delete_sweep_rounded
+        : isSuccess
+        ? Icons.check_circle_rounded
+        : Icons.error_rounded;
+
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(msg), backgroundColor: Colors.red),
+      SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        behavior: SnackBarBehavior.floating,
+        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+        padding: EdgeInsets.zero,
+        duration: const Duration(seconds: 3),
+        content: Container(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 13.h),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: colors,
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+            borderRadius: BorderRadius.circular(14.r),
+            boxShadow: [
+              BoxShadow(
+                color: colors.first.withOpacity(0.35),
+                blurRadius: 14,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Icon(icon, color: Colors.white, size: 20.sp),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: Text(
+                  msg,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 13.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -569,15 +697,17 @@ class _EditTourScreenState extends State<EditTourScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Colors.black,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
-          _isEditMode
-              ? LocaleKeys.edit_tour.tr()
-              : LocaleKeys.createTour.tr(),
-          style: AppTextStyle.primaryPoppinsTextW600S18
-              .copyWith(color: Colors.black),
+          _isEditMode ? LocaleKeys.edit_tour.tr() : LocaleKeys.createTour.tr(),
+          style: AppTextStyle.primaryPoppinsTextW600S18.copyWith(
+            color: Colors.black,
+          ),
         ),
       ),
       body: BlocListener<GuideDashboardCubit, GuideDashboardState>(
@@ -591,17 +721,12 @@ class _EditTourScreenState extends State<EditTourScreen> {
           }
           if (state is GetTourDetailsFailure) {
             setState(() => _loadingDetails = false);
-            _showError(state.errorMessage);
+            _showGradientSnack(state.errorMessage, isSuccess: false);
             return;
           }
           if (state is CreateTourSuccess) {
             if (_slots.isEmpty) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(LocaleKeys.tour_created.tr()),
-                  backgroundColor: Colors.green,
-                ),
-              );
+              _showGradientSnack(LocaleKeys.tour_created.tr());
               Navigator.pop(context, true);
             } else {
               // Start creating slots one by one
@@ -612,12 +737,7 @@ class _EditTourScreenState extends State<EditTourScreen> {
             return;
           }
           if (state is EditTourSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(LocaleKeys.tour_updated.tr()),
-                backgroundColor: Colors.green,
-              ),
-            );
+            _showGradientSnack(LocaleKeys.tour_updated.tr());
             Navigator.pop(context, true);
             return;
           }
@@ -627,12 +747,7 @@ class _EditTourScreenState extends State<EditTourScreen> {
               _createNextSlot(context);
             } else {
               // All slots created
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(LocaleKeys.tour_created.tr()),
-                  backgroundColor: Colors.green,
-                ),
-              );
+              _showGradientSnack(LocaleKeys.tour_created.tr());
               Navigator.pop(context, true);
             }
             return;
@@ -644,11 +759,15 @@ class _EditTourScreenState extends State<EditTourScreen> {
               barrierDismissible: false,
               builder: (ctx) => AlertDialog(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16.r)),
+                  borderRadius: BorderRadius.circular(16.r),
+                ),
                 title: Row(
                   children: [
-                    Icon(Icons.warning_amber_rounded,
-                        color: Colors.orange, size: 22.sp),
+                    Icon(
+                      Icons.warning_amber_rounded,
+                      color: Colors.orange,
+                      size: 22.sp,
+                    ),
                     SizedBox(width: 8.w),
                     const Text('Slot Creation Failed'),
                   ],
@@ -672,16 +791,20 @@ class _EditTourScreenState extends State<EditTourScreen> {
                       Navigator.pop(ctx);
                       _createNextSlot(context); // retry same slot
                     },
-                    child: const Text('Retry',
-                        style: TextStyle(color: Colors.white)),
+                    child: const Text(
+                      'Retry',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ],
               ),
             );
             return;
           }
-          if (state is CreateTourFailure) _showError(state.errorMessage);
-          if (state is EditTourFailure)   _showError(state.errorMessage);
+          if (state is CreateTourFailure)
+            _showGradientSnack(state.errorMessage, isSuccess: false);
+          if (state is EditTourFailure)
+            _showGradientSnack(state.errorMessage, isSuccess: false);
         },
         child: BlocBuilder<GuideDashboardCubit, GuideDashboardState>(
           buildWhen: (_, s) =>
@@ -698,7 +821,8 @@ class _EditTourScreenState extends State<EditTourScreen> {
               s is GetTourDetailsSuccess ||
               s is GetTourDetailsFailure,
           builder: (context, state) {
-            _isLoading = state is CreateTourLoading ||
+            _isLoading =
+                state is CreateTourLoading ||
                 state is EditTourLoading ||
                 state is CreateSlotLoading;
 
@@ -707,8 +831,7 @@ class _EditTourScreenState extends State<EditTourScreen> {
             }
 
             return SingleChildScrollView(
-              padding:
-                  EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -749,11 +872,9 @@ class _EditTourScreenState extends State<EditTourScreen> {
                             children: [
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    _FieldLabel(
-                                        LocaleKeys.duration_hours.tr()),
+                                    _FieldLabel(LocaleKeys.duration_hours.tr()),
                                     _Field(
                                       controller: _durationCtrl,
                                       hint: '4',
@@ -765,11 +886,9 @@ class _EditTourScreenState extends State<EditTourScreen> {
                               SizedBox(width: 12.w),
                               Expanded(
                                 child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    _FieldLabel(
-                                        LocaleKeys.max_group_size.tr()),
+                                    _FieldLabel(LocaleKeys.max_group_size.tr()),
                                     _Field(
                                       controller: _maxGroupCtrl,
                                       hint: '10',
@@ -800,48 +919,60 @@ class _EditTourScreenState extends State<EditTourScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ..._stops.asMap().entries.map(
-                                (e) => ListTile(
-                                  dense: true,
-                                  contentPadding: EdgeInsets.zero,
-                                  leading: CircleAvatar(
-                                    radius: 14.r,
-                                    backgroundColor: AppColors.primaryColor,
-                                    child: Text(
-                                      '${e.key + 1}',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 11.sp,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
-                                  title: Text(
-                                    e.value['Title']?.toString() ?? '',
-                                    style: TextStyle(fontSize: 13.sp),
-                                  ),
-                                  subtitle: e.value['Description']?.toString().isNotEmpty == true
-                                      ? Text(
-                                          e.value['Description'].toString(),
-                                          style: TextStyle(
-                                              fontSize: 11.sp,
-                                              color: AppColors.grey400Color),
-                                        )
-                                      : null,
-                                  trailing: IconButton(
-                                    icon: const Icon(Icons.close,
-                                        color: Colors.red, size: 18),
-                                    onPressed: () => setState(
-                                        () => _stops.removeAt(e.key)),
+                            (e) => ListTile(
+                              dense: true,
+                              contentPadding: EdgeInsets.zero,
+                              leading: CircleAvatar(
+                                radius: 14.r,
+                                backgroundColor: AppColors.primaryColor,
+                                child: Text(
+                                  '${e.key + 1}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 11.sp,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ),
+                              title: Text(
+                                e.value['Title']?.toString() ?? '',
+                                style: TextStyle(fontSize: 13.sp),
+                              ),
+                              subtitle:
+                                  e.value['Description']
+                                          ?.toString()
+                                          .isNotEmpty ==
+                                      true
+                                  ? Text(
+                                      e.value['Description'].toString(),
+                                      style: TextStyle(
+                                        fontSize: 11.sp,
+                                        color: AppColors.grey400Color,
+                                      ),
+                                    )
+                                  : null,
+                              trailing: IconButton(
+                                icon: const Icon(
+                                  Icons.close,
+                                  color: Colors.red,
+                                  size: 18,
+                                ),
+                                onPressed: () =>
+                                    setState(() => _stops.removeAt(e.key)),
+                              ),
+                            ),
+                          ),
                           TextButton.icon(
                             onPressed: _showStopDialog,
-                            icon: const Icon(Icons.add_circle_outline_rounded,
-                                color: AppColors.primaryColor),
+                            icon: const Icon(
+                              Icons.add_circle_outline_rounded,
+                              color: AppColors.primaryColor,
+                            ),
                             label: Text(
                               LocaleKeys.add_stop.tr(),
                               style: const TextStyle(
-                                  color: AppColors.primaryColor),
+                                color: AppColors.primaryColor,
+                              ),
                             ),
                           ),
                         ],
@@ -859,38 +990,47 @@ class _EditTourScreenState extends State<EditTourScreen> {
                           Wrap(
                             spacing: 6.w,
                             runSpacing: 4.h,
-                            children: _inclusions.asMap().entries
-                                .map(
-                                  (e) {
-                                    final desc = e.value['Description']?.toString() ?? '';
-                                    final type = e.value['Type']?.toString() ?? 'Included';
-                                    final isExcluded = type == 'Excluded';
-                                    return Chip(
-                                      avatar: Icon(
-                                        isExcluded ? Icons.remove_circle_outline : Icons.check_circle_outline,
-                                        size: 14.sp,
-                                        color: isExcluded ? Colors.red : AppColors.primaryColor,
-                                      ),
-                                      label: Text(desc, style: TextStyle(fontSize: 12.sp)),
-                                      backgroundColor: isExcluded
-                                          ? Colors.red.withOpacity(0.07)
-                                          : AppColors.primaryColor.withOpacity(0.08),
-                                      deleteIconColor: Colors.red,
-                                      onDeleted: () => setState(() => _inclusions.removeAt(e.key)),
-                                    );
-                                  },
-                                )
-                                .toList(),
+                            children: _inclusions.asMap().entries.map((e) {
+                              final desc =
+                                  e.value['Description']?.toString() ?? '';
+                              final type =
+                                  e.value['Type']?.toString() ?? 'Included';
+                              final isExcluded = type == 'Excluded';
+                              return Chip(
+                                avatar: Icon(
+                                  isExcluded
+                                      ? Icons.remove_circle_outline
+                                      : Icons.check_circle_outline,
+                                  size: 14.sp,
+                                  color: isExcluded
+                                      ? Colors.red
+                                      : AppColors.primaryColor,
+                                ),
+                                label: Text(
+                                  desc,
+                                  style: TextStyle(fontSize: 12.sp),
+                                ),
+                                backgroundColor: isExcluded
+                                    ? Colors.red.withOpacity(0.07)
+                                    : AppColors.primaryColor.withOpacity(0.08),
+                                deleteIconColor: Colors.red,
+                                onDeleted: () =>
+                                    setState(() => _inclusions.removeAt(e.key)),
+                              );
+                            }).toList(),
                           ),
                           if (_inclusions.isNotEmpty) SizedBox(height: 4.h),
                           TextButton.icon(
                             onPressed: _showInclusionDialog,
-                            icon: const Icon(Icons.add_circle_outline_rounded,
-                                color: AppColors.primaryColor),
+                            icon: const Icon(
+                              Icons.add_circle_outline_rounded,
+                              color: AppColors.primaryColor,
+                            ),
                             label: Text(
                               LocaleKeys.add_inclusion.tr(),
                               style: const TextStyle(
-                                  color: AppColors.primaryColor),
+                                color: AppColors.primaryColor,
+                              ),
                             ),
                           ),
                         ],
@@ -925,8 +1065,11 @@ class _EditTourScreenState extends State<EditTourScreen> {
                                     ),
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.close,
-                                        color: Colors.red, size: 18),
+                                    icon: const Icon(
+                                      Icons.close,
+                                      color: Colors.red,
+                                      size: 18,
+                                    ),
                                     onPressed: () =>
                                         setState(() => _addOns.removeAt(e.key)),
                                   ),
@@ -936,12 +1079,15 @@ class _EditTourScreenState extends State<EditTourScreen> {
                           ),
                           TextButton.icon(
                             onPressed: _showAddOnDialog,
-                            icon: const Icon(Icons.add_circle_outline_rounded,
-                                color: AppColors.primaryColor),
+                            icon: const Icon(
+                              Icons.add_circle_outline_rounded,
+                              color: AppColors.primaryColor,
+                            ),
                             label: Text(
                               LocaleKeys.add_addon.tr(),
                               style: const TextStyle(
-                                  color: AppColors.primaryColor),
+                                color: AppColors.primaryColor,
+                              ),
                             ),
                           ),
                         ],
@@ -958,59 +1104,73 @@ class _EditTourScreenState extends State<EditTourScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ..._slots.asMap().entries.map(
-                                  (e) => Container(
-                                    margin: EdgeInsets.only(bottom: 8.h),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 12.w, vertical: 10.h),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          AppColors.primaryColor.withOpacity(0.05),
-                                      borderRadius: BorderRadius.circular(10.r),
-                                      border: Border.all(
-                                        color:
-                                            AppColors.primaryColor.withOpacity(0.2),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Icon(Icons.event,
-                                            size: 16.sp,
-                                            color: AppColors.primaryColor),
-                                        SizedBox(width: 8.w),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                e.value['date'] as String,
-                                                style: TextStyle(
-                                                    fontSize: 13.sp,
-                                                    fontWeight: FontWeight.w600),
-                                              ),
-                                              Text(
-                                                '${e.value['startTime']} → ${e.value['endTime']}  •  ${e.value['capacity']} seats',
-                                                style: TextStyle(
-                                                    fontSize: 11.sp,
-                                                    color: AppColors.grey400Color),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(Icons.close,
-                                              color: Colors.red, size: 18),
-                                          onPressed: () => setState(
-                                              () => _slots.removeAt(e.key)),
-                                        ),
-                                      ],
+                              (e) => Container(
+                                margin: EdgeInsets.only(bottom: 8.h),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12.w,
+                                  vertical: 10.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primaryColor.withOpacity(
+                                    0.05,
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.r),
+                                  border: Border.all(
+                                    color: AppColors.primaryColor.withOpacity(
+                                      0.2,
                                     ),
                                   ),
                                 ),
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.event,
+                                      size: 16.sp,
+                                      color: AppColors.primaryColor,
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            e.value['date'] as String,
+                                            style: TextStyle(
+                                              fontSize: 13.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          Text(
+                                            '${e.value['startTime']} → ${e.value['endTime']}  •  ${e.value['capacity']} seats',
+                                            style: TextStyle(
+                                              fontSize: 11.sp,
+                                              color: AppColors.grey400Color,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    IconButton(
+                                      icon: const Icon(
+                                        Icons.close,
+                                        color: Colors.red,
+                                        size: 18,
+                                      ),
+                                      onPressed: () => setState(
+                                        () => _slots.removeAt(e.key),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
                             TextButton.icon(
                               onPressed: _showSlotDialog,
-                              icon: const Icon(Icons.add_circle_outline_rounded,
-                                  color: AppColors.primaryColor),
+                              icon: const Icon(
+                                Icons.add_circle_outline_rounded,
+                                color: AppColors.primaryColor,
+                              ),
                               label: const Text(
                                 'Add Slot',
                                 style: TextStyle(color: AppColors.primaryColor),
@@ -1040,21 +1200,17 @@ class _EditTourScreenState extends State<EditTourScreen> {
                             children: [
                               Expanded(
                                 child: _MediaButton(
-                                  label:
-                                      LocaleKeys.upload_from_camera.tr(),
+                                  label: LocaleKeys.upload_from_camera.tr(),
                                   icon: Icons.camera_alt_outlined,
-                                  onTap: () =>
-                                      _pickImages(ImageSource.camera),
+                                  onTap: () => _pickImages(ImageSource.camera),
                                 ),
                               ),
                               SizedBox(width: 12.w),
                               Expanded(
                                 child: _MediaButton(
-                                  label:
-                                      LocaleKeys.upload_from_gallery.tr(),
+                                  label: LocaleKeys.upload_from_gallery.tr(),
                                   icon: Icons.photo_library_outlined,
-                                  onTap: () =>
-                                      _pickImages(ImageSource.gallery),
+                                  onTap: () => _pickImages(ImageSource.gallery),
                                 ),
                               ),
                             ],
@@ -1071,8 +1227,8 @@ class _EditTourScreenState extends State<EditTourScreen> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primaryColor,
-                          disabledBackgroundColor:
-                              AppColors.primaryColor.withOpacity(0.5),
+                          disabledBackgroundColor: AppColors.primaryColor
+                              .withOpacity(0.5),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14.r),
                           ),
@@ -1149,8 +1305,9 @@ class _SectionCard extends StatelessWidget {
               SizedBox(width: 8.w),
               Text(
                 title,
-                style: AppTextStyle.primaryPoppinsTextW600S18
-                    .copyWith(fontSize: 15.sp),
+                style: AppTextStyle.primaryPoppinsTextW600S18.copyWith(
+                  fontSize: 15.sp,
+                ),
               ),
             ],
           ),
@@ -1196,41 +1353,13 @@ class _Field extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return CustomTextFieldWidget(
       controller: controller,
       maxLines: maxLines,
       keyboardType: isNumber ? TextInputType.number : TextInputType.text,
+      hintText: hint,
       validator: (v) =>
           (v == null || v.trim().isEmpty) ? 'This field is required' : null,
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13.sp),
-        filled: true,
-        fillColor: const Color(0xfff9f9fc),
-        contentPadding:
-            EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
-          borderSide: BorderSide.none,
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
-          borderSide: BorderSide(color: Colors.grey.shade200),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
-          borderSide:
-              BorderSide(color: AppColors.primaryColor, width: 1.5),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
-          borderSide: const BorderSide(color: Colors.red),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.r),
-          borderSide: const BorderSide(color: Colors.red, width: 1.5),
-        ),
-      ),
     );
   }
 }
@@ -1247,18 +1376,61 @@ class _DialogTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return CustomTextFieldWidget(
       controller: ctrl,
-      autofocus: !isNumber,
+      autoFocus: !isNumber,
       keyboardType: isNumber ? TextInputType.number : TextInputType.text,
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13.sp),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.r),
+      hintText: hint,
+    );
+  }
+}
+
+// ─── Picker field (date / time) ───────────────────────────────────────────────
+
+class _PickerField extends StatelessWidget {
+  const _PickerField({
+    required this.label,
+    required this.hasValue,
+    required this.icon,
+    required this.onTap,
+  });
+  final String label;
+  final bool hasValue;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 13.h),
+        decoration: BoxDecoration(
+          color: AppColors.whiteColor,
+          borderRadius: BorderRadius.circular(8.r),
+          border: Border.all(
+            color: hasValue ? AppColors.primaryColor : Colors.grey.shade200,
+            width: hasValue ? 1.0 : 1.0,
+          ),
         ),
-        contentPadding:
-            EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              size: 18.sp,
+              color: hasValue ? AppColors.primaryColor : Colors.grey.shade400,
+            ),
+            SizedBox(width: 10.w),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 13.sp,
+                color: hasValue ? Colors.black87 : Colors.grey.shade400,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

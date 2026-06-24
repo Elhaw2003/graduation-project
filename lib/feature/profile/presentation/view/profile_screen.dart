@@ -166,9 +166,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                   ),
-                  SliverToBoxAdapter(
-                    child: _DashboardGrid(),
-                  ),
+                  SliverToBoxAdapter(child: _DashboardGrid()),
                   SliverToBoxAdapter(
                     child: CustomHeightSpacingWidget(height: 20),
                   ),

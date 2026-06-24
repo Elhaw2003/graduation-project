@@ -10,6 +10,70 @@ import 'package:smart_guide/feature/guide_dashboard/presentation/cubit/guide_das
 import 'package:smart_guide/feature/guide_dashboard/presentation/view/widget/tour_list_item.dart';
 import 'package:smart_guide/feature/guid_app/presentation/view/edit_tour_screen.dart';
 
+void _showGradientSnack(
+  BuildContext context,
+  String msg, {
+  bool isSuccess = true,
+  bool isDelete = false,
+}) {
+  final List<Color> colors = isDelete
+      ? [const Color(0xFFEF4444), const Color(0xFFF59E0B)]
+      : isSuccess
+          ? [const Color(0xFF1E4DB7), const Color(0xFF10B981)]
+          : [const Color(0xFFDC2626), const Color(0xFFEA580C)];
+  final icon = isDelete
+      ? Icons.delete_sweep_rounded
+      : isSuccess
+          ? Icons.check_circle_rounded
+          : Icons.error_rounded;
+
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+      padding: EdgeInsets.zero,
+      duration: const Duration(seconds: 3),
+      content: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 13.h),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: colors,
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          borderRadius: BorderRadius.circular(14.r),
+          boxShadow: [
+            BoxShadow(
+              color: colors.first.withOpacity(0.35),
+              blurRadius: 14,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.white, size: 20.sp),
+            SizedBox(width: 10.w),
+            Expanded(
+              child: Text(
+                msg,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 13.sp,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
 class ToursManagementScreen extends StatefulWidget {
   const ToursManagementScreen({super.key});
 
@@ -76,20 +140,10 @@ class _ToursManagementScreenState extends State<ToursManagementScreen> {
       body: BlocConsumer<GuideDashboardCubit, GuideDashboardState>(
         listener: (context, state) {
           if (state is DeleteTourSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Tour deleted successfully'),
-                backgroundColor: Colors.green,
-              ),
-            );
+            _showGradientSnack(context, 'Tour deleted successfully', isDelete: true);
             context.read<GuideDashboardCubit>().fetchMyTours();
           } else if (state is DeleteTourFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage),
-                backgroundColor: Colors.red,
-              ),
-            );
+            _showGradientSnack(context, state.errorMessage, isSuccess: false);
           }
         },
         builder: (context, state) {
