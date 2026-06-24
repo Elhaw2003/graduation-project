@@ -1,44 +1,26 @@
 {
   "project_info": {
-    "project_number": "550908208870",
-    "project_id": "smart-guide-e3306",
-    "storage_bucket": "smart-guide-e3306.firebasestorage.app"
+    "project_number": "695295007711",
+    "project_id": "smartguide-bae09",
+    "storage_bucket": "smartguide-bae09.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:550908208870:android:f519ba9af6cbe386bf7d27",
+        "mobilesdk_app_id": "1:695295007711:android:6e212dfdec1b54efa2026a",
         "android_client_info": {
           "package_name": "com.smartguide.app"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "550908208870-r9ebu96im3qjud5at9e6s66sq5kge25q.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.smartguide.app",
-            "certificate_hash": "310ef2fdb6920f35eebf273671c99ac4f5522651"
-          }
-        },
-        {
-          "client_id": "550908208870-8p9ph0rcl7du5crr59e53eesrkbj4k90.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDm9WRY7Ztf7DueIiJbMHbzvngjl5K8MtI"
+          "current_key": "AIzaSyC_sUeEw9a3B_pVyElETDVWDsaHXl9sUBs"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "550908208870-8p9ph0rcl7du5crr59e53eesrkbj4k90.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

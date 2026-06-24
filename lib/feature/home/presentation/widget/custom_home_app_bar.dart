@@ -1,11 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
+import 'package:smart_guide/feature/notifications/data/logic/notification_cubit.dart';
+import 'package:smart_guide/feature/notifications/presentation/screens/notifications_screen.dart';
 import 'package:smart_guide/generated/assets.dart';
 
 class CustomHomeAppBar extends StatelessWidget {
@@ -105,7 +108,6 @@ class CustomHomeAppBar extends StatelessWidget {
             ),
           ),
         ),
-
         _buildActionIcon(
           icon: SvgPicture.asset(
             Assets.imagesSvgSettings,
@@ -113,6 +115,22 @@ class CustomHomeAppBar extends StatelessWidget {
             color: AppColors.primaryColor,
           ),
           onTap: () => context.pushNamed(AppRoutes.settingsScreen),
+        ),
+
+        SizedBox(width: 8.w),
+
+        _buildActionIcon(
+          icon: Icon(
+            Icons.notifications_none_rounded,
+            color: AppColors.primaryColor,
+            size: 22.sp,
+          ),
+          onTap: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NotificationsScreen()),
+            );
+          },
         ),
 
         SizedBox(width: 8.w),

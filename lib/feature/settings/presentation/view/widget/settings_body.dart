@@ -8,6 +8,9 @@ import 'package:smart_guide/core/shared_widgets/custom_switch_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/settings/presentation/cubit/log_out/cubit/log_out_cubit.dart';
+import 'package:smart_guide/feature/settings/presentation/view/about_app_screen.dart';
+import 'package:smart_guide/feature/settings/presentation/view/help_center_screen.dart';
+import 'package:smart_guide/feature/settings/presentation/view/terms_of_service.dart';
 import 'package:smart_guide/feature/settings/presentation/view/widget/log_out_dialog.dart';
 import 'package:smart_guide/feature/settings/presentation/view/widget/settings_card_widget.dart';
 import 'package:smart_guide/generated/assets.dart';
@@ -34,11 +37,11 @@ class SettingsBody extends StatelessWidget {
                 svgIconPath: Assets.imagesSvgPersonalInfo,
                 trailing: CustomArrowForward(),
               ),
-              ListTileCardWidget(
-                title: LocaleKeys.password_security.tr(),
-                svgIconPath: Assets.imagesSvgPassSecurity,
-                trailing: CustomArrowForward(),
-              ),
+              // ListTileCardWidget(
+              //   title: LocaleKeys.password_security.tr(),
+              //   svgIconPath: Assets.imagesSvgPassSecurity,
+              //   trailing: CustomArrowForward(),
+              // ),
               ListTileCardWidget(
                 title: LocaleKeys.notifications.tr(),
                 svgIconPath: Assets.imagesSvgNotification,
@@ -47,31 +50,31 @@ class SettingsBody extends StatelessWidget {
             ],
           ),
           CustomHeightSpacingWidget(height: 16),
-          SettingsCardWidget(
-            items: [
-              ListTileCardWidget(
-                title: LocaleKeys.appearance.tr(),
-                titleStyle: AppTextStyle.secondaryTextPoppinsColorW500S16,
-                svgIconPath: Assets.imagesSvgAppearence,
-              ),
-              ListTileCardWidget(
-                title: LocaleKeys.dark_mode.tr(),
-                svgIconPath: Assets.imagesSvgDarkMode,
-                trailing: CustomArrowForward(),
-              ),
-              ListTileCardWidget(
-                title: LocaleKeys.language.tr(),
-                svgIconPath: Assets.imagesSvgLangauge,
-                trailing: CustomArrowForward(),
-              ),
-              ListTileCardWidget(
-                title: LocaleKeys.privacy.tr(),
-                svgIconPath: Assets.imagesSvgPrivacy,
-                trailing: CustomSwitchWidget(value: false),
-              ),
-            ],
-          ),
-          CustomHeightSpacingWidget(height: 16),
+          // SettingsCardWidget(
+          //   items: [
+          //     ListTileCardWidget(
+          //       title: LocaleKeys.appearance.tr(),
+          //       titleStyle: AppTextStyle.secondaryTextPoppinsColorW500S16,
+          //       svgIconPath: Assets.imagesSvgAppearence,
+          //     ),
+          //     // ListTileCardWidget(
+          //     //   title: LocaleKeys.dark_mode.tr(),
+          //     //   svgIconPath: Assets.imagesSvgDarkMode,
+          //     //   trailing: CustomArrowForward(),
+          //     // ),
+          //     ListTileCardWidget(
+          //       title: LocaleKeys.language.tr(),
+          //       svgIconPath: Assets.imagesSvgLangauge,
+          //       trailing: CustomArrowForward(),
+          //     ),
+          //     ListTileCardWidget(
+          //       title: LocaleKeys.privacy.tr(),
+          //       svgIconPath: Assets.imagesSvgPrivacy,
+          //       trailing: CustomSwitchWidget(value: false),
+          //     ),
+          //   ],
+          // ),
+          // CustomHeightSpacingWidget(height: 16),
           SettingsCardWidget(
             items: [
               ListTileCardWidget(
@@ -79,10 +82,19 @@ class SettingsBody extends StatelessWidget {
                 titleStyle: AppTextStyle.secondaryTextPoppinsColorW500S16,
                 svgIconPath: Assets.imagesSvgSupport,
               ),
-              ListTileCardWidget(
-                title: LocaleKeys.help_center.tr(),
-                svgIconPath: Assets.imagesSvgHelp,
-                trailing: CustomArrowForward(),
+              GestureDetector(
+                onTap: () {
+                  // Handle tap event for Help Center
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HelpCenterScreen()),
+                  );
+                },
+                child: ListTileCardWidget(
+                  title: LocaleKeys.help_center.tr(),
+                  svgIconPath: Assets.imagesSvgHelp,
+                  trailing: CustomArrowForward(),
+                ),
               ),
               ListTileCardWidget(
                 title: LocaleKeys.contact_support.tr(),
@@ -99,15 +111,35 @@ class SettingsBody extends StatelessWidget {
           CustomHeightSpacingWidget(height: 16),
           SettingsCardWidget(
             items: [
-              ListTileCardWidget(
-                title: LocaleKeys.about_app.tr(),
-                titleStyle: AppTextStyle.secondaryTextPoppinsColorW500S16,
-                svgIconPath: Assets.imagesSvgAbout,
+              GestureDetector(
+                onTap: () {
+                  // Handle tap event for About App
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AboutAppScreen()),
+                  );
+                },
+                child: ListTileCardWidget(
+                  title: LocaleKeys.about_app.tr(),
+                  titleStyle: AppTextStyle.secondaryTextPoppinsColorW500S16,
+                  svgIconPath: Assets.imagesSvgAbout,
+                ),
               ),
-              ListTileCardWidget(
-                title: LocaleKeys.terms_of_service.tr(),
-                svgIconPath: Assets.imagesSvgTermsOfService,
-                trailing: CustomArrowForward(),
+              GestureDetector(
+                onTap: () {
+                  // Handle tap event for Terms of Service
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TermsOfServiceScreen(),
+                    ),
+                  );
+                },
+                child: ListTileCardWidget(
+                  title: LocaleKeys.terms_of_service.tr(),
+                  svgIconPath: Assets.imagesSvgTermsOfService,
+                  trailing: CustomArrowForward(),
+                ),
               ),
               Center(
                 child: TextButton.icon(

@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:smart_guide/feature/auth/domain/user_type_enum.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,8 @@ import 'package:smart_guide/feature/auth/login/presentation/cubit/login_email/lo
 import 'package:smart_guide/feature/auth/login/presentation/view/widget/google_button.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/widget/login_button_widget.dart';
 import 'package:smart_guide/feature/auth/login/presentation/view/widget/remember_and_forgot_wiget.dart';
+import 'package:smart_guide/feature/notifications/data/services/fcm_service.dart';
+import 'package:smart_guide/feature/notifications/data/services/notification_service.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
 class LoginBody extends StatefulWidget {
@@ -46,13 +49,73 @@ class _LoginBodyState extends State<LoginBody> {
     return BlocConsumer<LoginCubit, LoginStates>(
       listener: (context, state) async {
         if (state is LoginSuccessStates) {
-          final userType = state.loginModel.userType;
+          debugPrint("🟢 LOGIN SUCCESS DETECTED");
 
-          // خزّنه
+          final fcmService = FcmService();
+
+          final userType = state.loginModel.userType;
+          debugPrint("👤 UserType: ${userType.name}");
+
           await SecureStorageHelper.instance.saveUserType(userType.name);
+          debugPrint("💾 UserType saved to secure storage");
 
           CacheHelper.setBool(CacheHelper.kIsRememberMe, isRememberMeChecked);
+          debugPrint("💾 RememberMe saved: $isRememberMeChecked");
 
+          /// 1. Get FCM Token
+          debugPrint("📲 Getting FCM device token...");
+          final deviceToken = await fcmService.getDeviceToken();
+
+          if (deviceToken == null) {
+            debugPrint("❌ FCM TOKEN = NULL (Firebase issue)");
+          } else {
+            debugPrint("✅ FCM TOKEN GENERATED:");
+            debugPrint(deviceToken);
+          }
+
+          /// 2. Get Auth Token
+          final authToken = CacheHelper.kToken;
+
+          if (authToken == null) {
+            debugPrint("❌ AUTH TOKEN = NULL (cache issue)");
+          } else {
+            debugPrint("🔐 AUTH TOKEN FOUND");
+          }
+
+          /// 3. Send to backend
+          if (deviceToken != null && authToken != null) {
+            debugPrint("🚀 START SENDING FCM TO BACKEND...");
+
+            final dio = Dio();
+
+            dio.options.headers = {
+              'Authorization': 'Bearer $authToken',
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            };
+
+            final notificationService = NotificationService(dio);
+
+            try {
+              final response = await notificationService.saveFcmToken(
+                deviceToken,
+              );
+
+              debugPrint("📡 FCM API CALLED SUCCESSFULLY");
+              debugPrint("📡 STATUS CODE: ${response.statusCode}");
+              debugPrint("📡 RESPONSE DATA: ${response.data}");
+            } catch (e) {
+              debugPrint("❌ FCM API ERROR:");
+              debugPrint(e.toString());
+            }
+          } else {
+            debugPrint("⚠️ SKIPPED SENDING FCM (missing token)");
+          }
+
+          /// 4. Navigation trace
+          debugPrint("➡️ Navigating after login...");
+
+          CacheHelper.setBool(CacheHelper.kIsRememberMe, isRememberMeChecked);
           CustomAnimatedShowSnackBar.successSnackBar(
             context: context,
             message: LocaleKeys.loginSuccessfully.tr(),
