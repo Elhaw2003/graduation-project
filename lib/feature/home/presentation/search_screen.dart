@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:smart_guide/core/di.dart';
+import 'package:smart_guide/core/methods/custom_animated_snack_bar.dart';
+import 'package:smart_guide/core/methods/save_place_feedback.dart';
 import 'package:smart_guide/core/shared_widgets/custom_grid_view.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/search_places/search_places_cubit.dart';
@@ -64,23 +66,17 @@ class _SearchPlacesBodyState extends State<_SearchPlacesBody> {
     return BlocListener<SavedPlacesCubit, SavedPlacesState>(
       listener: (context, state) {
         if (state is SavePlaceSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: Colors.green,
-            ),
-          );
+          SaveFeedback.saved(context);
         }
 
         if (state is RemovePlaceSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
-          );
+          SaveFeedback.removed(context);
         }
 
         if (state is SavedPlacesFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+          CustomAnimatedShowSnackBar.failureSnackBar(
+            context: context,
+            message: state.message,
           );
         }
       },

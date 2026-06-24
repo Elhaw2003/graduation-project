@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:smart_guide/core/methods/save_place_feedback.dart';
 import 'package:smart_guide/core/shared_widgets/custom_text_field_widget.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
@@ -209,21 +210,9 @@ class _AllGuidesBodyState extends State<AllGuidesBody> {
                 sliver: BlocListener<SavedGuidesCubit, SavedGuidesState>(
                   listener: (context, state) {
                     if (state is SaveGuideSuccess) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(state.message),
-                          backgroundColor: AppColors.greenColor,
-                          duration: const Duration(milliseconds: 1500),
-                        ),
-                      );
+                      SaveFeedback.savedGuide(context);
                     } else if (state is RemoveGuideSuccess) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(state.message),
-                          backgroundColor: AppColors.redAppColor,
-                          duration: const Duration(milliseconds: 1500),
-                        ),
-                      );
+                      SaveFeedback.removedGuide(context);
                     }
                   },
                   child: SliverList(

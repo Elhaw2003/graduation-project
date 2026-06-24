@@ -102,29 +102,29 @@ class CustomGridView extends StatelessWidget {
                   ),
 
                   /// TYPE
-                  if (type != null && type!.isNotEmpty)
-                    Positioned(
-                      top: 12.h,
-                      left: 12.w,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 10.w,
-                          vertical: 5.h,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30.r),
-                        ),
-                        child: Text(
-                          type!,
-                          style: TextStyle(
-                            fontSize: 10.sp,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.primaryColor,
-                          ),
-                        ),
-                      ),
-                    ),
+                  // if (type != null && type!.isNotEmpty)
+                  //   Positioned(
+                  //     top: 12.h,
+                  //     left: 12.w,
+                  //     child: Container(
+                  //       padding: EdgeInsets.symmetric(
+                  //         horizontal: 10.w,
+                  //         vertical: 5.h,
+                  //       ),
+                  //       decoration: BoxDecoration(
+                  //         color: Colors.white,
+                  //         borderRadius: BorderRadius.circular(30.r),
+                  //       ),
+                  //       child: Text(
+                  //         type!,
+                  //         style: TextStyle(
+                  //           fontSize: 10.sp,
+                  //           fontWeight: FontWeight.w700,
+                  //           color: AppColors.primaryColor,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
 
                   /// RATING
                   Positioned(

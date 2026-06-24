@@ -18,7 +18,6 @@ class SavePlacedCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => context.push(
         '${AppRoutes.detailsScreen}/${savedPlaceedCardModel.placeId}',
-        // extra: resolvePlaceImage(place.imageUrl, index),
       ),
       child: Container(
         height: 190.h,

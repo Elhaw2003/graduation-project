@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:readmore/readmore.dart';
+import 'package:smart_guide/core/methods/custom_animated_snack_bar.dart';
+import 'package:smart_guide/core/methods/save_place_feedback.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
 import 'package:smart_guide/core/utils/app_text_style.dart';
 import 'package:smart_guide/feature/details/presentation/view/widget/details_tour_appbar_widget.dart';
+import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_cubit.dart';
+import 'package:smart_guide/feature/saved/presentation/cubit/saved_places_states.dart';
 import 'package:smart_guide/feature/details/presentation/view/widget/details_tour_must_see_widget.dart';
 import 'package:smart_guide/feature/home/data/model/place_model.dart';
 import 'package:smart_guide/feature/home/presentation/cubit/get_place_details/get_place_details_cubit.dart';
@@ -311,66 +315,80 @@ class _TouristPlaceDetailsScreenState extends State<TouristPlaceDetailsScreen>
             );
           }
 
-          return Scaffold(
-            backgroundColor: AppColors.backgroundColor,
-            body: CustomScrollView(
-              controller: _scrollController,
-              physics: const BouncingScrollPhysics(),
-              slivers: [
-                DetailsTourAppbarWidget(
-                  headerAnimationController: _headerAnimationController,
-                  scrollOffset: _scrollOffset,
-                  title: place.name,
-                  rating: place.averageRating,
-                  placeId: place.id,
-                  imageUrl: place.imageUrl,
-                ),
+          return BlocListener<SavedPlacesCubit, SavedPlacesState>(
+            listener: (context, savedState) {
+              if (savedState is SavePlaceSuccess) {
+                SaveFeedback.saved(context);
+              } else if (savedState is RemovePlaceSuccess) {
+                SaveFeedback.removed(context);
+              } else if (savedState is SavedPlacesFailure) {
+                CustomAnimatedShowSnackBar.failureSnackBar(
+                  context: context,
+                  message: savedState.message,
+                );
+              }
+            },
+            child: Scaffold(
+              backgroundColor: AppColors.backgroundColor,
+              body: CustomScrollView(
+                controller: _scrollController,
+                physics: const BouncingScrollPhysics(),
+                slivers: [
+                  DetailsTourAppbarWidget(
+                    headerAnimationController: _headerAnimationController,
+                    scrollOffset: _scrollOffset,
+                    title: place.name,
+                    rating: place.averageRating,
+                    placeId: place.id,
+                    imageUrl: place.imageUrl,
+                  ),
 
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 30.h),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 30.h),
 
-                        _buildAboutSection(place),
-                        SizedBox(height: 24.h),
-
-                        DetailsTourMustSeeWidget(
-                          place: place,
-                          sectionFadeAnimations: _sectionFadeAnimations,
-                          sectionSlideAnimations: _sectionSlideAnimations,
-                        ),
-                        SizedBox(height: 24.h),
-
-                        _buildRatingSummarySection(place),
-                        SizedBox(height: 24.h),
-
-                        _buildPlaceInfoSection(place),
-                        SizedBox(height: 24.h),
-
-                        _buildLocationSection(place),
-                        SizedBox(height: 24.h),
-
-                        _buildQuickFactsSection(place),
-                        SizedBox(height: 24.h),
-
-                        if (place.reviews.isNotEmpty) ...[
-                          _buildReviewsSection(place),
+                          _buildAboutSection(place),
                           SizedBox(height: 24.h),
-                        ],
 
-                        if (place.myRating == null || place.myRating! <= 0)
-                          _buildRateButton(context, place),
-                        SizedBox(height: 40.h),
-                      ],
+                          DetailsTourMustSeeWidget(
+                            place: place,
+                            sectionFadeAnimations: _sectionFadeAnimations,
+                            sectionSlideAnimations: _sectionSlideAnimations,
+                          ),
+                          SizedBox(height: 24.h),
+
+                          _buildRatingSummarySection(place),
+                          SizedBox(height: 24.h),
+
+                          _buildPlaceInfoSection(place),
+                          SizedBox(height: 24.h),
+
+                          _buildLocationSection(place),
+                          SizedBox(height: 24.h),
+
+                          _buildQuickFactsSection(place),
+                          SizedBox(height: 24.h),
+
+                          if (place.reviews.isNotEmpty) ...[
+                            _buildReviewsSection(place),
+                            SizedBox(height: 24.h),
+                          ],
+
+                          if (place.myRating == null || place.myRating! <= 0)
+                            _buildRateButton(context, place),
+                          SizedBox(height: 40.h),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
+                ],
+              ),
+            ), // Scaffold
+          ); // BlocListener
         }
 
         return Scaffold(

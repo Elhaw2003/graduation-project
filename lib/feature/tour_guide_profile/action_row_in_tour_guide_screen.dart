@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:smart_guide/core/methods/save_place_feedback.dart';
 import 'package:smart_guide/core/routing/app_routes.dart';
 import 'package:smart_guide/core/services/cache/secure_storage_helper.dart';
 import 'package:smart_guide/core/utils/app_colors.dart';
@@ -83,22 +84,10 @@ class _ActionRowInTourGuideScreenState
       listener: (context, state) {
         if (state is SaveGuideSuccess &&
             state.savedIds.contains(widget.guideId)) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: AppColors.greenColor,
-              duration: const Duration(milliseconds: 1500),
-            ),
-          );
+          SaveFeedback.savedGuide(context);
         } else if (state is RemoveGuideSuccess &&
             !state.savedIds.contains(widget.guideId)) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: Colors.redAccent,
-              duration: const Duration(milliseconds: 1500),
-            ),
-          );
+          SaveFeedback.removedGuide(context);
         }
       },
       child: ClipRect(
