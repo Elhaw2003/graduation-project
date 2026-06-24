@@ -13,6 +13,8 @@ import 'package:smart_guide/core/utils/image_url_extension.dart';
 import 'package:smart_guide/feature/profile/presentation/cubit/tourist_session/tourist_session_cubit.dart';
 import 'package:smart_guide/feature/profile/presentation/cubit/tourist_session/tourist_session_states.dart';
 import 'package:smart_guide/feature/settings/presentation/cubit/log_out/cubit/log_out_cubit.dart';
+import 'package:smart_guide/feature/settings/presentation/view/about_app_screen.dart';
+import 'package:smart_guide/feature/settings/presentation/view/terms_of_service.dart';
 import 'package:smart_guide/feature/settings/presentation/view/widget/log_out_dialog.dart';
 import 'package:smart_guide/generated/locale_keys.g.dart';
 
@@ -79,20 +81,42 @@ class CustomDrawer extends StatelessWidget {
                         title: LocaleKeys.settings.tr(),
                         index: 6,
                       ),
-                      _buildDrawerItem(
-                        icon: Icons.info_outline,
-                        title: LocaleKeys.about_app.tr(),
-                        index: 7,
+                      GestureDetector(
+                        onTap: () {
+                          // Handle tap event for Help Center
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AboutAppScreen(),
+                            ),
+                          );
+                        },
+                        child: _buildDrawerItem(
+                          icon: Icons.info_outline,
+                          title: LocaleKeys.about_app.tr(),
+                          index: 7,
+                        ),
                       ),
                       _buildDrawerItem(
                         icon: Icons.support_agent_outlined,
                         title: LocaleKeys.support.tr(),
                         index: 8,
                       ),
-                      _buildDrawerItem(
-                        icon: Icons.privacy_tip_outlined,
-                        title: LocaleKeys.terms_of_service.tr(),
-                        index: 9,
+                      GestureDetector(
+                        onTap: () {
+                          // Handle tap event for Terms of Service
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TermsOfServiceScreen(),
+                            ),
+                          );
+                        },
+                        child: _buildDrawerItem(
+                          icon: Icons.privacy_tip_outlined,
+                          title: LocaleKeys.terms_of_service.tr(),
+                          index: 9,
+                        ),
                       ),
                       CustomHeightSpacingWidget(height: 20.h),
                       _buildDrawerItem(
