@@ -1,7 +1,7 @@
 # Smart Guide — Mobile Application (Flutter) | Graduation Project
 ## 📸 Screenshots
 
-![image](<img width="1847" height="615" alt="Screenshot 2026-07-02 163927" src="https://github.com/user-attachments/assets/9c6192a8-1d2e-4518-9f1b-b1086c99b751" />)
+![image](https://github.com/user-attachments/assets/9c6192a8-1d2e-4518-9f1b-b1086c99b751)
 
 
 
