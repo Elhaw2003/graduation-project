@@ -1,4 +1,9 @@
 # Smart Guide — Mobile Application (Flutter) | Graduation Project
+## 📸 Screenshots
+
+![image](<img width="1847" height="615" alt="Screenshot 2026-07-02 163927" src="https://github.com/user-attachments/assets/9c6192a8-1d2e-4518-9f1b-b1086c99b751" />)
+
+
 
 ## Introduction
 This repository contains the **Flutter mobile application module** for the **Smart Guide** graduation project. The mobile application represents the primary client for tourists and end-users, and it is designed to provide a responsive, localized, and secure experience while integrating with backend services for authentication and related workflows.
